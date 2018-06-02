@@ -1905,13 +1905,13 @@ public class CodecCollector {
 <span class="fc" id="L1905">                    occurencesInCurrentDocument.add(hit);</span>
                   } else {
 <span class="fc" id="L1907">                    occurencesSum.put(hitKey, occurencesSum.get(hitKey) + 1);</span>
-<span class="pc bpc" id="L1908" title="1 of 2 branches missed.">                    if (!occurencesInCurrentDocument.contains(hitKey)) {</span>
-<span class="nc bnc" id="L1909" title="All 2 branches missed.">                      if (occurencesN.containsKey(hitKey)) {</span>
-<span class="nc" id="L1910">                        occurencesN.put(hitKey, occurencesN.get(hitKey) + 1);</span>
+<span class="fc bfc" id="L1908" title="All 2 branches covered.">                    if (!occurencesInCurrentDocument.contains(hitKey)) {</span>
+<span class="pc bpc" id="L1909" title="1 of 2 branches missed.">                      if (occurencesN.containsKey(hitKey)) {</span>
+<span class="fc" id="L1910">                        occurencesN.put(hitKey, occurencesN.get(hitKey) + 1);</span>
                       } else {
 <span class="nc" id="L1912">                        occurencesN.put(hitKey, 1);</span>
                       }
-<span class="nc" id="L1914">                      occurencesInCurrentDocument.add(hitKey);</span>
+<span class="fc" id="L1914">                      occurencesInCurrentDocument.add(hitKey);</span>
                     }
                   }
 <span class="fc" id="L1917">                }</span>
@@ -1920,8 +1920,8 @@ public class CodecCollector {
 <span class="fc" id="L1920">                    int tmpNumber = occurencesN.get(groupHit);</span>
 <span class="fc" id="L1921">                    maximumNumberOfDocuments = Math</span>
 <span class="fc" id="L1922">                        .max(maximumNumberOfDocuments, tmpNumber);</span>
-<span class="pc bpc" id="L1923" title="1 of 2 branches missed.">                    if (tmpNumber &gt; boundaryMinimumNumberOfDocuments) {</span>
-<span class="nc" id="L1924">                      administrationOccurrences.add(groupHit);</span>
+<span class="fc bfc" id="L1923" title="All 2 branches covered.">                    if (tmpNumber &gt; boundaryMinimumNumberOfDocuments) {</span>
+<span class="fc" id="L1924">                      administrationOccurrences.add(groupHit);</span>
                     }
 <span class="fc" id="L1926">                  }</span>
                   // collect spans
