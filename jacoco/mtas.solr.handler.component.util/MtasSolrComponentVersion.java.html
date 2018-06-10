@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasSolrComponentVersion.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.solr.handler.component.util</a> &gt; <span class="el_source">MtasSolrComponentVersion.java</span></div><h1>MtasSolrComponentVersion.java</h1><pre class="source lang-java linenums">package mtas.solr.handler.component.util;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.solr.common.util.SimpleOrderedMap;
+import org.apache.solr.handler.component.ResponseBuilder;
+import org.apache.solr.handler.component.SearchComponent;
+import org.apache.solr.handler.component.ShardRequest;
+
+import mtas.codec.util.CodecComponent.ComponentFields;
+import mtas.codec.util.CodecComponent.ComponentVersion;
+import mtas.solr.handler.component.MtasSolrSearchComponent;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MtasSolrComponentStatus.
+ */
+public class MtasSolrComponentVersion
+    implements MtasSolrComponent&lt;ComponentVersion&gt; {
+
+  /** The Constant log. */
+<span class="fc" id="L26">  private static final Log log = LogFactory</span>
+<span class="fc" id="L27">      .getLog(MtasSolrComponentVersion.class);</span>
+
+  /** The search component. */
+  MtasSolrSearchComponent searchComponent;
+  
+<span class="fc" id="L32">  String propertyVersion = null;</span>
+  
+<span class="fc" id="L34">  String propertyArtifactId = null;</span>
+  
+<span class="fc" id="L36">  String propertyGroupId = null;</span>
+  
+<span class="fc" id="L38">  String propertyTimestamp = null;</span>
+
+  /** The Constant NAME. */
+  public static final String NAME = &quot;version&quot;;
+
+  /** The Constant PARAM_MTAS_VERSION. */
+  public static final String PARAM_MTAS_VERSION = MtasSolrSearchComponent.PARAM_MTAS
+      + &quot;.&quot; + NAME;
+  
+  public static final String NAME_MTAS_VERSION_VERSION = &quot;version&quot;;
+  
+  public static final String NAME_MTAS_VERSION_GROUPID = &quot;groupId&quot;;
+  
+  public static final String NAME_MTAS_VERSION_ARTIFACTID = &quot;artifactId&quot;;
+  
+  public static final String NAME_MTAS_VERSION_TIMESTAMP = &quot;timestamp&quot;;
+
+  /**
+   * Instantiates a new mtas solr component status.
+   *
+   * @param searchComponent
+   *          the search component
+   */
+<span class="fc" id="L61">  public MtasSolrComponentVersion(MtasSolrSearchComponent searchComponent) {</span>
+<span class="fc" id="L62">    this.searchComponent = searchComponent;</span>
+<span class="fc" id="L63">    String resourceName = &quot;project.properties&quot;; // could also be a constant</span>
+<span class="fc" id="L64">    ClassLoader loader = Thread.currentThread().getContextClassLoader();</span>
+<span class="fc" id="L65">    Properties props = new Properties();</span>
+<span class="pc" id="L66">    try(InputStream resourceStream = loader.getResourceAsStream(resourceName)) {</span>
+<span class="fc" id="L67">        props.load(resourceStream);</span>
+<span class="fc" id="L68">        propertyVersion = props.getProperty(NAME_MTAS_VERSION_VERSION);</span>
+<span class="fc" id="L69">        propertyArtifactId = props.getProperty(NAME_MTAS_VERSION_ARTIFACTID);</span>
+<span class="fc" id="L70">        propertyGroupId = props.getProperty(NAME_MTAS_VERSION_GROUPID);</span>
+<span class="fc" id="L71">        propertyTimestamp = props.getProperty(NAME_MTAS_VERSION_TIMESTAMP);</span>
+<span class="pc bpc" id="L72" title="6 of 8 branches missed.">    } catch (IOException e) {</span>
+<span class="nc" id="L73">		log.info(&quot;couldn't read project.properties: &quot;+e.getMessage());</span>
+<span class="fc" id="L74">	}</span>
+<span class="fc" id="L75">  }</span>
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * mtas.solr.handler.component.util.MtasSolrComponent#prepare(org.apache.solr.
+   * handler.component.ResponseBuilder,
+   * mtas.codec.util.CodecComponent.ComponentFields)
+   */
+  @Override
+  public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
+      throws IOException {
+<span class="nc" id="L88">	  mtasFields.doVersion = true;</span>
+<span class="nc" id="L89">	  mtasFields.version = new ComponentVersion();</span>
+<span class="nc" id="L90">  }</span>
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * mtas.solr.handler.component.util.MtasSolrComponent#create(mtas.codec.util.
+   * CodecComponent.BasicComponent, java.lang.Boolean)
+   */
+  @Override
+  public SimpleOrderedMap&lt;Object&gt; create(ComponentVersion version, Boolean encode)
+      throws IOException {
+<span class="nc" id="L102">    SimpleOrderedMap&lt;Object&gt; mtasVersionResponse = new SimpleOrderedMap&lt;&gt;();</span>
+<span class="nc" id="L103">    mtasVersionResponse.add(NAME_MTAS_VERSION_GROUPID, propertyGroupId);</span>
+<span class="nc" id="L104">    mtasVersionResponse.add(NAME_MTAS_VERSION_ARTIFACTID, propertyArtifactId);</span>
+<span class="nc" id="L105">    mtasVersionResponse.add(NAME_MTAS_VERSION_VERSION, propertyVersion);</span>
+<span class="nc" id="L106">    mtasVersionResponse.add(NAME_MTAS_VERSION_TIMESTAMP, propertyTimestamp);</span>
+<span class="nc" id="L107">    return mtasVersionResponse;</span>
+     
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * mtas.solr.handler.component.util.MtasSolrComponent#modifyRequest(org.apache
+   * .solr.handler.component.ResponseBuilder,
+   * org.apache.solr.handler.component.SearchComponent,
+   * org.apache.solr.handler.component.ShardRequest)
+   */
+  @Override
+  public void modifyRequest(ResponseBuilder rb, SearchComponent who,
+      ShardRequest sreq) {
+<span class="nc" id="L123">	  sreq.params.remove(PARAM_MTAS_VERSION);</span>
+<span class="nc" id="L124">  }</span>
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * mtas.solr.handler.component.util.MtasSolrComponent#finishStage(org.apache.
+   * solr.handler.component.ResponseBuilder)
+   */
+  @Override
+  public void finishStage(ResponseBuilder rb) {
+    // TODO Auto-generated method stub
+
+<span class="nc" id="L137">  }</span>
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * mtas.solr.handler.component.util.MtasSolrComponent#distributedProcess(org.
+   * apache.solr.handler.component.ResponseBuilder,
+   * mtas.codec.util.CodecComponent.ComponentFields)
+   */
+  @Override
+  public void distributedProcess(ResponseBuilder rb, ComponentFields mtasFields)
+      throws IOException {
+    // TODO Auto-generated method stub
+
+<span class="nc" id="L152">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

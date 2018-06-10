@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasSolrComponentStatus.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.solr.handler.component.util</a> &gt; <span class="el_source">MtasSolrComponentStatus.java</span></div><h1>MtasSolrComponentStatus.java</h1><pre class="source lang-java linenums">package mtas.solr.handler.component.util;
 
 import java.io.IOException;
-import java.util.Map.Entry;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.solr.common.params.ShardParams;
 import org.apache.solr.common.util.SimpleOrderedMap;
-import org.apache.solr.core.SolrInfoBean;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
 import org.apache.solr.handler.component.ShardRequest;
 
-import mtas.codec.util.Status;
 import mtas.codec.util.CodecComponent.ComponentFields;
 import mtas.codec.util.CodecComponent.ComponentStatus;
-import mtas.solr.handler.MtasRequestHandler;
 import mtas.solr.handler.MtasRequestHandler.ShardInformation;
 import mtas.solr.handler.component.MtasSolrSearchComponent;
 
@@ -26,8 +20,8 @@ public class MtasSolrComponentStatus
     implements MtasSolrComponent&lt;ComponentStatus&gt; {
 
   /** The Constant log. */
-<span class="fc" id="L29">  private static final Log log = LogFactory</span>
-<span class="fc" id="L30">      .getLog(MtasSolrComponentStatus.class);</span>
+<span class="fc" id="L23">  private static final Log log = LogFactory</span>
+<span class="fc" id="L24">      .getLog(MtasSolrComponentStatus.class);</span>
 
   /** The search component. */
   MtasSolrSearchComponent searchComponent;
@@ -53,9 +47,9 @@ public class MtasSolrComponentStatus
    * @param searchComponent
    *          the search component
    */
-<span class="fc" id="L56">  public MtasSolrComponentStatus(MtasSolrSearchComponent searchComponent) {</span>
-<span class="fc" id="L57">    this.searchComponent = searchComponent;</span>
-<span class="fc" id="L58">  }</span>
+<span class="fc" id="L50">  public MtasSolrComponentStatus(MtasSolrSearchComponent searchComponent) {</span>
+<span class="fc" id="L51">    this.searchComponent = searchComponent;</span>
+<span class="fc" id="L52">  }</span>
 
   /*
    * (non-Javadoc)
@@ -68,25 +62,25 @@ public class MtasSolrComponentStatus
   @Override
   public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
-<span class="fc" id="L71">    mtasFields.doStatus = true;</span>
-<span class="fc" id="L72">    String key = rb.req.getParams()</span>
-<span class="fc" id="L73">        .get(PARAM_MTAS_STATUS + &quot;.&quot; + NAME_MTAS_STATUS_KEY, null);</span>
-<span class="fc" id="L74">    boolean getHandler = rb.req.getParams()</span>
-<span class="fc" id="L75">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
+<span class="fc" id="L65">    mtasFields.doStatus = true;</span>
+<span class="fc" id="L66">    String key = rb.req.getParams()</span>
+<span class="fc" id="L67">        .get(PARAM_MTAS_STATUS + &quot;.&quot; + NAME_MTAS_STATUS_KEY, null);</span>
+<span class="fc" id="L68">    boolean getHandler = rb.req.getParams()</span>
+<span class="fc" id="L69">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
             + NAME_MTAS_STATUS_MTASHANDLER, false);
-<span class="fc" id="L77">    boolean getNumberOfDocuments = rb.req.getParams()</span>
-<span class="fc" id="L78">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
+<span class="fc" id="L71">    boolean getNumberOfDocuments = rb.req.getParams()</span>
+<span class="fc" id="L72">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
             + NAME_MTAS_STATUS_NUMBEROFDOCUMENTS, false);
-<span class="fc" id="L80">    boolean getNumberOfSegments = rb.req.getParams()</span>
-<span class="fc" id="L81">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
+<span class="fc" id="L74">    boolean getNumberOfSegments = rb.req.getParams()</span>
+<span class="fc" id="L75">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
             + NAME_MTAS_STATUS_NUMBEROFSEGMENTS, false);
-<span class="fc" id="L83">    mtasFields.status = new ComponentStatus(rb.req.getCore().getName(), key,</span>
+<span class="fc" id="L77">    mtasFields.status = new ComponentStatus(rb.req.getCore().getName(), key,</span>
         getHandler, getNumberOfDocuments, getNumberOfSegments);
-<span class="fc" id="L85">    mtasFields.status.numberOfDocuments = rb.req.getSearcher().getRawReader()</span>
-<span class="fc" id="L86">        .numDocs();</span>
-<span class="fc" id="L87">    mtasFields.status.numberOfSegments = rb.req.getSearcher().getRawReader()</span>
-<span class="fc" id="L88">        .leaves().size();</span>
-<span class="fc" id="L89">  }</span>
+<span class="fc" id="L79">    mtasFields.status.numberOfDocuments = rb.req.getSearcher().getRawReader()</span>
+<span class="fc" id="L80">        .numDocs();</span>
+<span class="fc" id="L81">    mtasFields.status.numberOfSegments = rb.req.getSearcher().getRawReader()</span>
+<span class="fc" id="L82">        .leaves().size();</span>
+<span class="fc" id="L83">  }</span>
 
   /*
    * (non-Javadoc)
@@ -98,26 +92,26 @@ public class MtasSolrComponentStatus
   @Override
   public SimpleOrderedMap&lt;Object&gt; create(ComponentStatus status, Boolean encode)
       throws IOException {
-<span class="fc" id="L101">    SimpleOrderedMap&lt;Object&gt; mtasStatusResponse = new SimpleOrderedMap&lt;&gt;();</span>
-<span class="fc bfc" id="L102" title="All 2 branches covered.">    if (status.getMtasHandler) {</span>
-<span class="fc" id="L103">      mtasStatusResponse.add(NAME_MTAS_STATUS_MTASHANDLER, status.handler);</span>
+<span class="fc" id="L95">    SimpleOrderedMap&lt;Object&gt; mtasStatusResponse = new SimpleOrderedMap&lt;&gt;();</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">    if (status.getMtasHandler) {</span>
+<span class="fc" id="L97">      mtasStatusResponse.add(NAME_MTAS_STATUS_MTASHANDLER, status.handler);</span>
     }
-<span class="fc bfc" id="L105" title="All 2 branches covered.">    if (status.getNumberOfDocuments) {</span>
-<span class="fc" id="L106">      mtasStatusResponse.add(NAME_MTAS_STATUS_NUMBEROFDOCUMENTS,</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">    if (status.getNumberOfDocuments) {</span>
+<span class="fc" id="L100">      mtasStatusResponse.add(NAME_MTAS_STATUS_NUMBEROFDOCUMENTS,</span>
           status.numberOfDocuments);
     }
-<span class="fc bfc" id="L109" title="All 2 branches covered.">    if (status.getNumberOfSegments) {</span>
-<span class="fc" id="L110">      mtasStatusResponse.add(NAME_MTAS_STATUS_NUMBEROFSEGMENTS,</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">    if (status.getNumberOfSegments) {</span>
+<span class="fc" id="L104">      mtasStatusResponse.add(NAME_MTAS_STATUS_NUMBEROFSEGMENTS,</span>
           status.numberOfSegments);
     }
-<span class="fc bfc" id="L113" title="All 2 branches covered.">    if(mtasStatusResponse.size()&gt;0) {</span>
-<span class="fc" id="L114">      mtasStatusResponse.add(ShardInformation.NAME_NAME, status.name);</span>
-<span class="pc bpc" id="L115" title="1 of 2 branches missed.">      if (status.key != null) {</span>
-<span class="nc" id="L116">        mtasStatusResponse.add(NAME_MTAS_STATUS_KEY, status.key); </span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">    if(mtasStatusResponse.size()&gt;0) {</span>
+<span class="fc" id="L108">      mtasStatusResponse.add(ShardInformation.NAME_NAME, status.name);</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">      if (status.key != null) {</span>
+<span class="nc" id="L110">        mtasStatusResponse.add(NAME_MTAS_STATUS_KEY, status.key); </span>
       }
-<span class="fc" id="L118">      return mtasStatusResponse;</span>
+<span class="fc" id="L112">      return mtasStatusResponse;</span>
     } else {
-<span class="fc" id="L120">      return null;</span>
+<span class="fc" id="L114">      return null;</span>
     }  
   }
 
@@ -133,8 +127,8 @@ public class MtasSolrComponentStatus
   @Override
   public void modifyRequest(ResponseBuilder rb, SearchComponent who,
       ShardRequest sreq) {
-<span class="nc" id="L136">    sreq.params.remove(PARAM_MTAS_STATUS + &quot;.&quot; + NAME_MTAS_STATUS_KEY);</span>
-<span class="nc" id="L137">  }</span>
+<span class="nc" id="L130">    sreq.params.remove(PARAM_MTAS_STATUS + &quot;.&quot; + NAME_MTAS_STATUS_KEY);</span>
+<span class="nc" id="L131">  }</span>
 
   /*
    * (non-Javadoc)
@@ -147,7 +141,7 @@ public class MtasSolrComponentStatus
   public void finishStage(ResponseBuilder rb) {
     // TODO Auto-generated method stub
 
-<span class="nc" id="L150">  }</span>
+<span class="nc" id="L144">  }</span>
 
   /*
    * (non-Javadoc)
@@ -162,7 +156,7 @@ public class MtasSolrComponentStatus
       throws IOException {
     // TODO Auto-generated method stub
 
-<span class="nc" id="L165">  }</span>
+<span class="nc" id="L159">  }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
