@@ -213,9 +213,9 @@ public class MtasDataLongBasic extends MtasDataBasic&lt;Long, Double&gt; {
   @Override
   protected boolean compareWithBoundary(Long value, Long boundary)
       throws IOException {
-<span class="fc bfc" id="L216" title="All 2 branches covered.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
 <span class="pc bpc" id="L217" title="1 of 2 branches missed.">        || segmentRegistration.equals(SEGMENT_BOUNDARY_ASC)) {</span>
-<span class="fc bfc" id="L218" title="All 2 branches covered.">      return value &lt;= boundary;</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">      return value &lt;= boundary;</span>
 <span class="pc bpc" id="L219" title="1 of 2 branches missed.">    } else if (segmentRegistration.equals(SEGMENT_SORT_DESC)</span>
 <span class="nc bnc" id="L220" title="All 2 branches missed.">        || segmentRegistration.equals(SEGMENT_BOUNDARY_DESC)) {</span>
 <span class="fc bfc" id="L221" title="All 2 branches covered.">      return value &gt;= boundary;</span>
@@ -235,9 +235,9 @@ public class MtasDataLongBasic extends MtasDataBasic&lt;Long, Double&gt; {
   @Override
   protected Long lastForComputingSegment(Long value, Long boundary)
       throws IOException {
-<span class="fc bfc" id="L238" title="All 2 branches covered.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
 <span class="pc bpc" id="L239" title="1 of 2 branches missed.">        || segmentRegistration.equals(SEGMENT_BOUNDARY_ASC)) {</span>
-<span class="fc" id="L240">      return Math.max(value, boundary);</span>
+<span class="nc" id="L240">      return Math.max(value, boundary);</span>
 <span class="pc bpc" id="L241" title="1 of 2 branches missed.">    } else if (segmentRegistration.equals(SEGMENT_SORT_DESC)</span>
 <span class="nc bnc" id="L242" title="All 2 branches missed.">        || segmentRegistration.equals(SEGMENT_BOUNDARY_DESC)) {</span>
 <span class="fc" id="L243">      return Math.min(value, boundary);</span>
@@ -256,9 +256,9 @@ public class MtasDataLongBasic extends MtasDataBasic&lt;Long, Double&gt; {
    */
   @Override
   protected Long lastForComputingSegment() throws IOException {
-<span class="fc bfc" id="L259" title="All 2 branches covered.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
 <span class="pc bpc" id="L260" title="1 of 2 branches missed.">        || segmentRegistration.equals(SEGMENT_BOUNDARY_ASC)) {</span>
-<span class="fc" id="L261">      return Collections.max(segmentValueTopList);</span>
+<span class="nc" id="L261">      return Collections.max(segmentValueTopList);</span>
 <span class="pc bpc" id="L262" title="1 of 2 branches missed.">    } else if (segmentRegistration.equals(SEGMENT_SORT_DESC)</span>
 <span class="nc bnc" id="L263" title="All 2 branches missed.">        || segmentRegistration.equals(SEGMENT_BOUNDARY_DESC)) {</span>
 <span class="fc" id="L264">      return Collections.min(segmentValueTopList);</span>
@@ -278,13 +278,13 @@ public class MtasDataLongBasic extends MtasDataBasic&lt;Long, Double&gt; {
   @Override
   protected Long boundaryForSegmentComputing(String segmentName)
       throws IOException {
-<span class="fc bfc" id="L281" title="All 2 branches covered.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
 <span class="pc bpc" id="L282" title="1 of 2 branches missed.">        || segmentRegistration.equals(SEGMENT_SORT_DESC)) {</span>
 <span class="fc" id="L283">      Long boundary = boundaryForSegment(segmentName);</span>
 <span class="pc bpc" id="L284" title="1 of 2 branches missed.">      if (boundary == null) {</span>
 <span class="nc" id="L285">        return null;</span>
       } else {
-<span class="fc bfc" id="L287" title="All 2 branches covered.">        if (segmentRegistration.equals(SEGMENT_SORT_DESC)) {</span>
+<span class="pc bpc" id="L287" title="1 of 2 branches missed.">        if (segmentRegistration.equals(SEGMENT_SORT_DESC)) {</span>
 <span class="fc" id="L288">          long correctionBoundary = 0;</span>
 <span class="fc bfc" id="L289" title="All 2 branches covered.">          for (String otherSegmentName : segmentValueTopListLast.keySet()) {</span>
 <span class="fc bfc" id="L290" title="All 2 branches covered.">            if (!otherSegmentName.equals(segmentName)) {</span>
@@ -296,7 +296,7 @@ public class MtasDataLongBasic extends MtasDataBasic&lt;Long, Double&gt; {
 <span class="fc" id="L296">          }</span>
 <span class="fc" id="L297">          return boundary + correctionBoundary;</span>
         } else {
-<span class="fc" id="L299">          return boundary;</span>
+<span class="nc" id="L299">          return boundary;</span>
         }
       }
     } else {
@@ -312,13 +312,13 @@ public class MtasDataLongBasic extends MtasDataBasic&lt;Long, Double&gt; {
    */
   @Override
   protected Long boundaryForSegment(String segmentName) throws IOException {
-<span class="fc bfc" id="L315" title="All 2 branches covered.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">    if (segmentRegistration.equals(SEGMENT_SORT_ASC)</span>
 <span class="pc bpc" id="L316" title="1 of 2 branches missed.">        || segmentRegistration.equals(SEGMENT_SORT_DESC)) {</span>
 <span class="fc" id="L317">      Long thisLast = segmentValueTopListLast.get(segmentName);</span>
 <span class="pc bpc" id="L318" title="1 of 2 branches missed.">      if (thisLast == null) {</span>
 <span class="nc" id="L319">        return null;</span>
-<span class="fc bfc" id="L320" title="All 2 branches covered.">      } else if (segmentRegistration.equals(SEGMENT_SORT_ASC)) {</span>
-<span class="fc" id="L321">        return thisLast * segmentNumber;</span>
+<span class="pc bpc" id="L320" title="1 of 2 branches missed.">      } else if (segmentRegistration.equals(SEGMENT_SORT_ASC)) {</span>
+<span class="nc" id="L321">        return thisLast * segmentNumber;</span>
       } else {
 <span class="fc" id="L323">        return Math.floorDiv(thisLast, segmentNumber);</span>
       }

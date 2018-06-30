@@ -48,7 +48,7 @@ class MtasDataItemLongBasic extends MtasDataItemBasic&lt;Long, Double&gt; {
 <span class="fc" id="L48">      MtasDataItemNumberComparator c2 = to.getComparableValue();</span>
 <span class="pc bpc" id="L49" title="2 of 4 branches missed.">      compare = (c1 != null &amp;&amp; c2 != null) ? c1.compareTo(c2.getValue()) : 0;</span>
     }
-<span class="fc bfc" id="L51" title="All 2 branches covered.">    return sortDirection.equals(CodecUtil.SORT_DESC) ? -1 * compare : compare;</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">    return sortDirection.equals(CodecUtil.SORT_DESC) ? -1 * compare : compare;</span>
   }
 
   /*

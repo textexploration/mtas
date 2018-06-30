@@ -298,7 +298,7 @@ public class MtasSolrComponentStats
 <span class="fc bfc" id="L298" title="All 2 branches covered.">      for (String field : fields) {</span>
 <span class="pc bpc" id="L299" title="2 of 4 branches missed.">        if (field == null || field.isEmpty()) {</span>
 <span class="nc" id="L300">          throw new IOException(&quot;no (valid) field in mtas stats tokens&quot;);</span>
-<span class="fc bfc" id="L301" title="All 2 branches covered.">        } else if (!mtasFields.list.containsKey(field)) {</span>
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">        } else if (!mtasFields.list.containsKey(field)) {</span>
 <span class="fc" id="L302">          mtasFields.list.put(field, new ComponentField(uniqueKeyField));</span>
         }
       }
@@ -315,9 +315,9 @@ public class MtasSolrComponentStats
 <span class="fc" id="L315">        String key = keys[i];</span>
 <span class="pc bpc" id="L316" title="2 of 4 branches missed.">        String type = (types[i] == null) || (types[i].isEmpty()) ? null</span>
 <span class="fc" id="L317">            : types[i].trim();</span>
-<span class="pc bpc" id="L318" title="1 of 4 branches missed.">        Double minimum = (minima[i] == null) || (minima[i].isEmpty()) ? null</span>
+<span class="pc bpc" id="L318" title="2 of 4 branches missed.">        Double minimum = (minima[i] == null) || (minima[i].isEmpty()) ? null</span>
 <span class="fc" id="L319">            : Double.parseDouble(minima[i]);</span>
-<span class="pc bpc" id="L320" title="1 of 4 branches missed.">        Double maximum = (maxima[i] == null) || (maxima[i].isEmpty()) ? null</span>
+<span class="pc bpc" id="L320" title="2 of 4 branches missed.">        Double maximum = (maxima[i] == null) || (maxima[i].isEmpty()) ? null</span>
 <span class="fc" id="L321">            : Double.parseDouble(maxima[i]);</span>
         try {
 <span class="fc" id="L323">          mtasFields.list.get(field).statsTokenList</span>
@@ -493,7 +493,7 @@ public class MtasSolrComponentStats
 <span class="fc bfc" id="L493" title="All 2 branches covered.">      for (String field : fields) {</span>
 <span class="pc bpc" id="L494" title="2 of 4 branches missed.">        if (field == null || field.isEmpty()) {</span>
 <span class="nc" id="L495">          throw new IOException(&quot;no (valid) field in mtas stats spans&quot;);</span>
-<span class="fc bfc" id="L496" title="All 2 branches covered.">        } else if (!mtasFields.list.containsKey(field)) {</span>
+<span class="pc bpc" id="L496" title="1 of 2 branches missed.">        } else if (!mtasFields.list.containsKey(field)) {</span>
 <span class="fc" id="L497">          mtasFields.list.put(field, new ComponentField(uniqueKeyField));</span>
         }
       }
@@ -519,8 +519,8 @@ public class MtasSolrComponentStats
               queryTypes[i][j], queryPrefixes[i][j], queryVariables[i][j],
               fields[i], queryIgnores[i][j], maximumIgnoreLength);
           // minimize number of queries
-<span class="fc bfc" id="L522" title="All 2 branches covered.">          if (cf.spanQueryList.contains(q)) {</span>
-<span class="fc" id="L523">            q = cf.spanQueryList.get(cf.spanQueryList.indexOf(q));</span>
+<span class="pc bpc" id="L522" title="1 of 2 branches missed.">          if (cf.spanQueryList.contains(q)) {</span>
+<span class="nc" id="L523">            q = cf.spanQueryList.get(cf.spanQueryList.indexOf(q));</span>
           } else {
 <span class="fc" id="L525">            cf.spanQueryList.add(q);</span>
           }

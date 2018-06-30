@@ -229,14 +229,14 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-<span class="fc" id="L232">    int h = this.getClass().getSimpleName().hashCode();</span>
-<span class="fc" id="L233">    h = (h * 7) ^ field.hashCode();</span>
-<span class="fc" id="L234">    return h;</span>
+<span class="nc" id="L232">    int h = this.getClass().getSimpleName().hashCode();</span>
+<span class="nc" id="L233">    h = (h * 7) ^ field.hashCode();</span>
+<span class="nc" id="L234">    return h;</span>
   }
   
   @Override
   public boolean isMatchAllPositionsQuery() {
-<span class="fc" id="L239">    return true;</span>
+<span class="nc" id="L239">    return true;</span>
   }
 
 }

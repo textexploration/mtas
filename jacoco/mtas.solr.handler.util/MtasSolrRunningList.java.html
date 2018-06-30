@@ -45,11 +45,11 @@ public class MtasSolrRunningList extends MtasSolrBaseList {
    * @see mtas.solr.handler.util.MtasSolrBaseList#garbageCollect()
    */
   public final void garbageCollect() {
-<span class="pc bpc" id="L48" title="2 of 4 branches missed.">    if (timeout != null &amp;&amp; !list.isEmpty()) {</span>
+<span class="pc bpc" id="L48" title="2 of 4 branches missed.">    if (timeout != null &amp;&amp; !data.isEmpty()) {</span>
 <span class="fc" id="L49">      long boundaryTime = System.currentTimeMillis() - (garbageTimeout);</span>
-<span class="pc bpc" id="L50" title="2 of 4 branches missed.">      list.removeIf((MtasSolrStatus solrStatus) -&gt; solrStatus.finished() || solrStatus.getStartTime() &lt; boundaryTime);</span>
+<span class="pc bpc" id="L50" title="2 of 4 branches missed.">      data.removeIf((MtasSolrStatus solrStatus) -&gt; solrStatus.finished() || solrStatus.getStartTime() &lt; boundaryTime);</span>
 <span class="fc" id="L51">      index.clear();</span>
-<span class="fc" id="L52">      list.forEach((MtasSolrStatus solrStatus) -&gt; index.put(solrStatus.key(), solrStatus));</span>
+<span class="fc" id="L52">      data.forEach((MtasSolrStatus solrStatus) -&gt; index.put(solrStatus.key(), solrStatus));</span>
     }
 <span class="fc" id="L54">  }</span>
 
@@ -60,7 +60,7 @@ public class MtasSolrRunningList extends MtasSolrBaseList {
    */
   public final List&lt;MtasSolrStatus&gt; checkForExceptions() {
 <span class="fc" id="L62">    List&lt;MtasSolrStatus&gt; statusWithException = null;</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">    for (MtasSolrStatus item : list) {</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">    for (MtasSolrStatus item : data) {</span>
 <span class="pc bpc" id="L64" title="1 of 2 branches missed.">      if (item.checkResponseForException()) {</span>
 <span class="nc bnc" id="L65" title="All 2 branches missed.">        if (statusWithException == null) {</span>
 <span class="nc" id="L66">          statusWithException = new ArrayList&lt;&gt;();</span>

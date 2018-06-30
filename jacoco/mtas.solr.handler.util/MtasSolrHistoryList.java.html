@@ -4,60 +4,93 @@ import java.io.IOException;
 
 import org.apache.solr.common.util.SimpleOrderedMap;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MtasSolrHistoryList.
+ */
 public class MtasSolrHistoryList extends MtasSolrBaseList {
 
+  /** The soft limit. */
   private int softLimit;
+  
+  /** The hard limit. */
   private int hardLimit;
-  
+
+  /** The Constant NAME_SOFTLIMIT. */
   private static final String NAME_SOFTLIMIT = &quot;softLimit&quot;;
+  
+  /** The Constant NAME_HARDLIMIT. */
   private static final String NAME_HARDLIMIT = &quot;hardLimit&quot;;
-  
+
+  /**
+   * Instantiates a new mtas solr history list.
+   */
   public MtasSolrHistoryList() {
-<span class="fc" id="L16">    super();</span>
-<span class="fc" id="L17">    softLimit = 0;</span>
-<span class="fc" id="L18">    hardLimit = 0;</span>
-<span class="fc" id="L19">  }</span>
-  
-  public MtasSolrHistoryList(int softLimit, int hardLimit) {  
-<span class="fc" id="L22">    this();</span>
-<span class="fc" id="L23">    setLimits(softLimit, hardLimit);      </span>
-<span class="fc" id="L24">  }</span>
-  
+<span class="fc" id="L29">    super();</span>
+<span class="fc" id="L30">    softLimit = 0;</span>
+<span class="fc" id="L31">    hardLimit = 0;</span>
+<span class="fc" id="L32">  }</span>
+
+  /**
+   * Instantiates a new mtas solr history list.
+   *
+   * @param softLimit the soft limit
+   * @param hardLimit the hard limit
+   */
+  public MtasSolrHistoryList(int softLimit, int hardLimit) {
+<span class="fc" id="L41">    this();</span>
+<span class="fc" id="L42">    setLimits(softLimit, hardLimit);</span>
+<span class="fc" id="L43">  }</span>
+
+  /* (non-Javadoc)
+   * @see mtas.solr.handler.util.MtasSolrBaseList#add(mtas.solr.handler.util.MtasSolrStatus)
+   */
   @Override
   public void add(MtasSolrStatus status) throws IOException {
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">    if(softLimit&gt;0) {</span>
-<span class="fc" id="L29">      super.add(status);</span>
-    }
-<span class="fc" id="L31">  }</span>
-  
-  public void setLimits(int softLimit, int hardLimit) {
-<span class="pc bpc" id="L34" title="6 of 8 branches missed.">    if ((softLimit &gt; 0 &amp;&amp; hardLimit &gt; softLimit) || (softLimit==0 &amp;&amp; hardLimit==0)) {</span>
-<span class="fc" id="L35">      this.softLimit = softLimit;</span>
-<span class="fc" id="L36">      this.hardLimit = hardLimit;</span>
-<span class="fc" id="L37">      garbageCollect();</span>
-    } else {
-<span class="nc" id="L39">      throw new IllegalArgumentException();</span>
-    }  
-<span class="fc" id="L41">  }</span>
-
-  public void garbageCollect() {
-<span class="pc bpc" id="L44" title="1 of 2 branches missed.">    if(softLimit==0) {</span>
-<span class="nc" id="L45">      reset();</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">    } else if (list.size() &gt; hardLimit) {</span>
-<span class="fc" id="L47">      long boundaryTime = list.get(softLimit).getStartTime();</span>
-<span class="fc" id="L48">      list.removeIf(</span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">          (MtasSolrStatus status) -&gt; status.getStartTime() &lt; boundaryTime);</span>
-<span class="fc" id="L50">      index.clear();</span>
-<span class="fc" id="L51">      list.forEach((MtasSolrStatus status) -&gt; index.put(status.key(), status));</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">    if (softLimit &gt; 0) {</span>
+<span class="fc" id="L51">      super.add(status);</span>
     }
 <span class="fc" id="L53">  }</span>
-    
+
+  /**
+   * Sets the limits.
+   *
+   * @param softLimit the soft limit
+   * @param hardLimit the hard limit
+   */
+  public void setLimits(int softLimit, int hardLimit) {
+<span class="pc bpc" id="L62" title="6 of 8 branches missed.">    if ((softLimit &gt; 0 &amp;&amp; hardLimit &gt; softLimit) || (softLimit == 0 &amp;&amp; hardLimit == 0)) {</span>
+<span class="fc" id="L63">      this.softLimit = softLimit;</span>
+<span class="fc" id="L64">      this.hardLimit = hardLimit;</span>
+<span class="fc" id="L65">      garbageCollect();</span>
+    } else {
+<span class="nc" id="L67">      throw new IllegalArgumentException();</span>
+    }
+<span class="fc" id="L69">  }</span>
+
+  /* (non-Javadoc)
+   * @see mtas.solr.handler.util.MtasSolrBaseList#garbageCollect()
+   */
+  public void garbageCollect() {
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">    if (softLimit == 0) {</span>
+<span class="nc" id="L76">      reset();</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">    } else if (data.size() &gt; hardLimit) {</span>
+<span class="fc" id="L78">      long boundaryTime = data.get(softLimit).getStartTime();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">      data.removeIf((MtasSolrStatus status) -&gt; status.getStartTime() &lt; boundaryTime);</span>
+<span class="fc" id="L80">      index.clear();</span>
+<span class="fc" id="L81">      data.forEach((MtasSolrStatus status) -&gt; index.put(status.key(), status));</span>
+    }
+<span class="fc" id="L83">  }</span>
+
+  /* (non-Javadoc)
+   * @see mtas.solr.handler.util.MtasSolrBaseList#createListOutput(boolean, int)
+   */
   @Override
-  public SimpleOrderedMap&lt;Object&gt; createListOutput(boolean shardRequests) {
-<span class="nc" id="L57">    SimpleOrderedMap&lt;Object&gt; output = super.createListOutput(shardRequests);</span>
-<span class="nc" id="L58">    output.add(NAME_SOFTLIMIT, softLimit);</span>
-<span class="nc" id="L59">    output.add(NAME_HARDLIMIT, hardLimit);</span>
-<span class="nc" id="L60">    return output;</span>
+  public SimpleOrderedMap&lt;Object&gt; createListOutput(boolean shardRequests, int number) {
+<span class="nc" id="L90">    SimpleOrderedMap&lt;Object&gt; output = super.createListOutput(shardRequests, number);</span>
+<span class="nc" id="L91">    output.add(NAME_SOFTLIMIT, softLimit);</span>
+<span class="nc" id="L92">    output.add(NAME_HARDLIMIT, hardLimit);</span>
+<span class="nc" id="L93">    return output;</span>
   }
 
 }
