@@ -432,7 +432,7 @@ public class MtasSolrStatus {
    * @return true, if successful
    */
   public boolean checkResponseForException() {
-<span class="pc bpc" id="L435" title="2 of 4 branches missed.">    if (!finished &amp;&amp; rsp != null) {</span>
+<span class="pc bpc" id="L435" title="1 of 4 branches missed.">    if (!finished &amp;&amp; rsp != null) {</span>
       Exception e;
 <span class="pc bpc" id="L437" title="1 of 2 branches missed.">      if ((e = rsp.getException()) != null) {</span>
 <span class="nc" id="L438">        setError(e.getMessage());</span>

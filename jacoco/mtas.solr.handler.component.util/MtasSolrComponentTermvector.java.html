@@ -385,7 +385,7 @@ public class MtasSolrComponentTermvector
 <span class="fc bfc" id="L385" title="All 2 branches covered.">        int numberFinal = (numberShards[i] == null)</span>
 <span class="pc bpc" id="L386" title="1 of 2 branches missed.">            || (numberShards[i].isEmpty()) ? listNumber</span>
 <span class="fc" id="L387">                : Integer.parseInt(numberShards[i]);</span>
-<span class="pc bpc" id="L388" title="2 of 4 branches missed.">        String type = (types[i] == null) || (types[i].isEmpty()) ? null</span>
+<span class="pc bpc" id="L388" title="1 of 4 branches missed.">        String type = (types[i] == null) || (types[i].isEmpty()) ? null</span>
 <span class="fc" id="L389">            : types[i].trim();</span>
 <span class="pc bpc" id="L390" title="1 of 4 branches missed.">        String sortType = (sortTypes[i] == null) || (sortTypes[i].isEmpty())</span>
 <span class="fc" id="L391">            ? null : sortTypes[i].trim();</span>
@@ -408,13 +408,13 @@ public class MtasSolrComponentTermvector
 <span class="fc" id="L408">        String ignoreRegexp = ignoreRegexps[i];</span>
 <span class="fc" id="L409">        String[] ignoreList = null;</span>
 <span class="fc" id="L410">        Boolean ignoreListRegexp = ignoreListRegexps[i];</span>
-<span class="pc bpc" id="L411" title="1 of 2 branches missed.">        if (ignoreLists[i] != null) {</span>
-<span class="nc" id="L412">          ArrayList&lt;String&gt; tmpList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L413">          String[] subList = ignoreLists[i].split(&quot;(?&lt;!\\\\),&quot;);</span>
-<span class="nc bnc" id="L414" title="All 2 branches missed.">          for (int j = 0; j &lt; subList.length; j++) {</span>
-<span class="nc" id="L415">            tmpList.add(subList[j].replace(&quot;\\,&quot;, &quot;,&quot;).replace(&quot;\\\\&quot;, &quot;\\&quot;));</span>
+<span class="fc bfc" id="L411" title="All 2 branches covered.">        if (ignoreLists[i] != null) {</span>
+<span class="fc" id="L412">          ArrayList&lt;String&gt; tmpList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L413">          String[] subList = ignoreLists[i].split(&quot;(?&lt;!\\\\),&quot;);</span>
+<span class="fc bfc" id="L414" title="All 2 branches covered.">          for (int j = 0; j &lt; subList.length; j++) {</span>
+<span class="fc" id="L415">            tmpList.add(subList[j].replace(&quot;\\,&quot;, &quot;,&quot;).replace(&quot;\\\\&quot;, &quot;\\&quot;));</span>
           }
-<span class="nc" id="L417">          ignoreList = tmpList.toArray(new String[tmpList.size()]);</span>
+<span class="fc" id="L417">          ignoreList = tmpList.toArray(new String[tmpList.size()]);</span>
         }
 
 <span class="pc bpc" id="L420" title="2 of 4 branches missed.">        if (prefix == null || prefix.isEmpty()) {</span>

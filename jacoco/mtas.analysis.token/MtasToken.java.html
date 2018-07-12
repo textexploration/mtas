@@ -571,7 +571,7 @@ public abstract class MtasToken {
   public static String getPostfixFromValue(String value) {
 <span class="fc" id="L572">    String postfix = &quot;&quot;;</span>
 <span class="fc" id="L573">    Matcher m = patternPrePostFix.matcher(value);</span>
-<span class="pc bpc" id="L574" title="1 of 2 branches missed.">    if (m.find()) {</span>
+<span class="fc bfc" id="L574" title="All 2 branches covered.">    if (m.find()) {</span>
 <span class="fc" id="L575">      postfix = m.group(2);</span>
 
     }
@@ -740,7 +740,7 @@ public abstract class MtasToken {
 <span class="fc" id="L740">    HashMap&lt;String, Automaton&gt; automatonMap = new HashMap&lt;&gt;();</span>
 <span class="pc bpc" id="L741" title="1 of 2 branches missed.">    if (valueList != null) {</span>
 <span class="fc bfc" id="L742" title="All 2 branches covered.">      for (String item : valueList) {</span>
-<span class="pc bpc" id="L743" title="1 of 2 branches missed.">        if (filter) {</span>
+<span class="fc bfc" id="L743" title="All 2 branches covered.">        if (filter) {</span>
 <span class="fc" id="L744">          item = item.replaceAll(&quot;([\\\&quot;\\)\\(\\&lt;\\&gt;\\.\\@\\#\\]\\[\\{\\}])&quot;,</span>
               &quot;\\\\$1&quot;);
         }
@@ -783,9 +783,9 @@ public abstract class MtasToken {
       String regexp, Map&lt;String, Automaton&gt; automatonMap) throws IOException {
 <span class="fc" id="L784">    List&lt;CompiledAutomaton&gt; list = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L785">    Automaton automatonRegexp = null;</span>
-<span class="pc bpc" id="L786" title="1 of 2 branches missed.">    if (regexp != null) {</span>
-<span class="nc" id="L787">      RegExp re = new RegExp(prefix + MtasToken.DELIMITER + regexp + &quot;\u0000*&quot;);</span>
-<span class="nc" id="L788">      automatonRegexp = re.toAutomaton();</span>
+<span class="fc bfc" id="L786" title="All 2 branches covered.">    if (regexp != null) {</span>
+<span class="fc" id="L787">      RegExp re = new RegExp(prefix + MtasToken.DELIMITER + regexp + &quot;\u0000*&quot;);</span>
+<span class="fc" id="L788">      automatonRegexp = re.toAutomaton();</span>
     }
 <span class="fc" id="L790">    int step = 500;</span>
 <span class="fc" id="L791">    List&lt;String&gt; keyList = new ArrayList&lt;&gt;(automatonMap.keySet());</span>
@@ -802,8 +802,8 @@ public abstract class MtasToken {
         }
 <span class="fc" id="L803">        Automaton automatonList = Operations.union(listAutomaton);</span>
         Automaton automaton;
-<span class="pc bpc" id="L805" title="1 of 2 branches missed.">        if (automatonRegexp != null) {</span>
-<span class="nc" id="L806">          automaton = Operations.intersection(automatonList, automatonRegexp);</span>
+<span class="fc bfc" id="L805" title="All 2 branches covered.">        if (automatonRegexp != null) {</span>
+<span class="fc" id="L806">          automaton = Operations.intersection(automatonList, automatonRegexp);</span>
         } else {
 <span class="fc" id="L808">          automaton = automatonList;</span>
         }

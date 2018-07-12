@@ -397,11 +397,11 @@ public class CodecCollector {
 <span class="fc" id="L397">      facetData = new HashMap&lt;&gt;();</span>
 <span class="fc" id="L398">      facetDataType = new HashMap&lt;&gt;();</span>
       // spans
-<span class="pc bpc" id="L400" title="1 of 2 branches missed.">      if (!fieldInfo.statsSpanList.isEmpty()) {</span>
+<span class="fc bfc" id="L400" title="All 2 branches covered.">      if (!fieldInfo.statsSpanList.isEmpty()) {</span>
 <span class="fc bfc" id="L401" title="All 2 branches covered.">        for (ComponentSpan cs : fieldInfo.statsSpanList) {</span>
-<span class="pc bpc" id="L402" title="1 of 2 branches missed.">          needPositions = (!needPositions) ? cs.parser.needPositions()</span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">          needPositions = (!needPositions) ? cs.parser.needPositions()</span>
               : needPositions;
-<span class="pc bpc" id="L404" title="1 of 2 branches missed.">          needPositions = (!needPositions) ? cs.functionNeedPositions()</span>
+<span class="fc bfc" id="L404" title="All 2 branches covered.">          needPositions = (!needPositions) ? cs.functionNeedPositions()</span>
               : needPositions;
 <span class="pc bpc" id="L406" title="1 of 4 branches missed.">          needSpans = (!needSpans) ? cs.parser.needArgumentsNumber() &gt; 0</span>
               : needSpans;
@@ -719,10 +719,10 @@ public class CodecCollector {
       // collect matches and numbers for queries
 <span class="fc bfc" id="L720" title="All 2 branches covered.">      for (MtasSpanQuery sq : fieldInfo.spanQueryList) {</span>
         // what to collect : numbers
-<span class="pc bpc" id="L722" title="1 of 2 branches missed.">        if (spansNumberData.containsKey(sq)) {</span>
+<span class="fc bfc" id="L722" title="All 2 branches covered.">        if (spansNumberData.containsKey(sq)) {</span>
 <span class="fc" id="L723">          numberData = spansNumberData.get(sq);</span>
         } else {
-<span class="nc" id="L725">          numberData = null;</span>
+<span class="fc" id="L725">          numberData = null;</span>
         }
         // what to collect: matches
 <span class="fc bfc" id="L728" title="All 2 branches covered.">        if (spansMatchData.containsKey(sq)) {</span>
@@ -732,15 +732,15 @@ public class CodecCollector {
         }
 <span class="fc" id="L733">        boolean doNormalCollection = true;</span>
         // if only number is needed, possibly termvectors can be used
-<span class="pc bpc" id="L735" title="1 of 4 branches missed.">        if ((numberData != null) &amp;&amp; (matchData == null)) {</span>
-<span class="pc bpc" id="L736" title="1 of 2 branches missed.">          if (sq.isMatchAllPositionsQuery()) {</span>
-<span class="nc" id="L737">            spansNumberByPositions.add(sq);</span>
-<span class="nc" id="L738">            needPositions = true;</span>
-<span class="nc" id="L739">            doNormalCollection = false;</span>
+<span class="fc bfc" id="L735" title="All 4 branches covered.">        if ((numberData != null) &amp;&amp; (matchData == null)) {</span>
+<span class="fc bfc" id="L736" title="All 2 branches covered.">          if (sq.isMatchAllPositionsQuery()) {</span>
+<span class="fc" id="L737">            spansNumberByPositions.add(sq);</span>
+<span class="fc" id="L738">            needPositions = true;</span>
+<span class="fc" id="L739">            doNormalCollection = false;</span>
           }
         }
         // collect (if termvector collection didn't work)
-<span class="pc bpc" id="L743" title="4 of 6 branches missed.">        if (doNormalCollection</span>
+<span class="pc bpc" id="L743" title="1 of 6 branches missed.">        if (doNormalCollection</span>
             &amp;&amp; ((numberData != null) || (matchData != null))) {
 <span class="fc" id="L745">          Spans spans = spansQueryWeight.get(sq).getSpans(lrc,</span>
               SpanWeight.Postings.POSITIONS);
@@ -781,7 +781,7 @@ public class CodecCollector {
 <span class="fc" id="L781">                      matchDataList.add(m);</span>
 <span class="fc" id="L782">                    }</span>
                   }
-<span class="pc bpc" id="L784" title="1 of 2 branches missed.">                  if ((numberData != null)) {</span>
+<span class="fc bfc" id="L784" title="All 2 branches covered.">                  if ((numberData != null)) {</span>
 <span class="fc" id="L785">                    numberData.put(spansDocId, number);</span>
                   }
 <span class="fc bfc" id="L787" title="All 2 branches covered.">                  if ((matchData != null)) {</span>
@@ -826,11 +826,11 @@ public class CodecCollector {
 <span class="nc" id="L826">          positionsData.put(docId, 0);</span>
 <span class="nc" id="L827">        }</span>
       }
-<span class="pc bpc" id="L829" title="3 of 4 branches missed.">      if (spansNumberByPositions != null &amp;&amp; spansNumberData != null) {        </span>
-<span class="nc bnc" id="L830" title="All 2 branches missed.">        for (MtasSpanQuery sq : spansNumberByPositions) {</span>
-<span class="nc" id="L831">          Map&lt;Integer,Integer&gt; numberData = spansNumberData.get(sq);</span>
-<span class="nc bnc" id="L832" title="All 2 branches missed.">          positionsData.forEach((k,v) -&gt; numberData.put(k,v!=null?v:0));          </span>
-<span class="nc" id="L833">        }</span>
+<span class="pc bpc" id="L829" title="1 of 4 branches missed.">      if (spansNumberByPositions != null &amp;&amp; spansNumberData != null) {        </span>
+<span class="fc bfc" id="L830" title="All 2 branches covered.">        for (MtasSpanQuery sq : spansNumberByPositions) {</span>
+<span class="fc" id="L831">          Map&lt;Integer,Integer&gt; numberData = spansNumberData.get(sq);</span>
+<span class="pc bpc" id="L832" title="1 of 2 branches missed.">          positionsData.forEach((k,v) -&gt; numberData.put(k,v!=null?v:0));          </span>
+<span class="fc" id="L833">        }</span>
       }
     }
 
@@ -877,7 +877,7 @@ public class CodecCollector {
           searcher, t, lrc);
     }
 <span class="fc bfc" id="L879" title="All 2 branches covered.">    if (!fieldInfo.spanQueryList.isEmpty()) {</span>
-<span class="pc bpc" id="L880" title="1 of 2 branches missed.">      if (!fieldInfo.statsSpanList.isEmpty()) {</span>
+<span class="fc bfc" id="L880" title="All 2 branches covered.">      if (!fieldInfo.statsSpanList.isEmpty()) {</span>
         // create stats
 <span class="fc" id="L882">        createStats(fieldInfo.statsSpanList, positionsData, spansNumberData,</span>
 <span class="fc" id="L883">            docSet.toArray(new Integer[docSet.size()]));</span>
@@ -1428,7 +1428,7 @@ public class CodecCollector {
             span.queries, docSet);
 <span class="pc bpc" id="L1429" title="1 of 2 branches missed.">        if (span.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
           // try to call functionParser as little as possible
-<span class="pc bpc" id="L1431" title="2 of 8 branches missed.">          if (span.statsType.equals(CodecUtil.STATS_BASIC)</span>
+<span class="pc bpc" id="L1431" title="1 of 8 branches missed.">          if (span.statsType.equals(CodecUtil.STATS_BASIC)</span>
               &amp;&amp; (span.minimumLong == null) &amp;&amp; (span.maximumLong == null)
               &amp;&amp; (span.functions == null
 <span class="pc bpc" id="L1434" title="2 of 4 branches missed.">                  || (span.functionBasic() &amp;&amp; span.functionSumRule()</span>
@@ -1442,8 +1442,8 @@ public class CodecCollector {
               long[] tmpArgs;
 <span class="fc bfc" id="L1443" title="All 2 branches covered.">              for (int docId : docSet) {</span>
 <span class="fc" id="L1444">                tmpArgs = args.get(docId);</span>
-<span class="pc bpc" id="L1445" title="1 of 2 branches missed.">                valuePositions += (positionsData == null) ? 0</span>
-<span class="pc" id="L1446">                    : positionsData.get(docId);</span>
+<span class="fc bfc" id="L1445" title="All 2 branches covered.">                valuePositions += (positionsData == null) ? 0</span>
+<span class="fc" id="L1446">                    : positionsData.get(docId);</span>
 <span class="pc bpc" id="L1447" title="1 of 2 branches missed.">                if (tmpArgs != null) {</span>
 <span class="fc bfc" id="L1448" title="All 2 branches covered.">                  for (int i = 0; i &lt; length; i++) {</span>
 <span class="fc" id="L1449">                    valueSum[i] += tmpArgs[i];</span>
@@ -1518,11 +1518,11 @@ public class CodecCollector {
                 }
               }
 <span class="fc bfc" id="L1520" title="All 2 branches covered.">              for (int docId : docSet) {</span>
-<span class="pc bpc" id="L1521" title="1 of 2 branches missed.">                if (positionsData == null) {</span>
+<span class="fc bfc" id="L1521" title="All 2 branches covered.">                if (positionsData == null) {</span>
 <span class="fc" id="L1522">                  positions = 0;</span>
                 } else {
-<span class="nc bnc" id="L1524" title="All 2 branches missed.">                  positions = (positionsData.get(docId) == null ? 0</span>
-<span class="nc" id="L1525">                      : positionsData.get(docId));</span>
+<span class="pc bpc" id="L1524" title="1 of 2 branches missed.">                  positions = (positionsData.get(docId) == null ? 0</span>
+<span class="fc" id="L1525">                      : positionsData.get(docId));</span>
                 }
 <span class="fc" id="L1527">                valueLong = span.parser.getValueLong(args.get(docId),</span>
                     positions);
@@ -2010,34 +2010,34 @@ public class CodecCollector {
       ComponentGroup group) {
 <span class="fc" id="L2011">    Integer start = null;</span>
 <span class="fc" id="L2012">    Integer end = null;</span>
-<span class="pc bpc" id="L2013" title="5 of 6 branches missed.">    if (group.hitInside != null || group.hitInsideLeft != null</span>
+<span class="fc bfc" id="L2013" title="All 6 branches covered.">    if (group.hitInside != null || group.hitInsideLeft != null</span>
         || group.hitInsideRight != null) {
 <span class="fc" id="L2015">      start = m.startPosition;</span>
 <span class="fc" id="L2016">      end = m.endPosition - 1;</span>
     } else {
-<span class="nc" id="L2018">      start = null;</span>
-<span class="nc" id="L2019">      end = null;</span>
+<span class="fc" id="L2018">      start = null;</span>
+<span class="fc" id="L2019">      end = null;</span>
     }
-<span class="pc bpc" id="L2021" title="1 of 2 branches missed.">    if (group.hitLeft != null) {</span>
-<span class="nc" id="L2022">      start = m.startPosition;</span>
-<span class="nc" id="L2023">      end = Math.max(m.startPosition + group.hitLeft.length - 1,</span>
+<span class="fc bfc" id="L2021" title="All 2 branches covered.">    if (group.hitLeft != null) {</span>
+<span class="fc" id="L2022">      start = m.startPosition;</span>
+<span class="fc" id="L2023">      end = Math.max(m.startPosition + group.hitLeft.length - 1,</span>
           m.endPosition - 1);
     }
-<span class="pc bpc" id="L2026" title="1 of 2 branches missed.">    if (group.hitRight != null) {</span>
-<span class="nc" id="L2027">      start = Math.min(m.endPosition - group.hitRight.length, m.startPosition);</span>
-<span class="nc bnc" id="L2028" title="All 2 branches missed.">      end = end == null ? (m.endPosition - 1)</span>
-<span class="nc" id="L2029">          : Math.max(end, (m.endPosition - 1));</span>
+<span class="fc bfc" id="L2026" title="All 2 branches covered.">    if (group.hitRight != null) {</span>
+<span class="fc" id="L2027">      start = Math.min(m.endPosition - group.hitRight.length, m.startPosition);</span>
+<span class="fc bfc" id="L2028" title="All 2 branches covered.">      end = end == null ? (m.endPosition - 1)</span>
+<span class="fc" id="L2029">          : Math.max(end, (m.endPosition - 1));</span>
     }
-<span class="pc bpc" id="L2031" title="1 of 2 branches missed.">    if (group.left != null) {</span>
-<span class="nc bnc" id="L2032" title="All 2 branches missed.">      start = start == null ? m.startPosition - group.left.length</span>
-<span class="nc" id="L2033">          : Math.min(m.startPosition - group.left.length, start);</span>
-<span class="nc bnc" id="L2034" title="All 2 branches missed.">      end = end == null ? m.startPosition - 1</span>
-<span class="nc" id="L2035">          : Math.max(m.startPosition - 1, end);</span>
+<span class="fc bfc" id="L2031" title="All 2 branches covered.">    if (group.left != null) {</span>
+<span class="fc bfc" id="L2032" title="All 2 branches covered.">      start = start == null ? m.startPosition - group.left.length</span>
+<span class="fc" id="L2033">          : Math.min(m.startPosition - group.left.length, start);</span>
+<span class="fc bfc" id="L2034" title="All 2 branches covered.">      end = end == null ? m.startPosition - 1</span>
+<span class="fc" id="L2035">          : Math.max(m.startPosition - 1, end);</span>
     }
-<span class="pc bpc" id="L2037" title="1 of 2 branches missed.">    if (group.right != null) {</span>
-<span class="nc bnc" id="L2038" title="All 2 branches missed.">      start = start == null ? m.endPosition : Math.min(m.endPosition, start);</span>
-<span class="nc bnc" id="L2039" title="All 2 branches missed.">      end = end == null ? m.endPosition + group.right.length - 1</span>
-<span class="nc" id="L2040">          : Math.max(m.endPosition + group.right.length - 1, end);</span>
+<span class="fc bfc" id="L2037" title="All 2 branches covered.">    if (group.right != null) {</span>
+<span class="fc bfc" id="L2038" title="All 2 branches covered.">      start = start == null ? m.endPosition : Math.min(m.endPosition, start);</span>
+<span class="fc bfc" id="L2039" title="All 2 branches covered.">      end = end == null ? m.endPosition + group.right.length - 1</span>
+<span class="fc" id="L2040">          : Math.max(m.endPosition + group.right.length - 1, end);</span>
     }
 <span class="fc" id="L2042">    return new IntervalTreeNodeData&lt;&gt;(start, end, m.startPosition,</span>
         m.endPosition - 1);
@@ -3114,7 +3114,7 @@ public class CodecCollector {
 <span class="fc" id="L3114">            compiledAutomaton = new CompiledAutomaton(automaton);</span>
 <span class="fc" id="L3115">            listAutomata.add(compiledAutomaton);</span>
 <span class="fc" id="L3116">          } else {</span>
-<span class="pc bpc" id="L3117" title="1 of 2 branches missed.">            automatonMap = MtasToken.createAutomatonMap(termVector.prefix,</span>
+<span class="fc bfc" id="L3117" title="All 2 branches covered.">            automatonMap = MtasToken.createAutomatonMap(termVector.prefix,</span>
                 new ArrayList&lt;String&gt;(termVector.list),
 <span class="fc" id="L3119">                termVector.listRegexp ? false : true);</span>
 <span class="fc" id="L3120">            listAutomata = MtasToken.createAutomata(termVector.prefix,</span>
@@ -3129,16 +3129,16 @@ public class CodecCollector {
 <span class="fc" id="L3129">            ignoreByteRunAutomatonList</span>
 <span class="fc" id="L3130">                .add(new ByteRunAutomaton(re.toAutomaton()));</span>
           }
-<span class="pc bpc" id="L3132" title="1 of 2 branches missed.">          if (termVector.ignoreList != null) {</span>
-<span class="nc bnc" id="L3133" title="All 2 branches missed.">            if (ignoreByteRunAutomatonList == null) {</span>
+<span class="fc bfc" id="L3132" title="All 2 branches covered.">          if (termVector.ignoreList != null) {</span>
+<span class="pc bpc" id="L3133" title="1 of 2 branches missed.">            if (ignoreByteRunAutomatonList == null) {</span>
 <span class="nc" id="L3134">              ignoreByteRunAutomatonList = new ArrayList&lt;&gt;();</span>
             }
-<span class="nc bnc" id="L3136" title="All 2 branches missed.">            Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(</span>
+<span class="pc bpc" id="L3136" title="1 of 2 branches missed.">            Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(</span>
                 termVector.prefix, new ArrayList&lt;String&gt;(termVector.ignoreList),
-<span class="nc" id="L3138">                termVector.ignoreListRegexp ? false : true);</span>
-<span class="nc bnc" id="L3139" title="All 2 branches missed.">            for (Automaton automaton : list.values()) {</span>
-<span class="nc" id="L3140">              ignoreByteRunAutomatonList.add(new ByteRunAutomaton(automaton));</span>
-<span class="nc" id="L3141">            }</span>
+<span class="fc" id="L3138">                termVector.ignoreListRegexp ? false : true);</span>
+<span class="fc bfc" id="L3139" title="All 2 branches covered.">            for (Automaton automaton : list.values()) {</span>
+<span class="fc" id="L3140">              ignoreByteRunAutomatonList.add(new ByteRunAutomaton(automaton));</span>
+<span class="fc" id="L3141">            }</span>
           }
 <span class="fc bfc" id="L3143" title="All 2 branches covered.">          for (CompiledAutomaton compiledAutomaton : listAutomata) {</span>
 <span class="fc" id="L3144">            if (!compiledAutomaton.type</span>
@@ -3181,14 +3181,14 @@ public class CodecCollector {
 <span class="fc" id="L3181">                    acceptedTerm = true;</span>
 <span class="fc bfc" id="L3182" title="All 2 branches covered.">                    if (ignoreByteRunAutomatonList != null) {</span>
 <span class="fc bfc" id="L3183" title="All 2 branches covered.">                      for (ByteRunAutomaton ignoreByteRunAutomaton : ignoreByteRunAutomatonList) {</span>
-<span class="pc bpc" id="L3184" title="1 of 2 branches missed.">                        if (ignoreByteRunAutomaton.run(term.bytes, term.offset,</span>
+<span class="fc bfc" id="L3184" title="All 2 branches covered.">                        if (ignoreByteRunAutomaton.run(term.bytes, term.offset,</span>
                             term.length)) {
-<span class="nc" id="L3186">                          acceptedTerm = false;</span>
-<span class="nc" id="L3187">                          break;</span>
+<span class="fc" id="L3186">                          acceptedTerm = false;</span>
+<span class="fc" id="L3187">                          break;</span>
                         }
 <span class="fc" id="L3189">                      }</span>
                     }
-<span class="pc bpc" id="L3191" title="1 of 2 branches missed.">                    if (acceptedTerm) {</span>
+<span class="fc bfc" id="L3191" title="All 2 branches covered.">                    if (acceptedTerm) {</span>
 <span class="fc bfc" id="L3192" title="All 2 branches covered.">                      if (doBasic) {</span>
                         // compute numbers;
 <span class="fc" id="L3194">                        TermvectorNumberBasic numberBasic = computeTermvectorNumberBasic(</span>
@@ -3356,16 +3356,16 @@ public class CodecCollector {
 <span class="fc" id="L3356">          ignoreByteRunAutomatonList</span>
 <span class="fc" id="L3357">              .add(new ByteRunAutomaton(re.toAutomaton()));</span>
         }
-<span class="pc bpc" id="L3359" title="1 of 2 branches missed.">        if (termVector.ignoreList != null) {</span>
-<span class="nc bnc" id="L3360" title="All 2 branches missed.">          if (ignoreByteRunAutomatonList == null) {</span>
+<span class="fc bfc" id="L3359" title="All 2 branches covered.">        if (termVector.ignoreList != null) {</span>
+<span class="pc bpc" id="L3360" title="1 of 2 branches missed.">          if (ignoreByteRunAutomatonList == null) {</span>
 <span class="nc" id="L3361">            ignoreByteRunAutomatonList = new ArrayList&lt;&gt;();</span>
           }
-<span class="nc bnc" id="L3363" title="All 2 branches missed.">          Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(</span>
+<span class="pc bpc" id="L3363" title="1 of 2 branches missed.">          Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(</span>
               termVector.prefix, new ArrayList&lt;String&gt;(termVector.ignoreList),
-<span class="nc" id="L3365">              termVector.ignoreListRegexp ? false : true);</span>
-<span class="nc bnc" id="L3366" title="All 2 branches missed.">          for (Automaton automaton : list.values()) {</span>
-<span class="nc" id="L3367">            ignoreByteRunAutomatonList.add(new ByteRunAutomaton(automaton));</span>
-<span class="nc" id="L3368">          }</span>
+<span class="fc" id="L3365">              termVector.ignoreListRegexp ? false : true);</span>
+<span class="fc bfc" id="L3366" title="All 2 branches covered.">          for (Automaton automaton : list.values()) {</span>
+<span class="fc" id="L3367">            ignoreByteRunAutomatonList.add(new ByteRunAutomaton(automaton));</span>
+<span class="fc" id="L3368">          }</span>
         }
 <span class="fc bfc" id="L3370" title="All 4 branches covered.">        if (!termVector.full &amp;&amp; termVector.list == null) {</span>
 <span class="fc" id="L3371">          termsEnum = t.intersect(compiledAutomaton, null);</span>

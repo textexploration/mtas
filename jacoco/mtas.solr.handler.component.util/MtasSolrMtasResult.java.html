@@ -237,7 +237,7 @@ public class MtasSolrMtasResult implements Serializable {
       }
       // main result
 <span class="fc" id="L239">      MtasDataItem&lt;?, ?&gt; dataItem = dataCollector.getResult().getData();</span>
-<span class="pc bpc" id="L240" title="1 of 2 branches missed.">      if (dataItem != null) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">      if (dataItem != null) {</span>
 <span class="fc" id="L241">        mtasResponse.addAll(dataItem.rewrite(showDebugInfo));</span>
 <span class="pc bpc" id="L242" title="1 of 2 branches missed.">        if (functionList.size() &gt; 0) {</span>
 <span class="nc" id="L243">          mtasResponse.add(&quot;functions&quot;, functionList);</span>
@@ -309,7 +309,7 @@ public class MtasSolrMtasResult implements Serializable {
 <span class="fc" id="L309">      SimpleOrderedMap&lt;Object&gt; mtasResponseList = new SimpleOrderedMap&lt;&gt;();</span>
       // functions
 <span class="fc" id="L311">      Map&lt;String, SimpleOrderedMap&lt;Object&gt;&gt; functionList = new HashMap&lt;&gt;();</span>
-<span class="pc bpc" id="L312" title="2 of 4 branches missed.">      if (functionData != null &amp;&amp; functionData.containsKey(dataCollector)) {</span>
+<span class="pc bpc" id="L312" title="1 of 4 branches missed.">      if (functionData != null &amp;&amp; functionData.containsKey(dataCollector)) {</span>
 <span class="fc" id="L313">        HashMap&lt;String, MtasSolrMtasResult&gt; functionDataItem = functionData</span>
 <span class="fc" id="L314">            .get(dataCollector);</span>
 <span class="pc bpc" id="L315" title="1 of 2 branches missed.">        for (Entry&lt;String, MtasSolrMtasResult&gt; entry : functionDataItem</span>
@@ -341,7 +341,7 @@ public class MtasSolrMtasResult implements Serializable {
 <span class="fc bfc" id="L341" title="All 2 branches covered.">      for (Entry&lt;String, ?&gt; entry : dataList.entrySet()) {</span>
 <span class="fc" id="L342">        SimpleOrderedMap&lt;Object&gt; mtasResponseListItem = new SimpleOrderedMap&lt;&gt;();</span>
 <span class="fc" id="L343">        MtasDataItem&lt;?, ?&gt; dataItem = (MtasDataItem&lt;?, ?&gt;) entry.getValue();</span>
-<span class="pc bpc" id="L344" title="2 of 4 branches missed.">        if (this.distances != null &amp;&amp; !this.distances.isEmpty()) {</span>
+<span class="pc bpc" id="L344" title="1 of 4 branches missed.">        if (this.distances != null &amp;&amp; !this.distances.isEmpty()) {</span>
 <span class="nc" id="L345">          SimpleOrderedMap&lt;Object&gt; mtasResponseListItemDistance = new SimpleOrderedMap&lt;&gt;();</span>
 <span class="nc bnc" id="L346" title="All 2 branches missed.">          for (SubComponentDistance item : this.distances) {</span>
 <span class="nc" id="L347">            mtasResponseListItemDistance.add(item.key,</span>
