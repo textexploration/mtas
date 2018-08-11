@@ -30,6 +30,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import mtas.analysis.token.MtasPosition;
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenString;
 import mtas.codec.util.CodecSearchTree.MtasTreeHit;
@@ -47,7 +49,6 @@ import org.apache.lucene.util.BytesRef;
 import org.noggit.JSONParser;
 import org.noggit.ObjectBuilder;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CodecComponent.
  */
@@ -85,6 +86,9 @@ public class CodecComponent {
 
     /** The do list. */
     public boolean doList;
+
+    /** The do page. */
+    public boolean doPage;
 
     /** The do group. */
     public boolean doGroup;
@@ -129,6 +133,7 @@ public class CodecComponent {
       doDocument = false;
       doKwic = false;
       doList = false;
+      doPage = false;
       doGroup = false;
       doStats = false;
       doTermVector = false;
@@ -166,6 +171,9 @@ public class CodecComponent {
     /** The list list. */
     public List<ComponentList> listList;
 
+    /** The page list. */
+    public List<ComponentPage> pageList;
+
     /** The group list. */
     public List<ComponentGroup> groupList;
 
@@ -202,6 +210,7 @@ public class CodecComponent {
       documentList = new ArrayList<>();
       kwicList = new ArrayList<>();
       listList = new ArrayList<>();
+      pageList = new ArrayList<>();
       groupList = new ArrayList<>();
       facetList = new ArrayList<>();
       termVectorList = new ArrayList<>();
@@ -726,7 +735,75 @@ public class CodecComponent {
       }
     }
   }
+  
+  /**
+   * The Class ComponentPage.
+   */
+  public static class ComponentPage implements BasicComponent {
+    /** The key. */
+    public String key;
+    
+    /** The unique key. */
+    public Map<Integer, String> uniqueKey;
 
+    /** The min position. */
+    public Map<Integer, Integer> minPosition;
+
+    /** The max position. */
+    public Map<Integer, Integer> maxPosition;
+    
+    /** The word list. */
+    public Map<Integer, Map<Integer, PageWordData>> wordList;
+    
+    /** The range list. */
+    public Map<Integer, Map<Integer, PageRangeData>> rangeList;
+    
+    /** The set list. */
+    public Map<Integer, Map<Integer, PageSetData>> setList;
+
+    /** The prefixes. */
+    public List<String> prefixes;
+
+    /** The start. */
+    public int start;
+
+    /** The end. */
+    public int end;
+
+    /**
+     * Instantiates a new component list.
+     *
+     * @param field          the field
+     * @param key          the key
+     * @param prefix          the prefix
+     * @param start          the start
+     * @param end the end
+     * @throws IOException           Signals that an I/O exception has occurred.
+     */
+    public ComponentPage(String field, String key, String prefix, int start,
+        int end) throws IOException {
+      this.key = key;
+      this.start = start;
+      this.end = end;
+      uniqueKey = new HashMap<>();
+      minPosition = new HashMap<>();
+      maxPosition = new HashMap<>();
+      wordList = new HashMap();
+      rangeList = new HashMap();
+      setList = new HashMap();
+      this.prefixes = new ArrayList<>();
+      if ((prefix != null) && (prefix.trim().length() > 0)) {
+        List<String> l = Arrays.asList(prefix.split(Pattern.quote(",")));
+        for (String ls : l) {
+          if (ls.trim().length() > 0) {
+            this.prefixes.add(ls.trim());
+          }
+        }
+      }
+    }
+
+  }
+  
   /**
    * The Class ComponentGroup.
    */
@@ -1604,7 +1681,11 @@ public class CodecComponent {
    * The Class ComponentVersion.
    */
   public static class ComponentVersion implements BasicComponent {
-	  public ComponentVersion() {
+	  
+  	/**
+  	 * Instantiates a new component version.
+  	 */
+  	public ComponentVersion() {
 		  
 	  }
   }
@@ -3365,6 +3446,187 @@ public class CodecComponent {
       this.hits = hits;
     }
   }
+  
+  
+  /**
+   * The Class PageWordData.
+   */
+  public static class PageWordData {
+    
+    /** The words. */
+    public List<PageWord> words;
+    
+    /**
+     * Adds the.
+     *
+     * @param token the token
+     */
+    public void add(MtasTokenString token) {
+      words.add(new PageWord(token));
+    }
+    
+    /**
+     * Instantiates a new page word data.
+     */
+    public PageWordData() {
+      words = new ArrayList<>();
+    }
+  }
+  
+  /**
+   * The Class PageWord.
+   */
+  public static class PageWord {
+    
+    /** The id. */
+    public int id;
+    
+    /** The prefix. */
+    public String prefix;
+    
+    /** The postfix. */
+    public String postfix;
+    
+    /** The parent id. */
+    public Integer parentId;
+    
+    /**
+     * Instantiates a new page word.
+     *
+     * @param token the token
+     */
+    public PageWord(MtasTokenString token) {
+      id = token.getId();
+      prefix = token.getPrefix();
+      postfix = token.getPostfix();
+      parentId = token.getParentId();
+    }
+    
+  }
+  
+/**
+ * The Class PageRangeData.
+ */
+public static class PageRangeData {
+    
+    /** The ranges. */
+    public List<PageRange> ranges;
+    
+    /**
+     * Adds the.
+     *
+     * @param token the token
+     */
+    public void add(MtasTokenString token) {
+      ranges.add(new PageRange(token));
+    }
+    
+    /**
+     * Instantiates a new page range data.
+     */
+    public PageRangeData() {
+      ranges = new ArrayList<>();
+    }
+  }
+
+/**
+ * The Class PageRange.
+ */
+public static class PageRange {
+  
+  /** The id. */
+  public int id;
+  
+  /** The start. */
+  public int start;
+  
+  /** The end. */
+  public int end;
+  
+  /** The prefix. */
+  public String prefix;
+  
+  /** The postfix. */
+  public String postfix;
+  
+  /** The parent id. */
+  public Integer parentId;
+  
+  /**
+   * Instantiates a new page range.
+   *
+   * @param token the token
+   */
+  public PageRange(MtasTokenString token) {
+    id = token.getId();
+    start = token.getPositionStart();
+    end = token.getPositionEnd();
+    prefix = token.getPrefix();
+    postfix = token.getPostfix();
+    parentId = token.getParentId();
+  }
+  
+}
+
+/**
+ * The Class PageSetData.
+ */
+public static class PageSetData {
+  
+  /** The sets. */
+  public List<PageSet> sets;
+  
+  /**
+   * Adds the.
+   *
+   * @param token the token
+   */
+  public void add(MtasTokenString token) {
+    sets.add(new PageSet(token));
+  }
+  
+  /**
+   * Instantiates a new page set data.
+   */
+  public PageSetData() {
+    sets = new ArrayList<>();
+  }
+}
+
+/**
+ * The Class PageSet.
+ */
+public static class PageSet {
+
+/** The id. */
+public int id;
+
+/** The positions. */
+public int[] positions;
+
+/** The prefix. */
+public String prefix;
+
+/** The postfix. */
+public String postfix;
+
+/** The parent id. */
+public Integer parentId;
+
+/**
+ * Instantiates a new page set.
+ *
+ * @param token the token
+ */
+public PageSet(MtasTokenString token) {
+  id = token.getId();
+  positions = token.getPositions();
+  prefix = token.getPrefix();
+  postfix = token.getPostfix();
+  parentId = token.getParentId();
+}
+
+}
 
   /**
    * The Class Match.

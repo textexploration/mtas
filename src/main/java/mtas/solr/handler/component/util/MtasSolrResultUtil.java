@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
@@ -32,6 +33,8 @@ import mtas.codec.util.CodecComponent.GroupHit;
 import mtas.codec.util.collector.MtasDataItem;
 import mtas.parser.cql.MtasCQLParser;
 import mtas.parser.cql.TokenMgrError;
+import mtas.parser.simple.MtasSimpleParser;
+import mtas.search.spans.MtasSpanOrQuery;
 import mtas.search.spans.util.MtasSpanQuery;
 import mtas.solr.handler.component.MtasSolrSearchComponent;
 
@@ -45,6 +48,9 @@ public class MtasSolrResultUtil {
 
   /** The Constant QUERY_TYPE_CQL. */
   public static final String QUERY_TYPE_CQL = "cql";
+
+  /** The Constant QUERY_TYPE_CQL. */
+  public static final String QUERY_TYPE_SIMPLE = "simple";
 
   /** The Constant patternKeyStartGrouphit. */
   public static final Pattern patternKeyStartGrouphit = Pattern
@@ -449,6 +455,19 @@ public class MtasSolrResultUtil {
           throw new IOException("couldn't parse " + queryType + " query "
               + queryIgnore + " (" + e.getMessage() + ")", e);
         }
+      } else if (queryType.equals(QUERY_TYPE_SIMPLE)) {
+        MtasSimpleParser ip = new MtasSimpleParser(queryIgnoreReader);
+        try {
+          List<MtasSpanQuery> iql = ip.parse(field, null, null, null);
+          MtasSpanQuery[] iqs = new MtasSpanQuery[iql.size()];
+          ignore = new MtasSpanOrQuery(iql.toArray(iqs));
+        } catch (mtas.parser.simple.ParseException e) {
+          throw new IOException("couldn't parse " + queryType + " query "
+              + queryIgnore + " (" + e.getMessage() + ")", e);
+        } catch (TokenMgrError e) {
+          throw new IOException("couldn't parse " + queryType + " query "
+              + queryIgnore + " (" + e.getMessage() + ")", e);
+        }
       } else {
         throw new IOException(
             "unknown queryType " + queryType + " for query " + queryValue);
@@ -461,6 +480,20 @@ public class MtasSolrResultUtil {
         return qp.parse(field, queryPrefix, queryVariables, ignore,
             maximumIgnoreLength);
       } catch (mtas.parser.cql.ParseException e) {
+        throw new IOException("couldn't parse " + queryType + " query "
+            + queryValue + " (" + e.getMessage() + ")", e);
+      } catch (TokenMgrError e) {
+        throw new IOException("couldn't parse " + queryType + " query "
+            + queryValue + " (" + e.getMessage() + ")", e);
+      }
+    } else if (queryType.equals(QUERY_TYPE_SIMPLE)) {
+      MtasSimpleParser qp = new MtasSimpleParser(queryValueReader);
+      try {
+        List<MtasSpanQuery> ql = qp.parse(field, queryPrefix, ignore,
+            maximumIgnoreLength);
+        MtasSpanQuery[] iqs = new MtasSpanQuery[ql.size()];
+        return new MtasSpanOrQuery(ql.toArray(iqs));
+      } catch (mtas.parser.simple.ParseException e) {
         throw new IOException("couldn't parse " + queryType + " query "
             + queryValue + " (" + e.getMessage() + ")", e);
       } catch (TokenMgrError e) {

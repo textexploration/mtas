@@ -16,6 +16,7 @@ import mtas.codec.util.CodecComponent.ComponentGroup;
 import mtas.codec.util.CodecComponent.ComponentCollection;
 import mtas.codec.util.CodecComponent.ComponentKwic;
 import mtas.codec.util.CodecComponent.ComponentList;
+import mtas.codec.util.CodecComponent.ComponentPage;
 import mtas.codec.util.CodecComponent.ComponentPosition;
 import mtas.codec.util.CodecComponent.ComponentSpan;
 import mtas.codec.util.CodecComponent.ComponentTermVector;
@@ -34,6 +35,7 @@ import mtas.solr.handler.MtasRequestHandler.ShardInformation;
 import mtas.solr.handler.component.util.MtasSolrComponentCollection;
 import mtas.solr.handler.component.util.MtasSolrComponentKwic;
 import mtas.solr.handler.component.util.MtasSolrComponentList;
+import mtas.solr.handler.component.util.MtasSolrComponentPage;
 import mtas.solr.handler.component.util.MtasSolrComponentPrefix;
 import mtas.solr.handler.component.util.MtasSolrComponentStats;
 import mtas.solr.handler.component.util.MtasSolrComponentStatus;
@@ -141,7 +143,10 @@ public class MtasSolrSearchComponent extends SearchComponent {
 	/** The search kwic. */
 	private MtasSolrComponentKwic searchKwic;
 
-	/** The search document. */
+	/** The search page. */
+  private MtasSolrComponentPage searchPage;
+
+  /** The search document. */
 	private MtasSolrComponentDocument searchDocument;
 
 	/** The search collection. */
@@ -150,6 +155,7 @@ public class MtasSolrSearchComponent extends SearchComponent {
 	/** The search status. */
 	private MtasSolrComponentStatus searchStatus;
 
+	/** The search version. */
 	private MtasSolrComponentVersion searchVersion;
 
 	/** The collection cache. */
@@ -176,7 +182,8 @@ public class MtasSolrSearchComponent extends SearchComponent {
 		searchDocument = new MtasSolrComponentDocument(this);
 		searchKwic = new MtasSolrComponentKwic(this);
 		searchList = new MtasSolrComponentList(this);
-		searchGroup = new MtasSolrComponentGroup(this);
+		searchPage = new MtasSolrComponentPage(this);
+    searchGroup = new MtasSolrComponentGroup(this);
 		searchTermvector = new MtasSolrComponentTermvector(this);
 		searchPrefix = new MtasSolrComponentPrefix(this);
 		searchStats = new MtasSolrComponentStats(this);
@@ -284,7 +291,11 @@ public class MtasSolrSearchComponent extends SearchComponent {
 				if (rb.req.getParams().getBool(MtasSolrComponentList.PARAM_MTAS_LIST, false)) {
 					searchList.prepare(rb, mtasFields);
 				}
-				// get settings group
+			  // get settings page
+        if (rb.req.getParams().getBool(MtasSolrComponentPage.PARAM_MTAS_PAGE, false)) {
+          searchPage.prepare(rb, mtasFields);
+        }
+        // get settings group
 				if (rb.req.getParams().getBool(MtasSolrComponentGroup.PARAM_MTAS_GROUP, false)) {
 					searchGroup.prepare(rb, mtasFields);
 				}
@@ -346,7 +357,7 @@ public class MtasSolrSearchComponent extends SearchComponent {
 					if (mtasFields != null) {
 						DocSet docSet = rb.getResults().docSet;
 						DocList docList = rb.getResults().docList;
-						if (mtasFields.doStats || mtasFields.doDocument || mtasFields.doKwic || mtasFields.doList
+						if (mtasFields.doStats || mtasFields.doDocument || mtasFields.doKwic || mtasFields.doList || mtasFields.doPage
 								|| mtasFields.doGroup || mtasFields.doFacet || mtasFields.doCollection
 								|| mtasFields.doTermVector || mtasFields.doPrefix || mtasFields.doStatus
 								|| mtasFields.doVersion) {
@@ -455,7 +466,17 @@ public class MtasSolrSearchComponent extends SearchComponent {
 								// add to response
 								mtasResponse.add(MtasSolrComponentList.NAME, mtasListResponses);
 							}
-							if (mtasFields.doGroup) {
+							if (mtasFields.doPage) {
+                ArrayList<NamedList<?>> mtasPageResponses = new ArrayList<>();
+                for (String field : mtasFields.list.keySet()) {
+                  for (ComponentPage page : mtasFields.list.get(field).pageList) {
+                    mtasPageResponses.add(searchPage.create(page, false));
+                  }
+                }
+                // add to response
+                mtasResponse.add(MtasSolrComponentPage.NAME, mtasPageResponses);
+              }
+              if (mtasFields.doGroup) {
 								ArrayList<NamedList<?>> mtasGroupResponses = new ArrayList<>();
 								for (String field : mtasFields.list.keySet()) {
 									for (ComponentGroup group : mtasFields.list.get(field).groupList) {
@@ -648,6 +669,9 @@ public class MtasSolrSearchComponent extends SearchComponent {
 				if (sreq.params.getBool(MtasSolrComponentKwic.PARAM_MTAS_KWIC, false)) {
 					searchKwic.modifyRequest(rb, who, sreq);
 				}
+				if (sreq.params.getBool(MtasSolrComponentPage.PARAM_MTAS_PAGE, false)) {
+          searchPage.modifyRequest(rb, who, sreq);
+        }
 			}
 		} catch (ExitableDirectoryReader.ExitingReaderException e) {
 			solrStatus.setError(e.getMessage());
@@ -737,6 +761,9 @@ public class MtasSolrSearchComponent extends SearchComponent {
 				if (rb.req.getParams().getBool(MtasSolrComponentKwic.PARAM_MTAS_KWIC, false)) {
 					searchKwic.finishStage(rb);
 				}
+				if (rb.req.getParams().getBool(MtasSolrComponentPage.PARAM_MTAS_PAGE, false)) {
+          searchPage.finishStage(rb);
+        }
 				mtasSolrResultMerge.merge(rb);
 			}
 		} catch (ExitableDirectoryReader.ExitingReaderException e) {

@@ -47,6 +47,7 @@
           </item>
           <item name="Kwic" href="search_component_kwic.html"/>
           <item name="List" href="search_component_list.html"/>
+          <item name="Page" href="search_component_page.html"/>
           <item name="Document" href="search_component_document.html"/>
           <item name="Termvector" href="search_component_termvector.html"/>
           <item name="Facet" href="search_component_facet.html"/>
@@ -57,6 +58,7 @@
         </item> 
         <item name="Parser" href="search_parser.html">
           <item name="CQL query" href="search_parser_cql.html"/>
+          <item name="Simple query" href="search_parser_simple.html"/>
           <item name="Join query" href="search_parser_join.html"/>  
         </item>
         <item name="Handler" href="search_handler.html">
@@ -64,6 +66,7 @@
         <item name="Type of statistics" href="search_stats.html"/>
         <item name="Functions" href="search_functions.html"/>
         <item name="CQL" href="search_cql.html"/>
+        <item name="Simple" href="search_simple.html"/>
         <item name="Sharding" href="search_sharding.html"/>                 
       </item>
       <item name="Download" href="download.html"/> 

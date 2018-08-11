@@ -32,6 +32,7 @@ import mtas.codec.util.CodecComponent.ComponentGroup;
 import mtas.codec.util.CodecComponent.ComponentCollection;
 import mtas.codec.util.CodecComponent.ComponentKwic;
 import mtas.codec.util.CodecComponent.ComponentList;
+import mtas.codec.util.CodecComponent.ComponentPage;
 import mtas.codec.util.CodecComponent.ComponentPosition;
 import mtas.codec.util.CodecComponent.ComponentSpan;
 import mtas.codec.util.CodecComponent.ComponentTermVector;
@@ -42,6 +43,9 @@ import mtas.codec.util.CodecComponent.KwicToken;
 import mtas.codec.util.CodecComponent.ListHit;
 import mtas.codec.util.CodecComponent.ListToken;
 import mtas.codec.util.CodecComponent.Match;
+import mtas.codec.util.CodecComponent.PageRangeData;
+import mtas.codec.util.CodecComponent.PageSetData;
+import mtas.codec.util.CodecComponent.PageWordData;
 import mtas.codec.util.CodecComponent.SubComponentDistance;
 import mtas.codec.util.CodecComponent.SubComponentFunction;
 import mtas.codec.util.CodecInfo.IndexDoc;
@@ -106,30 +110,19 @@ public class CodecCollector {
   /**
    * Collect field.
    *
-   * @param field
-   *          the field
-   * @param searcher
-   *          the searcher
-   * @param reader
-   *          the reader
-   * @param rawReader
-   *          the raw reader
-   * @param fullDocList
-   *          the full doc list
-   * @param fullDocSet
-   *          the full doc set
-   * @param fieldInfo
-   *          the field info
-   * @param spansQueryWeight
-   *          the spans query weight
-   * @throws IllegalAccessException
-   *           the illegal access exception
-   * @throws IllegalArgumentException
-   *           the illegal argument exception
-   * @throws InvocationTargetException
-   *           the invocation target exception
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
+   * @param field          the field
+   * @param searcher          the searcher
+   * @param reader          the reader
+   * @param rawReader          the raw reader
+   * @param fullDocList          the full doc list
+   * @param fullDocSet          the full doc set
+   * @param fieldInfo          the field info
+   * @param spansQueryWeight          the spans query weight
+   * @param status the status
+   * @throws IllegalAccessException           the illegal access exception
+   * @throws IllegalArgumentException           the illegal argument exception
+   * @throws InvocationTargetException           the invocation target exception
+   * @throws IOException           Signals that an I/O exception has occurred.
    */
   public static void collectField(String field, IndexSearcher searcher,
       IndexReader reader, IndexReader rawReader, List<Integer> fullDocList,
@@ -150,14 +143,6 @@ public class CodecCollector {
     }
 
     while (iterator.hasNext()) {
-      // try
-      // {
-      // Thread.sleep(10000);
-      // }
-      // catch(InterruptedException ex)
-      // {
-      // Thread.currentThread().interrupt();
-      // }
       LeafReaderContext lrc = iterator.next();
       LeafReader r = lrc.reader();
       // compute relevant docSet/docList
@@ -325,30 +310,19 @@ public class CodecCollector {
   /**
    * Collect spans positions and tokens.
    *
-   * @param spansQueryWeight
-   *          the spans query weight
-   * @param searcher
-   *          the searcher
-   * @param mtasCodecInfo
-   *          the mtas codec info
-   * @param r
-   *          the r
-   * @param lrc
-   *          the lrc
-   * @param field
-   *          the field
-   * @param t
-   *          the t
-   * @param docSet
-   *          the doc set
-   * @param docList
-   *          the doc list
-   * @param fieldInfo
-   *          the field info
-   * @param fieldInfos
-   *          the field infos
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
+   * @param spansQueryWeight          the spans query weight
+   * @param searcher          the searcher
+   * @param mtasCodecInfo          the mtas codec info
+   * @param r          the r
+   * @param lrc          the lrc
+   * @param field          the field
+   * @param t          the t
+   * @param docSet          the doc set
+   * @param docList          the doc list
+   * @param fieldInfo          the field info
+   * @param fieldInfos          the field infos
+   * @param status the status
+   * @throws IOException           Signals that an I/O exception has occurred.
    */
   private static void collectSpansPositionsAndTokens(
       Map<MtasSpanQuery, SpanWeight> spansQueryWeight, IndexSearcher searcher,
@@ -870,6 +844,14 @@ public class CodecCollector {
       // create positions
       createTokens(fieldInfo.statsTokenList, tokensData, docSet);
     }
+    
+    if (!fieldInfo.pageList.isEmpty()) {
+      // create pages
+      createPages(fieldInfo.pageList, docList, fieldInfos.fieldInfo(field), field,
+          lrc.docBase, fieldInfo.uniqueKeyField,
+          mtasCodecInfo,
+          searcher);
+    }
 
     if (!fieldInfo.documentList.isEmpty()) {
       // create document
@@ -1002,14 +984,11 @@ public class CodecCollector {
   /**
    * Collect prefixes.
    *
-   * @param fieldInfos
-   *          the field infos
-   * @param field
-   *          the field
-   * @param fieldInfo
-   *          the field info
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
+   * @param fieldInfos          the field infos
+   * @param field          the field
+   * @param fieldInfo          the field info
+   * @param status the status
+   * @throws IOException           Signals that an I/O exception has occurred.
    */
   private static void collectPrefixes(FieldInfos fieldInfos, String field,
       ComponentField fieldInfo, Status status) throws IOException {
@@ -1397,6 +1376,8 @@ public class CodecCollector {
       }
     }
   }
+  
+    
 
   /**
    * Creates the stats.
@@ -1762,26 +1743,17 @@ public class CodecCollector {
   /**
    * Creates the group.
    *
-   * @param groupList
-   *          the group list
-   * @param spansMatchData
-   *          the spans match data
-   * @param docSet
-   *          the doc set
-   * @param fieldInfo
-   *          the field info
-   * @param field
-   *          the field
-   * @param docBase
-   *          the doc base
-   * @param mtasCodecInfo
-   *          the mtas codec info
-   * @param searcher
-   *          the searcher
-   * @param lrc
-   *          the lrc
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
+   * @param groupList          the group list
+   * @param spansMatchData          the spans match data
+   * @param docSet          the doc set
+   * @param fieldInfo          the field info
+   * @param field          the field
+   * @param docBase          the doc base
+   * @param mtasCodecInfo          the mtas codec info
+   * @param searcher          the searcher
+   * @param lrc          the lrc
+   * @param status the status
+   * @throws IOException           Signals that an I/O exception has occurred.
    */
   private static void createGroup(List<ComponentGroup> groupList,
       Map<MtasSpanQuery, Map<Integer, List<Match>>> spansMatchData,
@@ -2268,6 +2240,137 @@ public class CodecCollector {
       // light sorting on start position
       Collections.sort(list, (Match m1,
           Match m2) -> (Integer.compare(m1.startPosition, m2.startPosition)));
+    }
+  }
+  
+  /**
+   * Creates the pages.
+   *
+   * @param pageList the page list
+   * @param docList the doc list
+   * @param fieldInfo the field info
+   * @param field the field
+   * @param docBase the doc base
+   * @param uniqueKeyField the unique key field
+   * @param mtasCodecInfo the mtas codec info
+   * @param searcher the searcher
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  private static void createPages(List<ComponentPage> pageList,
+      List<Integer> docList, FieldInfo fieldInfo, String field, int docBase, String uniqueKeyField, 
+      CodecInfo mtasCodecInfo, IndexSearcher searcher)
+      throws IOException {
+    if (pageList != null) {
+      for (ComponentPage page : pageList) {
+        // initialize
+        for (int docId : docList) {
+          // get unique id
+          Document doc = searcher.doc(docId,
+              new HashSet<String>(Arrays.asList(uniqueKeyField)));
+          IndexableField indxfld = doc.getField(uniqueKeyField);
+          // get other doc info
+          if (indxfld != null) {
+            page.uniqueKey.put(docId, indxfld.stringValue());
+          }
+          IndexDoc mDoc = mtasCodecInfo.getDoc(field, (docId - docBase));
+          if (mDoc != null) {
+            page.minPosition.put(docId, mDoc.minPosition);
+            page.maxPosition.put(docId, mDoc.maxPosition);
+            //get prefixes
+            String singlePositionPrefixes = fieldInfo.getAttribute(
+                MtasCodecPostingsFormat.MTAS_FIELDINFO_ATTRIBUTE_PREFIX_SINGLE_POSITION);
+            String multiplePositionPrefixes = fieldInfo.getAttribute(
+                MtasCodecPostingsFormat.MTAS_FIELDINFO_ATTRIBUTE_PREFIX_MULTIPLE_POSITION);
+            String setPositionPrefixes = fieldInfo.getAttribute(
+                MtasCodecPostingsFormat.MTAS_FIELDINFO_ATTRIBUTE_PREFIX_SET_POSITION);
+            //collect tokens
+            List<MtasTokenString> tokens;
+            List<String> allPrefixes;
+            //words
+            if (singlePositionPrefixes != null) {
+              allPrefixes = new ArrayList<>(Arrays.asList(singlePositionPrefixes
+                  .split(Pattern.quote(MtasToken.DELIMITER))));
+              if(!page.prefixes.isEmpty()) {
+                allPrefixes.retainAll(page.prefixes);
+              }
+              if(allPrefixes.size()>0) {
+                Map<Integer, PageWordData> wordList = new HashMap<>();
+                PageWordData wordData;
+                tokens = mtasCodecInfo.getPrefixFilteredObjectsByPositions(
+                    field, (docId - docBase), allPrefixes,
+                    Math.max(mDoc.minPosition, page.start),
+                    Math.min(mDoc.maxPosition, page.end));
+                for(MtasTokenString token : tokens) {
+                  if(wordList.containsKey(token.getPositionStart())) {
+                    wordData = wordList.get(token.getPositionStart());
+                  } else {
+                    wordData = new PageWordData();
+                    wordList.put(token.getPositionStart(), wordData);
+                  }
+                  wordData.add(token);
+                }
+                page.wordList.put(docId, wordList);
+              }
+            }
+            //ranges
+            if (multiplePositionPrefixes != null) {
+              allPrefixes = new ArrayList<>(Arrays.asList(multiplePositionPrefixes
+                  .split(Pattern.quote(MtasToken.DELIMITER))));
+              if (setPositionPrefixes != null) {
+                allPrefixes.removeAll(Arrays.asList(setPositionPrefixes
+                  .split(Pattern.quote(MtasToken.DELIMITER))));
+              }
+              if(!page.prefixes.isEmpty()) {
+                allPrefixes.retainAll(page.prefixes);
+              }
+              if(allPrefixes.size()>0) {
+                Map<Integer, PageRangeData> rangeList = new HashMap<>();
+                PageRangeData rangeData;
+                tokens = mtasCodecInfo.getPrefixFilteredObjectsByPositions(
+                    field, (docId - docBase), allPrefixes,
+                    Math.max(mDoc.minPosition, page.start),
+                    Math.min(mDoc.maxPosition, page.end));
+                for(MtasTokenString token : tokens) {
+                  if(rangeList.containsKey(token.getPositionStart())) {
+                    rangeData = rangeList.get(token.getPositionStart());
+                  } else {
+                    rangeData = new PageRangeData();
+                    rangeList.put(token.getPositionStart(), rangeData);
+                  }
+                  rangeData.add(token);
+                }
+                page.rangeList.put(docId, rangeList);
+              }
+            }
+            //sets
+            if (setPositionPrefixes != null) {
+              allPrefixes = new ArrayList<>(Arrays.asList(setPositionPrefixes
+                  .split(Pattern.quote(MtasToken.DELIMITER))));
+              if(!page.prefixes.isEmpty()) {
+                allPrefixes.retainAll(page.prefixes);
+              }
+              if(allPrefixes.size()>0) {
+                Map<Integer, PageSetData> setList = new HashMap<>();
+                PageSetData setData;
+                tokens = mtasCodecInfo.getPrefixFilteredObjectsByPositions(
+                    field, (docId - docBase), allPrefixes,
+                    Math.max(mDoc.minPosition, page.start),
+                    Math.min(mDoc.maxPosition, page.end));
+                for(MtasTokenString token : tokens) {
+                  if(setList.containsKey(token.getPositionStart())) {
+                    setData = setList.get(token.getPositionStart());
+                  } else {
+                    setData = new PageSetData();
+                    setList.put(token.getPositionStart(), setData);
+                  }
+                  setData.add(token);
+                }
+                page.setList.put(docId, setList);
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -3524,20 +3627,14 @@ public class CodecCollector {
   /**
    * Creates the termvector second round.
    *
-   * @param termVectorList
-   *          the term vector list
-   * @param positionsData
-   *          the positions data
-   * @param docSet
-   *          the doc set
-   * @param t
-   *          the t
-   * @param r
-   *          the r
-   * @param lrc
-   *          the lrc
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
+   * @param termVectorList          the term vector list
+   * @param positionsData          the positions data
+   * @param docSet          the doc set
+   * @param t          the t
+   * @param r          the r
+   * @param lrc          the lrc
+   * @param status the status
+   * @throws IOException           Signals that an I/O exception has occurred.
    */
   private static void createTermvectorSecondRound(
       List<ComponentTermVector> termVectorList,
