@@ -1375,6 +1375,7 @@
     -->
 
   <queryParser name="mtas_cql" class="mtas.solr.search.MtasSolrCQLQParserPlugin"/>
+  <queryParser name="mtas_simple" class="mtas.solr.search.MtasSolrSimpleQParserPlugin"/>
   <queryParser name="mtas_join" class="mtas.solr.search.MtasSolrJoinQParserPlugin"/>  
 
   <!-- Function Parsers

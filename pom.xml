@@ -137,6 +137,19 @@
 							<sourceDirectory>${project.basedir}/src/main/java/mtas/parser/function/</sourceDirectory>
 						</configuration>
 					</execution>
+					<execution>
+            <id>javacc3</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>javacc</goal>
+            </goals>
+            <configuration>
+              <jdkVersion>1.5</jdkVersion>
+              <javadocFriendlyComments>true</javadocFriendlyComments>
+              <packageName>mtas.parser.simple</packageName>
+              <sourceDirectory>${project.basedir}/src/main/java/mtas/parser/simple</sourceDirectory>
+            </configuration>
+          </execution>
 				</executions>
 			</plugin>
 			<plugin>

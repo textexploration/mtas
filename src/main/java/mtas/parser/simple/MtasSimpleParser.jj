@@ -1,0 +1,121 @@
+options
+{
+  STATIC = false;
+  UNICODE_INPUT = true;
+  JAVA_UNICODE_ESCAPE = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+
+  LOOKAHEAD= 1000;
+}
+
+PARSER_BEGIN(MtasSimpleParser)
+package mtas.parser.simple;
+import java.util.List;
+import java.util.ArrayList;
+import mtas.parser.simple.util.MtasSimpleParserWordQuery;
+import mtas.search.spans.util.MtasSpanQuery;
+import mtas.search.spans.util.MtasSpanUniquePositionQuery;
+import mtas.search.spans.MtasSpanSequenceItem;
+import mtas.search.spans.MtasSpanSequenceQuery;
+
+public class MtasSimpleParser
+{
+  public List<MtasSpanQuery> parse(String field, String defaultPrefix, MtasSpanQuery ignore, Integer maximumIgnoreLength) throws ParseException
+  {
+    List<MtasSpanQuery> queries = simple(field, defaultPrefix, ignore, maximumIgnoreLength);
+    for(int i=0; i<queries.size(); i++) {
+      queries.set(i, new MtasSpanUniquePositionQuery(queries.get(i)));
+    }
+    return queries; 
+  }
+
+}
+
+PARSER_END(MtasSimpleParser)
+
+SKIP :
+{
+    " "
+|   "\r"
+|   "\t"
+}
+
+
+TOKEN :
+{
+  < WORD :
+    (
+      "\\" ~[ ] //any escaped character
+    | //or
+      ~[ "\"", "\\", " ", "\r", "\t"] //any character except quote or backslash
+    )+ >
+}
+
+
+TOKEN:
+
+{
+    < QUOTE : ["\""] >
+}
+
+
+
+
+
+
+
+private List<MtasSpanQuery> simple(String field, String defaultPrefix, MtasSpanQuery ignore, Integer maximumIgnoreLength)  :
+{
+  MtasSpanQuery wordQuery;
+  Token quoted;
+  List<MtasSpanQuery> queries = new ArrayList<MtasSpanQuery>();
+  List<MtasSpanSequenceItem> quotedItems;
+} 
+{ 
+    
+  (
+    < QUOTE >
+    {
+      quotedItems = new ArrayList<MtasSpanSequenceItem>();
+    }
+    (
+      wordQuery = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
+	    {
+	      quotedItems.add(new MtasSpanSequenceItem(wordQuery, false));
+	    }
+	 )+
+	 < QUOTE >
+	 {
+       queries.add(new MtasSpanSequenceQuery(quotedItems, null, null));
+	 }
+    |
+    (
+      wordQuery = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
+      {
+        queries.add(wordQuery);
+      }
+    )+
+  )*
+  
+  <EOF>
+  
+  {
+    return queries;
+  }
+}
+
+private MtasSpanQuery simpleWord(String field, String defaultPrefix, MtasSpanQuery ignore, Integer maximumIgnoreLength) :
+{
+  Token word;
+  MtasSpanQuery query;
+}
+{
+  word = < WORD >
+  {
+    query = new MtasSimpleParserWordQuery(field, defaultPrefix, word.image);
+    return query;
+  }
+}  
+

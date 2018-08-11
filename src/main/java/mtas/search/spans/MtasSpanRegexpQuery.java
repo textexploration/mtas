@@ -1,6 +1,7 @@
 package mtas.search.spans;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import mtas.analysis.token.MtasToken;
 import mtas.codec.util.CodecUtil;
@@ -117,7 +118,7 @@ public class MtasSpanRegexpQuery extends MtasSpanQuery {
     if (value == null) {
       buffer.append(this.query.getField() + ":" + prefix);
     } else {
-      buffer.append(this.query.getField() + ":" + prefix + "=" + value);
+      buffer.append(this.query.getField() + ":" + prefix + "=" + value.replaceAll("\u0000\\*$","") );
     }
     buffer.append("])");
     return buffer.toString();

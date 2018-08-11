@@ -313,7 +313,7 @@ public class MtasSolrStatus {
    *          the new error
    */
   public final void setError(String error) {
-    this.errorMessage = Objects.requireNonNull(error, "error required");
+    this.errorMessage = (error==null)?"<unknown error>":error;
     this.errorStatus = true;
   }
 
