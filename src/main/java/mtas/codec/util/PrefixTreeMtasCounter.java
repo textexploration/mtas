@@ -66,8 +66,6 @@ public class PrefixTreeMtasCounter {
             if(i<number) {
               p=docSet[i];
             } else {
-              int p = docSet[0];
-              int i = 0;
               return false;
             }
           } 
