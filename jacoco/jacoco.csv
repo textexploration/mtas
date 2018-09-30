@@ -19,8 +19,8 @@ MTAS,mtas.analysis.parser,MtasCRMParser.MtasCRMAncestors,6,0,0,0,2,0,1,0,1,0
 MTAS,mtas.analysis.parser,MtasParser,11,65,1,7,2,13,2,5,1,2
 MTAS,mtas.analysis.parser,MtasXMLParser.MtasXMLParserMappingGroup,2,19,0,0,1,7,1,1,1,1
 MTAS,mtas.analysis.parser,MtasBasicParser.MtasParserMappingToken,0,45,0,0,0,15,0,4,0,4
-MTAS,mtas.analysis.parser,MtasSketchParser.MtasSketchParserMappingWordAnnotation,21,0,0,0,8,0,2,0,2,0
 MTAS,mtas.analysis.parser,MtasCRMParser.MtasCRMParserMappingCRMPair,21,0,0,0,8,0,2,0,2,0
+MTAS,mtas.analysis.parser,MtasSketchParser.MtasSketchParserMappingWordAnnotation,21,0,0,0,8,0,2,0,2,0
 MTAS,mtas.analysis.parser,MtasFoliaParser,0,22,0,0,0,9,0,2,0,2
 MTAS,mtas.analysis.parser,MtasElanParser,22,0,0,0,9,0,2,0,2,0
 MTAS,mtas.analysis.parser,MtasXMLParser.MtasXMLParserMappingRelationAnnotation,21,0,0,0,8,0,2,0,2,0
@@ -64,8 +64,8 @@ MTAS,mtas.search.similarities,MtasSimScorer,9,0,0,0,4,0,4,0,4,0
 MTAS,mtas.queries,MtasScoreProvider,8,0,0,0,4,0,3,0,3,0
 MTAS,mtas.queries,MtasScoreQuery,19,0,0,0,7,0,4,0,4,0
 MTAS,mtas.search.spans.util,MtasExtendedSpanTermQuery,96,119,9,13,17,24,11,7,3,4
-MTAS,mtas.search.spans.util,MtasExtendedSpanTermQuery.SpanTermWeight.new FilterSpans() {...},8,29,4,4,1,4,4,3,0,3
 MTAS,mtas.search.spans.util,MtasSpanUniquePositionSpans,37,279,11,39,9,71,11,30,3,13
+MTAS,mtas.search.spans.util,MtasExtendedSpanTermQuery.SpanTermWeight.new FilterSpans() {...},8,29,4,4,1,4,4,3,0,3
 MTAS,mtas.search.spans.util,MtasDisabledTwoPhaseIteratorSpanQuery.MtasDisabledTwoPhaseIteratorWeight,18,25,1,1,4,7,3,2,2,2
 MTAS,mtas.search.spans.util,MtasMaximumExpandSpans.new TwoPhaseIterator() {...},16,0,0,0,3,0,3,0,3,0
 MTAS,mtas.search.spans.util,MtasMaximumExpandSpans.new TwoPhaseIterator() {...},26,0,4,0,4,0,5,0,3,0
@@ -74,8 +74,8 @@ MTAS,mtas.search.spans.util,MtasDisabledTwoPhaseIteratorSpans,67,18,2,0,14,6,10,
 MTAS,mtas.search.spans.util,MtasExtendedTermSpans,78,89,9,9,24,26,8,7,2,4
 MTAS,mtas.search.spans.util,MtasExpandSpans,67,432,17,49,22,97,20,29,3,13
 MTAS,mtas.search.spans.util,MtasExpandSpanQuery.MtasExpandWeight,44,105,5,11,11,22,7,5,2,2
-MTAS,mtas.search.spans.util,MtasExpandSpans.new TwoPhaseIterator() {...},0,16,0,0,0,3,0,3,0,3
 MTAS,mtas.search.spans.util,MtasSpanUniquePositionQuery,38,110,2,8,8,25,4,11,2,8
+MTAS,mtas.search.spans.util,MtasExpandSpans.new TwoPhaseIterator() {...},0,16,0,0,0,3,0,3,0,3
 MTAS,mtas.search.spans.util,MtasExpandSpans.new TwoPhaseIterator() {...},1,25,2,2,0,4,2,3,0,3
 MTAS,mtas.search.spans.util,MtasSpanQuery,9,80,1,15,2,20,2,16,1,9
 MTAS,mtas.search.spans.util,MtasMaximumExpandSpanQuery.MtasMaximumExpandWeight,44,105,5,11,11,22,7,5,2,2
@@ -173,8 +173,8 @@ MTAS,mtas.search.spans,MtasSpanPrecededByQuery.SpanPrecededByWeight,24,56,1,1,7,
 MTAS,mtas.search.spans,MtasSpanSequenceItem,458,130,81,21,86,32,47,13,2,7
 MTAS,mtas.search.spans,MtasSpanFollowedByQuery,143,173,26,24,30,34,26,9,4,6
 MTAS,mtas.search.spans,MtasSpanMatchAllQuery,22,65,1,5,4,17,2,9,1,7
-MTAS,mtas.search.spans,MtasSpanRecurrenceQuery.SpanRecurrenceWeight,17,64,4,4,6,17,5,3,1,3
 MTAS,mtas.search.spans,MtasSpanTermQuery,22,71,1,9,7,15,5,10,4,6
+MTAS,mtas.search.spans,MtasSpanRecurrenceQuery.SpanRecurrenceWeight,17,64,4,4,6,17,5,3,1,3
 MTAS,mtas.search.spans,MtasSpanRecurrenceSpans.Match,29,40,5,5,7,11,6,4,1,4
 MTAS,mtas.search.spans,MtasSpanMatchNoneSpans,27,39,2,0,11,14,10,3,9,3
 MTAS,mtas.search.spans,MtasSpanMatchNoneQuery.SpanNoneWeight,13,65,0,6,5,15,3,5,3,2
@@ -217,7 +217,7 @@ MTAS,mtas.parser.function,TokenMgrError,175,0,17,0,37,0,18,0,6,0
 MTAS,mtas.parser.function,MtasFunctionParserTokenManager,366,701,82,71,84,149,62,45,7,14
 MTAS,mtas.parser.function,SimpleCharStream,797,269,45,15,136,61,53,16,26,12
 MTAS,mtas.codec.util,CodecComponent.ComponentFields,0,58,0,0,0,19,0,1,0,1
-MTAS,mtas.codec.util,CodecInfo,556,647,58,48,123,135,50,28,12,13
+MTAS,mtas.codec.util,CodecInfo,550,653,57,49,122,136,49,29,12,13
 MTAS,mtas.codec.util,CodecComponent.ComponentFacet,764,0,70,0,107,0,40,0,5,0
 MTAS,mtas.codec.util,CodecInfo.FieldReferences,0,18,0,0,0,7,0,1,0,1
 MTAS,mtas.codec.util,CodecComponent.Match,54,9,10,0,12,4,7,1,2,1
@@ -236,11 +236,11 @@ MTAS,mtas.codec.util,CodecSearchTree.IntervalItem,0,9,0,0,0,4,0,1,0,1
 MTAS,mtas.codec.util,CodecComponent.ListToken,22,0,0,0,7,0,1,0,1,0
 MTAS,mtas.codec.util,CodecComponent.ComponentPrefix,20,98,7,13,4,24,7,8,0,5
 MTAS,mtas.codec.util,DataCollector,117,98,13,7,13,8,9,4,1,2
-MTAS,mtas.codec.util,CodecComponent.KwicToken,16,0,0,0,5,0,1,0,1,0
 MTAS,mtas.codec.util,CodecComponent.ComponentField,0,59,0,0,0,14,0,1,0,1
+MTAS,mtas.codec.util,CodecComponent.KwicToken,16,0,0,0,5,0,1,0,1,0
 MTAS,mtas.codec.util,CodecComponent.ComponentGroup,47,359,9,31,4,68,9,13,0,2
 MTAS,mtas.codec.util,CodecComponent.ComponentDocument,134,0,20,0,32,0,11,0,1,0
-MTAS,mtas.codec.util,CodecCollector,6586,4188,1051,611,1261,911,632,244,16,29
+MTAS,mtas.codec.util,CodecCollector,6561,4213,1048,614,1257,915,630,246,16,29
 MTAS,mtas.codec.util,CodecComponent.KwicHit,16,0,0,0,5,0,1,0,1,0
 MTAS,mtas.codec.util,CodecComponent.ComponentKwic,151,0,26,0,29,0,14,0,1,0
 MTAS,mtas.codec.util,CodecCollector.RegisterStatus,0,9,0,0,0,4,0,1,0,1
@@ -266,7 +266,7 @@ MTAS,mtas.analysis.util,MtasPrefixTokenFilterFactory.MtasPrefixTokenFilter,140,0
 MTAS,mtas.analysis.util,MtasBufferedReader.new Iterator() {...},50,0,8,0,13,0,7,0,3,0
 MTAS,mtas.analysis.util,MtasFetchData,206,69,20,6,37,17,14,5,2,4
 MTAS,mtas.analysis.util,MtasCharFilterFactory,249,233,23,39,31,56,19,21,0,9
-MTAS,mtas.solr.handler.util,MtasSolrStatus,970,252,128,20,167,65,85,20,18,13
+MTAS,mtas.solr.handler.util,MtasSolrStatus,970,252,129,19,167,65,86,19,18,13
 MTAS,mtas.solr.handler.util,MtasSolrBaseList,222,61,20,2,50,16,17,3,6,3
 MTAS,mtas.solr.handler.util,MtasSolrHistoryList,30,90,8,8,6,22,7,9,1,7
 MTAS,mtas.solr.handler.util,MtasSolrRunningList,21,86,7,7,7,16,7,7,1,6
@@ -292,7 +292,7 @@ MTAS,mtas.codec.util.collector,MtasDataItemDoubleBasic,178,0,32,0,29,0,23,0,7,0
 MTAS,mtas.codec.util.collector,MtasDataItemAdvanced,443,172,80,22,73,33,56,12,2,4
 MTAS,mtas.codec.util.collector,MtasDataLongFull,445,76,69,3,79,8,50,3,14,3
 MTAS,mtas.codec.util.collector,MtasDataCollectorResult,133,287,18,42,13,68,19,20,1,8
-MTAS,mtas.codec.util.collector,MtasDataBasic,284,531,36,26,46,103,25,22,4,12
+MTAS,mtas.codec.util.collector,MtasDataBasic,277,538,35,27,46,103,24,23,4,12
 MTAS,mtas.codec.util.collector,MtasDataItemNumberComparator,239,88,42,8,36,17,28,7,4,6
 MTAS,mtas.codec.util.collector,MtasDataLongOperations,69,85,22,12,21,18,23,11,6,11
 MTAS,mtas.codec.util.collector,MtasDataAdvanced,364,1055,28,40,51,188,24,26,4,12
