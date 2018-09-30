@@ -31,10 +31,10 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import mtas.analysis.token.MtasPosition;
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenString;
 import mtas.codec.util.CodecSearchTree.MtasTreeHit;
+import mtas.codec.util.HeatmapMtasCounter.Heatmap;
 import mtas.codec.util.collector.MtasDataCollector;
 import mtas.codec.util.distance.Distance;
 import mtas.parser.function.MtasFunctionParser;
@@ -42,10 +42,13 @@ import mtas.parser.function.ParseException;
 import mtas.parser.function.util.MtasFunctionParserFunction;
 import mtas.parser.function.util.MtasFunctionParserFunctionDefault;
 import mtas.search.spans.util.MtasSpanQuery;
+import mtas.solr.handler.component.util.MtasSolrComponentHeatmap;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.lucene.spatial.prefix.PrefixTreeStrategy;
 import org.apache.lucene.util.BytesRef;
+import org.locationtech.spatial4j.shape.Shape;
 import org.noggit.JSONParser;
 import org.noggit.ObjectBuilder;
 
@@ -89,6 +92,8 @@ public class CodecComponent {
 
     /** The do page. */
     public boolean doPage;
+
+    public boolean doHeatmap;
 
     /** The do group. */
     public boolean doGroup;
@@ -134,6 +139,7 @@ public class CodecComponent {
       doKwic = false;
       doList = false;
       doPage = false;
+      doHeatmap = false;
       doGroup = false;
       doStats = false;
       doTermVector = false;
@@ -173,6 +179,8 @@ public class CodecComponent {
 
     /** The page list. */
     public List<ComponentPage> pageList;
+    
+    public List<ComponentHeatmap> heatmapList;
 
     /** The group list. */
     public List<ComponentGroup> groupList;
@@ -211,6 +219,7 @@ public class CodecComponent {
       kwicList = new ArrayList<>();
       listList = new ArrayList<>();
       pageList = new ArrayList<>();
+      heatmapList = new ArrayList<>();
       groupList = new ArrayList<>();
       facetList = new ArrayList<>();
       termVectorList = new ArrayList<>();
@@ -496,6 +505,12 @@ public class CodecComponent {
 
     /** The number. */
     public Integer number;
+    
+    /** The page start. */
+    public Integer pageStart;
+    
+    /** The page end. */
+    public Integer pageEnd;
 
     /** The output. */
     public String output;
@@ -509,27 +524,20 @@ public class CodecComponent {
     /**
      * Instantiates a new component kwic.
      *
-     * @param query
-     *          the query
-     * @param key
-     *          the key
-     * @param prefixes
-     *          the prefixes
-     * @param number
-     *          the number
-     * @param start
-     *          the start
-     * @param left
-     *          the left
-     * @param right
-     *          the right
-     * @param output
-     *          the output
-     * @throws IOException
-     *           Signals that an I/O exception has occurred.
+     * @param query          the query
+     * @param key          the key
+     * @param prefixes          the prefixes
+     * @param number          the number
+     * @param start          the start
+     * @param pageStart the page start
+     * @param pageEnd the page end
+     * @param left          the left
+     * @param right          the right
+     * @param output          the output
+     * @throws IOException           Signals that an I/O exception has occurred.
      */
     public ComponentKwic(MtasSpanQuery query, String key, String prefixes,
-        Integer number, int start, int left, int right, String output)
+        Integer number, int start, Integer pageStart, Integer pageEnd, int left, int right, String output)
         throws IOException {
       this.query = query;
       this.key = key;
@@ -537,6 +545,8 @@ public class CodecComponent {
       this.right = (right > 0) ? right : 0;
       this.start = (start > 0) ? start : 0;
       this.number = (number != null && number >= 0) ? number : null;
+      this.pageStart = (pageStart!=null && pageEnd!=null)? pageStart : null;
+      this.pageEnd = (pageStart!=null && pageEnd!=null)? pageEnd : null;
       this.output = output;
       tokens = new HashMap<>();
       hits = new HashMap<>();
@@ -618,6 +628,13 @@ public class CodecComponent {
 
     /** The prefixes. */
     public List<String> prefixes;
+    
+    
+    /** The field values. */
+    public Map<Integer, Map<String, Object>> fieldValues;
+    
+    /** The field names. */
+    public List<String> fieldNames;
 
     /** The left. */
     public int left;
@@ -636,6 +653,9 @@ public class CodecComponent {
 
     /** The number. */
     public int number;
+    
+    /** The field list. */
+    public String fieldList;
 
     /** The prefix. */
     public String prefix;
@@ -652,43 +672,28 @@ public class CodecComponent {
     /**
      * Instantiates a new component list.
      *
-     * @param spanQuery
-     *          the span query
-     * @param field
-     *          the field
-     * @param queryValue
-     *          the query value
-     * @param queryType
-     *          the query type
-     * @param queryPrefix
-     *          the query prefix
-     * @param queryVariables
-     *          the query variables
-     * @param queryIgnore
-     *          the query ignore
-     * @param queryMaximumIgnoreLength
-     *          the query maximum ignore length
-     * @param key
-     *          the key
-     * @param prefix
-     *          the prefix
-     * @param start
-     *          the start
-     * @param number
-     *          the number
-     * @param left
-     *          the left
-     * @param right
-     *          the right
-     * @param output
-     *          the output
-     * @throws IOException
-     *           Signals that an I/O exception has occurred.
+     * @param spanQuery          the span query
+     * @param field          the field
+     * @param queryValue          the query value
+     * @param queryType          the query type
+     * @param queryPrefix          the query prefix
+     * @param queryVariables          the query variables
+     * @param queryIgnore          the query ignore
+     * @param queryMaximumIgnoreLength          the query maximum ignore length
+     * @param key          the key
+     * @param fieldList the field list
+     * @param prefix          the prefix
+     * @param start          the start
+     * @param number          the number
+     * @param left          the left
+     * @param right          the right
+     * @param output          the output
+     * @throws IOException           Signals that an I/O exception has occurred.
      */
     public ComponentList(MtasSpanQuery spanQuery, String field,
         String queryValue, String queryType, String queryPrefix,
         Map<String, String[]> queryVariables, String queryIgnore,
-        String queryMaximumIgnoreLength, String key, String prefix, int start,
+        String queryMaximumIgnoreLength, String key, String fieldList, String prefix, int start,
         int number, int left, int right, String output) throws IOException {
       this.spanQuery = spanQuery;
       this.field = field;
@@ -699,6 +704,7 @@ public class CodecComponent {
       this.queryMaximumIgnoreLength = queryMaximumIgnoreLength;
       this.queryVariables = queryVariables;
       this.key = key;
+      this.fieldList = fieldList;
       this.left = left;
       this.right = right;
       this.start = start;
@@ -719,6 +725,16 @@ public class CodecComponent {
         for (String ls : l) {
           if (ls.trim().length() > 0) {
             this.prefixes.add(ls.trim());
+          }
+        }
+      }
+      fieldValues = new HashMap<>();
+      fieldNames = new ArrayList<>();
+      if ((fieldList != null) && (fieldList.trim().length() > 0)) {
+        List<String> l = Arrays.asList(fieldList.split(Pattern.quote(",")));
+        for (String ls : l) {
+          if (ls.trim().length() > 0) {
+            this.fieldNames.add(ls.trim());
           }
         }
       }
@@ -802,6 +818,155 @@ public class CodecComponent {
       }
     }
 
+  }
+  
+  /**
+   * The Class ComponentHeatmap.
+   */
+  public static class ComponentHeatmap implements BasicComponent {
+    
+    /** The key. */
+    public String key;
+    
+    public MtasSpanQuery[] queries;
+    
+    /** The heatmap field. */
+    public String heatmapField;
+    
+    /** The query field. */
+    public String queryField;
+    
+    public PrefixTreeStrategy strategy;
+    
+    public Shape boundsShape;
+    
+    public Integer gridLevel;
+    public int maxCells;
+    
+    public String dataType;
+    public String statsType;
+    public SortedSet<String> statsItems;
+    
+    /** The minimum long. */
+    public Long minimumLong;
+
+    /** The maximum long. */
+    public Long maximumLong;
+
+    /** The functions. */
+    public List<SubComponentFunction> functions;
+
+    /** The parser. */
+    public MtasFunctionParserFunction parser;
+    
+    public Heatmap hm;
+    
+    private static final int DEFAULT_MAX_CELLS = 100000;
+    
+    /**
+     * Instantiates a new component heatmap.
+     *
+     * @param key the key
+     * @param heatmapField the heatmap field
+     * @param queryField the query field
+     * @throws IOException 
+     */
+    public ComponentHeatmap(String key, MtasSpanQuery[] queries, Double minimumDouble, 
+        Double maximumDouble, String type,
+        String[] functionKey, String[] functionExpression, String[] functionType, 
+        String heatmapField, String queryField, 
+        PrefixTreeStrategy strategy, Shape boundsShape, 
+        Integer gridLevel, Integer maxCells) throws IOException {
+      this.key = key;
+      this.queries = queries;
+      this.heatmapField = heatmapField;
+      this.queryField = queryField;
+      this.strategy = strategy;
+      this.boundsShape=boundsShape;
+      this.gridLevel=gridLevel;
+      this.maxCells=maxCells==null?DEFAULT_MAX_CELLS :maxCells;
+      this.parser = new MtasFunctionParserFunctionDefault(queries.length);
+      dataType = parser.getType();
+      statsItems = CodecUtil.createStatsItems(type);
+      statsType = CodecUtil.createStatsType(this.statsItems, null, parser);
+      if (minimumDouble != null) {
+        this.minimumLong = minimumDouble.longValue();
+      } else {
+        this.minimumLong = null;
+      }
+      if (maximumDouble != null) {
+        this.maximumLong = maximumDouble.longValue();
+      } else {
+        this.maximumLong = null;
+      }
+      HeatmapMtasCounter.createHeatmap(this);
+      
+    }
+    
+    /**
+     * Function sum rule.
+     *
+     * @return true, if successful
+     */
+    public boolean functionSumRule() {
+      if (functions != null) {
+        for (SubComponentFunction function : functions) {
+          if (!function.parserFunction.sumRule()) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    /**
+     * Function basic.
+     *
+     * @return true, if successful
+     */
+    public boolean functionBasic() {
+      if (functions != null) {
+        for (SubComponentFunction function : functions) {
+          if (!function.statsType.equals(CodecUtil.STATS_BASIC)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    /**
+     * Function need positions.
+     *
+     * @return true, if successful
+     */
+    public boolean functionNeedPositions() {
+      if (functions != null) {
+        for (SubComponentFunction function : functions) {
+          if (function.parserFunction.needPositions()) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    /**
+     * Function need arguments.
+     *
+     * @return the sets the
+     */
+    public Set<Integer> functionNeedArguments() {
+      Set<Integer> list = new HashSet<>();
+      if (functions != null) {
+        for (SubComponentFunction function : functions) {
+          list.addAll(function.parserFunction.needArgument());
+        }
+      }
+      return list;
+    }
+
+        
   }
   
   /**

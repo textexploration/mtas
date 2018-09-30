@@ -79,6 +79,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
   /** The Constant NAME_MTAS_LIST_KEY. */
   public static final String NAME_MTAS_LIST_KEY = "key";
 
+  public static final String NAME_MTAS_LIST_FIELDS = "fields";
+
   /** The Constant NAME_MTAS_LIST_PREFIX. */
   public static final String NAME_MTAS_LIST_PREFIX = "prefix";
 
@@ -128,6 +130,7 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
       String[] queryIgnores = new String[ids.size()];
       String[] queryMaximumIgnoreLengths = new String[ids.size()];
       String[] keys = new String[ids.size()];
+      String[] fieldLists = new String[ids.size()];
       String[] prefixes = new String[ids.size()];
       String[] starts = new String[ids.size()];
       String[] numbers = new String[ids.size()];
@@ -141,6 +144,9 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
             .get(PARAM_MTAS_LIST + "." + id + "." + NAME_MTAS_LIST_KEY,
                 String.valueOf(tmpCounter))
             .trim();
+        fieldLists[tmpCounter] = rb.req.getParams()
+            .get(PARAM_MTAS_LIST + "." + id + "." + NAME_MTAS_LIST_FIELDS,
+                null);
         queryTypes[tmpCounter] = rb.req.getParams().get(
             PARAM_MTAS_LIST + "." + id + "." + NAME_MTAS_LIST_QUERY_TYPE, null);
         queryValues[tmpCounter] = rb.req.getParams().get(
@@ -217,6 +223,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
       }
       MtasSolrResultUtil.compareAndCheck(keys, fields, NAME_MTAS_LIST_KEY,
           NAME_MTAS_LIST_FIELD, true);
+      MtasSolrResultUtil.compareAndCheck(keys, fieldLists, NAME_MTAS_LIST_KEY,
+          NAME_MTAS_LIST_FIELDS, false);
       MtasSolrResultUtil.compareAndCheck(prefixes, queryValues,
           NAME_MTAS_LIST_QUERY_VALUE, NAME_MTAS_LIST_FIELD, false);
       MtasSolrResultUtil.compareAndCheck(prefixes, queryTypes,
@@ -258,6 +266,7 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
                 + queryPrefixes[i]
             : keys[i].trim();
         String prefix = prefixes[i];
+        String fieldList = fieldLists[i];
         int start = (starts[i] == null) || (starts[i].isEmpty()) ? 0
             : Integer.parseInt(starts[i]);
         int number = (numbers[i] == null) || (numbers[i].isEmpty()) ? 10
@@ -270,7 +279,7 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
         mtasFields.list.get(fields[i]).listList.add(new ComponentList(q,
             fields[i], queryValues[i], queryTypes[i], queryPrefixes[i],
             queryVariables[i], queryIgnores[i], queryMaximumIgnoreLengths[i],
-            key, prefix, start, number, left, right, output));
+            key, fieldList, prefix, start, number, left, right, output));
       }
     }
   }
@@ -293,6 +302,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
           .getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_LIST);
       if ((sreq.purpose & ShardRequest.PURPOSE_GET_TOP_IDS) != 0) {
         for (String key : keys) {
+          sreq.params.remove(
+              PARAM_MTAS_LIST + "." + key + "." + NAME_MTAS_LIST_FIELDS);
           sreq.params.remove(
               PARAM_MTAS_LIST + "." + key + "." + NAME_MTAS_LIST_PREFIX);
           sreq.params
@@ -464,6 +475,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
                 params.add(PARAM_MTAS_LIST + "." + requestId + "."
                     + NAME_MTAS_LIST_PREFIX, list.prefix);
                 params.add(PARAM_MTAS_LIST + "." + requestId + "."
+                    + NAME_MTAS_LIST_FIELDS, list.fieldList);
+                params.add(PARAM_MTAS_LIST + "." + requestId + "."
                     + NAME_MTAS_LIST_START, Integer.toString(start));
                 params.add(
                     PARAM_MTAS_LIST + "." + requestId + "."
@@ -526,6 +539,10 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
           NamedList<Object> mtasListItemResponse = new SimpleOrderedMap<>();
           mtasListItemResponse.add("documentKey",
               list.uniqueKey.get(hit.docId));
+          if(list.fieldValues.containsKey(hit.docId)) {
+            mtasListItemResponse.add("documentFields",
+                list.fieldValues.get(hit.docId));
+          }
           mtasListItemResponse.add("documentHitPosition", hit.docPosition);
           mtasListItemResponse.add("documentHitTotal",
               list.subTotal.get(hit.docId));

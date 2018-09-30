@@ -295,7 +295,9 @@ abstract class MtasDataFull<T1 extends Number & Comparable<T1>, T2 extends Numbe
       closeNewList();
       initNewList(newMtasDataFull.getSize());
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-        map.put(newDataCollector, this);
+        if(map!=null) {
+          map.put(newDataCollector, this);
+        }
         for (int i = 0; i < newMtasDataFull.getSize(); i++) {
           if (newMtasDataFull.fullValueList[i].length > 0) {
             MtasDataCollector<?, ?>[] subCollectors = new MtasDataCollector<?, ?>[1];
@@ -314,7 +316,9 @@ abstract class MtasDataFull<T1 extends Number & Comparable<T1>, T2 extends Numbe
           }
         }
       } else if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-        map.put(newDataCollector, this);
+        if(map!=null) {
+          map.put(newDataCollector, this);
+        }
         if (newMtasDataFull.getSize() > 0) {
           MtasDataCollector<?, ?> subCollector = add(increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataFull.errorNumber[0],

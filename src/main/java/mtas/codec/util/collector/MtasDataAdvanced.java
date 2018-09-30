@@ -448,7 +448,9 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
       newMtasDataAdvanced.closeNewList();
       initNewList(newMtasDataAdvanced.getSize());
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-        map.put(newDataCollector, this);
+        if(map!=null) {
+          map.put(newDataCollector, this);
+        }
         for (int i = 0; i < newMtasDataAdvanced.getSize(); i++) {
           MtasDataCollector<?, ?>[] subCollectors = new MtasDataCollector[1];
           subCollectors[0] = add(newMtasDataAdvanced.keyList[i],
@@ -470,7 +472,9 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
         }
         closeNewList();
       } else if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-        map.put(newDataCollector, this);
+        if(map!=null) {
+          map.put(newDataCollector, this);
+        }
         if (newMtasDataAdvanced.getSize() > 0) {
           MtasDataCollector<?, ?> subCollector = add(increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataAdvanced.errorNumber[0],
