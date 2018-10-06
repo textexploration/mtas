@@ -735,7 +735,7 @@ public abstract class MtasBasicParser extends MtasParser {
               && startOffset != null && endOffset != null) {
             MtasToken token = tokenCollection.get(tokenId);
             token.addPositionRange(startPosition, endPosition);
-            token.setOffset(startOffset, endOffset);
+            token.addOffset(startOffset, endOffset);
           }
         }
       }
