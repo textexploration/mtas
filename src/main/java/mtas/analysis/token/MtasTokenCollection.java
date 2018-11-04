@@ -11,8 +11,6 @@ import java.util.Map.Entry;
 
 import org.apache.lucene.analysis.payloads.PayloadHelper;
 import org.apache.lucene.util.BytesRef;
-import org.hamcrest.core.IsNull;
-
 import mtas.analysis.util.MtasParserException;
 
 /**

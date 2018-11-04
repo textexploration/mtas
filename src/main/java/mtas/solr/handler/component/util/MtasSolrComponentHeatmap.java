@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -32,8 +33,10 @@ import org.locationtech.spatial4j.shape.Shape;
 import mtas.codec.util.CodecComponent.ComponentField;
 import mtas.codec.util.CodecComponent.ComponentFields;
 import mtas.codec.util.CodecComponent.ComponentHeatmap;
-import mtas.codec.util.HeatmapMtasCounter.Heatmap;
+import mtas.codec.util.CodecComponent.SubComponentFunction;
 import mtas.codec.util.collector.MtasDataCollector;
+import mtas.codec.util.heatmap.HeatmapMtasCounter.Heatmap;
+import mtas.parser.function.ParseException;
 import mtas.search.spans.util.MtasSpanQuery;
 import mtas.solr.handler.component.MtasSolrSearchComponent;
 
@@ -426,9 +429,13 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent<ComponentHeat
           gridLevel = strategy.getGrid().getLevelForDistance(distErr);
         }
         // add component
-        mtasFields.list.get(queryFields[i]).heatmapList.add(new ComponentHeatmap(key, ql, minimum, maximum, type,
-            functionKey, functionExpression, functionType, heatmapField, queryField,
+        try {
+          mtasFields.list.get(queryFields[i]).heatmapList.add(new ComponentHeatmap(key, ql, minimum, maximum, type,
+            functionKey, functionExpression, functionType,
             strategy, boundsShape, gridLevel, maxCellsValue));
+        } catch (ParseException e) {
+          throw new IOException(e.getMessage());
+        }  
       }
     }
   }
@@ -441,17 +448,22 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent<ComponentHeat
     SimpleOrderedMap<Object> mtasHeatmapResponse = new SimpleOrderedMap<>();
     mtasHeatmapResponse.add("key", heatmap.key);
     heatmap.hm.dataCollector.close();
-
-    HashMap<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> functionData = new HashMap<>();
-    HashMap<String, MtasSolrMtasResult> functionDataItem = new HashMap<>();
-    functionData.put(heatmap.hm.dataCollector,
-        functionDataItem);
+    Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> functionData = new HashMap<>();
+    HashMap<String, MtasSolrMtasResult> functionResults = new HashMap<>();    
+    for (SubComponentFunction function : heatmap.hm.functions) {
+      function.dataCollector.close();
+      functionResults.put(function.key, new MtasSolrMtasResult(function.dataCollector,
+                      function.dataType,
+                      function.statsType,
+                      function.statsItems, null, null));
+    } 
+    functionData.put(heatmap.hm.dataCollector, functionResults);
     MtasSolrMtasHeatmapResult data = new MtasSolrMtasHeatmapResult(heatmap, new MtasSolrMtasResult(
         heatmap.hm.dataCollector,
         heatmap.dataType,
         heatmap.statsType,
         heatmap.statsItems,
-        null, null));
+        null, functionData));
     if (encode) {
       mtasHeatmapResponse.add("_encoded_", MtasSolrResultUtil.encode(data));
       } else {

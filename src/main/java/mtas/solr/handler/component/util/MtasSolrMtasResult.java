@@ -329,7 +329,7 @@ public class MtasSolrMtasResult implements Serializable {
                 tmpMap.add(entry.getKey(), functionNamedList.getVal(i));
                 functionList.put(functionNamedList.getName(i), tmpMap);
               }
-            }
+            }        
           } else {
             throw new IOException("unexpected function collectorType "
                 + functionResult.dataCollector.getCollectorType());

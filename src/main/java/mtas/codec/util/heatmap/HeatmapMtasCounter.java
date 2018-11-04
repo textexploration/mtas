@@ -1,14 +1,12 @@
-package mtas.codec.util;
+package mtas.codec.util.heatmap;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
-
+import java.util.Map.Entry;
+import java.util.Set;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.spatial.prefix.PrefixTreeStrategy;
 import org.apache.lucene.spatial.prefix.tree.Cell;
@@ -20,7 +18,9 @@ import org.locationtech.spatial4j.shape.Point;
 import org.locationtech.spatial4j.shape.Rectangle;
 import org.locationtech.spatial4j.shape.SpatialRelation;
 
+import mtas.codec.util.CodecUtil;
 import mtas.codec.util.CodecComponent.ComponentHeatmap;
+import mtas.codec.util.CodecComponent.SubComponentFunction;
 import mtas.codec.util.collector.MtasDataCollector;
 
 /**
@@ -30,26 +30,72 @@ public class HeatmapMtasCounter {
 
   /** Maximum number of supported rows (or columns). */
   public static final int MAX_ROWS_OR_COLUMNS = (int) Math.sqrt(ArrayUtil.MAX_ARRAY_LENGTH);
-  static {
-    Math.multiplyExact(MAX_ROWS_OR_COLUMNS, MAX_ROWS_OR_COLUMNS);// will throw if doesn't stay within integer
-  }
+  // static {
+  // Math.multiplyExact(MAX_ROWS_OR_COLUMNS, MAX_ROWS_OR_COLUMNS);// will throw if
+  // doesn't stay within integer
+  // }
 
-  /** Response structure */
-  public static class Heatmap  {
+  /**
+   * Response structure.
+   */
+  public static class Heatmap {
+
+    /** The data collector. */
     public MtasDataCollector<?, ?> dataCollector;
+
+    /** The functions. */
+    public List<SubComponentFunction> functions;
+
+    /** The columns. */
     public final int columns;
+
+    /** The rows. */
     public final int rows;
+
+    /** The region. */
     public final Rectangle region;
+
+    /** The min X. */
     public final double minX;
+
+    /** The max X. */
     public final double maxX;
+
+    /** The min Y. */
     public final double minY;
+
+    /** The max Y. */
     public final double maxY;
+
+    /** The cell width. */
     public final double cellWidth;
+
+    /** The cell height. */
     public final double cellHeight;
+
+    /** The grid level. */
     public final int gridLevel;
 
-    public Heatmap(int columns, int rows, Rectangle region, double cellWidth, double cellHeight,
-        int gridLevel) throws IOException {
+    /**
+     * Instantiates a new heatmap.
+     *
+     * @param columns
+     *          the columns
+     * @param rows
+     *          the rows
+     * @param region
+     *          the region
+     * @param cellWidth
+     *          the cell width
+     * @param cellHeight
+     *          the cell height
+     * @param gridLevel
+     *          the grid level
+     * @throws IOException
+     *           Signals that an I/O exception has occurred.
+     */
+    public Heatmap(int columns, int rows, Rectangle region, double cellWidth, double cellHeight, int gridLevel)
+        throws IOException {
       this.columns = columns;
       this.rows = rows;
       this.region = region;
@@ -60,35 +106,93 @@ public class HeatmapMtasCounter {
       this.cellWidth = cellWidth;
       this.cellHeight = cellHeight;
       this.dataCollector = null;
+      this.functions = null;
       this.gridLevel = gridLevel;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
       return "Heatmap{" + columns + "x" + rows + " " + region + '}';
     }
+
+    /**
+     * Function need arguments.
+     *
+     * @return the sets the
+     */
+    public Set<Integer> functionNeedArguments() {
+      Set<Integer> list = new HashSet<>();
+      if (functions != null) {
+        for (SubComponentFunction function : functions) {
+          list.addAll(function.parserFunction.needArgument());
+        }
+      }
+      return list;
+    }
+
+    /**
+     * Function need positions.
+     *
+     * @return true, if successful
+     */
+    public boolean functionNeedPositions() {
+      if (functions != null) {
+        for (SubComponentFunction function : functions) {
+          if (function.parserFunction.needPositions()) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
   }
-  
-  public static void calcValues(PrefixTreeStrategy strategy, LeafReaderContext context, 
-      ComponentHeatmap heatmap, int number, int[] docSet, long[] values
-      ) throws IOException {
+
+  /**
+   * Calc values.
+   *
+   * @param strategy
+   *          the strategy
+   * @param context
+   *          the context
+   * @param heatmap
+   *          the heatmap
+   * @param number
+   *          the number
+   * @param docSet
+   *          the doc set
+   * @param values
+   *          the values
+   * @param args
+   *          the args
+   * @param positions
+   *          the positions
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   */
+  public static void calcValues(PrefixTreeStrategy strategy, LeafReaderContext context, ComponentHeatmap heatmap,
+      int number, int[] docSet, long[] values, long[][] args, int[] positions) throws IOException {
     if (heatmap.maxCells > (MAX_ROWS_OR_COLUMNS * MAX_ROWS_OR_COLUMNS)) {
       throw new IllegalArgumentException("maxCells (" + heatmap.maxCells + ") should be <= " + MAX_ROWS_OR_COLUMNS);
     }
     if (heatmap.boundsShape == null) {
       heatmap.boundsShape = strategy.getSpatialContext().getWorldBounds();
     }
-    
-    final int  rows = heatmap.hm.rows;
-    final int  columns = heatmap.hm.columns;
+
+    final int rows = heatmap.hm.rows;
+    final int columns = heatmap.hm.columns;
     double heatMinX = heatmap.hm.minX;
     double heatMaxX = heatmap.hm.maxX;
     double heatMinY = heatmap.hm.minY;
     double heatMaxY = heatmap.hm.maxY;
     final double cellWidth = heatmap.hm.cellWidth;
     final double cellHeight = heatmap.hm.cellHeight;
-    
-    if (docSet.length==0) {
+
+    if (docSet.length == 0) {
       return; // short-circuit
     }
 
@@ -96,18 +200,18 @@ public class HeatmapMtasCounter {
     // visiting and applied later. If the data is
     // just points then there won't be any ancestors.
     // grid count of ancestors covering all of the heatmap:
-    List<Long> allCellsAncestorsValues = new ArrayList<>(); 
-    
-    
+    CellValues allCellsAncestorsValues = new CellValues(new long[0], new long[heatmap.hm.functions.size()][],
+        new double[heatmap.hm.functions.size()][], new Map[heatmap.hm.functions.size()]);
+
     // All other ancestors:
-    Map<Rectangle, long[]> ancestorsValues = new HashMap<>();
+    Map<Rectangle, CellValues> ancestorsValues = new HashMap<>();
 
     // Now lets count!
-    PrefixTreeMtasCounter.compute(strategy, context, number, docSet, values, heatmap,
+    PrefixTreeMtasCounter.compute(strategy, context, number, docSet, values, args, positions, heatmap,
         new PrefixTreeMtasCounter.GridVisitor() {
-      
+
           @Override
-          public void visit(Cell cell, long[] cellValues) {
+          public void visit(Cell cell, CellValues cellValues) {
             final double heatMinX = heatmap.hm.region.getMinX();
             final Rectangle rect = (Rectangle) cell.getShape();
             if (cell.getLevel() == heatmap.gridLevel) {// heatmap level; count it directly
@@ -128,43 +232,74 @@ public class HeatmapMtasCounter {
               // increment
               String key = String.valueOf(column * heatmap.hm.rows + row);
               try {
-                heatmap.hm.dataCollector.add(key, cellValues, cellValues.length);
+                heatmap.hm.dataCollector.add(key, cellValues.values(), cellValues.valuesLength());
+                for (int i = 0; i < heatmap.hm.functions.size(); i++) {
+                  SubComponentFunction f = heatmap.hm.functions.get(i);
+                  if (f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
+                    heatmap.hm.functions.get(i).dataCollector.add(key, cellValues.functionValuesLong(i),
+                        cellValues.functionValuesLongLength(i));
+                  } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
+                    heatmap.hm.functions.get(i).dataCollector.add(key, cellValues.functionValuesDouble(i),
+                        cellValues.functionValuesDoubleLength(i));
+                  } else {
+                    // should not happen
+                    throw new IOException("unexpected dataType " + f.dataType);
+                  }
+                  if (!cellValues.functionValuesError(i).isEmpty()) {
+                    for (Entry<String, Integer> entry : cellValues.functionValuesError(i).entrySet()) {
+                      heatmap.hm.functions.get(i).dataCollector.error(key, entry.getKey(), entry.getValue());
+                    }
+                  }
+                }
               } catch (IOException e) {
+                // should not happen
                 e.printStackTrace();
               }
             } else if (rect.relate(heatmap.hm.region) == SpatialRelation.CONTAINS) {// containing ancestor
-              for(long cellValue : cellValues) {
-                allCellsAncestorsValues.add(cellValue);
-              }  
+              allCellsAncestorsValues.merge(cellValues);
             } else { // ancestor
               // note: not particularly efficient (possible put twice, and Integer wrapper);
               // oh well
-              long[] existingValues = (long[]) ancestorsValues.put(rect, cellValues);
+              CellValues existingValues = (CellValues) ancestorsValues.put(rect, cellValues);
               if (existingValues != null) {
-                long[] newValues = new long[existingValues.length + cellValues.length];
-                System.arraycopy(existingValues, 0, newValues, 0, existingValues.length);
-                System.arraycopy(cellValues, 0, newValues, existingValues.length, cellValues.length);
-                ancestorsValues.put(rect, newValues);
+                cellValues.merge(existingValues);
               }
             }
           }
-      
+
         });
 
     // Update the heatmap counts with ancestor counts
 
     // Apply allCellsAncestorCount
-    if (!allCellsAncestorsValues.isEmpty()) {
-      int n = heatmap.hm.columns*heatmap.hm.rows;   
-      for (int i = 0; i < n; i++) {
-        long[] allCellsAncestorsValuesArray = allCellsAncestorsValues.stream().mapToLong(l -> l).toArray();
-        heatmap.hm.dataCollector.add(String.valueOf(i), allCellsAncestorsValuesArray, allCellsAncestorsValuesArray.length);
+    if (allCellsAncestorsValues.valuesLength() > 0) {
+      int n = heatmap.hm.columns * heatmap.hm.rows;
+      for (int k = 0; k < n; k++) {
+        try {
+          String key = String.valueOf(k);
+          heatmap.hm.dataCollector.add(key, allCellsAncestorsValues.values(), allCellsAncestorsValues.valuesLength());
+          for (int i = 0; i < heatmap.hm.functions.size(); i++) {
+            SubComponentFunction f = heatmap.hm.functions.get(i);
+            if (f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
+              heatmap.hm.functions.get(i).dataCollector.add(key, allCellsAncestorsValues.functionValuesLong(i),
+                  allCellsAncestorsValues.functionValuesLongLength(i));
+            } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
+              heatmap.hm.functions.get(i).dataCollector.add(key, allCellsAncestorsValues.functionValuesDouble(i),
+                  allCellsAncestorsValues.functionValuesDoubleLength(i));
+            } else {
+              // should not happen
+              throw new IOException("unexpected dataType " + f.dataType);
+            }
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
     }
     int[] pair = new int[2];// output of intersectInterval
-    for (Map.Entry<Rectangle, long[]> entry : ancestorsValues.entrySet()) {
+    for (Map.Entry<Rectangle, CellValues> entry : ancestorsValues.entrySet()) {
       Rectangle rect = entry.getKey(); // from a cell (thus doesn't cross DL)
-      final long[] ancestorValuesEntry = entry.getValue();
+      final CellValues ancestorValuesEntry = entry.getValue();
 
       // note: we approach this in a way that eliminates int overflow/underflow (think
       // huge cell, tiny heatmap)
@@ -200,7 +335,15 @@ public class HeatmapMtasCounter {
       }
     }
   }
-  
+
+  /**
+   * Creates the heatmap.
+   *
+   * @param heatmap
+   *          the heatmap
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   */
   public static void createHeatmap(ComponentHeatmap heatmap) throws IOException {
     final Rectangle inputRect = heatmap.boundsShape.getBoundingBox();
     // First get the rect of the cell at the bottom-left at depth gridLevel
@@ -212,18 +355,19 @@ public class HeatmapMtasCounter {
     while (cellIterator.hasNext()) {
       cornerCell = cellIterator.next();
     }
-    assert cornerCell != null && cornerCell.getLevel() == heatmap.gridLevel : "Cell not at target level: "
-        + cornerCell;
+    assert cornerCell != null && cornerCell.getLevel() == heatmap.gridLevel : "Cell not at target level: " + cornerCell;
     final Rectangle cornerRect = (Rectangle) cornerCell.getShape();
     assert cornerRect.hasArea();
     // Now calculate the number of columns and rows necessary to cover the inputRect
     double heatMinX = cornerRect.getMinX();// note: we might change this below...
     final double cellWidth = cornerRect.getWidth();
     final Rectangle worldRect = ctx.getWorldBounds();
-    final int columns = calcRowsOrCols(cellWidth, heatMinX, inputRect.getWidth(), inputRect.getMinX(), worldRect.getWidth());
+    final int columns = calcRowsOrCols(cellWidth, heatMinX, inputRect.getWidth(), inputRect.getMinX(),
+        worldRect.getWidth());
     double heatMinY = cornerRect.getMinY();
     final double cellHeight = cornerRect.getHeight();
-    final int rows = calcRowsOrCols(cellHeight, heatMinY, inputRect.getHeight(), inputRect.getMinY(), worldRect.getHeight());
+    final int rows = calcRowsOrCols(cellHeight, heatMinY, inputRect.getHeight(), inputRect.getMinY(),
+        worldRect.getHeight());
     assert rows > 0 && columns > 0;
     if (columns > MAX_ROWS_OR_COLUMNS || rows > MAX_ROWS_OR_COLUMNS || columns * rows > heatmap.maxCells) {
       throw new IllegalArgumentException(
@@ -249,11 +393,26 @@ public class HeatmapMtasCounter {
     }
     heatmap.hm = new Heatmap(columns, rows, ctx.makeRectangle(heatMinX, heatMaxX, heatMinY, heatMaxY), cellWidth,
         cellHeight, heatmap.gridLevel);
-    heatmap.hm.dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_LIST, 
-        heatmap.dataType, heatmap.statsType, heatmap.statsItems, null,null,null, null,null,null);
-    heatmap.hm.dataCollector.initNewList(columns*rows);
   }
 
+  /**
+   * Intersect interval.
+   *
+   * @param heatMin
+   *          the heat min
+   * @param heatMax
+   *          the heat max
+   * @param heatCellLen
+   *          the heat cell len
+   * @param numCells
+   *          the num cells
+   * @param cellMin
+   *          the cell min
+   * @param cellMax
+   *          the cell max
+   * @param out
+   *          the out
+   */
   private static void intersectInterval(double heatMin, double heatMax, double heatCellLen, int numCells,
       double cellMin, double cellMax, int[] out) {
     assert heatMin < heatMax && cellMin < cellMax;
@@ -269,9 +428,25 @@ public class HeatmapMtasCounter {
       out[1] = (int) Math.round((cellMax - heatMin) / heatCellLen) - 1;
     }
   }
-  
+
+  /**
+   * Increment range.
+   *
+   * @param heatmap
+   *          the heatmap
+   * @param startColumn
+   *          the start column
+   * @param endColumn
+   *          the end column
+   * @param startRow
+   *          the start row
+   * @param endRow
+   *          the end row
+   * @param cellValues
+   *          the cell values
+   */
   private static void incrementRange(Heatmap heatmap, int startColumn, int endColumn, int startRow, int endRow,
-      long[] cellValues) {
+      CellValues cellValues) {
     // startColumn & startRow are not necessarily within the heatmap range; likewise
     // numRows/columns may overlap.
     if (startColumn < 0) {
@@ -293,7 +468,21 @@ public class HeatmapMtasCounter {
       int cBase = c * heatmap.rows;
       for (int r = startRow; r <= endRow; r++) {
         try {
-          heatmap.dataCollector.add(String.valueOf(cBase + r), cellValues, cellValues.length);
+          String key = String.valueOf(cBase + r);
+          heatmap.dataCollector.add(key, cellValues.values(), cellValues.valuesLength());
+          for (int i = 0; i < heatmap.functions.size(); i++) {
+            SubComponentFunction f = heatmap.functions.get(i);
+            if (f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
+              heatmap.functions.get(i).dataCollector.add(key, cellValues.functionValuesLong(i),
+                  cellValues.functionValuesLongLength(i));
+            } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
+              heatmap.functions.get(i).dataCollector.add(key, cellValues.functionValuesDouble(i),
+                  cellValues.functionValuesDoubleLength(i));
+            } else {
+              // should not happen
+              throw new IOException("unexpected dataType " + f.dataType);
+            }
+          }
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -304,6 +493,18 @@ public class HeatmapMtasCounter {
   /**
    * Computes the number of intervals (rows or columns) to cover a range given the
    * sizes.
+   *
+   * @param cellRange
+   *          the cell range
+   * @param cellMin
+   *          the cell min
+   * @param requestRange
+   *          the request range
+   * @param requestMin
+   *          the request min
+   * @param worldRange
+   *          the world range
+   * @return the int
    */
   private static int calcRowsOrCols(double cellRange, double cellMin, double requestRange, double requestMin,
       double worldRange) {
@@ -328,6 +529,9 @@ public class HeatmapMtasCounter {
     return Math.min((int) intervalsMax, (int) intervals);
   }
 
+  /**
+   * Instantiates a new heatmap mtas counter.
+   */
   private HeatmapMtasCounter() {
   }
 }

@@ -53,6 +53,7 @@ import mtas.codec.util.CodecComponent.SubComponentFunction;
 import mtas.codec.util.CodecInfo.IndexDoc;
 import mtas.codec.util.CodecSearchTree.MtasTreeHit;
 import mtas.codec.util.collector.MtasDataCollector;
+import mtas.codec.util.heatmap.HeatmapMtasCounter;
 import mtas.parser.function.ParseException;
 import mtas.parser.function.util.MtasFunctionParserFunction;
 import mtas.search.spans.MtasSpanAndQuery;
@@ -432,10 +433,10 @@ public class CodecCollector {
         needSpans = true;
         for (ComponentHeatmap ch : fieldInfo.heatmapList) {
           needPositions = (!needPositions) ? ch.parser.needPositions() : needPositions;
-          needPositions = (!needPositions) ? ch.functionNeedPositions() : needPositions;
+          needPositions = (!needPositions) ? ch.hm.functionNeedPositions() : needPositions;
           needSpans = (!needSpans) ? ch.parser.needArgumentsNumber() > 0 : needSpans;
           HashSet<Integer> arguments = ch.parser.needArgument();
-          arguments.addAll(ch.functionNeedArguments());
+          arguments.addAll(ch.hm.functionNeedArguments());
           for (int a : arguments) {
             if (ch.queries.length > a) {
               MtasSpanQuery q = ch.queries[a];
@@ -1382,7 +1383,7 @@ public class CodecCollector {
                 span.dataCollector.add(valueLong, docSet.length);
               } catch (IOException e) {
                 log.debug(e);
-                span.dataCollector.error(e.getMessage());
+                span.dataCollector.error(e.getMessage(), 1);
               }
               if (span.functions != null) {
                 for (SubComponentFunction function : span.functions) {
@@ -1393,7 +1394,7 @@ public class CodecCollector {
                       function.dataCollector.add(valueLong, docSet.length);
                     } catch (IOException e) {
                       log.debug(e);
-                      function.dataCollector.error(e.getMessage());
+                      function.dataCollector.error(e.getMessage(), 1);
                     }
                   } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
                     try {
@@ -1401,7 +1402,7 @@ public class CodecCollector {
                       function.dataCollector.add(valueDouble, docSet.length);
                     } catch (IOException e) {
                       log.debug(e);
-                      function.dataCollector.error(e.getMessage());
+                      function.dataCollector.error(e.getMessage(), 1);
                     }
                   } else {
                     throw new IOException("can't handle function dataType " + function.dataType);
@@ -1460,7 +1461,7 @@ public class CodecCollector {
                         }
                       } catch (IOException e) {
                         log.debug(e);
-                        function.dataCollector.error(e.getMessage());
+                        function.dataCollector.error(e.getMessage(), 1);
                       }
                     }
                   }
@@ -2343,61 +2344,67 @@ public class CodecCollector {
           // collect
           if (docSet.length > 0) {
             int number = 0;
-            int positions;
-            long valueLong;
-            double valueDouble;
+            int docPositions;
+            long docValueLong;
+            //double valueDouble;
             long[] values = new long[docSet.length];
             int[] docs = new int[docSet.length];
-            long[][] functionValuesLong = null;
-            double[][] functionValuesDouble = null;
-            if (heatmap.functions != null) {
-              functionValuesLong = new long[heatmap.functions.size()][];
-              functionValuesDouble = new double[heatmap.functions.size()][];
-              for (int i = 0; i < heatmap.functions.size(); i++) {
-                SubComponentFunction function = heatmap.functions.get(i);
-                if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-                  functionValuesLong[i] = new long[docSet.length];
-                  functionValuesDouble[i] = null;
-                } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
-                  functionValuesLong[i] = null;
-                  functionValuesDouble[i] = new double[docSet.length];
-                }
-                function.dataCollector.initNewList(1);
-              }
-            }
+            int[] positions = new int[docSet.length];
+            long[][] arguments = new long[docSet.length][];
+            //long[][] functionValuesLong = null;
+            //double[][] functionValuesDouble = null;
+//            if (heatmap.hm.functions != null) {
+//              functionValuesLong = new long[heatmap.hm.functions.size()][];
+//              functionValuesDouble = new double[heatmap.hm.functions.size()][];
+//              for (int i = 0; i < heatmap.hm.functions.size(); i++) {
+//                SubComponentFunction function = heatmap.hm.functions.get(i);
+//                if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
+//                  functionValuesLong[i] = new long[docSet.length];
+//                  functionValuesDouble[i] = null;
+//                } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
+//                  functionValuesLong[i] = null;
+//                  functionValuesDouble[i] = new double[docSet.length];
+//                }
+//              }            
+//            }
             for (int docId : docSet) {
               if (positionsData == null) {
-                positions = 0;
+                docPositions = 0;
               } else {
-                positions = (positionsData.get(docId) == null ? 0 : positionsData.get(docId));
+                docPositions = (positionsData.get(docId) == null ? 0 : positionsData.get(docId));
               }
-              valueLong = heatmap.parser.getValueLong(args.get(docId), positions);
-              if (((heatmap.minimumLong == null) || (valueLong >= heatmap.minimumLong))
-                  && ((heatmap.maximumLong == null) || (valueLong <= heatmap.maximumLong))) {
-                values[number] = valueLong;
+              docValueLong = heatmap.parser.getValueLong(args.get(docId), docPositions);
+              if (((heatmap.minimumLong == null) || (docValueLong >= heatmap.minimumLong))
+                  && ((heatmap.maximumLong == null) || (docValueLong <= heatmap.maximumLong))) {
+                values[number] = docValueLong;
                 docs[number] = docId-lrc.docBase;
-                if (heatmap.functions != null) {
-                  for (int i = 0; i < heatmap.functions.size(); i++) {
-                    SubComponentFunction function = heatmap.functions.get(i);
-                    try {
-                      if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-                        valueLong = function.parserFunction.getValueLong(args.get(docId), positions);
-                        functionValuesLong[i][number] = valueLong;
-                      } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
-                        valueDouble = function.parserFunction.getValueDouble(args.get(docId), positions);
-                        functionValuesDouble[i][number] = valueDouble;
-                      }
-                    } catch (IOException e) {
-                      log.debug(e);
-                      function.dataCollector.error(e.getMessage());
-                    }
-                  }
-                }
+                positions[number] = docPositions;
+                arguments[number] = args.get(docId);
+                
+//                if (heatmap.hm.functions != null) {
+//                  
+//                  for (int i = 0; i < heatmap.hm.functions.size(); i++) {
+//                    SubComponentFunction function = heatmap.hm.functions.get(i);
+//                    try {
+//                      if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
+//                        valueLong = function.parserFunction.getValueLong(args.get(docId), positions);
+//                        functionValuesLong[i][number] = valueLong;
+//                      } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
+//                        valueDouble = function.parserFunction.getValueDouble(args.get(docId), positions);
+//                        functionValuesDouble[i][number] = valueDouble;
+//                      }
+//                    } catch (IOException e) {
+//                      log.debug(e);
+//                      //TODO implement for list
+//                      //function.dataCollector.error(e.getMessage());
+//                    }
+//                  }
+//                }
                 number++;
               }
             }
             if (number > 0) {
-              HeatmapMtasCounter.calcValues(heatmap.strategy, lrc, heatmap, number, docs, values);
+              HeatmapMtasCounter.calcValues(heatmap.strategy, lrc, heatmap, number, docs, values, arguments, positions);
             }  
           }
         } else {
@@ -2852,7 +2859,7 @@ public class CodecCollector {
                         subDataCollector = dataCollector.add(key, value, subDocSet.length);
                       } catch (IOException e) {
                         log.debug(e);
-                        dataCollector.error(key, e.getMessage());
+                        dataCollector.error(key, e.getMessage(), 1);
                         subDataCollector = null;
                       }
                       if (cf.baseFunctionList[level] != null && cf.baseFunctionList[level].containsKey(dataCollector)) {
@@ -2864,7 +2871,7 @@ public class CodecCollector {
                               function.dataCollector.add(key, valueLong, subDocSet.length);
                             } catch (IOException e) {
                               log.debug(e);
-                              function.dataCollector.error(key, e.getMessage());
+                              function.dataCollector.error(key, e.getMessage(), 1);
                             }
                           } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
                             try {
@@ -2872,7 +2879,7 @@ public class CodecCollector {
                               function.dataCollector.add(key, valueDouble, subDocSet.length);
                             } catch (IOException e) {
                               log.debug(e);
-                              function.dataCollector.error(key, e.getMessage());
+                              function.dataCollector.error(key, e.getMessage(), 1);
                             }
                           }
                         }
@@ -2930,7 +2937,7 @@ public class CodecCollector {
                                   functionNumber[i]++;
                                 } catch (IOException e) {
                                   log.debug(e);
-                                  function.dataCollector.error(key, e.getMessage());
+                                  function.dataCollector.error(key, e.getMessage(), 1);
                                 }
                               } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
                                 try {
@@ -2939,7 +2946,7 @@ public class CodecCollector {
                                   functionNumber[i]++;
                                 } catch (IOException e) {
                                   log.debug(e);
-                                  function.dataCollector.error(key, e.getMessage());
+                                  function.dataCollector.error(key, e.getMessage(), 1);
                                 }
                               }
                             }
@@ -3228,7 +3235,7 @@ public class CodecCollector {
                           } catch (IOException e) {
                             log.debug(e);
                             termVector.subComponentFunction.dataCollector.error(MtasToken.getPostfixFromValue(term),
-                                e.getMessage());
+                                e.getMessage(),1);
                           }
                           termVector.subComponentFunction.dataCollector.add(key, valueLong, numberBasic.docNumber);
                           if (termVector.functions != null) {
@@ -3255,7 +3262,7 @@ public class CodecCollector {
                                   .getValueLong(new long[] { numberFull.args[i] }, numberFull.positions[i]);
                             } catch (IOException e) {
                               log.debug(e);
-                              termVector.subComponentFunction.dataCollector.error(key, e.getMessage());
+                              termVector.subComponentFunction.dataCollector.error(key, e.getMessage(), 1);
                             }
                           }
                           termVector.subComponentFunction.dataCollector.add(key, valuesLong, valuesLong.length);
@@ -3269,7 +3276,7 @@ public class CodecCollector {
                                         .getValueLong(new long[] { numberFull.args[i] }, numberFull.positions[i]);
                                   } catch (IOException e) {
                                     log.debug(e);
-                                    function.dataCollector.error(key, e.getMessage());
+                                    function.dataCollector.error(key, e.getMessage(), 1);
                                   }
                                 }
                                 function.dataCollector.add(key, valuesLong, valuesLong.length);
@@ -3281,7 +3288,7 @@ public class CodecCollector {
                                         .getValueDouble(new long[] { numberFull.args[i] }, numberFull.positions[i]);
                                   } catch (IOException e) {
                                     log.debug(e);
-                                    function.dataCollector.error(key, e.getMessage());
+                                    function.dataCollector.error(key, e.getMessage(), 1);
                                   }
                                 }
                                 function.dataCollector.add(key, valuesDouble, valuesDouble.length);
@@ -3994,7 +4001,7 @@ public class CodecCollector {
               number.positions[i]);
         } catch (IOException e) {
           log.debug(e);
-          dataCollector.error(mutableKey[0], e.getMessage());
+          dataCollector.error(mutableKey[0], e.getMessage(), 1);
         }
       }
       if (!termVector.subComponentFunction.statsType.equals(CodecUtil.STATS_BASIC)) {
@@ -4011,7 +4018,7 @@ public class CodecCollector {
                     number.positions[i]);
               } catch (IOException e) {
                 log.debug(e);
-                function.dataCollector.error(mutableKey[0], e.getMessage());
+                function.dataCollector.error(mutableKey[0], e.getMessage(), 1);
               }
             }
             function.dataCollector.add(mutableKey[0], valuesLong, valuesLong.length);
@@ -4023,7 +4030,7 @@ public class CodecCollector {
                     number.positions[i]);
               } catch (IOException e) {
                 log.debug(e);
-                function.dataCollector.error(mutableKey[0], e.getMessage());
+                function.dataCollector.error(mutableKey[0], e.getMessage(), 1);
               }
             }
             function.dataCollector.add(mutableKey[0], valuesDouble, valuesDouble.length);

@@ -106,9 +106,9 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
    * mtas.codec.util.DataCollector.MtasDataCollector#error(java.lang.String)
    */
   @Override
-  public final void error(String error) throws IOException {
+  public final void error(String error, int number) throws IOException {
     add(false);
-    setError(newCurrentPosition, error, newCurrentExisting);
+    setError(newCurrentPosition, error, number, newCurrentExisting);
   }
 
   /*
@@ -119,10 +119,10 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
    * java.lang.String)
    */
   @Override
-  public final void error(String key, String error) throws IOException {
+  public final void error(String key, String error, int number) throws IOException {
     if (key != null) {
       add(key, false);
-      setError(newCurrentPosition, error, newCurrentExisting);
+      setError(newCurrentPosition, error, number, newCurrentExisting);
     }
   }
 
@@ -131,9 +131,10 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
    *
    * @param newPosition the new position
    * @param error the error
+   * @param number the number of occurrences
    * @param currentExisting the current existing
    */
-  protected void setError(int newPosition, String error,
+  protected void setError(int newPosition, String error, int number,
       boolean currentExisting) {
     if (!currentExisting) {
       newAdvancedValueSumList[newPosition] = operations.getZero1();
@@ -143,12 +144,12 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
       newAdvancedValueMaxList[newPosition] = operations.getZero1();
       newAdvancedValueNList[newPosition] = 0;
     }
-    newErrorNumber[newPosition]++;
+    newErrorNumber[newPosition]+=number;
     if (newErrorList[newPosition].containsKey(error)) {
       newErrorList[newPosition].put(error,
-          newErrorList[newPosition].get(error) + 1);
+          newErrorList[newPosition].get(error) + number);
     } else {
-      newErrorList[newPosition].put(error, 1);
+      newErrorList[newPosition].put(error, number);
     }
   }
 

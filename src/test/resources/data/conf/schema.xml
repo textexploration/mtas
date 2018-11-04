@@ -19,6 +19,8 @@
 		positionIncrementGap="0" precisionStep="0" />
 	<fieldType name="string" class="solr.StrField"
 		sortMissingLast="true" />
+	<fieldType name="geo" class="solr.RptWithGeometrySpatialField" 
+    spatialContextFactory="JTS" format="GeoJSON" />	
 
 	<fieldType name="text" class="solr.TextField"
 		positionIncrementGap="100">
@@ -67,7 +69,8 @@
 		required="true" stored="true" />
 	<field name="_version_" type="long" indexed="true" stored="true" />
 	<field name="title" type="string" indexed="true" stored="true" />
-	<field name="text" type="string" indexed="true" stored="true" />
+	<field name="location" type="geo" indexed="true" stored="true" />
+  <field name="text" type="string" indexed="true" stored="true" />
 	<field name="source" type="string" indexed="true" stored="true" />
 	<field name="error" type="string" indexed="true" stored="true" />
 	<field name="numberOfTokens" type="int" indexed="true" stored="true" />

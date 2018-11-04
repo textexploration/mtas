@@ -2,6 +2,8 @@ package mtas.solr;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -661,6 +663,63 @@ public class MtasSolrTestDistributedSearchConsistency {
     createPrefixAssertions(list.get(COLLECTION_ALL_OPTIMIZED).getResponse(),
         list.get(COLLECTION_DISTRIBUTED).getResponse(), "prefixKey");
   }
+  
+  @org.junit.Test
+  public void mtasRequestHandlerHeatmap() throws IOException {
+    int level = 3;
+    ModifiableSolrParams params = new ModifiableSolrParams();
+    String[] collections = new String[] { COLLECTION_ALL_OPTIMIZED,
+        COLLECTION_ALL_MULTIPLE_SEGMENTS, COLLECTION_DISTRIBUTED };
+    params.set("q", "*:*");
+    params.set("mtas", "true");
+    params.set("rows", "0");
+    params.set("mtas.heatmap", "true");
+    params.set("mtas.heatmap.0.key", "geo");
+    params.set("mtas.heatmap.0.queryField", MtasSolrBase.FIELD_MTAS);
+    params.set("mtas.heatmap.0.query.0.value", "[pos=\"LID\"]");
+    params.set("mtas.heatmap.0.query.0.type", "cql");
+    params.set("mtas.heatmap.0.minimum", 1);
+    params.set("mtas.heatmap.0.heatmapField", "location");
+    params.set("mtas.heatmap.0.gridLevel", level);
+    params.set("mtas.heatmap.0.geom", "[\"0 0\" TO \"40 40\"]");
+    Map<String, QueryResponse> list = createResults(params,
+        Arrays.asList(collections));
+    ArrayList<ArrayList<NamedList<Object>>> mtasHeatmap1 = MtasSolrBase.getFromMtasHeatmap(list.get(COLLECTION_ALL_OPTIMIZED).getResponse(),"geo");
+    ArrayList<ArrayList<NamedList<Object>>> mtasHeatmap2 = MtasSolrBase.getFromMtasHeatmap(list.get(COLLECTION_ALL_MULTIPLE_SEGMENTS).getResponse(),"geo");
+    ArrayList<ArrayList<NamedList<Object>>> mtasHeatmap3 = MtasSolrBase.getFromMtasHeatmap(list.get(COLLECTION_DISTRIBUTED).getResponse(),"geo");
+    assertTrue("size optimized and segments different", mtasHeatmap1.size()==mtasHeatmap2.size());
+    assertTrue("size optimized and distributed different", mtasHeatmap1.size()==mtasHeatmap3.size());
+    for(int i=0; i<mtasHeatmap1.size();i++) {
+      if(mtasHeatmap1.get(i)==null) {
+        assertNull("expected segments null", mtasHeatmap2.get(i));
+        assertNull("expected distributed null", mtasHeatmap3.get(i));
+      } else {
+        assertNotNull("expected segments null", mtasHeatmap2.get(i));
+        assertNotNull("expected distributed null", mtasHeatmap3.get(i));
+        assertTrue("size optimized and segments different", mtasHeatmap1.get(i).size()==mtasHeatmap2.get(i).size());
+        assertTrue("size optimized and distributed different", mtasHeatmap1.get(i).size()==mtasHeatmap3.get(i).size());
+        for(int j=0; j<mtasHeatmap1.get(i).size();j++) {
+          if(mtasHeatmap1.get(i).get(j)==null) {
+            assertNull("expected mtasHeatmap to be null", mtasHeatmap2.get(i).get(j));
+            assertNull("expected mtasHeatmap to be null", mtasHeatmap3.get(i).get(j));
+          } else {
+            assertNotNull("expected mtasHeatmap not to be null", mtasHeatmap2.get(i).get(j));
+            assertNotNull("expected mtasHeatmap not to be null", mtasHeatmap3.get(i).get(j));
+            Long mtasValueN1 = (Long) mtasHeatmap1.get(i).get(j).get("n");
+            Long mtasValueN2 = (Long) mtasHeatmap2.get(i).get(j).get("n");
+            Long mtasValueN3 = (Long) mtasHeatmap3.get(i).get(j).get("n");
+            Long mtasValueSum1 = (Long) mtasHeatmap1.get(i).get(j).get("sum");
+            Long mtasValueSum2 = (Long) mtasHeatmap2.get(i).get(j).get("sum");
+            Long mtasValueSum3 = (Long) mtasHeatmap3.get(i).get(j).get("sum");
+            assertEquals("difference optimized and segments n", mtasValueN1, mtasValueN2); 
+            assertEquals("difference optimized and segments sum", mtasValueSum1, mtasValueSum2); 
+            assertEquals("difference optimized and distributed n", mtasValueN1, mtasValueN3); 
+            assertEquals("difference optimized and distributed sum", mtasValueSum1, mtasValueSum3); 
+          }
+        }
+      }
+    }
+  }  
 
   /**
    * Creates the results.

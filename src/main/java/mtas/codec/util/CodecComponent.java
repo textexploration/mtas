@@ -33,10 +33,12 @@ import java.util.regex.Pattern;
 
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenString;
+import mtas.codec.util.CodecComponent.SubComponentFunction;
 import mtas.codec.util.CodecSearchTree.MtasTreeHit;
-import mtas.codec.util.HeatmapMtasCounter.Heatmap;
 import mtas.codec.util.collector.MtasDataCollector;
 import mtas.codec.util.distance.Distance;
+import mtas.codec.util.heatmap.HeatmapMtasCounter;
+import mtas.codec.util.heatmap.HeatmapMtasCounter.Heatmap;
 import mtas.parser.function.MtasFunctionParser;
 import mtas.parser.function.ParseException;
 import mtas.parser.function.util.MtasFunctionParserFunction;
@@ -71,7 +73,7 @@ public class CodecComponent {
 
     /** The status. */
     public ComponentStatus status;
-    
+
     /** The version. */
     public ComponentVersion version;
 
@@ -93,6 +95,7 @@ public class CodecComponent {
     /** The do page. */
     public boolean doPage;
 
+    /** The do heatmap. */
     public boolean doHeatmap;
 
     /** The do group. */
@@ -124,7 +127,7 @@ public class CodecComponent {
 
     /** The do status. */
     public boolean doStatus;
-    
+
     /** The do version. */
     public boolean doVersion;
 
@@ -179,7 +182,8 @@ public class CodecComponent {
 
     /** The page list. */
     public List<ComponentPage> pageList;
-    
+
+    /** The heatmap list. */
     public List<ComponentHeatmap> heatmapList;
 
     /** The group list. */
@@ -272,8 +276,7 @@ public class CodecComponent {
      *          the prefix
      */
     public void addSinglePosition(String prefix) {
-      if (!prefix.trim().isEmpty() && !singlePositionList.contains(prefix)
-          && !multiplePositionList.contains(prefix)) {
+      if (!prefix.trim().isEmpty() && !singlePositionList.contains(prefix) && !multiplePositionList.contains(prefix)) {
         singlePositionList.add(prefix);
       }
     }
@@ -416,18 +419,16 @@ public class CodecComponent {
      * @throws IOException
      *           Signals that an I/O exception has occurred.
      */
-    public ComponentDocument(String key, String prefix, String statsType,
-        String regexp, String[] list, int listNumber, Boolean listRegexp,
-        Boolean listExpand, int listExpandNumber, String ignoreRegexp,
-        String[] ignoreList, Boolean ignoreListRegexp) throws IOException {
+    public ComponentDocument(String key, String prefix, String statsType, String regexp, String[] list, int listNumber,
+        Boolean listRegexp, Boolean listExpand, int listExpandNumber, String ignoreRegexp, String[] ignoreList,
+        Boolean ignoreListRegexp) throws IOException {
       this.key = key;
       this.prefix = prefix;
       this.regexp = regexp;
       if (list != null && list.length > 0) {
         this.list = new HashSet<>(Arrays.asList(list));
         this.listRegexp = listRegexp != null ? listRegexp : false;
-        this.listExpand = (listExpand != null && listExpandNumber > 0)
-            ? listExpand : false;
+        this.listExpand = (listExpand != null && listExpandNumber > 0) ? listExpand : false;
         if (this.listExpand) {
           this.listExpandNumber = listExpandNumber;
         } else {
@@ -442,8 +443,7 @@ public class CodecComponent {
       this.ignoreRegexp = ignoreRegexp;
       if (ignoreList != null && ignoreList.length > 0) {
         this.ignoreList = new HashSet<>(Arrays.asList(ignoreList));
-        this.ignoreListRegexp = ignoreListRegexp != null ? ignoreListRegexp
-            : false;
+        this.ignoreListRegexp = ignoreListRegexp != null ? ignoreListRegexp : false;
       } else {
         this.ignoreList = null;
         this.ignoreListRegexp = false;
@@ -505,10 +505,10 @@ public class CodecComponent {
 
     /** The number. */
     public Integer number;
-    
+
     /** The page start. */
     public Integer pageStart;
-    
+
     /** The page end. */
     public Integer pageEnd;
 
@@ -524,29 +524,39 @@ public class CodecComponent {
     /**
      * Instantiates a new component kwic.
      *
-     * @param query          the query
-     * @param key          the key
-     * @param prefixes          the prefixes
-     * @param number          the number
-     * @param start          the start
-     * @param pageStart the page start
-     * @param pageEnd the page end
-     * @param left          the left
-     * @param right          the right
-     * @param output          the output
-     * @throws IOException           Signals that an I/O exception has occurred.
+     * @param query
+     *          the query
+     * @param key
+     *          the key
+     * @param prefixes
+     *          the prefixes
+     * @param number
+     *          the number
+     * @param start
+     *          the start
+     * @param pageStart
+     *          the page start
+     * @param pageEnd
+     *          the page end
+     * @param left
+     *          the left
+     * @param right
+     *          the right
+     * @param output
+     *          the output
+     * @throws IOException
+     *           Signals that an I/O exception has occurred.
      */
-    public ComponentKwic(MtasSpanQuery query, String key, String prefixes,
-        Integer number, int start, Integer pageStart, Integer pageEnd, int left, int right, String output)
-        throws IOException {
+    public ComponentKwic(MtasSpanQuery query, String key, String prefixes, Integer number, int start, Integer pageStart,
+        Integer pageEnd, int left, int right, String output) throws IOException {
       this.query = query;
       this.key = key;
       this.left = (left > 0) ? left : 0;
       this.right = (right > 0) ? right : 0;
       this.start = (start > 0) ? start : 0;
       this.number = (number != null && number >= 0) ? number : null;
-      this.pageStart = (pageStart!=null && pageEnd!=null)? pageStart : null;
-      this.pageEnd = (pageStart!=null && pageEnd!=null)? pageEnd : null;
+      this.pageStart = (pageStart != null && pageEnd != null) ? pageStart : null;
+      this.pageEnd = (pageStart != null && pageEnd != null) ? pageEnd : null;
       this.output = output;
       tokens = new HashMap<>();
       hits = new HashMap<>();
@@ -628,11 +638,10 @@ public class CodecComponent {
 
     /** The prefixes. */
     public List<String> prefixes;
-    
-    
+
     /** The field values. */
     public Map<Integer, Map<String, Object>> fieldValues;
-    
+
     /** The field names. */
     public List<String> fieldNames;
 
@@ -653,7 +662,7 @@ public class CodecComponent {
 
     /** The number. */
     public int number;
-    
+
     /** The field list. */
     public String fieldList;
 
@@ -672,29 +681,44 @@ public class CodecComponent {
     /**
      * Instantiates a new component list.
      *
-     * @param spanQuery          the span query
-     * @param field          the field
-     * @param queryValue          the query value
-     * @param queryType          the query type
-     * @param queryPrefix          the query prefix
-     * @param queryVariables          the query variables
-     * @param queryIgnore          the query ignore
-     * @param queryMaximumIgnoreLength          the query maximum ignore length
-     * @param key          the key
-     * @param fieldList the field list
-     * @param prefix          the prefix
-     * @param start          the start
-     * @param number          the number
-     * @param left          the left
-     * @param right          the right
-     * @param output          the output
-     * @throws IOException           Signals that an I/O exception has occurred.
+     * @param spanQuery
+     *          the span query
+     * @param field
+     *          the field
+     * @param queryValue
+     *          the query value
+     * @param queryType
+     *          the query type
+     * @param queryPrefix
+     *          the query prefix
+     * @param queryVariables
+     *          the query variables
+     * @param queryIgnore
+     *          the query ignore
+     * @param queryMaximumIgnoreLength
+     *          the query maximum ignore length
+     * @param key
+     *          the key
+     * @param fieldList
+     *          the field list
+     * @param prefix
+     *          the prefix
+     * @param start
+     *          the start
+     * @param number
+     *          the number
+     * @param left
+     *          the left
+     * @param right
+     *          the right
+     * @param output
+     *          the output
+     * @throws IOException
+     *           Signals that an I/O exception has occurred.
      */
-    public ComponentList(MtasSpanQuery spanQuery, String field,
-        String queryValue, String queryType, String queryPrefix,
-        Map<String, String[]> queryVariables, String queryIgnore,
-        String queryMaximumIgnoreLength, String key, String fieldList, String prefix, int start,
-        int number, int left, int right, String output) throws IOException {
+    public ComponentList(MtasSpanQuery spanQuery, String field, String queryValue, String queryType, String queryPrefix,
+        Map<String, String[]> queryVariables, String queryIgnore, String queryMaximumIgnoreLength, String key,
+        String fieldList, String prefix, int start, int number, int left, int right, String output) throws IOException {
       this.spanQuery = spanQuery;
       this.field = field;
       this.queryValue = queryValue;
@@ -751,14 +775,14 @@ public class CodecComponent {
       }
     }
   }
-  
+
   /**
    * The Class ComponentPage.
    */
   public static class ComponentPage implements BasicComponent {
     /** The key. */
     public String key;
-    
+
     /** The unique key. */
     public Map<Integer, String> uniqueKey;
 
@@ -767,13 +791,13 @@ public class CodecComponent {
 
     /** The max position. */
     public Map<Integer, Integer> maxPosition;
-    
+
     /** The word list. */
     public Map<Integer, Map<Integer, PageWordData>> wordList;
-    
+
     /** The range list. */
     public Map<Integer, Map<Integer, PageRangeData>> rangeList;
-    
+
     /** The set list. */
     public Map<Integer, Map<Integer, PageSetData>> setList;
 
@@ -789,15 +813,20 @@ public class CodecComponent {
     /**
      * Instantiates a new component list.
      *
-     * @param field          the field
-     * @param key          the key
-     * @param prefix          the prefix
-     * @param start          the start
-     * @param end the end
-     * @throws IOException           Signals that an I/O exception has occurred.
+     * @param field
+     *          the field
+     * @param key
+     *          the key
+     * @param prefix
+     *          the prefix
+     * @param start
+     *          the start
+     * @param end
+     *          the end
+     * @throws IOException
+     *           Signals that an I/O exception has occurred.
      */
-    public ComponentPage(String field, String key, String prefix, int start,
-        int end) throws IOException {
+    public ComponentPage(String field, String key, String prefix, int start, int end) throws IOException {
       this.key = key;
       this.start = start;
       this.end = end;
@@ -819,72 +848,82 @@ public class CodecComponent {
     }
 
   }
-  
+
   /**
    * The Class ComponentHeatmap.
    */
   public static class ComponentHeatmap implements BasicComponent {
-    
+
     /** The key. */
     public String key;
-    
+
+    /** The queries. */
     public MtasSpanQuery[] queries;
-    
-    /** The heatmap field. */
-    public String heatmapField;
-    
-    /** The query field. */
-    public String queryField;
-    
+
+    /** The strategy. */
     public PrefixTreeStrategy strategy;
-    
+
+    /** The bounds shape. */
     public Shape boundsShape;
-    
+
+    /** The grid level. */
     public Integer gridLevel;
+    
+    /** The max cells. */
     public int maxCells;
-    
+
+    /** The data type. */
     public String dataType;
-    public String statsType;
-    public SortedSet<String> statsItems;
     
+    /** The stats type. */
+    public String statsType;
+    
+    /** The stats items. */
+    public SortedSet<String> statsItems;
+
     /** The minimum long. */
     public Long minimumLong;
 
     /** The maximum long. */
     public Long maximumLong;
 
-    /** The functions. */
-    public List<SubComponentFunction> functions;
-
     /** The parser. */
     public MtasFunctionParserFunction parser;
-    
+
+    /** The hm. */
     public Heatmap hm;
-    
+
+    /** The Constant DEFAULT_MAX_CELLS. */
     private static final int DEFAULT_MAX_CELLS = 100000;
-    
+
     /**
      * Instantiates a new component heatmap.
      *
-     * @param key the key
-     * @param heatmapField the heatmap field
-     * @param queryField the query field
-     * @throws IOException 
+     * @param key          the key
+     * @param queries the queries
+     * @param minimumDouble the minimum double
+     * @param maximumDouble the maximum double
+     * @param type the type
+     * @param functionKey the function key
+     * @param functionExpression the function expression
+     * @param functionType the function type
+     * @param strategy the strategy
+     * @param boundsShape the bounds shape
+     * @param gridLevel the grid level
+     * @param maxCells the max cells
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ParseException the parse exception
      */
-    public ComponentHeatmap(String key, MtasSpanQuery[] queries, Double minimumDouble, 
-        Double maximumDouble, String type,
-        String[] functionKey, String[] functionExpression, String[] functionType, 
-        String heatmapField, String queryField, 
-        PrefixTreeStrategy strategy, Shape boundsShape, 
-        Integer gridLevel, Integer maxCells) throws IOException {
+    public ComponentHeatmap(String key, MtasSpanQuery[] queries, Double minimumDouble, Double maximumDouble,
+        String type, String[] functionKey, String[] functionExpression, String[] functionType,
+        PrefixTreeStrategy strategy, Shape boundsShape, Integer gridLevel, Integer maxCells)
+        throws IOException, ParseException {
       this.key = key;
-      this.queries = queries;
-      this.heatmapField = heatmapField;
-      this.queryField = queryField;
+      this.queries = (MtasSpanQuery[]) queries.clone();
       this.strategy = strategy;
-      this.boundsShape=boundsShape;
-      this.gridLevel=gridLevel;
-      this.maxCells=maxCells==null?DEFAULT_MAX_CELLS :maxCells;
+      this.boundsShape = boundsShape;
+      this.gridLevel = gridLevel;
+      this.maxCells = maxCells == null ? DEFAULT_MAX_CELLS : maxCells;
       this.parser = new MtasFunctionParserFunctionDefault(queries.length);
       dataType = parser.getType();
       statsItems = CodecUtil.createStatsItems(type);
@@ -899,76 +938,32 @@ public class CodecComponent {
       } else {
         this.maximumLong = null;
       }
+      hm = null;
       HeatmapMtasCounter.createHeatmap(this);
-      
-    }
-    
-    /**
-     * Function sum rule.
-     *
-     * @return true, if successful
-     */
-    public boolean functionSumRule() {
-      if (functions != null) {
-        for (SubComponentFunction function : functions) {
-          if (!function.parserFunction.sumRule()) {
-            return false;
+      // init functions
+      if(hm!=null) {
+        hm.functions = new ArrayList<>();
+        if (functionKey != null && functionExpression != null && functionType != null) {
+          if (functionKey.length == functionExpression.length && functionKey.length == functionType.length) {
+            for (int i = 0; i < functionKey.length; i++) {
+              SubComponentFunction scf = new SubComponentFunction(DataCollector.COLLECTOR_TYPE_LIST, functionKey[i],
+                  functionExpression[i], functionType[i]);
+              scf.dataCollector.initNewList(hm.columns * hm.rows);
+              hm.functions.add(scf);
+            }
           }
         }
+        // init datacollector
+        hm.dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_LIST, dataType, statsType, statsItems,
+            null, null, null, null, null, null);
+        hm.dataCollector.initNewList(hm.columns * hm.rows);
+      } else {
+        throw new IOException("couldn't define hm");
       }
-      return true;
     }
 
-    /**
-     * Function basic.
-     *
-     * @return true, if successful
-     */
-    public boolean functionBasic() {
-      if (functions != null) {
-        for (SubComponentFunction function : functions) {
-          if (!function.statsType.equals(CodecUtil.STATS_BASIC)) {
-            return false;
-          }
-        }
-      }
-      return true;
-    }
-
-    /**
-     * Function need positions.
-     *
-     * @return true, if successful
-     */
-    public boolean functionNeedPositions() {
-      if (functions != null) {
-        for (SubComponentFunction function : functions) {
-          if (function.parserFunction.needPositions()) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
-
-    /**
-     * Function need arguments.
-     *
-     * @return the sets the
-     */
-    public Set<Integer> functionNeedArguments() {
-      Set<Integer> list = new HashSet<>();
-      if (functions != null) {
-        for (SubComponentFunction function : functions) {
-          list.addAll(function.parserFunction.needArgument());
-        }
-      }
-      return list;
-    }
-
-        
   }
-  
+
   /**
    * The Class ComponentGroup.
    */
@@ -1068,25 +1063,19 @@ public class CodecComponent {
      * @throws IOException
      *           Signals that an I/O exception has occurred.
      */
-    public ComponentGroup(MtasSpanQuery spanQuery, String key, int number,
-        int start, String groupingHitInsidePrefixes,
-        String[] groupingHitInsideLeftPosition,
-        String[] groupingHitInsideLeftPrefixes,
-        String[] groupingHitInsideRightPosition,
-        String[] groupingHitInsideRightPrefixes,
-        String[] groupingHitLeftPosition, String[] groupingHitLeftPrefixes,
-        String[] groupingHitRightPosition, String[] groupingHitRightPrefixes,
-        String[] groupingLeftPosition, String[] groupingLeftPrefixes,
-        String[] groupingRightPosition, String[] groupingRightPrefixes)
-        throws IOException {
+    public ComponentGroup(MtasSpanQuery spanQuery, String key, int number, int start, String groupingHitInsidePrefixes,
+        String[] groupingHitInsideLeftPosition, String[] groupingHitInsideLeftPrefixes,
+        String[] groupingHitInsideRightPosition, String[] groupingHitInsideRightPrefixes,
+        String[] groupingHitLeftPosition, String[] groupingHitLeftPrefixes, String[] groupingHitRightPosition,
+        String[] groupingHitRightPrefixes, String[] groupingLeftPosition, String[] groupingLeftPrefixes,
+        String[] groupingRightPosition, String[] groupingRightPrefixes) throws IOException {
       this.spanQuery = spanQuery;
       this.key = key;
       this.dataType = CodecUtil.DATA_TYPE_LONG;
       this.sortType = CodecUtil.STATS_TYPE_SUM;
       this.sortDirection = CodecUtil.SORT_DESC;
       this.statsItems = CodecUtil.createStatsItems("n,sum,mean");
-      this.statsType = CodecUtil.createStatsType(this.statsItems, this.sortType,
-          null);
+      this.statsType = CodecUtil.createStatsType(this.statsItems, this.sortType, null);
       this.start = start;
       this.number = number;
       HashSet<String> tmpPrefixes = new HashSet<>();
@@ -1103,24 +1092,18 @@ public class CodecComponent {
       } else {
         hitInside = null;
       }
-      hitInsideLeft = createPositionedPrefixes(tmpPrefixes,
-          groupingHitInsideLeftPosition, groupingHitInsideLeftPrefixes);
-      hitInsideRight = createPositionedPrefixes(tmpPrefixes,
-          groupingHitInsideRightPosition, groupingHitInsideRightPrefixes);
-      hitLeft = createPositionedPrefixes(tmpPrefixes, groupingHitLeftPosition,
-          groupingHitLeftPrefixes);
-      hitRight = createPositionedPrefixes(tmpPrefixes, groupingHitRightPosition,
-          groupingHitRightPrefixes);
-      left = createPositionedPrefixes(tmpPrefixes, groupingLeftPosition,
-          groupingLeftPrefixes);
-      right = createPositionedPrefixes(tmpPrefixes, groupingRightPosition,
-          groupingRightPrefixes);
+      hitInsideLeft = createPositionedPrefixes(tmpPrefixes, groupingHitInsideLeftPosition,
+          groupingHitInsideLeftPrefixes);
+      hitInsideRight = createPositionedPrefixes(tmpPrefixes, groupingHitInsideRightPosition,
+          groupingHitInsideRightPrefixes);
+      hitLeft = createPositionedPrefixes(tmpPrefixes, groupingHitLeftPosition, groupingHitLeftPrefixes);
+      hitRight = createPositionedPrefixes(tmpPrefixes, groupingHitRightPosition, groupingHitRightPrefixes);
+      left = createPositionedPrefixes(tmpPrefixes, groupingLeftPosition, groupingLeftPrefixes);
+      right = createPositionedPrefixes(tmpPrefixes, groupingRightPosition, groupingRightPrefixes);
       prefixes = new ArrayList<>(tmpPrefixes);
       // datacollector
-      dataCollector = DataCollector.getCollector(
-          DataCollector.COLLECTOR_TYPE_LIST, this.dataType, this.statsType,
-          this.statsItems, this.sortType, this.sortDirection, this.start,
-          this.number, null, null);
+      dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_LIST, this.dataType, this.statsType,
+          this.statsItems, this.sortType, this.sortDirection, this.start, this.number, null, null);
     }
 
     /**
@@ -1136,15 +1119,13 @@ public class CodecComponent {
      * @throws IOException
      *           Signals that an I/O exception has occurred.
      */
-    private static HashSet<String>[] createPositionedPrefixes(
-        HashSet<String> prefixList, String[] position, String[] prefixes)
-        throws IOException {
+    private static HashSet<String>[] createPositionedPrefixes(HashSet<String> prefixList, String[] position,
+        String[] prefixes) throws IOException {
       Pattern p = Pattern.compile("^([0-9]+)(\\-([0-9]+))?$");
       Matcher m;
       if (position == null && prefixes == null) {
         return null;
-      } else if (prefixes == null || position == null
-          || position.length != prefixes.length) {
+      } else if (prefixes == null || position == null || position.length != prefixes.length) {
         throw new IOException("incorrect position/prefixes");
       } else if (position.length == 0) {
         return null;
@@ -1326,14 +1307,11 @@ public class CodecComponent {
      *           the parse exception
      */
     @SuppressWarnings("unchecked")
-    public ComponentFacet(MtasSpanQuery[] spanQueries, String field, String key,
-        String[] baseFields, String[] baseFieldTypes, String[] baseTypes,
-        Double[] baseRangeSizes, Double[] baseRangeBases,
-        String[] baseSortTypes, String[] baseSortDirections,
-        Integer[] baseNumbers, Double[] baseMinimumDoubles,
-        Double[] baseMaximumDoubles, String[][] baseFunctionKeys,
-        String[][] baseFunctionExpressions, String[][] baseFunctionTypes)
-        throws IOException, ParseException {
+    public ComponentFacet(MtasSpanQuery[] spanQueries, String field, String key, String[] baseFields,
+        String[] baseFieldTypes, String[] baseTypes, Double[] baseRangeSizes, Double[] baseRangeBases,
+        String[] baseSortTypes, String[] baseSortDirections, Integer[] baseNumbers, Double[] baseMinimumDoubles,
+        Double[] baseMaximumDoubles, String[][] baseFunctionKeys, String[][] baseFunctionExpressions,
+        String[][] baseFunctionTypes) throws IOException, ParseException {
       this.spanQueries = (MtasSpanQuery[]) spanQueries.clone();
       this.key = key;
       this.baseFields = (String[]) baseFields.clone();
@@ -1368,34 +1346,28 @@ public class CodecComponent {
         baseDataTypes[i] = CodecUtil.DATA_TYPE_LONG;
         baseFunctionList[i] = new HashMap<>();
         baseFunctionParserFunctions[i] = null;
-        baseParsers[i] = new MtasFunctionParserFunctionDefault(
-            this.spanQueries.length);
+        baseParsers[i] = new MtasFunctionParserFunctionDefault(this.spanQueries.length);
         if (this.baseSortDirections[i] == null) {
           this.baseSortDirections[i] = CodecUtil.SORT_ASC;
         } else if (!this.baseSortDirections[i].equals(CodecUtil.SORT_ASC)
             && !this.baseSortDirections[i].equals(CodecUtil.SORT_DESC)) {
-          throw new IOException(
-              "unrecognized sortDirection " + this.baseSortDirections[i]);
+          throw new IOException("unrecognized sortDirection " + this.baseSortDirections[i]);
         }
         if (this.baseSortTypes[i] == null) {
           this.baseSortTypes[i] = CodecUtil.SORT_TERM;
         } else if (!this.baseSortTypes[i].equals(CodecUtil.SORT_TERM)
             && !CodecUtil.isStatsType(this.baseSortTypes[i])) {
-          throw new IOException(
-              "unrecognized sortType " + this.baseSortTypes[i]);
+          throw new IOException("unrecognized sortType " + this.baseSortTypes[i]);
         }
         this.baseCollectorTypes[i] = DataCollector.COLLECTOR_TYPE_LIST;
         this.baseStatsItems[i] = CodecUtil.createStatsItems(this.baseTypes[i]);
-        this.baseStatsTypes[i] = CodecUtil.createStatsType(baseStatsItems[i],
-            this.baseSortTypes[i], new MtasFunctionParserFunctionDefault(1));
+        this.baseStatsTypes[i] = CodecUtil.createStatsType(baseStatsItems[i], this.baseSortTypes[i],
+            new MtasFunctionParserFunctionDefault(1));
       }
       boolean doFunctions;
-      doFunctions = baseFunctionKeys != null && baseFunctionExpressions != null
-          && baseFunctionTypes != null;
-      doFunctions = doFunctions ? baseFunctionKeys.length == baseFields.length
-          : false;
-      doFunctions = doFunctions ? baseFunctionTypes.length == baseFields.length
-          : false;
+      doFunctions = baseFunctionKeys != null && baseFunctionExpressions != null && baseFunctionTypes != null;
+      doFunctions = doFunctions ? baseFunctionKeys.length == baseFields.length : false;
+      doFunctions = doFunctions ? baseFunctionTypes.length == baseFields.length : false;
       if (doFunctions) {
         this.baseFunctionKeys = new String[baseFields.length][];
         this.baseFunctionExpressions = new String[baseFields.length][];
@@ -1412,8 +1384,7 @@ public class CodecComponent {
               this.baseFunctionExpressions[i][j] = baseFunctionExpressions[i][j];
               this.baseFunctionTypes[i][j] = baseFunctionTypes[i][j];
               baseFunctionParserFunctions[i][j] = new MtasFunctionParser(
-                  new BufferedReader(
-                      new StringReader(baseFunctionExpressions[i][j]))).parse();
+                  new BufferedReader(new StringReader(baseFunctionExpressions[i][j]))).parse();
             }
           } else {
             this.baseFunctionKeys[i] = new String[0];
@@ -1425,33 +1396,22 @@ public class CodecComponent {
       }
       if (baseFields.length > 0) {
         if (baseFields.length == 1) {
-          dataCollector = DataCollector.getCollector(this.baseCollectorTypes[0],
-              this.baseDataTypes[0], this.baseStatsTypes[0],
-              this.baseStatsItems[0], this.baseSortTypes[0],
-              this.baseSortDirections[0], 0, this.baseNumbers[0], null, null);
+          dataCollector = DataCollector.getCollector(this.baseCollectorTypes[0], this.baseDataTypes[0],
+              this.baseStatsTypes[0], this.baseStatsItems[0], this.baseSortTypes[0], this.baseSortDirections[0], 0,
+              this.baseNumbers[0], null, null);
         } else {
-          String[] subBaseCollectorTypes = Arrays
-              .copyOfRange(baseCollectorTypes, 1, baseDataTypes.length);
-          String[] subBaseDataTypes = Arrays.copyOfRange(baseDataTypes, 1,
-              baseDataTypes.length);
-          String[] subBaseStatsTypes = Arrays.copyOfRange(baseStatsTypes, 1,
-              baseStatsTypes.length);
-          SortedSet<String>[] subBaseStatsItems = Arrays
-              .copyOfRange(baseStatsItems, 1, baseStatsItems.length);
-          String[] subBaseSortTypes = Arrays.copyOfRange(baseSortTypes, 1,
-              baseSortTypes.length);
-          String[] subBaseSortDirections = Arrays
-              .copyOfRange(baseSortDirections, 1, baseSortDirections.length);
-          Integer[] subNumbers = Arrays.copyOfRange(baseNumbers, 1,
-              baseNumbers.length);
+          String[] subBaseCollectorTypes = Arrays.copyOfRange(baseCollectorTypes, 1, baseDataTypes.length);
+          String[] subBaseDataTypes = Arrays.copyOfRange(baseDataTypes, 1, baseDataTypes.length);
+          String[] subBaseStatsTypes = Arrays.copyOfRange(baseStatsTypes, 1, baseStatsTypes.length);
+          SortedSet<String>[] subBaseStatsItems = Arrays.copyOfRange(baseStatsItems, 1, baseStatsItems.length);
+          String[] subBaseSortTypes = Arrays.copyOfRange(baseSortTypes, 1, baseSortTypes.length);
+          String[] subBaseSortDirections = Arrays.copyOfRange(baseSortDirections, 1, baseSortDirections.length);
+          Integer[] subNumbers = Arrays.copyOfRange(baseNumbers, 1, baseNumbers.length);
           Integer[] subStarts = ArrayUtils.toObject(new int[subNumbers.length]);
-          dataCollector = DataCollector.getCollector(this.baseCollectorTypes[0],
-              this.baseDataTypes[0], this.baseStatsTypes[0],
-              this.baseStatsItems[0], this.baseSortTypes[0],
-              this.baseSortDirections[0], 0, this.baseNumbers[0],
-              subBaseCollectorTypes, subBaseDataTypes, subBaseStatsTypes,
-              subBaseStatsItems, subBaseSortTypes, subBaseSortDirections,
-              subStarts, subNumbers, null, null);
+          dataCollector = DataCollector.getCollector(this.baseCollectorTypes[0], this.baseDataTypes[0],
+              this.baseStatsTypes[0], this.baseStatsItems[0], this.baseSortTypes[0], this.baseSortDirections[0], 0,
+              this.baseNumbers[0], subBaseCollectorTypes, subBaseDataTypes, subBaseStatsTypes, subBaseStatsItems,
+              subBaseSortTypes, subBaseSortDirections, subStarts, subNumbers, null, null);
         }
       } else {
         throw new IOException("no baseFields");
@@ -1586,55 +1546,76 @@ public class CodecComponent {
     /**
      * Instantiates a new component term vector.
      *
-     * @param key          the key
-     * @param prefix          the prefix
-     * @param distanceKey          the distance key
-     * @param distanceType          the distance type
-     * @param distanceBase          the distance base
-     * @param distanceParameter          the distance parameter
-     * @param distanceMinimum the distance minimum
-     * @param distanceMaximum          the distance maximum
-     * @param regexp          the regexp
-     * @param full          the full
-     * @param type          the type
-     * @param sortType          the sort type
-     * @param sortDirection          the sort direction
-     * @param startValue          the start value
-     * @param number          the number
-     * @param functionKey          the function key
-     * @param functionExpression          the function expression
-     * @param functionType          the function type
-     * @param boundary          the boundary
-     * @param list          the list
-     * @param listRegexp          the list regexp
-     * @param ignoreRegexp          the ignore regexp
-     * @param ignoreList          the ignore list
-     * @param ignoreListRegexp          the ignore list regexp
-     * @throws IOException           Signals that an I/O exception has occurred.
-     * @throws ParseException           the parse exception
+     * @param key
+     *          the key
+     * @param prefix
+     *          the prefix
+     * @param distanceKey
+     *          the distance key
+     * @param distanceType
+     *          the distance type
+     * @param distanceBase
+     *          the distance base
+     * @param distanceParameter
+     *          the distance parameter
+     * @param distanceMinimum
+     *          the distance minimum
+     * @param distanceMaximum
+     *          the distance maximum
+     * @param regexp
+     *          the regexp
+     * @param full
+     *          the full
+     * @param type
+     *          the type
+     * @param sortType
+     *          the sort type
+     * @param sortDirection
+     *          the sort direction
+     * @param startValue
+     *          the start value
+     * @param number
+     *          the number
+     * @param functionKey
+     *          the function key
+     * @param functionExpression
+     *          the function expression
+     * @param functionType
+     *          the function type
+     * @param boundary
+     *          the boundary
+     * @param list
+     *          the list
+     * @param listRegexp
+     *          the list regexp
+     * @param ignoreRegexp
+     *          the ignore regexp
+     * @param ignoreList
+     *          the ignore list
+     * @param ignoreListRegexp
+     *          the ignore list regexp
+     * @throws IOException
+     *           Signals that an I/O exception has occurred.
+     * @throws ParseException
+     *           the parse exception
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public ComponentTermVector(String key, String prefix, String[] distanceKey,
-        String[] distanceType, String[] distanceBase, Map[] distanceParameter,
-        String[] distanceMinimum, String[] distanceMaximum, String regexp, Boolean full, String type,
-        String sortType, String sortDirection, String startValue, int number,
-        String[] functionKey, String[] functionExpression,
-        String[] functionType, String boundary, String[] list,
-        Boolean listRegexp, String ignoreRegexp, String[] ignoreList,
-        Boolean ignoreListRegexp) throws IOException, ParseException {
+    public ComponentTermVector(String key, String prefix, String[] distanceKey, String[] distanceType,
+        String[] distanceBase, Map[] distanceParameter, String[] distanceMinimum, String[] distanceMaximum,
+        String regexp, Boolean full, String type, String sortType, String sortDirection, String startValue, int number,
+        String[] functionKey, String[] functionExpression, String[] functionType, String boundary, String[] list,
+        Boolean listRegexp, String ignoreRegexp, String[] ignoreList, Boolean ignoreListRegexp)
+        throws IOException, ParseException {
       this.key = key;
       this.prefix = prefix;
       distances = new ArrayList<>();
-      if (distanceKey != null && distanceType != null && distanceBase != null
-          && distanceParameter != null && distanceMaximum != null) {
-        if (distanceKey.length == distanceType.length
-            && distanceKey.length == distanceBase.length
-            && distanceKey.length == distanceParameter.length
-            && distanceKey.length == distanceMaximum.length) {
+      if (distanceKey != null && distanceType != null && distanceBase != null && distanceParameter != null
+          && distanceMaximum != null) {
+        if (distanceKey.length == distanceType.length && distanceKey.length == distanceBase.length
+            && distanceKey.length == distanceParameter.length && distanceKey.length == distanceMaximum.length) {
           for (int i = 0; i < distanceKey.length; i++) {
-            SubComponentDistance item = new SubComponentDistance(distanceKey[i],
-                distanceType[i], this.prefix, distanceBase[i],
-                distanceParameter[i], distanceMinimum[i], distanceMaximum[i]);
+            SubComponentDistance item = new SubComponentDistance(distanceKey[i], distanceType[i], this.prefix,
+                distanceBase[i], distanceParameter[i], distanceMinimum[i], distanceMaximum[i]);
             distances.add(item);
           }
         }
@@ -1667,8 +1648,7 @@ public class CodecComponent {
       } else {
         this.list = null;
         this.listRegexp = false;
-        this.startValue = (startValue != null)
-            ? new BytesRef(prefix + MtasToken.DELIMITER + startValue) : null;
+        this.startValue = (startValue != null) ? new BytesRef(prefix + MtasToken.DELIMITER + startValue) : null;
         if (boundary == null) {
           this.boundary = null;
           if (number < -1) {
@@ -1677,8 +1657,7 @@ public class CodecComponent {
             this.number = number;
           } else {
             if (!full) {
-              throw new IOException(
-                  "number " + number + " only supported for full termvector");
+              throw new IOException("number " + number + " only supported for full termvector");
             } else {
               this.number = Integer.MAX_VALUE;
             }
@@ -1691,45 +1670,35 @@ public class CodecComponent {
       this.ignoreRegexp = ignoreRegexp;
       if (ignoreList != null && ignoreList.length > 0) {
         this.ignoreList = new HashSet(Arrays.asList(ignoreList));
-        this.ignoreListRegexp = ignoreListRegexp != null ? ignoreListRegexp
-            : false;
+        this.ignoreListRegexp = ignoreListRegexp != null ? ignoreListRegexp : false;
       } else {
         this.ignoreList = null;
         this.ignoreListRegexp = false;
       }
       functions = new ArrayList<>();
-      if (functionKey != null && functionExpression != null
-          && functionType != null) {
-        if (functionKey.length == functionExpression.length
-            && functionKey.length == functionType.length) {
+      if (functionKey != null && functionExpression != null && functionType != null) {
+        if (functionKey.length == functionExpression.length && functionKey.length == functionType.length) {
           for (int i = 0; i < functionKey.length; i++) {
-            functions
-                .add(new SubComponentFunction(DataCollector.COLLECTOR_TYPE_LIST,
-                    functionKey[i], functionExpression[i], functionType[i]));
+            functions.add(new SubComponentFunction(DataCollector.COLLECTOR_TYPE_LIST, functionKey[i],
+                functionExpression[i], functionType[i]));
           }
         }
       }
-      if (!this.sortType.equals(CodecUtil.SORT_TERM)
-          && !CodecUtil.isStatsType(this.sortType)) {
+      if (!this.sortType.equals(CodecUtil.SORT_TERM) && !CodecUtil.isStatsType(this.sortType)) {
         throw new IOException("unknown sortType '" + this.sortType + "'");
       } else if (!full && !this.sortType.equals(CodecUtil.SORT_TERM)) {
-        if (!(this.sortType.equals(CodecUtil.STATS_TYPE_SUM)
-            || this.sortType.equals(CodecUtil.STATS_TYPE_N))) {
-          throw new IOException("sortType '" + this.sortType
-              + "' only supported with full termVector");
+        if (!(this.sortType.equals(CodecUtil.STATS_TYPE_SUM) || this.sortType.equals(CodecUtil.STATS_TYPE_N))) {
+          throw new IOException("sortType '" + this.sortType + "' only supported with full termVector");
         }
       }
       if (!this.sortType.equals(CodecUtil.SORT_TERM)) {
         if (startValue != null) {
-          throw new IOException("startValue '" + startValue
-              + "' only supported with termVector sorted on "
-              + CodecUtil.SORT_TERM);
+          throw new IOException(
+              "startValue '" + startValue + "' only supported with termVector sorted on " + CodecUtil.SORT_TERM);
         }
       }
-      if (!this.sortDirection.equals(CodecUtil.SORT_ASC)
-          && !this.sortDirection.equals(CodecUtil.SORT_DESC)) {
-        throw new IOException(
-            "unrecognized sortDirection '" + this.sortDirection + "'");
+      if (!this.sortDirection.equals(CodecUtil.SORT_ASC) && !this.sortDirection.equals(CodecUtil.SORT_DESC)) {
+        throw new IOException("unrecognized sortDirection '" + this.sortDirection + "'");
       }
       boundaryRegistration = this.boundary != null;
       String segmentRegistration = null;
@@ -1750,10 +1719,9 @@ public class CodecComponent {
         }
       }
       // create main subComponentFunction
-      this.subComponentFunction = new SubComponentFunction(
-          DataCollector.COLLECTOR_TYPE_LIST, key, type,
-          new MtasFunctionParserFunctionDefault(1), this.sortType,
-          this.sortDirection, 0, this.number, segmentRegistration, boundary);
+      this.subComponentFunction = new SubComponentFunction(DataCollector.COLLECTOR_TYPE_LIST, key, type,
+          new MtasFunctionParserFunctionDefault(1), this.sortType, this.sortDirection, 0, this.number,
+          segmentRegistration, boundary);
     }
 
     /**
@@ -1797,39 +1765,44 @@ public class CodecComponent {
 
     /** The handler. */
     public String handler;
-    
+
     /** The name. */
     public String name;
-    
+
     /** The key. */
     public String key;
-    
+
     /** The number of documents. */
     public Integer numberOfDocuments;
-    
+
     /** The number of segments. */
     public Integer numberOfSegments;
-    
+
     /** The get mtas handler. */
     public boolean getMtasHandler;
-    
+
     /** The get number of documents. */
     public boolean getNumberOfDocuments;
-    
+
     /** The get number of segments. */
     public boolean getNumberOfSegments;
 
     /**
      * Instantiates a new component status.
      *
-     * @param name the name
-     * @param key the key
-     * @param getMtasHandler the get mtas handler
-     * @param getNumberOfDocuments the get number of documents
-     * @param getNumberOfSegments the get number of segments
+     * @param name
+     *          the name
+     * @param key
+     *          the key
+     * @param getMtasHandler
+     *          the get mtas handler
+     * @param getNumberOfDocuments
+     *          the get number of documents
+     * @param getNumberOfSegments
+     *          the get number of segments
      */
-    public ComponentStatus(String name, String key, boolean getMtasHandler,
-        boolean getNumberOfDocuments, boolean getNumberOfSegments) {
+    public ComponentStatus(String name, String key, boolean getMtasHandler, boolean getNumberOfDocuments,
+        boolean getNumberOfSegments) {
       this.name = Objects.requireNonNull(name, "no name");
       this.key = key;
       this.getMtasHandler = getMtasHandler;
@@ -1841,21 +1814,20 @@ public class CodecComponent {
     }
 
   }
-  
+
   /**
    * The Class ComponentVersion.
    */
   public static class ComponentVersion implements BasicComponent {
-	  
-  	/**
-  	 * Instantiates a new component version.
-  	 */
-  	public ComponentVersion() {
-		  
-	  }
+
+    /**
+     * Instantiates a new component version.
+     */
+    public ComponentVersion() {
+
+    }
   }
 
-  
   /**
    * The Interface ComponentStats.
    */
@@ -1921,21 +1893,16 @@ public class CodecComponent {
      * @throws ParseException
      *           the parse exception
      */
-    public ComponentSpan(MtasSpanQuery[] queries, String key,
-        Double minimumDouble, Double maximumDouble, String type,
-        String[] functionKey, String[] functionExpression,
-        String[] functionType) throws IOException, ParseException {
+    public ComponentSpan(MtasSpanQuery[] queries, String key, Double minimumDouble, Double maximumDouble, String type,
+        String[] functionKey, String[] functionExpression, String[] functionType) throws IOException, ParseException {
       this.queries = (MtasSpanQuery[]) queries.clone();
       this.key = key;
       functions = new ArrayList<>();
-      if (functionKey != null && functionExpression != null
-          && functionType != null) {
-        if (functionKey.length == functionExpression.length
-            && functionKey.length == functionType.length) {
+      if (functionKey != null && functionExpression != null && functionType != null) {
+        if (functionKey.length == functionExpression.length && functionKey.length == functionType.length) {
           for (int i = 0; i < functionKey.length; i++) {
-            functions
-                .add(new SubComponentFunction(DataCollector.COLLECTOR_TYPE_DATA,
-                    functionKey[i], functionExpression[i], functionType[i]));
+            functions.add(new SubComponentFunction(DataCollector.COLLECTOR_TYPE_DATA, functionKey[i],
+                functionExpression[i], functionType[i]));
           }
         }
       }
@@ -1953,8 +1920,7 @@ public class CodecComponent {
       } else {
         this.maximumLong = null;
       }
-      dataCollector = DataCollector.getCollector(
-          DataCollector.COLLECTOR_TYPE_DATA, dataType, this.statsType,
+      dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_DATA, dataType, this.statsType,
           this.statsItems, null, null, null, null, null, null);
     }
 
@@ -2065,8 +2031,7 @@ public class CodecComponent {
      * @throws ParseException
      *           the parse exception
      */
-    public ComponentPosition(String key, Double minimumDouble,
-        Double maximumDouble, String statsType)
+    public ComponentPosition(String key, Double minimumDouble, Double maximumDouble, String statsType)
         throws IOException, ParseException {
       this.key = key;
       dataType = CodecUtil.DATA_TYPE_LONG;
@@ -2082,8 +2047,7 @@ public class CodecComponent {
       } else {
         this.maximumLong = null;
       }
-      dataCollector = DataCollector.getCollector(
-          DataCollector.COLLECTOR_TYPE_DATA, dataType, this.statsType,
+      dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_DATA, dataType, this.statsType,
           this.statsItems, null, null, null, null, null, null);
     }
   }
@@ -2130,8 +2094,7 @@ public class CodecComponent {
      * @throws ParseException
      *           the parse exception
      */
-    public ComponentToken(String key, Double minimumDouble,
-        Double maximumDouble, String statsType)
+    public ComponentToken(String key, Double minimumDouble, Double maximumDouble, String statsType)
         throws IOException, ParseException {
       this.key = key;
       dataType = CodecUtil.DATA_TYPE_LONG;
@@ -2147,8 +2110,7 @@ public class CodecComponent {
       } else {
         this.maximumLong = null;
       }
-      dataCollector = DataCollector.getCollector(
-          DataCollector.COLLECTOR_TYPE_DATA, dataType, this.statsType,
+      dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_DATA, dataType, this.statsType,
           this.statsItems, null, null, null, null, null, null);
     }
   }
@@ -2187,7 +2149,7 @@ public class CodecComponent {
 
     /** The version. */
     public String version;
-    
+
     /** The original version. */
     public String originalVersion;
 
@@ -2243,8 +2205,7 @@ public class CodecComponent {
      * @throws IOException
      *           Signals that an I/O exception has occurred.
      */
-    public void setCreateVariables(String id, Set<String> fields)
-        throws IOException {
+    public void setCreateVariables(String id, Set<String> fields) throws IOException {
       if (action.equals(ACTION_CREATE)) {
         this.id = id;
         this.fields = fields;
@@ -2288,13 +2249,16 @@ public class CodecComponent {
     /**
      * Sets the post variables.
      *
-     * @param id          the id
-     * @param values          the values
-     * @param originalVersion the original version
-     * @throws IOException           Signals that an I/O exception has occurred.
+     * @param id
+     *          the id
+     * @param values
+     *          the values
+     * @param originalVersion
+     *          the original version
+     * @throws IOException
+     *           Signals that an I/O exception has occurred.
      */
-    public void setPostVariables(String id, HashSet<String> values, String originalVersion)
-        throws IOException {
+    public void setPostVariables(String id, HashSet<String> values, String originalVersion) throws IOException {
       if (action.equals(ACTION_POST)) {
         this.id = id;
         this.values = values;
@@ -2316,8 +2280,7 @@ public class CodecComponent {
      * @throws IOException
      *           Signals that an I/O exception has occurred.
      */
-    public void setImportVariables(String id, String url, String collection)
-        throws IOException {
+    public void setImportVariables(String id, String url, String collection) throws IOException {
       if (action.equals(ACTION_IMPORT)) {
         this.id = id;
         StringBuilder importUrlBuffer = new StringBuilder(url);
@@ -2326,25 +2289,17 @@ public class CodecComponent {
         importUrlBuffer.append("&mtas=true&mtas.collection=true");
         importUrlBuffer.append("&mtas.collection.0.key=0");
         importUrlBuffer.append("&mtas.collection.0.action=get");
-        importUrlBuffer.append(
-            "&mtas.collection.0.id=" + URLEncoder.encode(collection, "UTF-8"));
+        importUrlBuffer.append("&mtas.collection.0.id=" + URLEncoder.encode(collection, "UTF-8"));
         Map<String, Object> params = getImport(importUrlBuffer.toString());
         try {
           if (params.containsKey("mtas") && params.get("mtas") instanceof Map) {
-            Map<String, Object> mtasParams = (Map<String, Object>) params
-                .get("mtas");
-            if (mtasParams.containsKey("collection")
-                && mtasParams.get("collection") instanceof List) {
-              List<Object> mtasCollectionList = (List<Object>) mtasParams
-                  .get("collection");
-              if (mtasCollectionList.size() == 1
-                  && mtasCollectionList.get(0) instanceof Map) {
-                Map<String, Object> collectionData = (Map<String, Object>) mtasCollectionList
-                    .get(0);
-                if (collectionData.containsKey("values")
-                    && collectionData.get("values") instanceof List) {
-                  List<String> valuesList = (List<String>) collectionData
-                      .get("values");
+            Map<String, Object> mtasParams = (Map<String, Object>) params.get("mtas");
+            if (mtasParams.containsKey("collection") && mtasParams.get("collection") instanceof List) {
+              List<Object> mtasCollectionList = (List<Object>) mtasParams.get("collection");
+              if (mtasCollectionList.size() == 1 && mtasCollectionList.get(0) instanceof Map) {
+                Map<String, Object> collectionData = (Map<String, Object>) mtasCollectionList.get(0);
+                if (collectionData.containsKey("values") && collectionData.get("values") instanceof List) {
+                  List<String> valuesList = (List<String>) collectionData.get("values");
                   for (String valueItem : valuesList) {
                     values.add(valueItem);
                   }
@@ -2352,8 +2307,7 @@ public class CodecComponent {
                   throw new IOException("no values in response");
                 }
               } else {
-                throw new IOException(
-                    "no valid mtas collection item in response");
+                throw new IOException("no valid mtas collection item in response");
               }
             } else {
               throw new IOException("no valid mtas collection in response");
@@ -2378,8 +2332,7 @@ public class CodecComponent {
      * @throws IOException
      *           Signals that an I/O exception has occurred.
      */
-    private Map<String, Object> getImport(String collectionGetUrl)
-        throws IOException {
+    private Map<String, Object> getImport(String collectionGetUrl) throws IOException {
       // get data
       URL url = new URL(collectionGetUrl);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -2387,8 +2340,7 @@ public class CodecComponent {
       connection.setDoInput(true);
       connection.setInstanceFollowRedirects(false);
       connection.setRequestMethod("GET");
-      connection.setRequestProperty("Content-Type",
-          "application/json; charset=UTF-8");
+      connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
       connection.setRequestProperty("charset", "utf-8");
       connection.setUseCaches(false);
       // process response
@@ -2429,18 +2381,19 @@ public class CodecComponent {
     public String action() {
       return action;
     }
-    
+
     /**
      * Original version.
      *
      * @return the string
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *           Signals that an I/O exception has occurred.
      */
     public String originalVersion() throws IOException {
-      if(action.equals(ACTION_POST)) {
+      if (action.equals(ACTION_POST)) {
         return originalVersion;
       } else {
-        throw new IOException("unexpected call for "+action);
+        throw new IOException("unexpected call for " + action);
       }
     }
 
@@ -2491,8 +2444,7 @@ public class CodecComponent {
      *          the json
      * @return the params from JSON
      */
-    private static void getParamsFromJSON(Map<String, Object> params,
-        String json) {
+    private static void getParamsFromJSON(Map<String, Object> params, String json) {
       JSONParser parser = new JSONParser(json);
       try {
         Object o = ObjectBuilder.getVal(parser);
@@ -2551,7 +2503,7 @@ public class CodecComponent {
 
     /** The minimum. */
     public Double minimum;
-    
+
     /** The maximum. */
     public Double maximum;
 
@@ -2573,16 +2525,23 @@ public class CodecComponent {
     /**
      * Instantiates a new sub component distance.
      *
-     * @param key          the key
-     * @param type          the type
-     * @param prefix          the prefix
-     * @param base          the base
-     * @param parameters          the parameters
-     * @param minimum the minimum
-     * @param maximum          the maximum
+     * @param key
+     *          the key
+     * @param type
+     *          the type
+     * @param prefix
+     *          the prefix
+     * @param base
+     *          the base
+     * @param parameters
+     *          the parameters
+     * @param minimum
+     *          the minimum
+     * @param maximum
+     *          the maximum
      */
-    public SubComponentDistance(String key, String type, String prefix,
-        String base, Map<String, String> parameters, String minimum, String maximum) {
+    public SubComponentDistance(String key, String type, String prefix, String base, Map<String, String> parameters,
+        String minimum, String maximum) {
       this.key = key;
       this.prefix = prefix;
       this.type = type;
@@ -2604,16 +2563,11 @@ public class CodecComponent {
         if (type != null) {
           try {
             Constructor<Distance> constructor = (Constructor<Distance>) Class
-                .forName("mtas.codec.util.distance." + createClassName(type)
-                    + "Distance")
-                .getConstructor(String.class, String.class, Double.class, Double.class,
-                    Map.class);
-            distance = constructor.newInstance(prefix, base, minimum, maximum,
-                parameters);
-          } catch (ClassNotFoundException | NoSuchMethodException
-              | SecurityException | InstantiationException
-              | IllegalAccessException | IllegalArgumentException
-              | InvocationTargetException e) {
+                .forName("mtas.codec.util.distance." + createClassName(type) + "Distance")
+                .getConstructor(String.class, String.class, Double.class, Double.class, Map.class);
+            distance = constructor.newInstance(prefix, base, minimum, maximum, parameters);
+          } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+              | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new IllegalStateException(e);
           }
           // distance = new MorseDistance(prefix, base, maximum, parameters);
@@ -2627,7 +2581,8 @@ public class CodecComponent {
     /**
      * Creates the class name.
      *
-     * @param type the type
+     * @param type
+     *          the type
      * @return the string
      */
     private String createClassName(String type) {
@@ -2716,10 +2671,8 @@ public class CodecComponent {
      *           Signals that an I/O exception has occurred.
      */
     public SubComponentFunction(String collectorType, String key, String type,
-        MtasFunctionParserFunction parserFunction, String sortType,
-        String sortDirection, Integer start, Integer number,
-        String segmentRegistration, String boundary)
-        throws ParseException, IOException {
+        MtasFunctionParserFunction parserFunction, String sortType, String sortDirection, Integer start, Integer number,
+        String segmentRegistration, String boundary) throws ParseException, IOException {
       this.key = key;
       this.expression = null;
       this.type = type;
@@ -2728,18 +2681,14 @@ public class CodecComponent {
       this.sortDirection = sortDirection;
       this.dataType = parserFunction.getType();
       this.statsItems = CodecUtil.createStatsItems(this.type);
-      this.statsType = CodecUtil.createStatsType(statsItems, sortType,
-          parserFunction);
+      this.statsType = CodecUtil.createStatsType(statsItems, sortType, parserFunction);
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-        dataCollector = DataCollector.getCollector(
-            DataCollector.COLLECTOR_TYPE_LIST, dataType, statsType, statsItems,
-            sortType, sortDirection, start, number, null, null, null, null,
-            null, null, null, null, segmentRegistration, boundary);
-      } else if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-        dataCollector = DataCollector.getCollector(
-            DataCollector.COLLECTOR_TYPE_DATA, dataType, statsType, statsItems,
-            sortType, sortDirection, start, number, segmentRegistration,
+        dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_LIST, dataType, statsType, statsItems,
+            sortType, sortDirection, start, number, null, null, null, null, null, null, null, null, segmentRegistration,
             boundary);
+      } else if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
+        dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_DATA, dataType, statsType, statsItems,
+            sortType, sortDirection, start, number, segmentRegistration, boundary);
       }
     }
 
@@ -2759,25 +2708,22 @@ public class CodecComponent {
      * @throws IOException
      *           Signals that an I/O exception has occurred.
      */
-    public SubComponentFunction(String collectorType, String key,
-        String expression, String type) throws ParseException, IOException {
+    public SubComponentFunction(String collectorType, String key, String expression, String type)
+        throws ParseException, IOException {
       this.key = key;
       this.expression = expression;
       this.type = type;
       this.sortType = null;
       this.sortDirection = null;
-      parserFunction = new MtasFunctionParser(
-          new BufferedReader(new StringReader(this.expression))).parse();
+      parserFunction = new MtasFunctionParser(new BufferedReader(new StringReader(this.expression))).parse();
       dataType = parserFunction.getType();
       statsItems = CodecUtil.createStatsItems(this.type);
       statsType = CodecUtil.createStatsType(statsItems, null, parserFunction);
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-        dataCollector = DataCollector.getCollector(
-            DataCollector.COLLECTOR_TYPE_LIST, dataType, statsType, statsItems,
+        dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_LIST, dataType, statsType, statsItems,
             sortType, sortDirection, 0, Integer.MAX_VALUE, null, null);
       } else if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-        dataCollector = DataCollector.getCollector(
-            DataCollector.COLLECTOR_TYPE_DATA, dataType, statsType, statsItems,
+        dataCollector = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_DATA, dataType, statsType, statsItems,
             sortType, sortDirection, null, null, null, null);
       }
     }
@@ -2899,8 +2845,7 @@ public class CodecComponent {
     public Set<String>[] unknownRight;
 
     /** The Constant KEY_START. */
-    public static final String KEY_START = MtasToken.DELIMITER + "grouphit"
-        + MtasToken.DELIMITER;
+    public static final String KEY_START = MtasToken.DELIMITER + "grouphit" + MtasToken.DELIMITER;
 
     /**
      * Sort.
@@ -2914,8 +2859,7 @@ public class CodecComponent {
         @Override
         public int compare(MtasTreeHit<String> hit1, MtasTreeHit<String> hit2) {
           int compare = Integer.compare(hit1.additionalId, hit2.additionalId);
-          compare = (compare == 0)
-              ? Long.compare(hit1.additionalRef, hit2.additionalRef) : compare;
+          compare = (compare == 0) ? Long.compare(hit1.additionalRef, hit2.additionalRef) : compare;
           return compare;
         }
       });
@@ -2943,8 +2887,7 @@ public class CodecComponent {
      *           the unsupported encoding exception
      */
     @SuppressWarnings("unchecked")
-    public GroupHit(List<MtasTreeHit<String>> list, int start, int end,
-        int hitStart, int hitEnd, ComponentGroup group,
+    public GroupHit(List<MtasTreeHit<String>> list, int start, int end, int hitStart, int hitEnd, ComponentGroup group,
         Set<String> knownPrefixes) throws UnsupportedEncodingException {
       // compute dimensions
       int leftRangeStart = start;
@@ -3011,32 +2954,28 @@ public class CodecComponent {
         }
       }
       if (group.hitInsideLeft != null) {
-        for (int p = hitStart; p <= Math.min(hitEnd,
-            hitStart + group.hitInsideLeft.length - 1); p++) {
+        for (int p = hitStart; p <= Math.min(hitEnd, hitStart + group.hitInsideLeft.length - 1); p++) {
           if (group.hitInsideLeft[p - hitStart] != null) {
             missingHit[p - hitStart].addAll(group.hitInsideLeft[p - hitStart]);
           }
         }
       }
       if (group.hitLeft != null) {
-        for (int p = hitStart; p <= Math.min(hitEnd,
-            hitStart + group.hitLeft.length - 1); p++) {
+        for (int p = hitStart; p <= Math.min(hitEnd, hitStart + group.hitLeft.length - 1); p++) {
           if (group.hitLeft[p - hitStart] != null) {
             missingHit[p - hitStart].addAll(group.hitLeft[p - hitStart]);
           }
         }
       }
       if (group.hitInsideRight != null) {
-        for (int p = Math.max(hitStart,
-            hitEnd - group.hitInsideRight.length + 1); p <= hitEnd; p++) {
+        for (int p = Math.max(hitStart, hitEnd - group.hitInsideRight.length + 1); p <= hitEnd; p++) {
           if (group.hitInsideRight[hitEnd - p] != null) {
             missingHit[p - hitStart].addAll(group.hitInsideRight[hitEnd - p]);
           }
         }
       }
       if (group.hitRight != null) {
-        for (int p = hitStart; p <= Math.min(hitEnd,
-            hitStart + group.hitRight.length - 1); p++) {
+        for (int p = hitStart; p <= Math.min(hitEnd, hitStart + group.hitRight.length - 1); p++) {
           if (group.hitRight[p - hitStart] != null) {
             missingHit[p - hitStart].addAll(group.hitRight[p - hitStart]);
           }
@@ -3050,24 +2989,21 @@ public class CodecComponent {
         }
       }
       if (group.hitRight != null) {
-        for (int p = 0; p < Math.min(leftRangeLength,
-            group.hitRight.length - dataHit.length); p++) {
+        for (int p = 0; p < Math.min(leftRangeLength, group.hitRight.length - dataHit.length); p++) {
           if (group.hitRight[p + dataHit.length] != null) {
             missingLeft[p].addAll(group.hitRight[p + dataHit.length]);
           }
         }
       }
       if (group.right != null) {
-        for (int p = 0; p < Math.min(rightRangeLength,
-            group.right.length); p++) {
+        for (int p = 0; p < Math.min(rightRangeLength, group.right.length); p++) {
           if (group.right[p] != null) {
             missingRight[p].addAll(group.right[p]);
           }
         }
       }
       if (group.hitLeft != null) {
-        for (int p = 0; p < Math.min(rightRangeLength,
-            group.hitLeft.length - dataHit.length); p++) {
+        for (int p = 0; p < Math.min(rightRangeLength, group.hitLeft.length - dataHit.length); p++) {
           if (group.hitLeft[p + dataHit.length] != null) {
             missingRight[p].addAll(group.hitLeft[p + dataHit.length]);
           }
@@ -3078,102 +3014,71 @@ public class CodecComponent {
       List<MtasTreeHit<String>> sortedList = sort(list);
       for (MtasTreeHit<String> hit : sortedList) {
         // inside hit
-        if (group.hitInside != null && hit.idData != null
-            && group.hitInside.contains(hit.idData)) {
-          for (int p = Math.max(hitStart, hit.startPosition); p <= Math
-              .min(hitEnd, hit.endPosition); p++) {
+        if (group.hitInside != null && hit.idData != null && group.hitInside.contains(hit.idData)) {
+          for (int p = Math.max(hitStart, hit.startPosition); p <= Math.min(hitEnd, hit.endPosition); p++) {
             dataHit[p - hitStart].add(hit.refData);
-            missingHit[p - hitStart]
-                .remove(MtasToken.getPrefixFromValue(hit.refData));
+            missingHit[p - hitStart].remove(MtasToken.getPrefixFromValue(hit.refData));
           }
-        } else if ((group.hitInsideLeft != null || group.hitLeft != null
-            || group.hitInsideRight != null || group.hitRight != null)
-            && hit.idData != null) {
-          for (int p = Math.max(hitStart, hit.startPosition); p <= Math
-              .min(hitEnd, hit.endPosition); p++) {
+        } else if ((group.hitInsideLeft != null || group.hitLeft != null || group.hitInsideRight != null
+            || group.hitRight != null) && hit.idData != null) {
+          for (int p = Math.max(hitStart, hit.startPosition); p <= Math.min(hitEnd, hit.endPosition); p++) {
             int pHitLeft = p - hitStart;
             int pHitRight = hitEnd - p;
-            if (group.hitInsideLeft != null
-                && pHitLeft <= (group.hitInsideLeft.length - 1)
-                && group.hitInsideLeft[pHitLeft] != null
-                && group.hitInsideLeft[pHitLeft].contains(hit.idData)) {
+            if (group.hitInsideLeft != null && pHitLeft <= (group.hitInsideLeft.length - 1)
+                && group.hitInsideLeft[pHitLeft] != null && group.hitInsideLeft[pHitLeft].contains(hit.idData)) {
               // keyHit += hit.refData;
               dataHit[p - hitStart].add(hit.refData);
-              missingHit[p - hitStart]
-                  .remove(MtasToken.getPrefixFromValue(hit.refData));
-            } else if (group.hitLeft != null
-                && pHitLeft <= (group.hitLeft.length - 1)
-                && group.hitLeft[pHitLeft] != null
-                && group.hitLeft[pHitLeft].contains(hit.idData)) {
+              missingHit[p - hitStart].remove(MtasToken.getPrefixFromValue(hit.refData));
+            } else if (group.hitLeft != null && pHitLeft <= (group.hitLeft.length - 1)
+                && group.hitLeft[pHitLeft] != null && group.hitLeft[pHitLeft].contains(hit.idData)) {
               // keyHit += hit.refData;
               dataHit[p - hitStart].add(hit.refData);
-              missingHit[p - hitStart]
-                  .remove(MtasToken.getPrefixFromValue(hit.refData));
-            } else if (group.hitInsideRight != null
-                && pHitRight <= (group.hitInsideRight.length - 1)
-                && group.hitInsideRight[pHitRight] != null
-                && group.hitInsideRight[pHitRight].contains(hit.idData)) {
+              missingHit[p - hitStart].remove(MtasToken.getPrefixFromValue(hit.refData));
+            } else if (group.hitInsideRight != null && pHitRight <= (group.hitInsideRight.length - 1)
+                && group.hitInsideRight[pHitRight] != null && group.hitInsideRight[pHitRight].contains(hit.idData)) {
               dataHit[p - hitStart].add(hit.refData);
-              missingHit[p - hitStart]
-                  .remove(MtasToken.getPrefixFromValue(hit.refData));
-            } else if (group.hitRight != null
-                && pHitRight <= (group.hitRight.length - 1)
-                && group.hitRight[pHitRight] != null
-                && group.hitRight[pHitRight].contains(hit.idData)) {
+              missingHit[p - hitStart].remove(MtasToken.getPrefixFromValue(hit.refData));
+            } else if (group.hitRight != null && pHitRight <= (group.hitRight.length - 1)
+                && group.hitRight[pHitRight] != null && group.hitRight[pHitRight].contains(hit.idData)) {
               dataHit[p - hitStart].add(hit.refData);
-              missingHit[p - hitStart]
-                  .remove(MtasToken.getPrefixFromValue(hit.refData));
+              missingHit[p - hitStart].remove(MtasToken.getPrefixFromValue(hit.refData));
             }
           }
         }
         // left
         if (hit.startPosition < hitStart) {
-          if ((group.left != null || (group.hitRight != null
-              && group.hitRight.length > (1 + hitEnd - hitStart)))
+          if ((group.left != null || (group.hitRight != null && group.hitRight.length > (1 + hitEnd - hitStart)))
               && hit.idData != null) {
-            for (int p = Math.min(hit.endPosition,
-                hitStart - 1); p >= hit.startPosition; p--) {
+            for (int p = Math.min(hit.endPosition, hitStart - 1); p >= hit.startPosition; p--) {
               int pLeft = hitStart - 1 - p;
               int pHitRight = hitEnd - p;
-              if (group.left != null && pLeft <= (group.left.length - 1)
-                  && group.left[pLeft] != null
+              if (group.left != null && pLeft <= (group.left.length - 1) && group.left[pLeft] != null
                   && group.left[pLeft].contains(hit.idData)) {
                 dataLeft[hitStart - 1 - p].add(hit.refData);
-                missingLeft[hitStart - 1 - p]
-                    .remove(MtasToken.getPrefixFromValue(hit.refData));
-              } else if (group.hitRight != null
-                  && pHitRight <= (group.hitRight.length - 1)
-                  && group.hitRight[pHitRight] != null
-                  && group.hitRight[pHitRight].contains(hit.idData)) {
+                missingLeft[hitStart - 1 - p].remove(MtasToken.getPrefixFromValue(hit.refData));
+              } else if (group.hitRight != null && pHitRight <= (group.hitRight.length - 1)
+                  && group.hitRight[pHitRight] != null && group.hitRight[pHitRight].contains(hit.idData)) {
                 dataLeft[hitStart - 1 - p].add(hit.refData);
-                missingLeft[hitStart - 1 - p]
-                    .remove(MtasToken.getPrefixFromValue(hit.refData));
+                missingLeft[hitStart - 1 - p].remove(MtasToken.getPrefixFromValue(hit.refData));
               }
             }
           }
         }
         // right
         if (hit.endPosition > hitEnd) {
-          if ((group.right != null || (group.hitLeft != null
-              && group.hitLeft.length > (1 + hitEnd - hitStart)))
+          if ((group.right != null || (group.hitLeft != null && group.hitLeft.length > (1 + hitEnd - hitStart)))
               && hit.idData != null) {
-            for (int p = Math.max(hit.startPosition,
-                hitEnd + 1); p <= hit.endPosition; p++) {
+            for (int p = Math.max(hit.startPosition, hitEnd + 1); p <= hit.endPosition; p++) {
               int pRight = p - hitEnd - 1;
               int pHitLeft = p - hitStart;
-              if (group.right != null && pRight <= (group.right.length - 1)
-                  && group.right[pRight] != null
+              if (group.right != null && pRight <= (group.right.length - 1) && group.right[pRight] != null
                   && group.right[pRight].contains(hit.idData)) {
                 dataRight[p - rightRangeStart].add(hit.refData);
-                missingRight[p - rightRangeStart]
-                    .remove(MtasToken.getPrefixFromValue(hit.refData));
-              } else if (group.hitLeft != null
-                  && pHitLeft <= (group.hitLeft.length - 1)
-                  && group.hitLeft[pHitLeft] != null
-                  && group.hitLeft[pHitLeft].contains(hit.idData)) {
+                missingRight[p - rightRangeStart].remove(MtasToken.getPrefixFromValue(hit.refData));
+              } else if (group.hitLeft != null && pHitLeft <= (group.hitLeft.length - 1)
+                  && group.hitLeft[pHitLeft] != null && group.hitLeft[pHitLeft].contains(hit.idData)) {
                 dataRight[p - rightRangeStart].add(hit.refData);
-                missingRight[p - rightRangeStart]
-                    .remove(MtasToken.getPrefixFromValue(hit.refData));
+                missingRight[p - rightRangeStart].remove(MtasToken.getPrefixFromValue(hit.refData));
               }
             }
           }
@@ -3322,8 +3227,8 @@ public class CodecComponent {
      * @throws UnsupportedEncodingException
      *           the unsupported encoding exception
      */
-    private String dataToString(List<String>[] data, Set<String>[] missing,
-        boolean reverse) throws UnsupportedEncodingException {
+    private String dataToString(List<String>[] data, Set<String>[] missing, boolean reverse)
+        throws UnsupportedEncodingException {
       StringBuilder text = null;
       Encoder encoder = Base64.getEncoder();
       String prefix;
@@ -3350,23 +3255,19 @@ public class CodecComponent {
             }
             prefix = MtasToken.getPrefixFromValue(dataItem.get(j));
             postfix = MtasToken.getPostfixFromValue(dataItem.get(j));
-            text.append(encoder
-                .encodeToString(prefix.getBytes(StandardCharsets.UTF_8)));
+            text.append(encoder.encodeToString(prefix.getBytes(StandardCharsets.UTF_8)));
             if (!postfix.isEmpty()) {
               text.append(".");
-              text.append(encoder
-                  .encodeToString(postfix.getBytes(StandardCharsets.UTF_8)));
+              text.append(encoder.encodeToString(postfix.getBytes(StandardCharsets.UTF_8)));
             }
           }
           if (missingItem != null) {
-            String[] tmpMissing = missingItem
-                .toArray(new String[missingItem.size()]);
+            String[] tmpMissing = missingItem.toArray(new String[missingItem.size()]);
             for (int j = 0; j < tmpMissing.length; j++) {
               if (j > 0 || !dataItem.isEmpty()) {
                 text.append("&");
               }
-              text.append(encoder.encodeToString(
-                  ("!" + tmpMissing[j]).getBytes(StandardCharsets.UTF_8)));
+              text.append(encoder.encodeToString(("!" + tmpMissing[j]).getBytes(StandardCharsets.UTF_8)));
             }
           }
         }
@@ -3392,8 +3293,7 @@ public class CodecComponent {
      *          the new key
      * @return the map[]
      */
-    private static Map<String, String>[] keyToSubSubObject(String key,
-        StringBuilder newKey) {
+    private static Map<String, String>[] keyToSubSubObject(String key, StringBuilder newKey) {
       if (!key.isEmpty()) {
         newKey.append(" [");
         String prefix;
@@ -3416,22 +3316,16 @@ public class CodecComponent {
               tmpNewKey = new StringBuilder();
             }
             if (matcher.matches()) {
-              prefix = new String(
-                  decoder.decode(
-                      matcher.group(1).getBytes(StandardCharsets.UTF_8)),
+              prefix = new String(decoder.decode(matcher.group(1).getBytes(StandardCharsets.UTF_8)),
                   StandardCharsets.UTF_8);
-              postfix = new String(
-                  decoder.decode(
-                      matcher.group(2).getBytes(StandardCharsets.UTF_8)),
+              postfix = new String(decoder.decode(matcher.group(2).getBytes(StandardCharsets.UTF_8)),
                   StandardCharsets.UTF_8);
               tmpNewKey.append(prefix.replace("=", "\\="));
               tmpNewKey.append("=\"" + postfix.replace("\"", "\\\"") + "\"");
               subResult.put("prefix", prefix);
               subResult.put("value", postfix);
             } else {
-              prefix = new String(
-                  decoder.decode(parts[i].getBytes(StandardCharsets.UTF_8)),
-                  StandardCharsets.UTF_8);
+              prefix = new String(decoder.decode(parts[i].getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
               tmpNewKey.append(prefix.replace("=", "\\="));
               if (prefix.startsWith("!")) {
                 subResult.put("missing", prefix.substring(1));
@@ -3462,8 +3356,7 @@ public class CodecComponent {
      *          the new key
      * @return the map
      */
-    private static Map<Integer, Map<String, String>[]> keyToSubObject(
-        String key, StringBuilder newKey) {
+    private static Map<Integer, Map<String, String>[]> keyToSubObject(String key, StringBuilder newKey) {
       Map<Integer, Map<String, String>[]> result = new HashMap<>();
       if (key == null || key.trim().isEmpty()) {
         return null;
@@ -3489,8 +3382,7 @@ public class CodecComponent {
      *          the new key
      * @return the map
      */
-    public static Map<String, Map<Integer, Map<String, String>[]>> keyToObject(
-        String key, StringBuilder newKey) {
+    public static Map<String, Map<Integer, Map<String, String>[]>> keyToObject(String key, StringBuilder newKey) {
       if (key.startsWith(KEY_START)) {
         String content = key.substring(KEY_START.length());
         StringBuilder keyLeft = new StringBuilder("");
@@ -3560,8 +3452,7 @@ public class CodecComponent {
      * @param tokens
      *          the tokens
      */
-    public ListToken(Integer docId, Integer docPosition, Match match,
-        List<MtasTokenString> tokens) {
+    public ListToken(Integer docId, Integer docPosition, Match match, List<MtasTokenString> tokens) {
       this.docId = docId;
       this.docPosition = docPosition;
       startPosition = match.startPosition;
@@ -3602,8 +3493,7 @@ public class CodecComponent {
      * @param hits
      *          the hits
      */
-    public ListHit(Integer docId, Integer docPosition, Match match,
-        Map<Integer, List<String>> hits) {
+    public ListHit(Integer docId, Integer docPosition, Match match, Map<Integer, List<String>> hits) {
       this.docId = docId;
       this.docPosition = docPosition;
       startPosition = match.startPosition;
@@ -3611,25 +3501,25 @@ public class CodecComponent {
       this.hits = hits;
     }
   }
-  
-  
+
   /**
    * The Class PageWordData.
    */
   public static class PageWordData {
-    
+
     /** The words. */
     public List<PageWord> words;
-    
+
     /**
      * Adds the.
      *
-     * @param token the token
+     * @param token
+     *          the token
      */
     public void add(MtasTokenString token) {
       words.add(new PageWord(token));
     }
-    
+
     /**
      * Instantiates a new page word data.
      */
@@ -3637,28 +3527,29 @@ public class CodecComponent {
       words = new ArrayList<>();
     }
   }
-  
+
   /**
    * The Class PageWord.
    */
   public static class PageWord {
-    
+
     /** The id. */
     public int id;
-    
+
     /** The prefix. */
     public String prefix;
-    
+
     /** The postfix. */
     public String postfix;
-    
+
     /** The parent id. */
     public Integer parentId;
-    
+
     /**
      * Instantiates a new page word.
      *
-     * @param token the token
+     * @param token
+     *          the token
      */
     public PageWord(MtasTokenString token) {
       id = token.getId();
@@ -3666,26 +3557,27 @@ public class CodecComponent {
       postfix = token.getPostfix();
       parentId = token.getParentId();
     }
-    
+
   }
-  
-/**
- * The Class PageRangeData.
- */
-public static class PageRangeData {
-    
+
+  /**
+   * The Class PageRangeData.
+   */
+  public static class PageRangeData {
+
     /** The ranges. */
     public List<PageRange> ranges;
-    
+
     /**
      * Adds the.
      *
-     * @param token the token
+     * @param token
+     *          the token
      */
     public void add(MtasTokenString token) {
       ranges.add(new PageRange(token));
     }
-    
+
     /**
      * Instantiates a new page range data.
      */
@@ -3694,104 +3586,107 @@ public static class PageRangeData {
     }
   }
 
-/**
- * The Class PageRange.
- */
-public static class PageRange {
-  
-  /** The id. */
-  public int id;
-  
-  /** The start. */
-  public int start;
-  
-  /** The end. */
-  public int end;
-  
-  /** The prefix. */
-  public String prefix;
-  
-  /** The postfix. */
-  public String postfix;
-  
-  /** The parent id. */
-  public Integer parentId;
-  
   /**
-   * Instantiates a new page range.
-   *
-   * @param token the token
+   * The Class PageRange.
    */
-  public PageRange(MtasTokenString token) {
-    id = token.getId();
-    start = token.getPositionStart();
-    end = token.getPositionEnd();
-    prefix = token.getPrefix();
-    postfix = token.getPostfix();
-    parentId = token.getParentId();
-  }
-  
-}
+  public static class PageRange {
 
-/**
- * The Class PageSetData.
- */
-public static class PageSetData {
-  
-  /** The sets. */
-  public List<PageSet> sets;
-  
+    /** The id. */
+    public int id;
+
+    /** The start. */
+    public int start;
+
+    /** The end. */
+    public int end;
+
+    /** The prefix. */
+    public String prefix;
+
+    /** The postfix. */
+    public String postfix;
+
+    /** The parent id. */
+    public Integer parentId;
+
+    /**
+     * Instantiates a new page range.
+     *
+     * @param token
+     *          the token
+     */
+    public PageRange(MtasTokenString token) {
+      id = token.getId();
+      start = token.getPositionStart();
+      end = token.getPositionEnd();
+      prefix = token.getPrefix();
+      postfix = token.getPostfix();
+      parentId = token.getParentId();
+    }
+
+  }
+
   /**
-   * Adds the.
-   *
-   * @param token the token
+   * The Class PageSetData.
    */
-  public void add(MtasTokenString token) {
-    sets.add(new PageSet(token));
+  public static class PageSetData {
+
+    /** The sets. */
+    public List<PageSet> sets;
+
+    /**
+     * Adds the.
+     *
+     * @param token
+     *          the token
+     */
+    public void add(MtasTokenString token) {
+      sets.add(new PageSet(token));
+    }
+
+    /**
+     * Instantiates a new page set data.
+     */
+    public PageSetData() {
+      sets = new ArrayList<>();
+    }
   }
-  
+
   /**
-   * Instantiates a new page set data.
+   * The Class PageSet.
    */
-  public PageSetData() {
-    sets = new ArrayList<>();
+  public static class PageSet {
+
+    /** The id. */
+    public int id;
+
+    /** The positions. */
+    public int[] positions;
+
+    /** The prefix. */
+    public String prefix;
+
+    /** The postfix. */
+    public String postfix;
+
+    /** The parent id. */
+    public Integer parentId;
+
+    /**
+     * Instantiates a new page set.
+     *
+     * @param token
+     *          the token
+     */
+    public PageSet(MtasTokenString token) {
+      id = token.getId();
+      positions = token.getPositions();
+      prefix = token.getPrefix();
+      postfix = token.getPostfix();
+      parentId = token.getParentId();
+    }
+
   }
-}
-
-/**
- * The Class PageSet.
- */
-public static class PageSet {
-
-/** The id. */
-public int id;
-
-/** The positions. */
-public int[] positions;
-
-/** The prefix. */
-public String prefix;
-
-/** The postfix. */
-public String postfix;
-
-/** The parent id. */
-public Integer parentId;
-
-/**
- * Instantiates a new page set.
- *
- * @param token the token
- */
-public PageSet(MtasTokenString token) {
-  id = token.getId();
-  positions = token.getPositions();
-  prefix = token.getPrefix();
-  postfix = token.getPostfix();
-  parentId = token.getParentId();
-}
-
-}
 
   /**
    * The Class Match.
@@ -3831,8 +3726,7 @@ public PageSet(MtasTokenString token) {
       if (getClass() != obj.getClass())
         return false;
       final Match that = (Match) obj;
-      return startPosition == that.startPosition
-          && endPosition == that.endPosition;
+      return startPosition == that.startPosition && endPosition == that.endPosition;
     }
 
     /*

@@ -2,6 +2,8 @@ package mtas.solr.handler.component.util;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import mtas.codec.util.CodecComponent.ComponentHeatmap;
 
@@ -21,7 +23,7 @@ public class MtasSolrMtasHeatmapResult implements Serializable {
   public double minY;
   public double maxY;
   public MtasSolrMtasResult result;
-
+  public Map<String, MtasSolrMtasResult> functionResults;
   
   public MtasSolrMtasHeatmapResult(ComponentHeatmap heatmap, MtasSolrMtasResult result) {
     gridLevel = heatmap.hm.gridLevel;
@@ -34,13 +36,10 @@ public class MtasSolrMtasHeatmapResult implements Serializable {
     this.result = result;
   }
 
-
   void merge(MtasSolrMtasHeatmapResult newItem) throws IOException {
     if(gridLevel == newItem.gridLevel && rows==newItem.rows && columns==newItem.columns) {
       result.merge(newItem.result);
     }
   }
-
-
   
 }

@@ -15,7 +15,7 @@ import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.ShardRequest;
 import org.apache.solr.handler.component.ShardResponse;
 
-import mtas.codec.util.HeatmapMtasCounter.Heatmap;
+import mtas.codec.util.heatmap.HeatmapMtasCounter.Heatmap;
 import mtas.solr.handler.component.MtasSolrSearchComponent;
 
 /**
