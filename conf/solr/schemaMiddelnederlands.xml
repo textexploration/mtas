@@ -40,6 +40,8 @@
 	    multiValued="false" indexed="true" stored="true" />
 	<field name="localizationCountry" type="middelnederlands_text" 
 	    multiValued="false" indexed="true" stored="true" />
+	<field name="localizationLatLng" type="middelnederlands_geo" 
+	    multiValued="false" indexed="true" stored="true" />   
 
 	<!-- text -->
 	<field name="text" type="middelnederlands_mtas" indexed="true"
@@ -56,7 +58,7 @@
 	    indexed="true" stored="true" />
 	<field name="textPrefix" type="middelnederlands_string"
      	multiValued="true" indexed="true" stored="true" />
-    <dynamicField name="textPrefix_*" type="middelnederlands_int"
+  <dynamicField name="textPrefix_*" type="middelnederlands_int"
 		required="false" multiValued="false" indexed="true" stored="true" />		 
   		
 	<!-- metadata -->
@@ -83,6 +85,8 @@
 	<fieldType name="middelnederlands_long" class="solr.LongPointField" docValues="true" />
 	<fieldType name="middelnederlands_date" class="solr.DatePointField" docValues="true" />
 	<fieldtype name="middelnederlands_binary" class="solr.BinaryField" />
+	<fieldType name="middelnederlands_geo" class="solr.RptWithGeometrySpatialField" 
+	  spatialContextFactory="JTS" format="GeoJSON" />
 
 	<fieldType name="middelnederlands_text" class="solr.TextField"
 		positionIncrementGap="100">

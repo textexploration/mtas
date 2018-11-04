@@ -6,9 +6,23 @@ In recent years, multiple solutions have come available providing search on huge
 >
 > `<entity="location/> within (<s/> containing [lemma="utrecht"])`
 
-Parsers for several [document formats](indexing_formats.html) are provided, each with extended possibilities for [configuration](indexing_configuration.html), and advanced query [features](features.html) like [statistics](search_component_stats.html), [termvectors](search_component_termvector.html) and [kwic](search_component_kwic.html) are available.
+Also a [Simple](search_simple.html) query parser can be used
+
+> `koe paard`
+>
+> `"de koe" paard`
+>
+> `"de pos:ADJ koe"`
+
+Parsers for several [document formats](indexing_formats.html) are provided, each with extended possibilities for [configuration](indexing_configuration.html).
+
+Advanced query [features](features.html) like [statistics](search_component_stats.html), [termvectors](search_component_termvector.html) and [kwic](search_component_kwic.html) are included.
 
 Source code and releases are available on [GitHub](https://github.com/textexploration/mtas/), see [installation instructions](installation.html) on how to get started.
+
+---
+
+This project builds upon the latest commit from April 30, 2018 for [meertensinstituut/mtas](https://github.com/meertensinstituut/mtas/tree/5c862d53014b15fb87de83da0b33fd91518642ec). See also the related [broker](https://github.com/textexploration/broker) project, another continuation of previous work.
 
 ---
 

@@ -229,6 +229,16 @@ public class CodecInfo {
     return getObjects(hits);
   }
 
+  /**
+   * Gets the objects by positions.
+   *
+   * @param field the field
+   * @param docId the doc id
+   * @param startPosition the start position
+   * @param endPosition the end position
+   * @return the objects by positions
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   public ArrayList<MtasTokenString> getObjectsByPositions(String field,
       int docId, int startPosition, int endPosition) throws IOException {
     IndexDoc doc = getDoc(field, docId);
@@ -263,7 +273,7 @@ public class CodecInfo {
     IndexDoc doc = getDoc(field, docId);
     IndexInput inIndexObjectPosition = indexInputList
         .get("indexObjectPosition");
-    if (doc != null) {
+    if (doc != null && startPosition<=endPosition) {
       ArrayList<MtasTreeHit<?>> hits = CodecSearchTree.searchMtasTree(
           startPosition, endPosition, inIndexObjectPosition,
           doc.fpIndexObjectPosition, doc.smallestObjectFilepointer);
@@ -350,7 +360,7 @@ public class CodecInfo {
     IndexDoc doc = getDoc(field, docId);
     IndexInput inIndexObjectPosition = indexInputList
         .get("indexObjectPosition");
-    if (doc != null) {
+    if (doc != null && startPosition<=endPosition) {
       ArrayList<MtasTreeHit<?>> hitItems = CodecSearchTree.searchMtasTree(
           startPosition, endPosition, inIndexObjectPosition,
           doc.fpIndexObjectPosition, doc.smallestObjectFilepointer);
@@ -515,6 +525,12 @@ public class CodecInfo {
     }
   }
 
+  /**
+   * Gets the prefixes.
+   *
+   * @param field the field
+   * @return the prefixes
+   */
   public Set<String> getPrefixes(String field) {
     LinkedHashMap<String, Long> prefixRefs = this.getPrefixRefs(field);
     return prefixRefs.keySet();

@@ -1,11 +1,13 @@
 package mtas.solr;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +30,9 @@ public class MtasSolrBase {
   
   /** The Constant FIELD_TITLE. */
   public final static String FIELD_TITLE = "title";
+  
+  /** The Constant FIELD_TITLE. */
+  public final static String FIELD_LOCATION = "location";
   
   /** The Constant FIELD_TEXT. */
   public final static String FIELD_TEXT = "text";
@@ -167,6 +172,66 @@ public class MtasSolrBase {
                 return (Long) item.get(name);
               } else if (item != null) {
                 return (Double) item.get(name);
+              }
+            }
+          } else {
+            log.error("unexpected " + mtasStatsTypeResponseRaw);
+          }
+        } else {
+          log.error("unexpected " + mtasStatsResponseRaw);
+        }
+      } else {
+        log.error("unexpected " + mtasResponseRaw);
+      }
+    }
+    return null;
+  }
+  
+  public static Number getFromMtasStatsFunction(NamedList<Object> response, String type,
+      String key, String function, String name) {
+    if (response == null) {
+      log.error("no (valid); response");
+    } else {
+      Object mtasResponseRaw = response.get("mtas");
+      if (mtasResponseRaw != null && mtasResponseRaw instanceof NamedList) {
+        NamedList<Object> mtasResponse = (NamedList) mtasResponseRaw;
+        Object mtasStatsResponseRaw = mtasResponse.get("stats");
+        if (mtasStatsResponseRaw != null
+            && mtasStatsResponseRaw instanceof NamedList) {
+          NamedList<Object> mtasStatsResponse = (NamedList) mtasStatsResponseRaw;
+          Object mtasStatsTypeResponseRaw = mtasStatsResponse.get(type);
+          if (mtasStatsTypeResponseRaw != null
+              && mtasStatsTypeResponseRaw instanceof List) {
+            List<NamedList> mtasStatsTypeResponse = (List) mtasStatsResponse
+                .get(type);
+            if (mtasStatsTypeResponse.isEmpty()) {
+              log.error("no (valid) mtas stats " + type + " response");
+            } else {
+              NamedList<Object> item = null;
+              for (NamedList<Object> mtasStatsSpansResponseItem : mtasStatsTypeResponse) {
+                if (mtasStatsSpansResponseItem.get("key") != null
+                    && (mtasStatsSpansResponseItem.get("key") instanceof String)
+                    && mtasStatsSpansResponseItem.get("key").equals(key)) {
+                  item = mtasStatsSpansResponseItem;
+                  break;
+                }
+              }
+              assertFalse("no item with key " + key, item == null);
+              if (item != null && item.get("functions") instanceof Map) {
+                @SuppressWarnings("unchecked")
+                Map<String,NamedList<Object>> subItems = (Map) item.get("functions");
+                if(subItems.containsKey("function")) {
+                  NamedList<Object> subItem = subItems.get("function");
+                  if(subItem.get(name) instanceof Long) {
+                    return (Long) subItem.get(name);
+                  } else if (subItem.get(name) instanceof Double) {
+                    return (Double) subItem.get(name);
+                  }
+                } else {
+                  log.error("no function available");
+                }
+              } else {
+                log.error("unexpected " + item);
               }
             }
           } else {
@@ -395,6 +460,61 @@ public class MtasSolrBase {
     }
     return null;
   }
+  
+  @SuppressWarnings("unchecked")
+  public static ArrayList<ArrayList<Integer>> getFromFacetHeatmap(NamedList<Object> response, String key) {
+    if (response == null) {
+      log.error("no (valid); response");
+    } else {
+      Object facetResponseRaw = response.get("facet_counts");
+      if (facetResponseRaw != null && facetResponseRaw instanceof NamedList) {
+        NamedList<Object> facetResponse = (NamedList<Object>) facetResponseRaw;
+        Object facetHeatmapResponseRaw = facetResponse.get("facet_heatmaps");
+        if (facetHeatmapResponseRaw != null
+            && facetHeatmapResponseRaw instanceof NamedList) {
+          NamedList<Object> facetHeatmapResponse = (NamedList<Object>) facetHeatmapResponseRaw;
+          Object facetHeatmapItemResponseRaw = facetHeatmapResponse.get(key);
+          if (facetHeatmapItemResponseRaw != null
+              && facetHeatmapItemResponseRaw instanceof NamedList) {
+            NamedList<Object> facetHeatmapItemResponse = (NamedList<Object>) facetHeatmapItemResponseRaw;
+            Object facetHeatmapItemCountsResponseRaw = facetHeatmapItemResponse.get("counts_ints2D");
+            if (facetHeatmapItemCountsResponseRaw != null
+                && facetHeatmapItemCountsResponseRaw instanceof ArrayList) {
+              return (ArrayList<ArrayList<Integer>>) facetHeatmapItemCountsResponseRaw;
+            } 
+          }  
+        } 
+      } 
+    }  
+    return null;
+  }
+  
+  @SuppressWarnings("unchecked")
+  public static ArrayList<ArrayList<NamedList<Object>>> getFromMtasHeatmap(NamedList<Object> response, String key) {
+    if (response == null) {
+      log.error("no (valid); response");
+    } else {
+      Object mtasResponseRaw = response.get("mtas");
+      if (mtasResponseRaw != null && mtasResponseRaw instanceof NamedList) {
+        NamedList<Object> mtasResponse = (NamedList<Object>) mtasResponseRaw;
+        Object mtasHeatmapResponseRaw = mtasResponse.get("heatmap");
+        if (mtasHeatmapResponseRaw != null
+            && mtasHeatmapResponseRaw instanceof ArrayList) {
+          ArrayList<Object> mtasHeatmapResponse = (ArrayList<Object>) mtasHeatmapResponseRaw;
+          for(Object mtasHeatmapItemResponseRaw : mtasHeatmapResponse) {
+            if (mtasHeatmapItemResponseRaw != null
+                && mtasHeatmapItemResponseRaw instanceof NamedList) {
+              NamedList<Object> mtasHeatmapItemResponse = (NamedList<Object>) mtasHeatmapItemResponseRaw;
+              if(mtasHeatmapItemResponse.get("key").equals(key)) {
+                return (ArrayList<ArrayList<NamedList<Object>>>) mtasHeatmapItemResponse.get("stats_2D");
+              }
+            }
+          }
+        } 
+      } 
+    }  
+    return null;
+  }
 
   /**
    * Delete directory.
@@ -432,6 +552,7 @@ public class MtasSolrBase {
     SolrInputDocument newDoc1 = new SolrInputDocument();
     newDoc1.addField(FIELD_ID, "1");
     newDoc1.addField(FIELD_TITLE, "Een onaangenaam mens in de Haarlemmerhout");
+    newDoc1.addField(FIELD_LOCATION, "10,10");
     newDoc1.addField(FIELD_TEXT, "Een onaangenaam mens in de Haarlemmerhout");
     newDoc1.addField(FIELD_MTAS, dataPath.resolve("resources")
         .resolve("beets1.xml.gz").toFile().getAbsolutePath());
@@ -444,6 +565,7 @@ public class MtasSolrBase {
     SolrInputDocument newDoc2 = new SolrInputDocument();
     newDoc2.addField(FIELD_ID, "2");
     newDoc2.addField(FIELD_TITLE, "Een oude kennis");
+    newDoc2.addField(FIELD_LOCATION, "10,20");
     newDoc2.addField(FIELD_TEXT, "Een oude kennis");
     newDoc2.addField(FIELD_MTAS, dataPath.resolve("resources")
         .resolve("beets2.xml.gz").toFile().getAbsolutePath());
@@ -456,6 +578,7 @@ public class MtasSolrBase {
     solrDocuments.put(2, newDoc2);
     newDoc3.addField(FIELD_ID, "3");
     newDoc3.addField(FIELD_TITLE, "Varen en Rijden");
+    newDoc3.addField(FIELD_LOCATION, "30,10");    
     newDoc3.addField(FIELD_TEXT, "Varen en Rijden");
     newDoc3.addField(FIELD_MTAS, dataPath.resolve("resources")
         .resolve("beets3.xml.gz").toFile().getAbsolutePath());

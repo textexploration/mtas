@@ -77,6 +77,13 @@ public class MtasSolrComponentKwic implements MtasSolrComponent<ComponentKwic> {
   /** The Constant NAME_MTAS_KWIC_START. */
   public static final String NAME_MTAS_KWIC_START = "start";
 
+  /** The Constant NAME_MTAS_KWIC_PAGE_START. */
+  public static final String NAME_MTAS_KWIC_PAGE_START = "page.start";
+  
+  /** The Constant NAME_MTAS_KWIC_PAGE_END. */
+  public static final String NAME_MTAS_KWIC_PAGE_END = "page.end";
+
+  
   /** The Constant NAME_MTAS_KWIC_LEFT. */
   public static final String NAME_MTAS_KWIC_LEFT = "left";
 
@@ -133,6 +140,8 @@ public class MtasSolrComponentKwic implements MtasSolrComponent<ComponentKwic> {
       String[] prefixes = new String[ids.size()];
       String[] numbers = new String[ids.size()];
       String[] starts = new String[ids.size()];
+      String[] pageStarts = new String[ids.size()];
+      String[] pageEnds = new String[ids.size()];
       String[] lefts = new String[ids.size()];
       String[] rights = new String[ids.size()];
       String[] outputs = new String[ids.size()];
@@ -199,6 +208,10 @@ public class MtasSolrComponentKwic implements MtasSolrComponent<ComponentKwic> {
             PARAM_MTAS_KWIC + "." + id + "." + NAME_MTAS_KWIC_NUMBER, null);
         starts[tmpCounter] = rb.req.getParams()
             .get(PARAM_MTAS_KWIC + "." + id + "." + NAME_MTAS_KWIC_START, null);
+        pageStarts[tmpCounter] = rb.req.getParams().get(
+            PARAM_MTAS_KWIC + "." + id + "." + NAME_MTAS_KWIC_PAGE_START, null);
+        pageEnds[tmpCounter] = rb.req.getParams().get(
+            PARAM_MTAS_KWIC + "." + id + "." + NAME_MTAS_KWIC_PAGE_END, null);
         lefts[tmpCounter] = rb.req.getParams()
             .get(PARAM_MTAS_KWIC + "." + id + "." + NAME_MTAS_KWIC_LEFT, null);
         rights[tmpCounter] = rb.req.getParams()
@@ -238,6 +251,10 @@ public class MtasSolrComponentKwic implements MtasSolrComponent<ComponentKwic> {
           NAME_MTAS_KWIC_FIELD, false);
       MtasSolrResultUtil.compareAndCheck(starts, fields, NAME_MTAS_KWIC_START,
           NAME_MTAS_KWIC_FIELD, false);
+      MtasSolrResultUtil.compareAndCheck(pageStarts, fields, NAME_MTAS_KWIC_PAGE_START,
+          NAME_MTAS_KWIC_FIELD, false);
+      MtasSolrResultUtil.compareAndCheck(pageEnds, fields, NAME_MTAS_KWIC_PAGE_END,
+          NAME_MTAS_KWIC_FIELD, false);
       MtasSolrResultUtil.compareAndCheck(lefts, fields, NAME_MTAS_KWIC_LEFT,
           NAME_MTAS_KWIC_FIELD, false);
       MtasSolrResultUtil.compareAndCheck(rights, fields, NAME_MTAS_KWIC_RIGHT,
@@ -264,11 +281,13 @@ public class MtasSolrComponentKwic implements MtasSolrComponent<ComponentKwic> {
         Integer number = (numbers[i] != null) ? getPositiveInteger(numbers[i])
             : null;
         int start = getPositiveInteger(starts[i]);
+        Integer pageStart = (pageStarts[i]!=null && pageEnds[i]!=null)?getPositiveInteger(pageStarts[i]):null;
+        Integer pageEnd = (pageStarts[i]!=null && pageEnds[i]!=null)?getPositiveInteger(pageEnds[i]):null;
         int left = getPositiveInteger(lefts[i]);
         int right = getPositiveInteger(rights[i]);
         String output = outputs[i];
         mtasFields.list.get(fields[i]).kwicList.add(new ComponentKwic(q, key,
-            prefix, number, start, left, right, output));
+            prefix, number, start, pageStart, pageEnd, left, right, output));
       }
     }
   }

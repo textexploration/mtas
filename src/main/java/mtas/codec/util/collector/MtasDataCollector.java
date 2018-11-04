@@ -1217,18 +1217,20 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
    * Error.
    *
    * @param error the error
+   * @param number the number of occurrences   
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public abstract void error(String error) throws IOException;
+  public abstract void error(String error, int number) throws IOException;
 
   /**
    * Error.
    *
    * @param key the key
    * @param error the error
+   * @param number the number of occurrences
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public abstract void error(String key, String error) throws IOException;
+  public abstract void error(String key, String error, int number) throws IOException;
 
   /**
    * Adds the.

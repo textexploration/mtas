@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 
 import org.apache.lucene.analysis.payloads.PayloadHelper;
 import org.apache.lucene.util.BytesRef;
-
 import mtas.analysis.util.MtasParserException;
 
 /**
@@ -224,6 +223,8 @@ public class MtasTokenCollection {
     Integer parentId;
     Integer maxId = null;
     Integer minId = null;
+    Integer startOffset;
+    Integer endOffset;
     MtasToken token;
     // check id, position and value
     for (Entry<Integer, MtasToken> entry : tokenCollection.entrySet()) {
@@ -238,7 +239,7 @@ public class MtasTokenCollection {
         trash.add(entry.getKey());
       }
     }
-    // check parentId
+    // check parentId and offset
     for (Entry<Integer, MtasToken> entry : tokenCollection.entrySet()) {
       token = entry.getValue();
       parentId = token.getParentId();

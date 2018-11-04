@@ -842,7 +842,7 @@ abstract class MtasXMLParser extends MtasBasicParser {
       log.debug(e);      
       throw new MtasParserException("No valid XML: " + e.getMessage());
     }
-
+    
     // update tokens with variable
     for (Entry<Integer, Set<String>> updateItem : updateList
         .get(UPDATE_TYPE_VARIABLE).entrySet()) {
@@ -894,6 +894,7 @@ abstract class MtasXMLParser extends MtasBasicParser {
         }
       }
     }
+    
     // final check
     tokenCollection.check(autorepair, makeunique);
     return tokenCollection;

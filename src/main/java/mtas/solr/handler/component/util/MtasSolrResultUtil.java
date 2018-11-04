@@ -10,9 +10,11 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
@@ -32,6 +34,8 @@ import mtas.codec.util.CodecComponent.GroupHit;
 import mtas.codec.util.collector.MtasDataItem;
 import mtas.parser.cql.MtasCQLParser;
 import mtas.parser.cql.TokenMgrError;
+import mtas.parser.simple.MtasSimpleParser;
+import mtas.search.spans.MtasSpanOrQuery;
 import mtas.search.spans.util.MtasSpanQuery;
 import mtas.solr.handler.component.MtasSolrSearchComponent;
 
@@ -45,6 +49,9 @@ public class MtasSolrResultUtil {
 
   /** The Constant QUERY_TYPE_CQL. */
   public static final String QUERY_TYPE_CQL = "cql";
+
+  /** The Constant QUERY_TYPE_CQL. */
+  public static final String QUERY_TYPE_SIMPLE = "simple";
 
   /** The Constant patternKeyStartGrouphit. */
   public static final Pattern patternKeyStartGrouphit = Pattern
@@ -162,6 +169,31 @@ public class MtasSolrResultUtil {
             nl.setVal(i, null);
           }
         }
+      } else if (nl.getVal(i) instanceof MtasSolrMtasHeatmapResult) {
+        MtasSolrMtasHeatmapResult o = (MtasSolrMtasHeatmapResult) nl.getVal(i);
+        NamedList<Object> tmpResponse = new SimpleOrderedMap<>();
+        tmpResponse.add("gridLevel", o.gridLevel);
+        tmpResponse.add("columns", o.columns);
+        tmpResponse.add("rows", o.rows);
+        tmpResponse.add("minX", o.minX);
+        tmpResponse.add("maxX", o.maxX);
+        tmpResponse.add("minY", o.minY);
+        tmpResponse.add("maxY", o.maxY);
+        rewrite(tmpResponse, searchComponent, doCollapse);
+        //create stats_2D result
+        NamedList<Object> nnl = o.result.getNamedList(showDebugInfo);
+        List<List<Object>> rowList = new ArrayList<>(Collections.nCopies(o.rows,null));
+        for(Entry<String,Object> entry : nnl) {
+          int key = Integer.parseInt(entry.getKey());
+          int row= o.rows - key%o.rows - 1;
+          int column = key/o.rows;
+          if(rowList.get(row)==null) {
+            rowList.set(row, new ArrayList<>(Collections.nCopies(o.columns,null)));
+          }
+          rowList.get(row).set(column,entry.getValue());
+        }
+        tmpResponse.add("stats_2D", rowList);
+        collapseNamedList.put(nl.getName(i), tmpResponse);
       }
     }
     // collapse
@@ -449,6 +481,19 @@ public class MtasSolrResultUtil {
           throw new IOException("couldn't parse " + queryType + " query "
               + queryIgnore + " (" + e.getMessage() + ")", e);
         }
+      } else if (queryType.equals(QUERY_TYPE_SIMPLE)) {
+        MtasSimpleParser ip = new MtasSimpleParser(queryIgnoreReader);
+        try {
+          List<MtasSpanQuery> iql = ip.parse(field, null, null, null);
+          MtasSpanQuery[] iqs = new MtasSpanQuery[iql.size()];
+          ignore = new MtasSpanOrQuery(iql.toArray(iqs));
+        } catch (mtas.parser.simple.ParseException e) {
+          throw new IOException("couldn't parse " + queryType + " query "
+              + queryIgnore + " (" + e.getMessage() + ")", e);
+        } catch (TokenMgrError e) {
+          throw new IOException("couldn't parse " + queryType + " query "
+              + queryIgnore + " (" + e.getMessage() + ")", e);
+        }
       } else {
         throw new IOException(
             "unknown queryType " + queryType + " for query " + queryValue);
@@ -461,6 +506,20 @@ public class MtasSolrResultUtil {
         return qp.parse(field, queryPrefix, queryVariables, ignore,
             maximumIgnoreLength);
       } catch (mtas.parser.cql.ParseException e) {
+        throw new IOException("couldn't parse " + queryType + " query "
+            + queryValue + " (" + e.getMessage() + ")", e);
+      } catch (TokenMgrError e) {
+        throw new IOException("couldn't parse " + queryType + " query "
+            + queryValue + " (" + e.getMessage() + ")", e);
+      }
+    } else if (queryType.equals(QUERY_TYPE_SIMPLE)) {
+      MtasSimpleParser qp = new MtasSimpleParser(queryValueReader);
+      try {
+        List<MtasSpanQuery> ql = qp.parse(field, queryPrefix, ignore,
+            maximumIgnoreLength);
+        MtasSpanQuery[] iqs = new MtasSpanQuery[ql.size()];
+        return new MtasSpanOrQuery(ql.toArray(iqs));
+      } catch (mtas.parser.simple.ParseException e) {
         throw new IOException("couldn't parse " + queryType + " query "
             + queryValue + " (" + e.getMessage() + ")", e);
       } catch (TokenMgrError e) {

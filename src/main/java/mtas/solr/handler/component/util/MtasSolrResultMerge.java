@@ -15,6 +15,7 @@ import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.ShardRequest;
 import org.apache.solr.handler.component.ShardResponse;
 
+import mtas.codec.util.heatmap.HeatmapMtasCounter.Heatmap;
 import mtas.solr.handler.component.MtasSolrSearchComponent;
 
 /**
@@ -66,7 +67,11 @@ public class MtasSolrResultMerge {
 					if (rb.req.getParams().getBool(MtasSolrComponentFacet.PARAM_MTAS_FACET, false)) {
 						mergeArrayList(sreq, mtasResponse, MtasSolrComponentFacet.NAME, null, false);
 					}
-					// merge collection
+				  // merge heatmap
+          if (rb.req.getParams().getBool(MtasSolrComponentHeatmap.PARAM_MTAS_HEATMAP, false)) {
+            mergeArrayList(sreq, mtasResponse, MtasSolrComponentHeatmap.NAME, null, false);
+          }
+          // merge collection
 					if (rb.req.getParams().getBool(MtasSolrComponentCollection.PARAM_MTAS_COLLECTION, false)) {
 						mergeArrayList(sreq, mtasResponse, MtasSolrComponentCollection.NAME, null, false);
 					}
@@ -101,6 +106,11 @@ public class MtasSolrResultMerge {
 						mergeArrayList(sreq, mtasResponse, MtasSolrComponentKwic.NAME, ShardRequest.PURPOSE_PRIVATE,
 								true);
 					}
+				  // merge page
+          if (rb.req.getParams().getBool(MtasSolrComponentPage.PARAM_MTAS_PAGE, false)) {
+            mergeArrayList(sreq, mtasResponse, MtasSolrComponentPage.NAME, ShardRequest.PURPOSE_PRIVATE,
+                true);
+          }
 				}
 			}
 			if (newResponse && mtasResponse.size() > 0) {
@@ -124,7 +134,7 @@ public class MtasSolrResultMerge {
 	@SuppressWarnings("unchecked")
 	private void mergeNamedList(ShardRequest sreq, NamedList<Object> mtasResponse, String key,
 			Integer preferredPurpose) {
-		// create new response for key
+	  // create new response for key
 		NamedList<Object> mtasListResponse;
 		Object o = mtasResponse.get(key);
 		if (o instanceof NamedList) {
@@ -155,7 +165,7 @@ public class MtasSolrResultMerge {
 		}
 		try {
 			for (NamedList<Object> mtasListShardResponse : mtasListShardResponses.values()) {
-				mergeResponsesNamedList(mtasListResponse, mtasListShardResponse);
+			  mergeResponsesNamedList(mtasListResponse, mtasListShardResponse);
 			}
 		} catch (IOException e) {
 			log.error(e);
@@ -196,7 +206,7 @@ public class MtasSolrResultMerge {
 			// only continue if new shard or preferred purpose
 			if (mtasListShardResponses.containsKey(response.getShard())
 					&& ((preferredPurpose == null) || (sreq.purpose != preferredPurpose))) {
-				break;
+			  break;
 			}
 			// update
 			try {
@@ -205,10 +215,10 @@ public class MtasSolrResultMerge {
 				if (data != null) {
 					if (mtasListShardResponses.containsKey(response.getShardAddress())) {
 						if (mergeAllShardResponses) {
-							mtasListShardResponsesExtra.add(data);
+							mtasListShardResponsesExtra.add(MtasSolrResultUtil.decode(data));
 						}
 					} else {
-						mtasListShardResponses.put(response.getShardAddress(), data);
+						mtasListShardResponses.put(response.getShardAddress(), MtasSolrResultUtil.decode(data));
 					}
 				}
 			} catch (ClassCastException e) {
@@ -338,14 +348,17 @@ public class MtasSolrResultMerge {
 					} else if (original instanceof MtasSolrCollectionResult) {
 						MtasSolrCollectionResult originalComponentResult = (MtasSolrCollectionResult) original;
 						originalComponentResult.merge((MtasSolrCollectionResult) shardValue);
-					} else if (original instanceof String) {
+					} else if (original instanceof MtasSolrMtasHeatmapResult) {
+					  MtasSolrMtasHeatmapResult originalComponentResult = (MtasSolrMtasHeatmapResult) original;
+            originalComponentResult.merge((MtasSolrMtasHeatmapResult) shardValue);
+          } else if (original instanceof String) {
 						// ignore?
 					} else if (original instanceof Integer) {
 						original = (Integer) original + ((Integer) shardValue);
 					} else if (original instanceof Long) {
 						original = (Long) original + ((Long) shardValue);
 					} else {
-						// ignore?
+					  // ignore?
 					}
 					mainResponse.setVal(originalId, original);
 				} else {

@@ -23,6 +23,10 @@ more information.
 
 ---
 
+This project builds upon the latest commit from April 30, 2018 for [meertensinstituut/mtas](https://github.com/meertensinstituut/mtas/tree/5c862d53014b15fb87de83da0b33fd91518642ec). See also the related [broker](https://github.com/textexploration/broker) project, another continuation of previous work.
+
+---
+
 One of the primary use cases for Mtas, the [Nederlab project](http://www.nederlab.nl/), currently<sup>1</sup> provides access, both in terms of metadata and annotated text, to over 74 million items for search and analysis as specified below. 
 
 |                 | Total          | Mean      | Min   | Max        |

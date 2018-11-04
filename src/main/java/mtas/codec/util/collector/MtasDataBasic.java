@@ -82,9 +82,9 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
    * mtas.codec.util.DataCollector.MtasDataCollector#error(java.lang.String)
    */
   @Override
-  public final void error(String error) throws IOException {
+  public final void error(String error, int number) throws IOException {
     add(false);
-    setError(newCurrentPosition, error, newCurrentExisting);
+    setError(newCurrentPosition, error, number, newCurrentExisting);
   }
 
   /*
@@ -95,10 +95,10 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
    * java.lang.String)
    */
   @Override
-  public final void error(String key, String error) throws IOException {
+  public final void error(String key, String error, int number) throws IOException {
     if (key != null) {
       add(key, false);
-      setError(newCurrentPosition, error, newCurrentExisting);
+      setError(newCurrentPosition, error, number, newCurrentExisting);
     }
   }
 
@@ -107,20 +107,21 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
    *
    * @param newPosition the new position
    * @param error the error
+   * @param number the number of occurrences
    * @param currentExisting the current existing
    */
-  protected void setError(int newPosition, String error,
+  protected void setError(int newPosition, String error, int number,
       boolean currentExisting) {
     if (!currentExisting) {
       newBasicValueSumList[newPosition] = operations.getZero1();
       newBasicValueNList[newPosition] = 0;
     }
-    newErrorNumber[newPosition]++;
+    newErrorNumber[newPosition]+=number;
     if (newErrorList[newPosition].containsKey(error)) {
       newErrorList[newPosition].put(error,
-          newErrorList[newPosition].get(error) + 1);
+          newErrorList[newPosition].get(error) + number);
     } else {
-      newErrorList[newPosition].put(error, 1);
+      newErrorList[newPosition].put(error, number);
     }
   }
 
@@ -329,7 +330,9 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
       newMtasDataBasic.closeNewList();
       initNewList(newMtasDataBasic.getSize());
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-        map.put(newDataCollector, this);
+        if(map!=null) {
+          map.put(newDataCollector, this);
+        }
         for (int i = 0; i < newMtasDataBasic.getSize(); i++) {
           MtasDataCollector<?, ?>[] subCollectors = new MtasDataCollector[1];
           subCollectors[0] = add(newMtasDataBasic.keyList[i],
@@ -347,7 +350,9 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
         }
         closeNewList();
       } else if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-        map.put(newDataCollector, this);
+        if(map!=null) {
+          map.put(newDataCollector, this);
+        }
         if (newMtasDataBasic.getSize() > 0) {
           MtasDataCollector<?, ?> subCollector = add(increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataBasic.errorNumber[0],

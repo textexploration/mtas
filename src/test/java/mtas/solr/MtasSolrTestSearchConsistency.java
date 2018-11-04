@@ -2,6 +2,8 @@ package mtas.solr;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedWriter;
@@ -69,7 +71,7 @@ public class MtasSolrTestSearchConsistency {
           solrPath.toAbsolutePath().toString());
       container.load();
       server = new EmbeddedSolrServer(container, collections.get(0));
-
+      
       // add
       server.add("collection1", solrDocuments.get(1));
       server.commit("collection1");
@@ -1093,6 +1095,190 @@ public class MtasSolrTestSearchConsistency {
     }
   }
 
+  @org.junit.Test
+  public void mtasRequestHandlerHeatmapComparedWithFacets() throws IOException {
+    for(int level = 1; level<=3; level++) {
+      ModifiableSolrParams params = new ModifiableSolrParams();
+      params.set("q", "*:*");
+      params.set("fq", "{!mtas_cql field=\""+MtasSolrBase.FIELD_MTAS+"\" query=\"[pos=\\\"LID\\\"]\"}");
+      params.set("rows", "0");
+      params.set("facet", "true");
+      params.set("facet.heatmap", "{!facet.heatmap.geom=\"[\\\"0 0\\\" TO \\\"40 40\\\"]\" facet.heatmap.gridLevel="+level+" key=\"geo\"}location");
+      params.set("mtas", "true");
+      params.set("mtas.heatmap", "true");
+      params.set("mtas.heatmap.0.key", "geo");
+      params.set("mtas.heatmap.0.queryField", MtasSolrBase.FIELD_MTAS);
+      params.set("mtas.heatmap.0.query.0.value", "[pos=\"LID\"]");
+      params.set("mtas.heatmap.0.query.0.type", "cql");
+      params.set("mtas.heatmap.0.minimum", 1);
+      params.set("mtas.heatmap.0.heatmapField", "location");
+      params.set("mtas.heatmap.0.gridLevel", level);
+      params.set("mtas.heatmap.0.geom", "[\"0 0\" TO \"40 40\"]");
+      SolrRequest<?> request = new QueryRequest(params);
+      NamedList<Object> response1;
+      try {
+        response1 = server.request(request, "collection1");
+      } catch (SolrServerException e) {
+        throw new IOException(e);
+      }
+      ArrayList<ArrayList<Integer>> facetHeatmap = MtasSolrBase.getFromFacetHeatmap(response1,"geo");
+      ArrayList<ArrayList<NamedList<Object>>> mtasHeatmap = MtasSolrBase.getFromMtasHeatmap(response1,"geo");
+      //compare
+      assertTrue("size facet heatmap and mtas heatmap different", facetHeatmap.size()==mtasHeatmap.size());
+      for(int i=0; i<facetHeatmap.size();i++) {
+        if(facetHeatmap.get(i)==null) {
+          assertNull("expected mtasHeatmap to be null", mtasHeatmap.get(i));
+        } else {
+          assertNotNull("expected mtasHeatmap row "+i+" not to be null", mtasHeatmap.get(i));
+          for(int j=0; j<facetHeatmap.get(i).size();j++) {
+            if(facetHeatmap.get(i).get(j)==0) {
+              assertNull("expected mtasHeatmap to be null", mtasHeatmap.get(i).get(j));
+            } else {
+              assertNotNull("expected mtasHeatmap not to be null", mtasHeatmap.get(i).get(j));
+              Integer facetValue = facetHeatmap.get(i).get(j);
+              Long mtasValue = (Long) mtasHeatmap.get(i).get(j).get("n");
+              assertEquals("difference facetHeatmap and mtasHeatmap", facetValue.intValue(), mtasValue.intValue());  
+            }
+          }
+        }
+      }
+    }
+  }  
+  
+  @org.junit.Test
+  public void mtasRequestHandlerHeatmapComparedWithStats() throws IOException {
+    for(int level = 1; level<=3; level++) {
+      ModifiableSolrParams params = new ModifiableSolrParams();
+      params.set("q", "*:*");
+      params.set("fq", "{!mtas_cql field=\""+MtasSolrBase.FIELD_MTAS+"\" query=\"[pos=\\\"LID\\\"]\"}");
+      params.set("rows", "0");
+      params.set("mtas", "true");
+      params.set("mtas.stats", "true");
+      params.set("mtas.stats.spans", "true");
+      params.set("mtas.stats.spans.0.field", MtasSolrBase.FIELD_MTAS);
+      params.set("mtas.stats.spans.0.key", "statsKey");
+      params.set("mtas.stats.spans.0.minimum", 1);
+      params.set("mtas.stats.spans.0.query.0.type", "cql");
+      params.set("mtas.stats.spans.0.query.0.value", "[pos=\"LID\"]");
+      params.set("mtas.stats.spans.0.type", "n,sum");
+      params.set("mtas.heatmap", "true");
+      params.set("mtas.heatmap.0.key", "geo");
+      params.set("mtas.heatmap.0.queryField", MtasSolrBase.FIELD_MTAS);
+      params.set("mtas.heatmap.0.query.0.value", "[pos=\"LID\"]");
+      params.set("mtas.heatmap.0.query.0.type", "cql");
+      params.set("mtas.heatmap.0.minimum", 1);
+      params.set("mtas.heatmap.0.heatmapField", "location");
+      params.set("mtas.heatmap.0.gridLevel", level);
+      params.set("mtas.heatmap.0.geom", "[\"0 0\" TO \"40 40\"]");
+      SolrRequest<?> request = new QueryRequest(params);
+      NamedList<Object> response1;
+      try {
+        response1 = server.request(request, "collection1");
+      } catch (SolrServerException e) {
+        throw new IOException(e);
+      }
+      ArrayList<ArrayList<NamedList<Object>>> mtasHeatmap = MtasSolrBase.getFromMtasHeatmap(response1,"geo");
+      //compare
+      long mtasValueN = 0;
+      long mtasValueSum = 0;
+      long statsN = MtasSolrBase
+          .getFromMtasStats(response1, "spans", "statsKey", "n")
+          .longValue();
+      long statsSum = MtasSolrBase
+          .getFromMtasStats(response1, "spans", "statsKey", "sum")
+          .longValue();
+      for(int i=0; i<mtasHeatmap.size();i++) {
+        if(mtasHeatmap.get(i)!=null) {
+          for(int j=0; j<mtasHeatmap.get(i).size();j++) {
+            if(mtasHeatmap.get(i).get(j)!=null) {
+              mtasValueN += (Long) mtasHeatmap.get(i).get(j).get("n");
+              mtasValueSum += (Long) mtasHeatmap.get(i).get(j).get("sum");
+            }
+          }
+        }
+      }
+      assertEquals("expected n from heatmap and stats to be equal", statsN, mtasValueN);
+      assertEquals("expected sum from heatmap and stats to be equal", statsSum, mtasValueSum);
+    }
+  }  
+  
+  @org.junit.Test
+  public void mtasRequestHandlerHeatmapFunctions() throws IOException {
+    for(int level = 1; level<=3; level++) {
+      ModifiableSolrParams params = new ModifiableSolrParams();
+      params.set("q", "*:*");
+      params.set("fq", "{!mtas_cql field=\""+MtasSolrBase.FIELD_MTAS+"\" query=\"[pos=\\\"LID\\\"]\"}");
+      params.set("rows", "0");
+      params.set("mtas", "true");
+      params.set("mtas.stats", "true");
+      params.set("mtas.stats.spans", "true");
+      params.set("mtas.stats.spans.0.field", MtasSolrBase.FIELD_MTAS);
+      params.set("mtas.stats.spans.0.key", "statsKey");
+      params.set("mtas.stats.spans.0.minimum", 1);
+      params.set("mtas.stats.spans.0.query.0.type", "cql");
+      params.set("mtas.stats.spans.0.query.0.value", "[pos=\"LID\"]");
+      params.set("mtas.stats.spans.0.query.1.type", "cql");
+      params.set("mtas.stats.spans.0.query.1.value", "[pos=\"ADJ\"]");
+      params.set("mtas.stats.spans.0.function.0.key", "function");
+      params.set("mtas.stats.spans.0.function.0.expression", "$q1+(2*$q0)");
+      params.set("mtas.stats.spans.0.function.0.type", "n,sum");
+      params.set("mtas.heatmap", "true");
+      params.set("mtas.heatmap.0.key", "geo");
+      params.set("mtas.heatmap.0.queryField", MtasSolrBase.FIELD_MTAS);
+      params.set("mtas.heatmap.0.query.0.value", "[pos=\"LID\"]");
+      params.set("mtas.heatmap.0.query.0.type", "cql");
+      params.set("mtas.heatmap.0.query.1.value", "[pos=\"ADJ\"]");
+      params.set("mtas.heatmap.0.query.1.type", "cql");
+      params.set("mtas.heatmap.0.minimum", 1);
+      params.set("mtas.heatmap.0.heatmapField", "location");
+      params.set("mtas.heatmap.0.gridLevel", level);
+      params.set("mtas.heatmap.0.geom", "[\"0 0\" TO \"40 40\"]");
+      params.set("mtas.heatmap.0.function.0.key", "function");
+      params.set("mtas.heatmap.0.function.0.expression", "$q1+(2*$q0)");
+      params.set("mtas.heatmap.0.function.0.type", "n,sum");
+      SolrRequest<?> request = new QueryRequest(params);
+      NamedList<Object> response1;
+      try {
+        response1 = server.request(request, "collection1");
+      } catch (SolrServerException e) {
+        throw new IOException(e);
+      }
+      ArrayList<ArrayList<NamedList<Object>>> mtasHeatmap = MtasSolrBase.getFromMtasHeatmap(response1,"geo");
+      //compare
+      long mtasValueN = 0;
+      long mtasValueSum = 0;
+      long mtasValueFunctionN = 0;
+      long mtasValueFunctionSum = 0;
+      long statsN = MtasSolrBase
+          .getFromMtasStats(response1, "spans", "statsKey", "n")
+          .longValue();
+      long statsSum = MtasSolrBase
+          .getFromMtasStats(response1, "spans", "statsKey", "sum")
+          .longValue();
+      long statsFunctionN = MtasSolrBase.getFromMtasStatsFunction(response1, "spans", "statsKey", "function", "n").longValue();
+      long statsFunctionSum = MtasSolrBase.getFromMtasStatsFunction(response1, "spans", "statsKey", "function", "sum").longValue();
+      for(int i=0; i<mtasHeatmap.size();i++) {
+        if(mtasHeatmap.get(i)!=null) {
+          for(int j=0; j<mtasHeatmap.get(i).size();j++) {
+            if(mtasHeatmap.get(i).get(j)!=null) {
+              mtasValueN += (Long) mtasHeatmap.get(i).get(j).get("n");
+              mtasValueSum += (Long) mtasHeatmap.get(i).get(j).get("sum");
+              NamedList<Object> fs= (NamedList<Object>) mtasHeatmap.get(i).get(j).get("functions");
+              NamedList<Object> f = (NamedList<Object>) fs.get("function");
+              mtasValueFunctionN += (Long) f.get("n");
+              mtasValueFunctionSum += (Long) f.get("sum");
+              assertEquals("expected n from heatmap and function to be equal", (Long) mtasHeatmap.get(i).get(j).get("n"), (Long) f.get("n"));
+            }
+          }
+        }
+      }
+      assertEquals("expected n from heatmap and stats to be equal", statsN, mtasValueN);
+      assertEquals("expected sum from heatmap and stats to be equal", statsSum, mtasValueSum);
+      assertEquals("expected n from function heatmap and stats to be equal", statsFunctionN, mtasValueFunctionN);
+      assertEquals("expected sum from function heatmap and stats to be equal", statsFunctionSum, mtasValueFunctionSum);
+    }
+  }  
+  
   /**
    * Creates the termvector assertions.
    *

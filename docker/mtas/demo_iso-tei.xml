@@ -201,11 +201,11 @@
             <mapping type="groupAnnotation" name="span" start="from" end="to">				
                 <token type="string" offset="false" realoffset="false" parent="false">
                     <pre>
-						<item type="name" />
-						<item type="ancestorAttribute" distance="0" name="type"
-							prefix="." />
-						<item type="string" value=".interval" />
-					</pre>
+											<item type="name" />
+											<item type="ancestorAttribute" distance="0" name="type"
+												prefix="." />
+											<item type="string" value=".interval" />
+										</pre>
                     <post>
                         <item type="variableFromAttribute" name="interval" value="from" />
                         <item type="variableFromAttribute" name="interval" value="to"
@@ -217,8 +217,8 @@
             <mapping type="groupAnnotation" name="span" start="from" end="to">
                 <token type="string" offset="false" realoffset="false" parent="false">
                     <pre>
-						<item type="ancestorAttribute" distance="0" name="type" />
-					</pre>
+											<item type="ancestorAttribute" distance="0" name="type" />
+										</pre>
                     <post>
                         <item type="text" />
                     </post>
@@ -227,8 +227,8 @@
             <mapping type="groupAnnotation" name="gap" start="start" end="end">
                 <token type="string" offset="false" realoffset="false" parent="false">
                     <pre>
-						<item type="name" />
-					</pre>
+											<item type="name" />
+										</pre>
                     <post>
                         <item type="attribute" name="reason" />
                     </post>

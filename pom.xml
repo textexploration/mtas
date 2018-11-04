@@ -104,6 +104,7 @@
 						<org.slf4j.simpleLogger.defaultLogLevel>ERROR</org.slf4j.simpleLogger.defaultLogLevel>
 						<org.slf4j.simpleLogger.showDateTime>true</org.slf4j.simpleLogger.showDateTime>
 					</systemPropertyVariables>
+					<useSystemClassLoader>false</useSystemClassLoader>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -137,6 +138,19 @@
 							<sourceDirectory>${project.basedir}/src/main/java/mtas/parser/function/</sourceDirectory>
 						</configuration>
 					</execution>
+					<execution>
+            <id>javacc3</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>javacc</goal>
+            </goals>
+            <configuration>
+              <jdkVersion>1.5</jdkVersion>
+              <javadocFriendlyComments>true</javadocFriendlyComments>
+              <packageName>mtas.parser.simple</packageName>
+              <sourceDirectory>${project.basedir}/src/main/java/mtas/parser/simple</sourceDirectory>
+            </configuration>
+          </execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -490,6 +504,11 @@
 			<artifactId>slf4j-simple</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+        <groupId>org.locationtech.jts</groupId>
+        <artifactId>jts-core</artifactId>
+        <scope>test</scope>
+      </dependency>
 		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-simple</artifactId> 
 			<scope>runtime</scope> <optional>true</optional> </dependency> -->
 	</dependencies>
@@ -542,6 +561,12 @@
 				<artifactId>slf4j-simple</artifactId>
 				<version>1.7.25</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+			  <groupId>org.locationtech.jts</groupId>
+        <artifactId>jts-core</artifactId>
+        <version>1.15.1</version>
+        <scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
