@@ -6,11 +6,11 @@
 		<currentLuceneVersion>7.4.0</currentLuceneVersion>
 	</properties>
 	<scm>
-		<connection>scm:git:https://github.com/textexploration/mtas.git</connection>
-		<url>http://github.com/textexploration/mtas</url>
-		<developerConnection>scm:git:https://github.com/textexploration/mtas.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
+    <connection>scm:git:ssh://git@github.com/textexploration/mtas.git</connection>
+    <url>https://github.com/textexploration/mtas</url>
+    <developerConnection>scm:git:ssh://git@github.com/textexploration/mtas.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
