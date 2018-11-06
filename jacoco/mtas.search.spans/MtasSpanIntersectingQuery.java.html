@@ -39,15 +39,15 @@ public class MtasSpanIntersectingQuery extends MtasSpanQuery {
    * @param q2 the q 2
    */
   public MtasSpanIntersectingQuery(MtasSpanQuery q1, MtasSpanQuery q2) {
-<span class="pc bpc" id="L42" title="2 of 4 branches missed.">    super(q1 != null ? q1.getMinimumWidth() : null,</span>
-<span class="pc" id="L43">        q1 != null ? q1.getMaximumWidth() : null);</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">    super(q1 != null ? q1.getMinimumWidth() : null,</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        q1 != null ? q1.getMaximumWidth() : null);</span>
 <span class="pc bpc" id="L44" title="2 of 4 branches missed.">    if (q1 != null &amp;&amp; (field = q1.getField()) != null) {</span>
 <span class="pc bpc" id="L45" title="3 of 6 branches missed.">      if (q2 != null &amp;&amp; q2.getField() != null &amp;&amp; !q2.getField().equals(field)) {</span>
 <span class="nc" id="L46">        throw new IllegalArgumentException(&quot;Clauses must have same field.&quot;);</span>
       }
 <span class="nc bnc" id="L48" title="All 2 branches missed.">    } else if (q2 != null) {</span>
 <span class="nc" id="L49">      field = q2.getField();</span>
-    } else {
+<span class="nc" id="L50">    } else {</span>
 <span class="nc" id="L51">      field = null;</span>
     }
 <span class="fc" id="L53">    this.q1 = q1;</span>
@@ -86,8 +86,8 @@ public class MtasSpanIntersectingQuery extends MtasSpanQuery {
 <span class="fc" id="L86">      subWeights.add(w1);</span>
 <span class="fc" id="L87">      subWeights.add(w2);</span>
       // return
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">      return new SpanIntersectingWeight(w1, w2, searcher,</span>
-<span class="pc" id="L90">          needsScores ? getTermContexts(subWeights) : null, boost);</span>
+<span class="fc" id="L89">      return new SpanIntersectingWeight(w1, w2, searcher,</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">          needsScores ? getTermContexts(subWeights) : null, boost);</span>
     }
   }
 
@@ -102,7 +102,7 @@ public class MtasSpanIntersectingQuery extends MtasSpanQuery {
 <span class="nc" id="L102">    List&lt;SpanWeight&gt; weights = new ArrayList&lt;&gt;();</span>
 <span class="nc bnc" id="L103" title="All 2 branches missed.">    for (MtasSpanIntersectingQueryWeight item : items) {</span>
 <span class="nc" id="L104">      weights.add(item.spanWeight);</span>
-<span class="nc" id="L105">    }</span>
+    }
 <span class="nc" id="L106">    return getTermContexts(weights);</span>
   }
 
@@ -117,13 +117,13 @@ public class MtasSpanIntersectingQuery extends MtasSpanQuery {
 <span class="nc" id="L117">    buffer.append(this.getClass().getSimpleName() + &quot;([&quot;);</span>
 <span class="nc bnc" id="L118" title="All 2 branches missed.">    if (q1 != null) {</span>
 <span class="nc" id="L119">      buffer.append(q1.toString(q1.getField()));</span>
-    } else {
+<span class="nc" id="L120">    } else {</span>
 <span class="nc" id="L121">      buffer.append(&quot;null&quot;);</span>
     }
 <span class="nc" id="L123">    buffer.append(&quot;,&quot;);</span>
 <span class="nc bnc" id="L124" title="All 2 branches missed.">    if (q2 != null) {</span>
 <span class="nc" id="L125">      buffer.append(q2.toString(q2.getField()));</span>
-    } else {
+<span class="nc" id="L126">    } else {</span>
 <span class="nc" id="L127">      buffer.append(&quot;null&quot;);</span>
     }
 <span class="nc" id="L129">    buffer.append(&quot;])&quot;);</span>
@@ -179,7 +179,7 @@ public class MtasSpanIntersectingQuery extends MtasSpanQuery {
 
       boolean returnNone;
 <span class="pc bpc" id="L181" title="1 of 2 branches missed.">      returnNone = newQ1.getMaximumWidth() != null</span>
-<span class="pc bnc" id="L182" title="All 2 branches missed.">          &amp;&amp; newQ1.getMaximumWidth() == 0;</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">          &amp;&amp; newQ1.getMaximumWidth() == 0;</span>
 <span class="pc bpc" id="L183" title="1 of 2 branches missed.">      returnNone |= newQ2.getMaximumWidth() != null</span>
 <span class="pc bpc" id="L184" title="1 of 2 branches missed.">          &amp;&amp; newQ2.getMaximumWidth() == 0;</span>
 <span class="pc bpc" id="L185" title="1 of 2 branches missed.">      if (returnNone) {</span>
@@ -259,13 +259,13 @@ public class MtasSpanIntersectingQuery extends MtasSpanQuery {
 <span class="nc" id="L259">        return null; // field does not exist</span>
       }
 <span class="fc" id="L261">      MtasSpanIntersectingQuerySpans s1 = new MtasSpanIntersectingQuerySpans(</span>
-          MtasSpanIntersectingQuery.this,
+<span class="fc" id="L262">          MtasSpanIntersectingQuery.this,</span>
 <span class="fc" id="L263">          w1.spanWeight.getSpans(context, requiredPostings));</span>
 <span class="fc" id="L264">      MtasSpanIntersectingQuerySpans s2 = new MtasSpanIntersectingQuerySpans(</span>
-          MtasSpanIntersectingQuery.this,
+<span class="fc" id="L265">          MtasSpanIntersectingQuery.this,</span>
 <span class="fc" id="L266">          w2.spanWeight.getSpans(context, requiredPostings));</span>
 <span class="fc" id="L267">      return new MtasSpanIntersectingSpans(MtasSpanIntersectingQuery.this, s1,</span>
-          s2);
+<span class="fc" id="L268">          s2);</span>
     }
 
     /*
@@ -300,8 +300,8 @@ public class MtasSpanIntersectingQuery extends MtasSpanQuery {
      * @param query the query
      * @param spans the spans
      */
-    public MtasSpanIntersectingQuerySpans(MtasSpanIntersectingQuery query,
-<span class="fc" id="L304">        Spans spans) {</span>
+<span class="fc" id="L303">    public MtasSpanIntersectingQuerySpans(MtasSpanIntersectingQuery query,</span>
+        Spans spans) {
 <span class="pc bpc" id="L305" title="1 of 2 branches missed.">      this.spans = spans != null ? spans : new MtasSpanMatchNoneSpans(query);</span>
 <span class="fc" id="L306">    }</span>
 

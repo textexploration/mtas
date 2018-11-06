@@ -29,7 +29,7 @@ public class MtasCQLParserWordFullCondition
 <span class="pc bpc" id="L29" title="1 of 2 branches missed.">    if (condition.not()) {</span>
 <span class="nc" id="L30">      not = true;</span>
 <span class="nc" id="L31">      condition.swapNot();</span>
-    } else {
+<span class="nc" id="L32">    } else {</span>
 <span class="fc" id="L33">      not = false;</span>
     }
 <span class="fc" id="L35">    wordCondition = condition;</span>
@@ -69,7 +69,7 @@ public class MtasCQLParserWordFullCondition
 <span class="fc bfc" id="L69" title="All 2 branches covered.">    } else if (wordCondition.isSimplePositive()) {</span>
 <span class="fc bfc" id="L70" title="All 2 branches covered.">      if (wordCondition.isSingle()) {</span>
 <span class="fc" id="L71">        q = wordCondition.getPositiveQuery(0);</span>
-      } else {
+<span class="fc" id="L72">      } else {</span>
 <span class="fc bfc" id="L73" title="All 2 branches covered.">        if (wordCondition.type().equals(MtasCQLParserWordCondition.TYPE_AND)) {</span>
 <span class="fc" id="L74">          q = new MtasSpanAndQuery(wordCondition.getPositiveQuery().toArray(</span>
 <span class="fc" id="L75">              new MtasSpanQuery[wordCondition.getPositiveQuery().size()]));</span>
@@ -77,7 +77,7 @@ public class MtasCQLParserWordFullCondition
 <span class="pc bpc" id="L77" title="1 of 2 branches missed.">            .equals(MtasCQLParserWordCondition.TYPE_OR)) {</span>
 <span class="fc" id="L78">          q = new MtasSpanOrQuery(wordCondition.getPositiveQuery().toArray(</span>
 <span class="fc" id="L79">              new MtasSpanQuery[wordCondition.getPositiveQuery().size()]));</span>
-        } else {
+<span class="fc" id="L80">        } else {</span>
 <span class="nc" id="L81">          throw new ParseException(&quot;unknown type &quot; + wordCondition.type());</span>
         }
       }
@@ -91,14 +91,14 @@ public class MtasCQLParserWordFullCondition
         MtasSpanQuery qNegative;
 <span class="pc bpc" id="L92" title="1 of 2 branches missed.">        if (wordCondition.getPositiveQuery().size() == 1) {</span>
 <span class="fc" id="L93">          qPositive = wordCondition.getPositiveQuery(0);</span>
-        } else {
+<span class="fc" id="L94">        } else {</span>
 <span class="nc" id="L95">          qPositive = new MtasSpanAndQuery(</span>
 <span class="nc" id="L96">              wordCondition.getPositiveQuery().toArray(</span>
 <span class="nc" id="L97">                  new MtasSpanQuery[wordCondition.getPositiveQuery().size()]));</span>
         }
 <span class="fc bfc" id="L99" title="All 2 branches covered.">        if (wordCondition.getNegativeQuery().size() == 1) {</span>
 <span class="fc" id="L100">          qNegative = wordCondition.getNegativeQuery(0);</span>
-        } else {
+<span class="fc" id="L101">        } else {</span>
 <span class="fc" id="L102">          qNegative = new MtasSpanOrQuery(</span>
 <span class="fc" id="L103">              wordCondition.getNegativeQuery().toArray(</span>
 <span class="fc" id="L104">                  new MtasSpanQuery[wordCondition.getNegativeQuery().size()]));</span>
@@ -110,14 +110,14 @@ public class MtasCQLParserWordFullCondition
         MtasSpanQuery qNegative;
 <span class="nc bnc" id="L111" title="All 2 branches missed.">        if (wordCondition.getPositiveQuery().size() == 1) {</span>
 <span class="nc" id="L112">          qPositive = wordCondition.getPositiveQuery(0);</span>
-        } else {
+<span class="nc" id="L113">        } else {</span>
 <span class="nc" id="L114">          qPositive = new MtasSpanOrQuery(</span>
 <span class="nc" id="L115">              wordCondition.getPositiveQuery().toArray(</span>
 <span class="nc" id="L116">                  new MtasSpanQuery[wordCondition.getPositiveQuery().size()]));</span>
         }
 <span class="nc bnc" id="L118" title="All 2 branches missed.">        if (wordCondition.getNegativeQuery().size() == 1) {</span>
 <span class="nc" id="L119">          qNegative = wordCondition.getNegativeQuery(0);</span>
-        } else {
+<span class="nc" id="L120">        } else {</span>
 <span class="nc" id="L121">          qNegative = new MtasSpanAndQuery(</span>
 <span class="nc" id="L122">              wordCondition.getNegativeQuery().toArray(</span>
 <span class="nc" id="L123">                  new MtasSpanQuery[wordCondition.getNegativeQuery().size()]));</span>

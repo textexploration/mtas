@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HeatmapMtasCounter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.codec.util.heatmap</a> &gt; <span class="el_source">HeatmapMtasCounter.java</span></div><h1>HeatmapMtasCounter.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package mtas.codec.util.heatmap;</span>
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import org.apache.lucene.index.LeafReaderContext;
+import org.apache.lucene.spatial.prefix.PrefixTreeStrategy;
+import org.apache.lucene.spatial.prefix.tree.Cell;
+import org.apache.lucene.spatial.prefix.tree.CellIterator;
+import org.apache.lucene.spatial.prefix.tree.SpatialPrefixTree;
+import org.apache.lucene.util.ArrayUtil;
+import org.locationtech.spatial4j.context.SpatialContext;
+import org.locationtech.spatial4j.shape.Point;
+import org.locationtech.spatial4j.shape.Rectangle;
+import org.locationtech.spatial4j.shape.SpatialRelation;
+
+import mtas.codec.util.CodecUtil;
+import mtas.codec.util.CodecComponent.ComponentHeatmap;
+import mtas.codec.util.CodecComponent.SubComponentFunction;
+import mtas.codec.util.collector.MtasDataCollector;
+
+/**
+ * Based on org.apache.lucene.spatial.prefix.HeatmapFacetCounter
+ */
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">public class HeatmapMtasCounter {</span>
+
+  /** Maximum number of supported rows (or columns). */
+<span class="fc" id="L32">  public static final int MAX_ROWS_OR_COLUMNS = (int) Math.sqrt(ArrayUtil.MAX_ARRAY_LENGTH);</span>
+  // static {
+  // Math.multiplyExact(MAX_ROWS_OR_COLUMNS, MAX_ROWS_OR_COLUMNS);// will throw if
+  // doesn't stay within integer
+  // }
+
+  /**
+   * Response structure.
+   */
+  public static class Heatmap {
+
+    /** The data collector. */
+    public MtasDataCollector&lt;?, ?&gt; dataCollector;
+
+    /** The functions. */
+    public List&lt;SubComponentFunction&gt; functions;
+
+    /** The columns. */
+    public final int columns;
+
+    /** The rows. */
+    public final int rows;
+
+    /** The region. */
+    public final Rectangle region;
+
+    /** The min X. */
+    public final double minX;
+
+    /** The max X. */
+    public final double maxX;
+
+    /** The min Y. */
+    public final double minY;
+
+    /** The max Y. */
+    public final double maxY;
+
+    /** The cell width. */
+    public final double cellWidth;
+
+    /** The cell height. */
+    public final double cellHeight;
+
+    /** The grid level. */
+    public final int gridLevel;
+
+    /**
+     * Instantiates a new heatmap.
+     *
+     * @param columns
+     *          the columns
+     * @param rows
+     *          the rows
+     * @param region
+     *          the region
+     * @param cellWidth
+     *          the cell width
+     * @param cellHeight
+     *          the cell height
+     * @param gridLevel
+     *          the grid level
+     * @throws IOException
+     *           Signals that an I/O exception has occurred.
+     */
+<span class="fc" id="L97">    public Heatmap(int columns, int rows, Rectangle region, double cellWidth, double cellHeight, int gridLevel)</span>
+        throws IOException {
+<span class="fc" id="L99">      this.columns = columns;</span>
+<span class="fc" id="L100">      this.rows = rows;</span>
+<span class="fc" id="L101">      this.region = region;</span>
+<span class="fc" id="L102">      this.minX = region.getMinX();</span>
+<span class="fc" id="L103">      this.maxX = region.getMaxX();</span>
+<span class="fc" id="L104">      this.minY = region.getMinY();</span>
+<span class="fc" id="L105">      this.maxY = region.getMaxY();</span>
+<span class="fc" id="L106">      this.cellWidth = cellWidth;</span>
+<span class="fc" id="L107">      this.cellHeight = cellHeight;</span>
+<span class="fc" id="L108">      this.dataCollector = null;</span>
+<span class="fc" id="L109">      this.functions = null;</span>
+<span class="fc" id="L110">      this.gridLevel = gridLevel;</span>
+<span class="fc" id="L111">    }</span>
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+<span class="nc" id="L120">      return &quot;Heatmap{&quot; + columns + &quot;x&quot; + rows + &quot; &quot; + region + '}';</span>
+    }
+
+    /**
+     * Function need arguments.
+     *
+     * @return the sets the
+     */
+    public Set&lt;Integer&gt; functionNeedArguments() {
+<span class="fc" id="L129">      Set&lt;Integer&gt; list = new HashSet&lt;&gt;();</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">      if (functions != null) {</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        for (SubComponentFunction function : functions) {</span>
+<span class="fc" id="L132">          list.addAll(function.parserFunction.needArgument());</span>
+        }
+      }
+<span class="fc" id="L135">      return list;</span>
+    }
+
+    /**
+     * Function need positions.
+     *
+     * @return true, if successful
+     */
+    public boolean functionNeedPositions() {
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">      if (functions != null) {</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        for (SubComponentFunction function : functions) {</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">          if (function.parserFunction.needPositions()) {</span>
+<span class="nc" id="L147">            return true;</span>
+          }
+        }
+      }
+<span class="fc" id="L151">      return false;</span>
+    }
+  }
+
+  /**
+   * Calc values.
+   *
+   * @param strategy
+   *          the strategy
+   * @param context
+   *          the context
+   * @param heatmap
+   *          the heatmap
+   * @param number
+   *          the number
+   * @param docSet
+   *          the doc set
+   * @param values
+   *          the values
+   * @param args
+   *          the args
+   * @param positions
+   *          the positions
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   */
+  public static void calcValues(PrefixTreeStrategy strategy, LeafReaderContext context, ComponentHeatmap heatmap,
+      int number, int[] docSet, long[] values, long[][] args, int[] positions) throws IOException {
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">    if (heatmap.maxCells &gt; (MAX_ROWS_OR_COLUMNS * MAX_ROWS_OR_COLUMNS)) {</span>
+<span class="nc" id="L180">      throw new IllegalArgumentException(&quot;maxCells (&quot; + heatmap.maxCells + &quot;) should be &lt;= &quot; + MAX_ROWS_OR_COLUMNS);</span>
+    }
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">    if (heatmap.boundsShape == null) {</span>
+<span class="nc" id="L183">      heatmap.boundsShape = strategy.getSpatialContext().getWorldBounds();</span>
+    }
+
+<span class="fc" id="L186">    final int rows = heatmap.hm.rows;</span>
+<span class="fc" id="L187">    final int columns = heatmap.hm.columns;</span>
+<span class="fc" id="L188">    double heatMinX = heatmap.hm.minX;</span>
+<span class="fc" id="L189">    double heatMaxX = heatmap.hm.maxX;</span>
+<span class="fc" id="L190">    double heatMinY = heatmap.hm.minY;</span>
+<span class="fc" id="L191">    double heatMaxY = heatmap.hm.maxY;</span>
+<span class="fc" id="L192">    final double cellWidth = heatmap.hm.cellWidth;</span>
+<span class="fc" id="L193">    final double cellHeight = heatmap.hm.cellHeight;</span>
+
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">    if (docSet.length == 0) {</span>
+<span class="nc" id="L196">      return; // short-circuit</span>
+    }
+
+    // All ancestor cell counts (of gridLevel) will be captured during grid
+    // visiting and applied later. If the data is
+    // just points then there won't be any ancestors.
+    // grid count of ancestors covering all of the heatmap:
+<span class="fc" id="L203">    CellValues allCellsAncestorsValues = new CellValues(new long[0], new long[heatmap.hm.functions.size()][],</span>
+<span class="fc" id="L204">        new double[heatmap.hm.functions.size()][], new Map[heatmap.hm.functions.size()]);</span>
+
+    // All other ancestors:
+<span class="fc" id="L207">    Map&lt;Rectangle, CellValues&gt; ancestorsValues = new HashMap&lt;&gt;();</span>
+
+    // Now lets count!
+<span class="fc" id="L210">    PrefixTreeMtasCounter.compute(strategy, context, number, docSet, values, args, positions, heatmap,</span>
+<span class="fc" id="L211">        new PrefixTreeMtasCounter.GridVisitor() {</span>
+
+          @Override
+          public void visit(Cell cell, CellValues cellValues) {
+<span class="fc" id="L215">            final double heatMinX = heatmap.hm.region.getMinX();</span>
+<span class="fc" id="L216">            final Rectangle rect = (Rectangle) cell.getShape();</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            if (cell.getLevel() == heatmap.gridLevel) {// heatmap level; count it directly</span>
+              // convert to col &amp; row
+              int column;
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">              if (rect.getMinX() &gt;= heatMinX) {</span>
+<span class="fc" id="L221">                column = (int) Math.round((rect.getMinX() - heatMinX) / cellWidth);</span>
+<span class="fc" id="L222">              } else { // due to dateline wrap</span>
+<span class="nc" id="L223">                column = (int) Math.round((rect.getMinX() + 360 - heatMinX) / cellWidth);</span>
+              }
+<span class="fc" id="L225">              int row = (int) Math.round((rect.getMinY() - heatMinY) / cellHeight);</span>
+              // note: unfortunately, it's possible for us to visit adjacent cells to the
+              // heatmap (if the SpatialPrefixTree
+              // allows adjacent cells to overlap on the seam), so we need to skip them
+<span class="pc bpc" id="L229" title="4 of 8 branches missed.">              if (column &lt; 0 || column &gt;= heatmap.hm.columns || row &lt; 0 || row &gt;= heatmap.hm.rows) {</span>
+<span class="nc" id="L230">                return;</span>
+              }
+              // increment
+<span class="fc" id="L233">              String key = String.valueOf(column * heatmap.hm.rows + row);</span>
+              try {
+<span class="fc" id="L235">                heatmap.hm.dataCollector.add(key, cellValues.values(), cellValues.valuesLength());</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                for (int i = 0; i &lt; heatmap.hm.functions.size(); i++) {</span>
+<span class="fc" id="L237">                  SubComponentFunction f = heatmap.hm.functions.get(i);</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">                  if (f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
+<span class="fc" id="L239">                    heatmap.hm.functions.get(i).dataCollector.add(key, cellValues.functionValuesLong(i),</span>
+<span class="fc" id="L240">                        cellValues.functionValuesLongLength(i));</span>
+<span class="pc bnc" id="L241" title="All 2 branches missed.">                  } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc" id="L242">                    heatmap.hm.functions.get(i).dataCollector.add(key, cellValues.functionValuesDouble(i),</span>
+<span class="nc" id="L243">                        cellValues.functionValuesDoubleLength(i));</span>
+<span class="nc" id="L244">                  } else {</span>
+                    // should not happen
+<span class="nc" id="L246">                    throw new IOException(&quot;unexpected dataType &quot; + f.dataType);</span>
+                  }
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">                  if (!cellValues.functionValuesError(i).isEmpty()) {</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">                    for (Entry&lt;String, Integer&gt; entry : cellValues.functionValuesError(i).entrySet()) {</span>
+<span class="nc" id="L250">                      heatmap.hm.functions.get(i).dataCollector.error(key, entry.getKey(), entry.getValue());</span>
+                    }
+                  }
+                }
+<span class="pc" id="L254">              } catch (IOException e) {</span>
+                // should not happen
+<span class="nc" id="L256">                e.printStackTrace();</span>
+              }
+<span class="nc bnc" id="L258" title="All 2 branches missed.">            } else if (rect.relate(heatmap.hm.region) == SpatialRelation.CONTAINS) {// containing ancestor</span>
+<span class="nc" id="L259">              allCellsAncestorsValues.merge(cellValues);</span>
+<span class="nc" id="L260">            } else { // ancestor</span>
+              // note: not particularly efficient (possible put twice, and Integer wrapper);
+              // oh well
+<span class="nc" id="L263">              CellValues existingValues = (CellValues) ancestorsValues.put(rect, cellValues);</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">              if (existingValues != null) {</span>
+<span class="nc" id="L265">                cellValues.merge(existingValues);</span>
+              }
+            }
+<span class="fc" id="L268">          }</span>
+
+        });
+
+    // Update the heatmap counts with ancestor counts
+
+    // Apply allCellsAncestorCount
+<span class="pc bpc" id="L275" title="1 of 2 branches missed.">    if (allCellsAncestorsValues.valuesLength() &gt; 0) {</span>
+<span class="nc" id="L276">      int n = heatmap.hm.columns * heatmap.hm.rows;</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">      for (int k = 0; k &lt; n; k++) {</span>
+        try {
+<span class="nc" id="L279">          String key = String.valueOf(k);</span>
+<span class="nc" id="L280">          heatmap.hm.dataCollector.add(key, allCellsAncestorsValues.values(), allCellsAncestorsValues.valuesLength());</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">          for (int i = 0; i &lt; heatmap.hm.functions.size(); i++) {</span>
+<span class="nc" id="L282">            SubComponentFunction f = heatmap.hm.functions.get(i);</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">            if (f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
+<span class="nc" id="L284">              heatmap.hm.functions.get(i).dataCollector.add(key, allCellsAncestorsValues.functionValuesLong(i),</span>
+<span class="nc" id="L285">                  allCellsAncestorsValues.functionValuesLongLength(i));</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">            } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc" id="L287">              heatmap.hm.functions.get(i).dataCollector.add(key, allCellsAncestorsValues.functionValuesDouble(i),</span>
+<span class="nc" id="L288">                  allCellsAncestorsValues.functionValuesDoubleLength(i));</span>
+<span class="nc" id="L289">            } else {</span>
+              // should not happen
+<span class="nc" id="L291">              throw new IOException(&quot;unexpected dataType &quot; + f.dataType);</span>
+            }
+          }
+<span class="nc" id="L294">        } catch (IOException e) {</span>
+<span class="nc" id="L295">          e.printStackTrace();</span>
+        }
+      }
+    }
+<span class="fc" id="L299">    int[] pair = new int[2];// output of intersectInterval</span>
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">    for (Map.Entry&lt;Rectangle, CellValues&gt; entry : ancestorsValues.entrySet()) {</span>
+<span class="nc" id="L301">      Rectangle rect = entry.getKey(); // from a cell (thus doesn't cross DL)</span>
+<span class="nc" id="L302">      final CellValues ancestorValuesEntry = entry.getValue();</span>
+
+      // note: we approach this in a way that eliminates int overflow/underflow (think
+      // huge cell, tiny heatmap)
+<span class="nc" id="L306">      intersectInterval(heatMinY, heatMaxY, cellHeight, rows, rect.getMinY(), rect.getMaxY(), pair);</span>
+<span class="nc" id="L307">      final int startRow = pair[0];</span>
+<span class="nc" id="L308">      final int endRow = pair[1];</span>
+
+<span class="nc bnc" id="L310" title="All 2 branches missed.">      if (!heatmap.hm.region.getCrossesDateLine()) {</span>
+<span class="nc" id="L311">        intersectInterval(heatMinX, heatMaxX, cellWidth, columns, rect.getMinX(), rect.getMaxX(), pair);</span>
+<span class="nc" id="L312">        final int startCol = pair[0];</span>
+<span class="nc" id="L313">        final int endCol = pair[1];</span>
+<span class="nc" id="L314">        incrementRange(heatmap.hm, startCol, endCol, startRow, endRow, ancestorValuesEntry);</span>
+
+<span class="nc" id="L316">      } else {</span>
+        // note: the cell rect might intersect 2 disjoint parts of the heatmap, so we do
+        // the left &amp; right separately
+<span class="nc" id="L319">        final int leftColumns = (int) Math.round((180 - heatMinX) / cellWidth);</span>
+<span class="nc" id="L320">        final int rightColumns = heatmap.hm.columns - leftColumns;</span>
+        // left half of dateline:
+<span class="nc bnc" id="L322" title="All 2 branches missed.">        if (rect.getMaxX() &gt; heatMinX) {</span>
+<span class="nc" id="L323">          intersectInterval(heatMinX, 180, cellWidth, leftColumns, rect.getMinX(), rect.getMaxX(), pair);</span>
+<span class="nc" id="L324">          final int startCol = pair[0];</span>
+<span class="nc" id="L325">          final int endCol = pair[1];</span>
+<span class="nc" id="L326">          incrementRange(heatmap.hm, startCol, endCol, startRow, endRow, ancestorValuesEntry);</span>
+        }
+        // right half of dateline
+<span class="nc bnc" id="L329" title="All 2 branches missed.">        if (rect.getMinX() &lt; heatMaxX) {</span>
+<span class="nc" id="L330">          intersectInterval(-180, heatMaxX, cellWidth, rightColumns, rect.getMinX(), rect.getMaxX(), pair);</span>
+<span class="nc" id="L331">          final int startCol = pair[0] + leftColumns;</span>
+<span class="nc" id="L332">          final int endCol = pair[1] + leftColumns;</span>
+<span class="nc" id="L333">          incrementRange(heatmap.hm, startCol, endCol, startRow, endRow, ancestorValuesEntry);</span>
+        }
+      }
+    }
+<span class="fc" id="L337">  }</span>
+
+  /**
+   * Creates the heatmap.
+   *
+   * @param heatmap
+   *          the heatmap
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   */
+  public static void createHeatmap(ComponentHeatmap heatmap) throws IOException {
+<span class="fc" id="L348">    final Rectangle inputRect = heatmap.boundsShape.getBoundingBox();</span>
+    // First get the rect of the cell at the bottom-left at depth gridLevel
+<span class="fc" id="L350">    final SpatialPrefixTree grid = heatmap.strategy.getGrid();</span>
+<span class="fc" id="L351">    final SpatialContext ctx = grid.getSpatialContext();</span>
+<span class="fc" id="L352">    final Point cornerPt = ctx.makePoint(inputRect.getMinX(), inputRect.getMinY());</span>
+<span class="fc" id="L353">    final CellIterator cellIterator = grid.getTreeCellIterator(cornerPt, heatmap.gridLevel);</span>
+<span class="fc" id="L354">    Cell cornerCell = null;</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">    while (cellIterator.hasNext()) {</span>
+<span class="fc" id="L356">      cornerCell = cellIterator.next();</span>
+    }
+<span class="pc bpc" id="L358" title="3 of 6 branches missed.">    assert cornerCell != null &amp;&amp; cornerCell.getLevel() == heatmap.gridLevel : &quot;Cell not at target level: &quot; + cornerCell;</span>
+<span class="fc" id="L359">    final Rectangle cornerRect = (Rectangle) cornerCell.getShape();</span>
+<span class="pc bpc" id="L360" title="2 of 4 branches missed.">    assert cornerRect.hasArea();</span>
+    // Now calculate the number of columns and rows necessary to cover the inputRect
+<span class="fc" id="L362">    double heatMinX = cornerRect.getMinX();// note: we might change this below...</span>
+<span class="fc" id="L363">    final double cellWidth = cornerRect.getWidth();</span>
+<span class="fc" id="L364">    final Rectangle worldRect = ctx.getWorldBounds();</span>
+<span class="fc" id="L365">    final int columns = calcRowsOrCols(cellWidth, heatMinX, inputRect.getWidth(), inputRect.getMinX(),</span>
+<span class="fc" id="L366">        worldRect.getWidth());</span>
+<span class="fc" id="L367">    double heatMinY = cornerRect.getMinY();</span>
+<span class="fc" id="L368">    final double cellHeight = cornerRect.getHeight();</span>
+<span class="fc" id="L369">    final int rows = calcRowsOrCols(cellHeight, heatMinY, inputRect.getHeight(), inputRect.getMinY(),</span>
+<span class="fc" id="L370">        worldRect.getHeight());</span>
+<span class="pc bpc" id="L371" title="3 of 6 branches missed.">    assert rows &gt; 0 &amp;&amp; columns &gt; 0;</span>
+<span class="pc bpc" id="L372" title="3 of 6 branches missed.">    if (columns &gt; MAX_ROWS_OR_COLUMNS || rows &gt; MAX_ROWS_OR_COLUMNS || columns * rows &gt; heatmap.maxCells) {</span>
+<span class="nc" id="L373">      throw new IllegalArgumentException(</span>
+<span class="nc" id="L374">          &quot;Too many cells (&quot; + columns + &quot; x &quot; + rows + &quot;) for level &quot; + heatmap.gridLevel + &quot; shape &quot; + inputRect);</span>
+    }
+
+    // Create resulting heatmap bounding rectangle &amp; Heatmap object.
+<span class="fc" id="L378">    final double halfCellWidth = cellWidth / 2.0;</span>
+    // if X world-wraps, use world bounds' range
+<span class="pc bpc" id="L380" title="1 of 2 branches missed.">    if (columns * cellWidth + halfCellWidth &gt; worldRect.getWidth()) {</span>
+<span class="nc" id="L381">      heatMinX = worldRect.getMinX();</span>
+    }
+<span class="fc" id="L383">    double heatMaxX = heatMinX + columns * cellWidth;</span>
+<span class="pc bpc" id="L384" title="1 of 2 branches missed.">    if (Math.abs(heatMaxX - worldRect.getMaxX()) &lt; halfCellWidth) {// numeric conditioning issue</span>
+<span class="nc" id="L385">      heatMaxX = worldRect.getMaxX();</span>
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">    } else if (heatMaxX &gt; worldRect.getMaxX()) {// wraps dateline (won't happen if !geo)</span>
+<span class="nc" id="L387">      heatMaxX = heatMaxX - worldRect.getMaxX() + worldRect.getMinX();</span>
+    }
+<span class="fc" id="L389">    final double halfCellHeight = cellHeight / 2.0;</span>
+<span class="fc" id="L390">    double heatMaxY = heatMinY + rows * cellHeight;</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">    if (Math.abs(heatMaxY - worldRect.getMaxY()) &lt; halfCellHeight) {// numeric conditioning issue</span>
+<span class="nc" id="L392">      heatMaxY = worldRect.getMaxY();</span>
+    }
+<span class="fc" id="L394">    heatmap.hm = new Heatmap(columns, rows, ctx.makeRectangle(heatMinX, heatMaxX, heatMinY, heatMaxY), cellWidth,</span>
+<span class="fc" id="L395">        cellHeight, heatmap.gridLevel);</span>
+<span class="fc" id="L396">  }</span>
+
+  /**
+   * Intersect interval.
+   *
+   * @param heatMin
+   *          the heat min
+   * @param heatMax
+   *          the heat max
+   * @param heatCellLen
+   *          the heat cell len
+   * @param numCells
+   *          the num cells
+   * @param cellMin
+   *          the cell min
+   * @param cellMax
+   *          the cell max
+   * @param out
+   *          the out
+   */
+  private static void intersectInterval(double heatMin, double heatMax, double heatCellLen, int numCells,
+      double cellMin, double cellMax, int[] out) {
+<span class="nc bnc" id="L418" title="All 6 branches missed.">    assert heatMin &lt; heatMax &amp;&amp; cellMin &lt; cellMax;</span>
+    // precondition: we know there's an intersection
+<span class="nc bnc" id="L420" title="All 2 branches missed.">    if (heatMin &gt;= cellMin) {</span>
+<span class="nc" id="L421">      out[0] = 0;</span>
+<span class="nc" id="L422">    } else {</span>
+<span class="nc" id="L423">      out[0] = (int) Math.round((cellMin - heatMin) / heatCellLen);</span>
+    }
+<span class="nc bnc" id="L425" title="All 2 branches missed.">    if (heatMax &lt;= cellMax) {</span>
+<span class="nc" id="L426">      out[1] = numCells - 1;</span>
+<span class="nc" id="L427">    } else {</span>
+<span class="nc" id="L428">      out[1] = (int) Math.round((cellMax - heatMin) / heatCellLen) - 1;</span>
+    }
+<span class="nc" id="L430">  }</span>
+
+  /**
+   * Increment range.
+   *
+   * @param heatmap
+   *          the heatmap
+   * @param startColumn
+   *          the start column
+   * @param endColumn
+   *          the end column
+   * @param startRow
+   *          the start row
+   * @param endRow
+   *          the end row
+   * @param cellValues
+   *          the cell values
+   */
+  private static void incrementRange(Heatmap heatmap, int startColumn, int endColumn, int startRow, int endRow,
+      CellValues cellValues) {
+    // startColumn &amp; startRow are not necessarily within the heatmap range; likewise
+    // numRows/columns may overlap.
+<span class="nc bnc" id="L452" title="All 2 branches missed.">    if (startColumn &lt; 0) {</span>
+<span class="nc" id="L453">      endColumn += startColumn;</span>
+<span class="nc" id="L454">      startColumn = 0;</span>
+    }
+<span class="nc" id="L456">    endColumn = Math.min(heatmap.columns - 1, endColumn);</span>
+
+<span class="nc bnc" id="L458" title="All 2 branches missed.">    if (startRow &lt; 0) {</span>
+<span class="nc" id="L459">      endRow += startRow;</span>
+<span class="nc" id="L460">      startRow = 0;</span>
+    }
+<span class="nc" id="L462">    endRow = Math.min(heatmap.rows - 1, endRow);</span>
+
+<span class="nc bnc" id="L464" title="All 2 branches missed.">    if (startRow &gt; endRow) {</span>
+<span class="nc" id="L465">      return;// short-circuit</span>
+    }
+<span class="nc bnc" id="L467" title="All 2 branches missed.">    for (int c = startColumn; c &lt;= endColumn; c++) {</span>
+<span class="nc" id="L468">      int cBase = c * heatmap.rows;</span>
+<span class="nc bnc" id="L469" title="All 2 branches missed.">      for (int r = startRow; r &lt;= endRow; r++) {</span>
+        try {
+<span class="nc" id="L471">          String key = String.valueOf(cBase + r);</span>
+<span class="nc" id="L472">          heatmap.dataCollector.add(key, cellValues.values(), cellValues.valuesLength());</span>
+<span class="nc bnc" id="L473" title="All 2 branches missed.">          for (int i = 0; i &lt; heatmap.functions.size(); i++) {</span>
+<span class="nc" id="L474">            SubComponentFunction f = heatmap.functions.get(i);</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">            if (f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
+<span class="nc" id="L476">              heatmap.functions.get(i).dataCollector.add(key, cellValues.functionValuesLong(i),</span>
+<span class="nc" id="L477">                  cellValues.functionValuesLongLength(i));</span>
+<span class="nc bnc" id="L478" title="All 2 branches missed.">            } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc" id="L479">              heatmap.functions.get(i).dataCollector.add(key, cellValues.functionValuesDouble(i),</span>
+<span class="nc" id="L480">                  cellValues.functionValuesDoubleLength(i));</span>
+<span class="nc" id="L481">            } else {</span>
+              // should not happen
+<span class="nc" id="L483">              throw new IOException(&quot;unexpected dataType &quot; + f.dataType);</span>
+            }
+          }
+<span class="nc" id="L486">        } catch (IOException e) {</span>
+<span class="nc" id="L487">          e.printStackTrace();</span>
+        }
+      }
+    }
+<span class="nc" id="L491">  }</span>
+
+  /**
+   * Computes the number of intervals (rows or columns) to cover a range given the
+   * sizes.
+   *
+   * @param cellRange
+   *          the cell range
+   * @param cellMin
+   *          the cell min
+   * @param requestRange
+   *          the request range
+   * @param requestMin
+   *          the request min
+   * @param worldRange
+   *          the world range
+   * @return the int
+   */
+  private static int calcRowsOrCols(double cellRange, double cellMin, double requestRange, double requestMin,
+      double worldRange) {
+<span class="pc bpc" id="L511" title="2 of 4 branches missed.">    assert requestMin &gt;= cellMin;</span>
+    // Idealistically this wouldn't be so complicated but we concern ourselves with
+    // overflow and edge cases
+<span class="fc" id="L514">    double range = (requestRange + (requestMin - cellMin));</span>
+<span class="pc bpc" id="L515" title="1 of 2 branches missed.">    if (range == 0) {</span>
+<span class="nc" id="L516">      return 1;</span>
+    }
+<span class="fc" id="L518">    final double intervals = Math.ceil(range / cellRange);</span>
+<span class="pc bpc" id="L519" title="1 of 2 branches missed.">    if (intervals &gt; Integer.MAX_VALUE) {</span>
+<span class="nc" id="L520">      return Integer.MAX_VALUE;// should result in an error soon (exceed thresholds)</span>
+    }
+    // ensures we don't have more intervals than world bounds (possibly due to
+    // rounding/edge issue)
+<span class="fc" id="L524">    final long intervalsMax = Math.round(worldRange / cellRange);</span>
+<span class="pc bpc" id="L525" title="1 of 2 branches missed.">    if (intervalsMax &gt; Integer.MAX_VALUE) {</span>
+      // just return intervals
+<span class="nc" id="L527">      return (int) intervals;</span>
+    }
+<span class="fc" id="L529">    return Math.min((int) intervalsMax, (int) intervals);</span>
+  }
+
+  /**
+   * Instantiates a new heatmap mtas counter.
+   */
+<span class="nc" id="L535">  private HeatmapMtasCounter() {</span>
+<span class="nc" id="L536">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

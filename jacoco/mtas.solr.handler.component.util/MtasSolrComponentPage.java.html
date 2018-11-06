@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasSolrComponentPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.solr.handler.component.util</a> &gt; <span class="el_source">MtasSolrComponentPage.java</span></div><h1>MtasSolrComponentPage.java</h1><pre class="source lang-java linenums">package mtas.solr.handler.component.util;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.Map.Entry;
+
+import org.apache.solr.common.util.NamedList;
+import org.apache.solr.common.util.SimpleOrderedMap;
+import org.apache.solr.handler.component.ResponseBuilder;
+import org.apache.solr.handler.component.SearchComponent;
+import org.apache.solr.handler.component.ShardRequest;
+
+import mtas.codec.util.CodecComponent.ComponentField;
+import mtas.codec.util.CodecComponent.ComponentFields;
+import mtas.codec.util.CodecComponent.ComponentPage;
+import mtas.codec.util.CodecComponent.PageRange;
+import mtas.codec.util.CodecComponent.PageRangeData;
+import mtas.codec.util.CodecComponent.PageSet;
+import mtas.codec.util.CodecComponent.PageSetData;
+import mtas.codec.util.CodecComponent.PageWord;
+import mtas.codec.util.CodecComponent.PageWordData;
+import mtas.solr.handler.component.MtasSolrSearchComponent;
+
+/**
+ * The Class MtasSolrComponentPage.
+ */
+public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage&gt; {
+  
+  /** The Constant NAME. */
+  public static final String NAME = &quot;page&quot;;
+
+  /** The Constant PARAM_MTAS_LIST. */
+  public static final String PARAM_MTAS_PAGE = MtasSolrSearchComponent.PARAM_MTAS
+      + &quot;.&quot; + NAME;
+  
+  /** The Constant NAME_MTAS_LIST_FIELD. */
+  public static final String NAME_MTAS_PAGE_FIELD = &quot;field&quot;;
+
+  /** The Constant NAME_MTAS_LIST_KEY. */
+  public static final String NAME_MTAS_PAGE_KEY = &quot;key&quot;;
+
+  /** The Constant NAME_MTAS_LIST_PREFIX. */
+  public static final String NAME_MTAS_PAGE_PREFIX = &quot;prefix&quot;;
+
+  /** The Constant NAME_MTAS_LIST_START. */
+  public static final String NAME_MTAS_PAGE_START = &quot;start&quot;;
+
+  /** The Constant NAME_MTAS_LIST_NUMBER. */
+  public static final String NAME_MTAS_PAGE_END = &quot;end&quot;;
+
+  /**
+   * Instantiates a new mtas solr component page.
+   *
+   * @param searchComponent the search component
+   */
+<span class="fc" id="L61">  public MtasSolrComponentPage(MtasSolrSearchComponent searchComponent) {</span>
+<span class="fc" id="L62">  }</span>
+  
+  /* (non-Javadoc)
+   * @see mtas.solr.handler.component.util.MtasSolrComponent#prepare(org.apache.solr.handler.component.ResponseBuilder, mtas.codec.util.CodecComponent.ComponentFields)
+   */
+  @Override
+  public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
+      throws IOException {
+<span class="nc" id="L70">    Set&lt;String&gt; ids = MtasSolrResultUtil</span>
+<span class="nc" id="L71">        .getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_PAGE);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">    if (!ids.isEmpty()) {</span>
+<span class="nc" id="L73">      int tmpCounter = 0;</span>
+<span class="nc" id="L74">      String[] fields = new String[ids.size()];</span>
+<span class="nc" id="L75">      String[] keys = new String[ids.size()];</span>
+<span class="nc" id="L76">      String[] prefixes = new String[ids.size()];</span>
+<span class="nc" id="L77">      String[] starts = new String[ids.size()];</span>
+<span class="nc" id="L78">      String[] ends = new String[ids.size()];</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">      for (String id : ids) {</span>
+<span class="nc" id="L80">        fields[tmpCounter] = rb.req.getParams()</span>
+<span class="nc" id="L81">            .get(PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_FIELD, null);</span>
+<span class="nc" id="L82">        keys[tmpCounter] = rb.req.getParams()</span>
+<span class="nc" id="L83">            .get(PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_KEY,</span>
+<span class="nc" id="L84">                String.valueOf(tmpCounter))</span>
+<span class="nc" id="L85">            .trim();</span>
+<span class="nc" id="L86">        prefixes[tmpCounter] = rb.req.getParams().get(</span>
+<span class="nc" id="L87">            PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_PREFIX, null);</span>
+<span class="nc" id="L88">        starts[tmpCounter] = rb.req.getParams()</span>
+<span class="nc" id="L89">            .get(PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_START, null);</span>
+<span class="nc" id="L90">        ends[tmpCounter] = rb.req.getParams()</span>
+<span class="nc" id="L91">            .get(PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_END, null);</span>
+<span class="nc" id="L92">        tmpCounter++;</span>
+      }
+<span class="nc" id="L94">      String uniqueKeyField = rb.req.getSchema().getUniqueKeyField().getName();</span>
+<span class="nc" id="L95">      mtasFields.doPage = true;</span>
+<span class="nc" id="L96">      rb.setNeedDocSet(true);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">      for (String field : fields) {</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">        if (field == null || field.isEmpty()) {</span>
+<span class="nc" id="L99">          throw new IOException(&quot;no (valid) field in mtas page&quot;);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        } else if (!mtasFields.list.containsKey(field)) {</span>
+<span class="nc" id="L101">          mtasFields.list.put(field, new ComponentField(uniqueKeyField));</span>
+        }
+      }
+<span class="nc" id="L104">      MtasSolrResultUtil.compareAndCheck(keys, fields, NAME_MTAS_PAGE_KEY,</span>
+<span class="nc" id="L105">          NAME_MTAS_PAGE_FIELD, true);</span>
+<span class="nc" id="L106">      MtasSolrResultUtil.compareAndCheck(prefixes, fields,</span>
+<span class="nc" id="L107">          NAME_MTAS_PAGE_PREFIX, NAME_MTAS_PAGE_FIELD, false);</span>
+<span class="nc" id="L108">      MtasSolrResultUtil.compareAndCheck(starts, fields, NAME_MTAS_PAGE_START,</span>
+<span class="nc" id="L109">          NAME_MTAS_PAGE_FIELD, false);</span>
+<span class="nc" id="L110">      MtasSolrResultUtil.compareAndCheck(ends, fields, NAME_MTAS_PAGE_END,</span>
+<span class="nc" id="L111">          NAME_MTAS_PAGE_FIELD, false);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">      for (int i = 0; i &lt; fields.length; i++) {</span>
+<span class="nc bnc" id="L113" title="All 4 branches missed.">        String key = (keys[i] == null) || (keys[i].isEmpty())</span>
+<span class="nc" id="L114">            ? String.valueOf(i) + &quot;:&quot; + fields[i] </span>
+<span class="nc" id="L115">            : keys[i].trim();</span>
+<span class="nc" id="L116">        String prefix = prefixes[i];</span>
+<span class="nc bnc" id="L117" title="All 4 branches missed.">        int start = (starts[i] == null) || (starts[i].isEmpty()) ? 0</span>
+<span class="nc" id="L118">            : Integer.parseInt(starts[i]);</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">        int end = (starts[i] == null) || (ends[i].isEmpty()) ? 0</span>
+<span class="nc" id="L120">            : Integer.parseInt(ends[i]);</span>
+<span class="nc" id="L121">        mtasFields.list.get(fields[i]).pageList.add(new ComponentPage(</span>
+<span class="nc" id="L122">            fields[i], key, prefix, start, end));</span>
+      }
+    }
+<span class="nc" id="L125">  }</span>
+
+  /* (non-Javadoc)
+   * @see mtas.solr.handler.component.util.MtasSolrComponent#create(mtas.codec.util.CodecComponent.BasicComponent, java.lang.Boolean)
+   */
+  @Override
+  public SimpleOrderedMap&lt;Object&gt; create(ComponentPage page, Boolean encode) throws IOException {
+<span class="nc" id="L132">    SimpleOrderedMap&lt;Object&gt; mtasPageResponse = new SimpleOrderedMap&lt;&gt;();</span>
+<span class="nc" id="L133">    mtasPageResponse.add(&quot;key&quot;, page.key);</span>
+<span class="nc" id="L134">    ArrayList&lt;NamedList&lt;Object&gt;&gt; mtasPageItemResponses = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">    for (int docId : page.uniqueKey.keySet()) {</span>
+<span class="nc" id="L136">      NamedList&lt;Object&gt; mtasPageItemResponse = new SimpleOrderedMap&lt;&gt;();</span>
+<span class="nc" id="L137">      mtasPageItemResponse.add(&quot;documentKey&quot;, page.uniqueKey.get(docId));</span>
+<span class="nc" id="L138">      mtasPageItemResponse.add(&quot;documentMinPosition&quot;,</span>
+<span class="nc" id="L139">          page.minPosition.get(docId));</span>
+<span class="nc" id="L140">      mtasPageItemResponse.add(&quot;documentMaxPosition&quot;,</span>
+<span class="nc" id="L141">          page.maxPosition.get(docId));</span>
+<span class="nc" id="L142">      NamedList&lt;Object&gt; mtasPageItemData = new SimpleOrderedMap&lt;&gt;();</span>
+      //words
+<span class="nc bnc" id="L144" title="All 2 branches missed.">      if(page.wordList.containsKey(docId)) {</span>
+<span class="nc" id="L145">        Map&lt;Integer, PageWordData&gt; wordList = page.wordList.get(docId);</span>
+<span class="nc" id="L146">        SimpleOrderedMap&lt;Object&gt; wordListResult = new SimpleOrderedMap&lt;&gt;();</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        for(Entry&lt;Integer, PageWordData&gt; entry : wordList.entrySet()) {</span>
+<span class="nc" id="L148">          List&lt;List&lt;Object&gt;&gt; wordPositionResult = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">          for(PageWord item: entry.getValue().words) {</span>
+<span class="nc" id="L150">            List&lt;Object&gt; itemResult = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L151">            itemResult.add(item.id);</span>
+<span class="nc" id="L152">            itemResult.add(item.prefix);</span>
+<span class="nc bnc" id="L153" title="All 6 branches missed.">            if((item.postfix!=null &amp;&amp; item.postfix.length()&gt;0) || item.parentId!=null) {</span>
+<span class="nc" id="L154">              itemResult.add(item.postfix);</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">              if(item.parentId!=null) {</span>
+<span class="nc" id="L156">                itemResult.add(item.parentId);</span>
+              }
+            }  
+<span class="nc" id="L159">            wordPositionResult.add(itemResult);</span>
+          }
+<span class="nc" id="L161">          wordListResult.add(Integer.toString(entry.getKey()), wordPositionResult);</span>
+        }
+<span class="nc" id="L163">        mtasPageItemData.add(&quot;word&quot;, wordListResult);</span>
+      }  
+      //ranges
+<span class="nc bnc" id="L166" title="All 2 branches missed.">      if(page.rangeList.containsKey(docId)) {</span>
+<span class="nc" id="L167">        Map&lt;Integer, PageRangeData&gt; rangeList = page.rangeList.get(docId);</span>
+<span class="nc" id="L168">        SimpleOrderedMap&lt;Object&gt; rangeListResult = new SimpleOrderedMap&lt;&gt;();</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        for(Entry&lt;Integer, PageRangeData&gt; entry : rangeList.entrySet()) {</span>
+<span class="nc" id="L170">          List&lt;List&lt;Object&gt;&gt; rangePositionResult = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">          for(PageRange item: entry.getValue().ranges) {</span>
+<span class="nc" id="L172">            List&lt;Object&gt; itemResult = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L173">            itemResult.add(item.id);</span>
+<span class="nc" id="L174">            itemResult.add(Arrays.asList(item.start, item.end));</span>
+<span class="nc" id="L175">            itemResult.add(item.prefix);</span>
+<span class="nc bnc" id="L176" title="All 6 branches missed.">            if((item.postfix!=null &amp;&amp; item.postfix.length()&gt;0) || item.parentId!=null) {</span>
+<span class="nc" id="L177">              itemResult.add(item.postfix);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">              if(item.parentId!=null) {</span>
+<span class="nc" id="L179">                itemResult.add(item.parentId);</span>
+              }
+            }  
+<span class="nc" id="L182">            rangePositionResult.add(itemResult);</span>
+          }
+<span class="nc" id="L184">          rangeListResult.add(Integer.toString(entry.getKey()), rangePositionResult);</span>
+        }
+<span class="nc" id="L186">        mtasPageItemData.add(&quot;range&quot;, rangeListResult);</span>
+      }
+      //sets 
+<span class="nc bnc" id="L189" title="All 2 branches missed.">      if(page.setList.containsKey(docId)) {</span>
+<span class="nc" id="L190">        Map&lt;Integer, PageSetData&gt; setList = page.setList.get(docId);</span>
+<span class="nc" id="L191">        SimpleOrderedMap&lt;Object&gt; setListResult = new SimpleOrderedMap&lt;&gt;();</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">        for(Entry&lt;Integer, PageSetData&gt; entry : setList.entrySet()) {</span>
+<span class="nc" id="L193">          List&lt;List&lt;Object&gt;&gt; setPositionResult = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">          for(PageSet item: entry.getValue().sets) {</span>
+<span class="nc" id="L195">            List&lt;Object&gt; itemResult = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L196">            itemResult.add(item.id);</span>
+<span class="nc" id="L197">            itemResult.add(Arrays.stream(item.positions)</span>
+<span class="nc" id="L198">                .boxed()</span>
+<span class="nc" id="L199">                .collect(Collectors.toList()));</span>
+<span class="nc" id="L200">            itemResult.add(item.prefix);</span>
+<span class="nc bnc" id="L201" title="All 6 branches missed.">            if((item.postfix!=null &amp;&amp; item.postfix.length()&gt;0) || item.parentId!=null) {</span>
+<span class="nc" id="L202">              itemResult.add(item.postfix);</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">              if(item.parentId!=null) {</span>
+<span class="nc" id="L204">                itemResult.add(item.parentId);</span>
+              }
+            }  
+<span class="nc" id="L207">            setPositionResult.add(itemResult);</span>
+          }
+<span class="nc" id="L209">          setListResult.add(Integer.toString(entry.getKey()), setPositionResult);</span>
+        }
+<span class="nc" id="L211">        mtasPageItemData.add(&quot;set&quot;, setListResult);</span>
+      }
+<span class="nc" id="L213">      mtasPageItemResponse.add(&quot;data&quot;,</span>
+<span class="nc" id="L214">          mtasPageItemData);</span>
+<span class="nc" id="L215">      mtasPageItemResponses.add(mtasPageItemResponse);</span>
+    }
+<span class="nc" id="L217">    mtasPageResponse.add(&quot;list&quot;, mtasPageItemResponses);</span>
+<span class="nc" id="L218">    return mtasPageResponse;</span>
+  }
+
+  /* (non-Javadoc)
+   * @see mtas.solr.handler.component.util.MtasSolrComponent#modifyRequest(org.apache.solr.handler.component.ResponseBuilder, org.apache.solr.handler.component.SearchComponent, org.apache.solr.handler.component.ShardRequest)
+   */
+  @Override
+  public void modifyRequest(ResponseBuilder rb, SearchComponent who, ShardRequest sreq) {
+<span class="nc bnc" id="L226" title="All 2 branches missed.">    if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)) {</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">      if (sreq.params.getBool(PARAM_MTAS_PAGE, false)</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">          &amp;&amp; (sreq.purpose &amp; ShardRequest.PURPOSE_GET_FIELDS) != 0) {</span>
+        // do nothing
+      } else {
+<span class="nc" id="L231">        Set&lt;String&gt; keys = MtasSolrResultUtil</span>
+<span class="nc" id="L232">            .getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_PAGE);</span>
+<span class="nc" id="L233">        sreq.params.remove(PARAM_MTAS_PAGE);</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">        for (String key : keys) {</span>
+<span class="nc" id="L235">          sreq.params</span>
+<span class="nc" id="L236">              .remove(PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_FIELD);</span>
+<span class="nc" id="L237">          sreq.params</span>
+<span class="nc" id="L238">              .remove(PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_KEY);</span>
+<span class="nc" id="L239">          sreq.params.remove(</span>
+<span class="nc" id="L240">              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_PREFIX);</span>
+<span class="nc" id="L241">          sreq.params.remove(</span>
+<span class="nc" id="L242">              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_START);</span>
+<span class="nc" id="L243">          sreq.params.remove(</span>
+<span class="nc" id="L244">              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_END);</span>
+        }
+      }
+    }
+<span class="nc" id="L248">  }</span>
+
+  /* (non-Javadoc)
+   * @see mtas.solr.handler.component.util.MtasSolrComponent#finishStage(org.apache.solr.handler.component.ResponseBuilder)
+   */
+  @Override
+  public void finishStage(ResponseBuilder rb) {
+<span class="nc bnc" id="L255" title="All 2 branches missed.">    if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">        &amp;&amp; rb.stage &gt;= ResponseBuilder.STAGE_EXECUTE_QUERY</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">        &amp;&amp; rb.stage &lt; ResponseBuilder.STAGE_GET_FIELDS) {</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">      for (ShardRequest sreq : rb.finished) {</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
+<span class="nc" id="L260">            &amp;&amp; sreq.params.getBool(PARAM_MTAS_PAGE, false)) {</span>
+          // nothing to do
+        }
+      }
+    }
+<span class="nc" id="L265">  }</span>
+
+  /* (non-Javadoc)
+   * @see mtas.solr.handler.component.util.MtasSolrComponent#distributedProcess(org.apache.solr.handler.component.ResponseBuilder, mtas.codec.util.CodecComponent.ComponentFields)
+   */
+  @Override
+  public void distributedProcess(ResponseBuilder rb, ComponentFields mtasFields) throws IOException {
+    // nothing to do
+<span class="nc" id="L273">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

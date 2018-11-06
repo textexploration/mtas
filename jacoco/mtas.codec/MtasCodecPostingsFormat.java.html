@@ -115,7 +115,7 @@ public class MtasCodecPostingsFormat extends PostingsFormat {
   public static final String MTAS_INDEX_OBJECT_PARENT_EXTENSION = &quot;mtas.index.object.parent&quot;;
 
   /** The Constant MTAS_INDEX_TERM_PREFIX_POSITION_EXTENSION. */
-  public static final String MTAS_INDEX_TERM_PREFIX_POSITION_EXTENSION = &quot;mtas.index.term.prefix.position&quot;;
+<span class="fc" id="L118">  public static final String MTAS_INDEX_TERM_PREFIX_POSITION_EXTENSION = &quot;mtas.index.term.prefix.position&quot;;</span>
 
   /** The delegate codec name. */
 <span class="fc" id="L121">  private String delegateCodecName = null;</span>
@@ -149,9 +149,9 @@ public class MtasCodecPostingsFormat extends PostingsFormat {
 <span class="fc" id="L149">      Class.forName(&quot;mtas.codec.MtasTerms&quot;);</span>
 <span class="fc" id="L150">      Class.forName(&quot;mtas.codec.util.CodecInfo&quot;);</span>
 <span class="fc" id="L151">      Class.forName(&quot;mtas.codec.tree.MtasTreeNodeId&quot;);</span>
-<span class="nc" id="L152">    } catch (ClassNotFoundException e) {</span>
+<span class="pc" id="L152">    } catch (ClassNotFoundException e) {</span>
 <span class="nc" id="L153">      log.error(e);</span>
-<span class="fc" id="L154">    }</span>
+    }
 <span class="fc" id="L155">  }</span>
 
   /**
@@ -173,9 +173,9 @@ public class MtasCodecPostingsFormat extends PostingsFormat {
 <span class="fc" id="L173">      Class.forName(&quot;mtas.codec.MtasTerms&quot;);</span>
 <span class="fc" id="L174">      Class.forName(&quot;mtas.codec.util.CodecInfo&quot;);</span>
 <span class="fc" id="L175">      Class.forName(&quot;mtas.codec.tree.MtasTreeNodeId&quot;);</span>
-<span class="nc" id="L176">    } catch (ClassNotFoundException e) {</span>
+<span class="pc" id="L176">    } catch (ClassNotFoundException e) {</span>
 <span class="nc" id="L177">      log.error(e);</span>
-<span class="fc" id="L178">    }</span>
+    }
 <span class="fc" id="L179">  }</span>
 
   /*
@@ -235,12 +235,12 @@ public class MtasCodecPostingsFormat extends PostingsFormat {
 <span class="fc" id="L235">        token.setParentId(parentId);</span>
       }
 <span class="fc bfc" id="L237" title="All 2 branches covered.">      if ((objectFlags</span>
-          &amp; MTAS_OBJECT_HAS_POSITION_RANGE) == MTAS_OBJECT_HAS_POSITION_RANGE) {
+<span class="fc" id="L238">          &amp; MTAS_OBJECT_HAS_POSITION_RANGE) == MTAS_OBJECT_HAS_POSITION_RANGE) {</span>
 <span class="fc" id="L239">        int positionStart = inObject.readVInt();</span>
 <span class="fc" id="L240">        int positionEnd = positionStart + inObject.readVInt();</span>
 <span class="fc" id="L241">        token.addPositionRange(positionStart, positionEnd);</span>
-<span class="fc bfc" id="L242" title="All 2 branches covered.">      } else if ((objectFlags</span>
-          &amp; MTAS_OBJECT_HAS_POSITION_SET) == MTAS_OBJECT_HAS_POSITION_SET) {
+<span class="fc" id="L242">      } else if ((objectFlags</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">          &amp; MTAS_OBJECT_HAS_POSITION_SET) == MTAS_OBJECT_HAS_POSITION_SET) {</span>
 <span class="fc" id="L244">        int size = inObject.readVInt();</span>
 <span class="fc" id="L245">        int tmpPrevious = 0;</span>
 <span class="fc" id="L246">        positions = new int[size];</span>
@@ -260,7 +260,7 @@ public class MtasCodecPostingsFormat extends PostingsFormat {
 <span class="nc" id="L260">        token.setOffset(offsetStart, offsetEnd);</span>
       }
 <span class="pc bpc" id="L262" title="1 of 2 branches missed.">      if ((objectFlags</span>
-          &amp; MTAS_OBJECT_HAS_REALOFFSET) == MTAS_OBJECT_HAS_REALOFFSET) {
+<span class="fc" id="L263">          &amp; MTAS_OBJECT_HAS_REALOFFSET) == MTAS_OBJECT_HAS_REALOFFSET) {</span>
 <span class="nc" id="L264">        int realOffsetStart = inObject.readVInt();</span>
 <span class="nc" id="L265">        int realOffsetEnd = realOffsetStart + inObject.readVInt();</span>
 <span class="nc" id="L266">        token.setRealOffset(realOffsetStart, realOffsetEnd);</span>
@@ -275,9 +275,9 @@ public class MtasCodecPostingsFormat extends PostingsFormat {
 <span class="fc" id="L275">      inTerm.seek(termRef);</span>
 <span class="fc" id="L276">      token.setTermRef(termRef);</span>
 <span class="fc" id="L277">      token.setValue(inTerm.readString());</span>
-<span class="nc" id="L278">    } catch (Exception e) {</span>
+<span class="pc" id="L278">    } catch (Exception e) {</span>
 <span class="nc" id="L279">      throw new IOException(e);</span>
-<span class="fc" id="L280">    }</span>
+    }
 <span class="fc" id="L281">    return token;</span>
   }
 

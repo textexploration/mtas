@@ -44,10 +44,10 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
       String[] subSortDirections, Integer[] subStart, Integer[] subNumber,
       String segmentRegistration, String boundary) throws IOException {
 <span class="nc" id="L46">    super(collectorType, CodecUtil.DATA_TYPE_DOUBLE, statsItems, sortType,</span>
-        sortDirection, start, number, subCollectorTypes, subDataTypes,
-        subStatsTypes, subStatsItems, subSortTypes, subSortDirections, subStart,
-        subNumber, new MtasDataDoubleOperations(), segmentRegistration,
-        boundary);
+<span class="nc" id="L47">        sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
+<span class="nc" id="L48">        subStatsTypes, subStatsItems, subSortTypes, subSortDirections, subStart,</span>
+<span class="nc" id="L49">        subNumber, new MtasDataDoubleOperations(), segmentRegistration,</span>
+<span class="nc" id="L50">        boundary);</span>
 <span class="nc" id="L51">  }</span>
 
   /*
@@ -59,11 +59,11 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
   protected final MtasDataItemDoubleAdvanced getItem(int i) {
 <span class="nc bnc" id="L60" title="All 4 branches missed.">    if (i &gt;= 0 &amp;&amp; i &lt; size) {</span>
 <span class="nc" id="L61">      return new MtasDataItemDoubleAdvanced(advancedValueSumList[i],</span>
-          advancedValueSumOfLogsList[i], advancedValueSumOfSquaresList[i],
-          advancedValueMinList[i], advancedValueMaxList[i],
+<span class="nc" id="L62">          advancedValueSumOfLogsList[i], advancedValueSumOfSquaresList[i],</span>
+<span class="nc" id="L63">          advancedValueMinList[i], advancedValueMaxList[i],</span>
 <span class="nc bnc" id="L64" title="All 2 branches missed.">          advancedValueNList[i], hasSub() ? subCollectorListNextLevel[i] : null,</span>
 <span class="nc" id="L65">          getStatsItems(), sortType, sortDirection, errorNumber[i],</span>
-          errorList[i], sourceNumberList[i]);
+<span class="nc" id="L66">          errorList[i], sourceNumberList[i]);</span>
     } else {
 <span class="nc" id="L68">      return null;</span>
     }
@@ -117,7 +117,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
       throws IOException {
 <span class="nc" id="L118">    MtasDataCollector&lt;?, ?&gt; dataCollector = add(false);</span>
 <span class="nc" id="L119">    setValue(newCurrentPosition, ArrayUtils.toObject(values), number,</span>
-        newCurrentExisting);
+<span class="nc" id="L120">        newCurrentExisting);</span>
 <span class="nc" id="L121">    return dataCollector;</span>
   }
 
@@ -182,7 +182,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
 <span class="nc bnc" id="L182" title="All 2 branches missed.">    if (key != null) {</span>
 <span class="nc" id="L183">      MtasDataCollector&lt;?, ?&gt; subCollector = add(key, false);</span>
 <span class="nc" id="L184">      setValue(newCurrentPosition, ArrayUtils.toObject(values), number,</span>
-          newCurrentExisting);
+<span class="nc" id="L185">          newCurrentExisting);</span>
 <span class="nc" id="L186">      return subCollector;</span>
     } else {
 <span class="nc" id="L188">      return null;</span>
@@ -207,7 +207,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
 <span class="nc bnc" id="L207" title="All 2 branches missed.">      return value &gt;= boundary;</span>
     } else {
 <span class="nc" id="L209">      throw new IOException(</span>
-          &quot;can't compare for segmentRegistration &quot; + segmentRegistration);
+<span class="nc" id="L210">          &quot;can't compare for segmentRegistration &quot; + segmentRegistration);</span>
     }
   }
 
@@ -229,7 +229,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
 <span class="nc" id="L229">      return Math.min(value, boundary);</span>
     } else {
 <span class="nc" id="L231">      throw new IOException(</span>
-          &quot;can't compute last for segmentRegistration &quot; + segmentRegistration);
+<span class="nc" id="L232">          &quot;can't compute last for segmentRegistration &quot; + segmentRegistration);</span>
     }
   }
 
@@ -250,7 +250,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
 <span class="nc" id="L250">      return Collections.min(segmentValueTopList);</span>
     } else {
 <span class="nc" id="L252">      throw new IOException(</span>
-          &quot;can't compute last for segmentRegistration &quot; + segmentRegistration);
+<span class="nc" id="L253">          &quot;can't compute last for segmentRegistration &quot; + segmentRegistration);</span>
     }
   }
 
@@ -280,7 +280,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
 <span class="nc" id="L280">                correctionBoundary += Math.max(0, otherBoundary - boundary);</span>
               }
             }
-<span class="nc" id="L283">          }</span>
+          }
 <span class="nc" id="L284">          return boundary + correctionBoundary;</span>
         } else {
 <span class="nc" id="L286">          return boundary;</span>
@@ -288,7 +288,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
       }
     } else {
 <span class="nc" id="L290">      throw new IOException(&quot;can't compute boundary for segmentRegistration &quot;</span>
-          + segmentRegistration);
+<span class="nc" id="L291">          + segmentRegistration);</span>
     }
   }
 
@@ -311,7 +311,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
       }
     } else {
 <span class="nc" id="L313">      throw new IOException(&quot;can't compute boundary for segmentRegistration &quot;</span>
-          + segmentRegistration);
+<span class="nc" id="L314">          + segmentRegistration);</span>
     }
   }
 
@@ -334,7 +334,7 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced&lt;Double, Double&g
       }
     } else {
 <span class="nc" id="L336">      throw new IOException(</span>
-          &quot;not available for segmentRegistration &quot; + segmentRegistration);
+<span class="nc" id="L337">          &quot;not available for segmentRegistration &quot; + segmentRegistration);</span>
     }
   }
 

@@ -123,7 +123,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
   private static final int defaultHardLimit = 200;
 
   /** The Constant defaultNumber. */
-  private static final int defaultNumber = 50;
+<span class="fc" id="L126">  private static final int defaultNumber = 50;</span>
 
   /**
    * Instantiates a new mtas request handler.
@@ -171,7 +171,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
 <span class="nc" id="L171">          } catch (IOException e) {</span>
 <span class="nc" id="L172">            log.debug(e);</span>
 <span class="nc" id="L173">            rsp.add(MESSAGE_ERROR, e.getMessage());</span>
-<span class="nc" id="L174">          }</span>
+          }
         }
         // test mapping
 <span class="nc bnc" id="L177" title="All 2 branches missed.">      } else if (action.equals(ACTION_MAPPING)) {</span>
@@ -202,7 +202,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
 <span class="nc bnc" id="L202" title="All 8 branches missed.">          } catch (IOException | MtasParserException e) {</span>
 <span class="nc" id="L203">            log.debug(e);</span>
 <span class="nc" id="L204">            rsp.add(MESSAGE_ERROR, e.getMessage());</span>
-          } finally {
+<span class="nc" id="L205">          } finally {</span>
 <span class="nc" id="L206">            stream.close();</span>
 <span class="nc" id="L207">          }</span>
 <span class="nc bnc" id="L208" title="All 4 branches missed.">        } else if (configuration != null &amp;&amp; document != null) {</span>
@@ -213,7 +213,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
 <span class="nc bnc" id="L213" title="All 8 branches missed.">          } catch (IOException e) {</span>
 <span class="nc" id="L214">            log.debug(e);</span>
 <span class="nc" id="L215">            rsp.add(MESSAGE_ERROR, e.getMessage());</span>
-          } finally {
+<span class="nc" id="L216">          } finally {</span>
 <span class="nc" id="L217">            stream.close();</span>
 <span class="nc" id="L218">          }</span>
         }
@@ -224,7 +224,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
 <span class="nc" id="L224">          number = Integer.parseInt(req.getParams().get(PARAM_NUMBER));</span>
 <span class="nc" id="L225">        } catch (NumberFormatException e) {</span>
 <span class="nc" id="L226">          number = defaultNumber;</span>
-<span class="nc" id="L227">        }</span>
+        }
 <span class="nc bnc" id="L228" title="All 2 branches missed.">        if (action.equals(ACTION_RUNNING)) {</span>
 <span class="nc" id="L229">          rsp.add(ACTION_RUNNING, running.createListOutput(shardRequests, number));</span>
 <span class="nc bnc" id="L230" title="All 2 branches missed.">        } else if (action.equals(ACTION_HISTORY)) {</span>
@@ -242,7 +242,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
 <span class="nc" id="L242">            solrStatus.setError(abort);</span>
           }
 <span class="nc" id="L244">          rsp.add(ACTION_STATUS, solrStatus.createItemOutput());</span>
-        } else {
+<span class="nc" id="L245">        } else {</span>
 <span class="nc" id="L246">          rsp.add(ACTION_STATUS, null);</span>
         }
       }
@@ -323,11 +323,11 @@ public class MtasRequestHandler extends RequestHandlerBase {
 <span class="nc bnc" id="L323" title="All 2 branches missed.">        } else if (val instanceof String) {</span>
 <span class="nc" id="L324">          params.put(key, (String) val);</span>
         }
-<span class="nc" id="L326">      }</span>
+      }
 <span class="nc" id="L327">    } catch (Exception e) {</span>
 <span class="nc" id="L328">      log.debug(&quot;ignore parse exceptions at this stage, they may be caused by incomplete macro expansions&quot;, e);</span>
 <span class="nc" id="L329">      return;</span>
-<span class="nc" id="L330">    }</span>
+    }
 <span class="nc" id="L331">  }</span>
 
   /**
@@ -402,31 +402,31 @@ public class MtasRequestHandler extends RequestHandlerBase {
 <span class="fc" id="L402">    solrParams.add(MtasSolrSearchComponent.PARAM_MTAS, CommonParams.TRUE);</span>
 <span class="fc" id="L403">    solrParams.add(MtasSolrComponentStatus.PARAM_MTAS_STATUS, CommonParams.TRUE);</span>
 <span class="fc" id="L404">    solrParams.add(</span>
-        MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot; + MtasSolrComponentStatus.NAME_MTAS_STATUS_MTASHANDLER,
-        CommonParams.TRUE);
+<span class="fc" id="L405">        MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot; + MtasSolrComponentStatus.NAME_MTAS_STATUS_MTASHANDLER,</span>
+<span class="fc" id="L406">        CommonParams.TRUE);</span>
 <span class="fc" id="L407">    solrParams.add(</span>
-        MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot; + MtasSolrComponentStatus.NAME_MTAS_STATUS_NUMBEROFSEGMENTS,
-        CommonParams.TRUE);
+<span class="fc" id="L408">        MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot; + MtasSolrComponentStatus.NAME_MTAS_STATUS_NUMBEROFSEGMENTS,</span>
+<span class="fc" id="L409">        CommonParams.TRUE);</span>
 <span class="fc" id="L410">    solrParams.add(</span>
-        MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot; + MtasSolrComponentStatus.NAME_MTAS_STATUS_NUMBEROFDOCUMENTS,
-        CommonParams.TRUE);
+<span class="fc" id="L411">        MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot; + MtasSolrComponentStatus.NAME_MTAS_STATUS_NUMBEROFDOCUMENTS,</span>
+<span class="fc" id="L412">        CommonParams.TRUE);</span>
 <span class="fc" id="L413">    SolrClient solrClient = new HttpSolrClient.Builder(shard).build();</span>
     try {  
 <span class="fc" id="L415">      QueryResponse response = solrClient.query(solrParams);</span>
 <span class="fc" id="L416">      Object mtasHandlerObject = Objects.requireNonNull(</span>
 <span class="fc" id="L417">          response.getResponse().findRecursive(MtasSolrSearchComponent.NAME, MtasSolrComponentStatus.NAME,</span>
-              MtasSolrComponentStatus.NAME_MTAS_STATUS_MTASHANDLER),
-          &quot;no number of segments for &quot; + shard);
+<span class="fc" id="L418">              MtasSolrComponentStatus.NAME_MTAS_STATUS_MTASHANDLER),</span>
+<span class="fc" id="L419">          &quot;no number of segments for &quot; + shard);</span>
 <span class="fc" id="L420">      Object numberOfSegmentsObject = Objects.requireNonNull(</span>
 <span class="fc" id="L421">          response.getResponse().findRecursive(MtasSolrSearchComponent.NAME, MtasSolrComponentStatus.NAME,</span>
-              MtasSolrComponentStatus.NAME_MTAS_STATUS_NUMBEROFSEGMENTS),
-          &quot;no number of documents for &quot; + shard);
+<span class="fc" id="L422">              MtasSolrComponentStatus.NAME_MTAS_STATUS_NUMBEROFSEGMENTS),</span>
+<span class="fc" id="L423">          &quot;no number of documents for &quot; + shard);</span>
 <span class="fc" id="L424">      Object numberOfDocumentsObject = Objects.requireNonNull(</span>
 <span class="fc" id="L425">          response.getResponse().findRecursive(MtasSolrSearchComponent.NAME, MtasSolrComponentStatus.NAME,</span>
-              MtasSolrComponentStatus.NAME_MTAS_STATUS_NUMBEROFDOCUMENTS),
-          &quot;no name for &quot; + shard);
+<span class="fc" id="L426">              MtasSolrComponentStatus.NAME_MTAS_STATUS_NUMBEROFDOCUMENTS),</span>
+<span class="fc" id="L427">          &quot;no name for &quot; + shard);</span>
 <span class="fc" id="L428">      Object nameObject = Objects.requireNonNull(response.getResponse().findRecursive(MtasSolrSearchComponent.NAME,</span>
-          MtasSolrComponentStatus.NAME, ShardInformation.NAME_NAME), &quot;no handler for &quot; + shard);
+<span class="fc" id="L429">          MtasSolrComponentStatus.NAME, ShardInformation.NAME_NAME), &quot;no handler for &quot; + shard);</span>
 <span class="pc bpc" id="L430" title="1 of 2 branches missed.">      if (mtasHandlerObject instanceof String) {</span>
 <span class="fc" id="L431">        shardInformation.mtasHandler = (String) mtasHandlerObject;</span>
       }
@@ -440,16 +440,16 @@ public class MtasRequestHandler extends RequestHandlerBase {
 <span class="fc" id="L440">        shardInformation.name = (String) nameObject;</span>
       }
 <span class="fc" id="L442">      shardIndex.put(shard, shardInformation);</span>
-<span class="nc" id="L443">    } catch (NullPointerException | SolrServerException | IOException e) {</span>
+<span class="pc" id="L443">    } catch (NullPointerException | SolrServerException | IOException e) {</span>
 <span class="nc" id="L444">      log.error(e);</span>
 <span class="nc" id="L445">      return null;</span>
-    } finally {
+<span class="nc" id="L446">    } finally {</span>
 <span class="pc bpc" id="L447" title="5 of 6 branches missed.">      if (solrClient != null) {</span>
         try {
 <span class="pc" id="L449">          solrClient.close();</span>
-<span class="nc" id="L450">        } catch (IOException e) {</span>
+<span class="pc" id="L450">        } catch (IOException e) {</span>
 <span class="nc" id="L451">          log.error(e);</span>
-<span class="pc" id="L452">        }</span>
+        }
       }
 <span class="nc" id="L454">    }</span>
 <span class="fc" id="L455">    return shardInformation;</span>
@@ -468,18 +468,18 @@ public class MtasRequestHandler extends RequestHandlerBase {
     @Override
     public void run() {
       List&lt;MtasSolrStatus&gt; statusWithException;
-      while (true) {
+<span class="nc" id="L471">      while (true) {</span>
         try {
 <span class="fc" id="L473">          Thread.sleep(1000);</span>
 <span class="fc" id="L474">          statusWithException = running.checkForExceptions();</span>
 <span class="pc bpc" id="L475" title="1 of 2 branches missed.">          if (statusWithException != null) {</span>
 <span class="nc bnc" id="L476" title="All 2 branches missed.">            for (MtasSolrStatus item : statusWithException) {</span>
 <span class="nc" id="L477">              finishStatus(item);</span>
-<span class="nc" id="L478">            }</span>
+            }
           }
 <span class="nc" id="L480">        } catch (Exception e) {</span>
 <span class="nc" id="L481">          e.printStackTrace();</span>
-<span class="pc" id="L482">        }</span>
+        }
       }
 
     }

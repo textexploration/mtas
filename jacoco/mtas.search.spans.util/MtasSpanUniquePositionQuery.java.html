@@ -123,8 +123,8 @@ public class MtasSpanUniquePositionQuery extends MtasSpanQuery {
   public MtasSpanWeight createWeight(IndexSearcher searcher,
       boolean needsScores, float boost) throws IOException {
 <span class="fc" id="L125">    SpanWeight subWeight = clause.createWeight(searcher, false, boost);</span>
-<span class="fc bfc" id="L126" title="All 2 branches covered.">    return new SpanUniquePositionWeight(subWeight, searcher,</span>
-<span class="fc" id="L127">        needsScores ? getTermContexts(subWeight) : null, boost);</span>
+<span class="fc" id="L126">    return new SpanUniquePositionWeight(subWeight, searcher,</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        needsScores ? getTermContexts(subWeight) : null, boost);</span>
   }
 
   /*
@@ -194,7 +194,7 @@ public class MtasSpanUniquePositionQuery extends MtasSpanQuery {
 <span class="fc" id="L194">        return null;</span>
       } else {
 <span class="fc" id="L196">        return new MtasSpanUniquePositionSpans(MtasSpanUniquePositionQuery.this,</span>
-            subSpan);
+<span class="fc" id="L197">            subSpan);</span>
       }
     }
 

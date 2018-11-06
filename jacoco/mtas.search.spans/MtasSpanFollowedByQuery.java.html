@@ -40,15 +40,15 @@ public class MtasSpanFollowedByQuery extends MtasSpanQuery {
    * @param q2 the q 2
    */
   public MtasSpanFollowedByQuery(MtasSpanQuery q1, MtasSpanQuery q2) {
-<span class="pc bpc" id="L43" title="2 of 4 branches missed.">    super(q1 != null ? q1.getMinimumWidth() : null,</span>
-<span class="pc" id="L44">        q1 != null ? q1.getMaximumWidth() : null);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">    super(q1 != null ? q1.getMinimumWidth() : null,</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        q1 != null ? q1.getMaximumWidth() : null);</span>
 <span class="pc bpc" id="L45" title="2 of 4 branches missed.">    if (q1 != null &amp;&amp; (field = q1.getField()) != null) {</span>
 <span class="pc bpc" id="L46" title="3 of 6 branches missed.">      if (q2 != null &amp;&amp; q2.getField() != null &amp;&amp; !q2.getField().equals(field)) {</span>
 <span class="nc" id="L47">        throw new IllegalArgumentException(&quot;Clauses must have same field.&quot;);</span>
       }
 <span class="nc bnc" id="L49" title="All 2 branches missed.">    } else if (q2 != null) {</span>
 <span class="nc" id="L50">      field = q2.getField();</span>
-    } else {
+<span class="nc" id="L51">    } else {</span>
 <span class="nc" id="L52">      field = null;</span>
     }
 <span class="fc" id="L54">    this.q1 = q1;</span>
@@ -87,8 +87,8 @@ public class MtasSpanFollowedByQuery extends MtasSpanQuery {
 <span class="fc" id="L87">      subWeights.add(w1);</span>
 <span class="fc" id="L88">      subWeights.add(w2);</span>
       // return
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">      return new SpanFollowedByWeight(w1, w2, searcher,</span>
-<span class="pc" id="L91">          needsScores ? getTermContexts(subWeights) : null, boost);</span>
+<span class="fc" id="L90">      return new SpanFollowedByWeight(w1, w2, searcher,</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">          needsScores ? getTermContexts(subWeights) : null, boost);</span>
     }
   }
 
@@ -103,7 +103,7 @@ public class MtasSpanFollowedByQuery extends MtasSpanQuery {
 <span class="nc" id="L103">    List&lt;SpanWeight&gt; weights = new ArrayList&lt;&gt;();</span>
 <span class="nc bnc" id="L104" title="All 2 branches missed.">    for (MtasSpanFollowedByQueryWeight item : items) {</span>
 <span class="nc" id="L105">      weights.add(item.spanWeight);</span>
-<span class="nc" id="L106">    }</span>
+    }
 <span class="nc" id="L107">    return getTermContexts(weights);</span>
   }
 
@@ -118,13 +118,13 @@ public class MtasSpanFollowedByQuery extends MtasSpanQuery {
 <span class="nc" id="L118">    buffer.append(this.getClass().getSimpleName() + &quot;([&quot;);</span>
 <span class="nc bnc" id="L119" title="All 2 branches missed.">    if (q1 != null) {</span>
 <span class="nc" id="L120">      buffer.append(q1.toString(q1.getField()));</span>
-    } else {
+<span class="nc" id="L121">    } else {</span>
 <span class="nc" id="L122">      buffer.append(&quot;null&quot;);</span>
     }
 <span class="nc" id="L124">    buffer.append(&quot;,&quot;);</span>
 <span class="nc bnc" id="L125" title="All 2 branches missed.">    if (q2 != null) {</span>
 <span class="nc" id="L126">      buffer.append(q2.toString(q2.getField()));</span>
-    } else {
+<span class="nc" id="L127">    } else {</span>
 <span class="nc" id="L128">      buffer.append(&quot;null&quot;);</span>
     }
 <span class="nc" id="L130">    buffer.append(&quot;])&quot;);</span>
@@ -172,8 +172,8 @@ public class MtasSpanFollowedByQuery extends MtasSpanQuery {
   public MtasSpanQuery rewrite(IndexReader reader) throws IOException {
 <span class="fc" id="L173">    MtasSpanQuery newQ1 = (MtasSpanQuery) q1.rewrite(reader);</span>
 <span class="fc" id="L174">    MtasSpanQuery newQ2 = (MtasSpanQuery) q2.rewrite(reader);</span>
-<span class="pc bpc" id="L175" title="4 of 8 branches missed.">    if (newQ1 == null || newQ1 instanceof MtasSpanMatchNoneQuery</span>
-        || newQ2 == null || newQ2 instanceof MtasSpanMatchNoneQuery) {
+<span class="pc bpc" id="L175" title="2 of 4 branches missed.">    if (newQ1 == null || newQ1 instanceof MtasSpanMatchNoneQuery</span>
+<span class="pc bpc" id="L176" title="2 of 4 branches missed.">        || newQ2 == null || newQ2 instanceof MtasSpanMatchNoneQuery) {</span>
 <span class="nc" id="L177">      return new MtasSpanMatchNoneQuery(field);</span>
 <span class="pc bpc" id="L178" title="1 of 4 branches missed.">    } else if (!newQ1.equals(q1) || !newQ2.equals(q2)) {</span>
 <span class="fc" id="L179">      return new MtasSpanFollowedByQuery(newQ1, newQ2).rewrite(reader);</span>
@@ -251,10 +251,10 @@ public class MtasSpanFollowedByQuery extends MtasSpanQuery {
 <span class="nc" id="L251">        return null; // field does not exist</span>
       }
 <span class="fc" id="L253">      MtasSpanFollowedByQuerySpans s1 = new MtasSpanFollowedByQuerySpans(</span>
-          MtasSpanFollowedByQuery.this,
+<span class="fc" id="L254">          MtasSpanFollowedByQuery.this,</span>
 <span class="fc" id="L255">          w1.spanWeight.getSpans(context, requiredPostings));</span>
 <span class="fc" id="L256">      MtasSpanFollowedByQuerySpans s2 = new MtasSpanFollowedByQuerySpans(</span>
-          MtasSpanFollowedByQuery.this,
+<span class="fc" id="L257">          MtasSpanFollowedByQuery.this,</span>
 <span class="fc" id="L258">          w2.spanWeight.getSpans(context, requiredPostings));</span>
 <span class="fc" id="L259">      return new MtasSpanFollowedBySpans(MtasSpanFollowedByQuery.this, s1, s2);</span>
     }
@@ -291,8 +291,8 @@ public class MtasSpanFollowedByQuery extends MtasSpanQuery {
      * @param query the query
      * @param spans the spans
      */
-    public MtasSpanFollowedByQuerySpans(MtasSpanFollowedByQuery query,
-<span class="fc" id="L295">        Spans spans) {</span>
+<span class="fc" id="L294">    public MtasSpanFollowedByQuerySpans(MtasSpanFollowedByQuery query,</span>
+        Spans spans) {
 <span class="pc bpc" id="L296" title="1 of 2 branches missed.">      this.spans = spans != null ? spans : new MtasSpanMatchNoneSpans(query);</span>
 <span class="fc" id="L297">    }</span>
 

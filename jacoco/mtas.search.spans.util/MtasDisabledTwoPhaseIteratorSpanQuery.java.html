@@ -42,7 +42,7 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
       boolean needsScores, float boost) throws IOException {
 <span class="fc" id="L43">    SpanWeight subWeight = subQuery.createWeight(searcher, needsScores, boost);</span>
 <span class="fc" id="L44">    return new MtasDisabledTwoPhaseIteratorWeight(subWeight, searcher,</span>
-        needsScores, boost);
+<span class="fc" id="L45">        needsScores, boost);</span>
   }
 
   /*
@@ -149,8 +149,8 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
      */
     public MtasDisabledTwoPhaseIteratorWeight(SpanWeight subWeight,
 <span class="fc" id="L151">        IndexSearcher searcher, boolean needsScores, float boost) throws IOException {</span>
-<span class="pc bpc" id="L152" title="1 of 2 branches missed.">      super(subQuery, searcher,</span>
-<span class="pc" id="L153">          needsScores ? getTermContexts(subWeight) : null, boost);</span>
+<span class="fc" id="L152">      super(subQuery, searcher,</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">          needsScores ? getTermContexts(subWeight) : null, boost);</span>
 <span class="fc" id="L154">      this.subWeight = subWeight;</span>
 <span class="fc" id="L155">    }</span>
 

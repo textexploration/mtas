@@ -8,10 +8,13 @@ mtas.codec.tree
 mtas.codec.util
 mtas.codec.util.collector
 mtas.codec.util.distance
+mtas.codec.util.heatmap
 mtas.parser.cql
 mtas.parser.cql.util
 mtas.parser.function
 mtas.parser.function.util
+mtas.parser.simple
+mtas.parser.simple.util
 mtas.queries
 mtas.search
 mtas.search.similarities

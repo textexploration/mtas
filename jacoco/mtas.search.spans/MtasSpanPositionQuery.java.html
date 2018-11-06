@@ -142,10 +142,10 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
 <span class="nc" id="L142">              break;</span>
             }
           }
-<span class="fc" id="L145">        }</span>
+        }
         // get fieldsproducer
 <span class="fc" id="L147">        Method fpm = r.getClass().getMethod(METHOD_GET_POSTINGS_READER,</span>
-            (Class&lt;?&gt;[]) null);
+<span class="fc" id="L148">            (Class&lt;?&gt;[]) null);</span>
 <span class="fc" id="L149">        FieldsProducer fp = (FieldsProducer) fpm.invoke(r, (Object[]) null);</span>
         // get MtasFieldsProducer using terms
 <span class="fc" id="L151">        Terms t = fp.terms(field);</span>
@@ -156,8 +156,8 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
 <span class="fc" id="L156">          return new MtasSpanPositionSpans(MtasSpanPositionQuery.this,</span>
 <span class="fc" id="L157">              mtasCodecInfo, field, start, end);</span>
         }
-<span class="nc" id="L159">      } catch (InvocationTargetException | IllegalAccessException</span>
-          | NoSuchMethodException e) {
+      } catch (InvocationTargetException | IllegalAccessException
+<span class="nc" id="L160">          | NoSuchMethodException e) {</span>
 <span class="nc" id="L161">        throw new IOException(&quot;Can't get reader&quot;, e);</span>
       }
 
@@ -201,8 +201,8 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
   @Override
   public String toString(String field) {
 <span class="nc" id="L203">    StringBuilder buffer = new StringBuilder();</span>
-<span class="nc bnc" id="L204" title="All 2 branches missed.">    buffer.append(this.getClass().getSimpleName() + &quot;([&quot; + start</span>
-        + (start != end ? &quot;,&quot; + end : &quot;&quot;) + &quot;])&quot;);
+<span class="nc" id="L204">    buffer.append(this.getClass().getSimpleName() + &quot;([&quot; + start</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">        + (start != end ? &quot;,&quot; + end : &quot;&quot;) + &quot;])&quot;);</span>
 <span class="nc" id="L206">    return buffer.toString();</span>
   }
 

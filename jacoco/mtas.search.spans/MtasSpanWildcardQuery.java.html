@@ -66,7 +66,7 @@ public class MtasSpanWildcardQuery extends MtasSpanQuery {
 <span class="nc" id="L66">      prefix = term.text().substring(0, i);</span>
 <span class="nc" id="L67">      value = term.text().substring((i + MtasToken.DELIMITER.length()));</span>
 <span class="nc bnc" id="L68" title="All 2 branches missed.">      value = (value.length() &gt; 0) ? value : null;</span>
-    } else {
+<span class="nc" id="L69">    } else {</span>
 <span class="nc" id="L70">      prefix = term.text();</span>
 <span class="nc" id="L71">      value = null;</span>
     }
@@ -87,15 +87,15 @@ public class MtasSpanWildcardQuery extends MtasSpanQuery {
         // forward index solution ?
 <span class="nc" id="L88">        throw new IOException(&quot;Wildcard expression \&quot;&quot;</span>
 <span class="nc" id="L89">            + CodecUtil.termValue(term.text()) + &quot;\&quot; expands to &quot;</span>
-            + clauses.length + &quot; terms, too many (boundary &quot;
-            + MTAS_WILDCARD_EXPAND_BOUNDARY + &quot;)!&quot;);
+<span class="nc" id="L90">            + clauses.length + &quot; terms, too many (boundary &quot;</span>
+<span class="nc" id="L91">            + MTAS_WILDCARD_EXPAND_BOUNDARY + &quot;)!&quot;);</span>
       }
 <span class="nc" id="L93">      MtasSpanQuery[] newClauses = new MtasSpanQuery[clauses.length];</span>
 <span class="nc bnc" id="L94" title="All 2 branches missed.">      for (int i = 0; i &lt; clauses.length; i++) {</span>
 <span class="nc bnc" id="L95" title="All 2 branches missed.">        if (clauses[i] instanceof SpanTermQuery) {</span>
 <span class="nc" id="L96">          newClauses[i] = new MtasSpanTermQuery((SpanTermQuery) clauses[i],</span>
-              singlePosition);
-        } else {
+<span class="nc" id="L97">              singlePosition);</span>
+<span class="nc" id="L98">        } else {</span>
 <span class="nc" id="L99">          throw new IOException(&quot;no SpanTermQuery after rewrite&quot;);</span>
         }
       }
@@ -117,7 +117,7 @@ public class MtasSpanWildcardQuery extends MtasSpanQuery {
 <span class="nc" id="L117">    buffer.append(this.getClass().getSimpleName() + &quot;([&quot;);</span>
 <span class="nc bnc" id="L118" title="All 2 branches missed.">    if (value == null) {</span>
 <span class="nc" id="L119">      buffer.append(this.query.getField() + &quot;:&quot; + prefix);</span>
-    } else {
+<span class="nc" id="L120">    } else {</span>
 <span class="nc" id="L121">      buffer.append(this.query.getField() + &quot;:&quot; + prefix + &quot;=&quot; + value);</span>
     }
 <span class="nc" id="L123">    buffer.append(&quot;])&quot;);</span>
@@ -145,7 +145,7 @@ public class MtasSpanWildcardQuery extends MtasSpanQuery {
   public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
       throws IOException {
 <span class="nc" id="L147">    return ((SpanQuery) searcher.rewrite(query)).createWeight(searcher,</span>
-        needsScores, boost);
+<span class="nc" id="L148">        needsScores, boost);</span>
   }
 
   /*

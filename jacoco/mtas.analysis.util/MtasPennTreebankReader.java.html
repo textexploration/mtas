@@ -103,12 +103,12 @@ public class MtasPennTreebankReader {
       } else {
 <span class="nc" id="L104">        throw new IOException(&quot;unexpected state&quot;);</span>
       }
-<span class="nc bnc" id="L106" title="All 4 branches missed.">    } else if (currentEvent == EVENT_STARTBRACKET</span>
-        || currentEvent == EVENT_ENDBRACKET) {
+<span class="nc bnc" id="L106" title="All 2 branches missed.">    } else if (currentEvent == EVENT_STARTBRACKET</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        || currentEvent == EVENT_ENDBRACKET) {</span>
 <span class="nc bnc" id="L108" title="All 2 branches missed.">      if (findBracket()) {</span>
 <span class="nc bnc" id="L109" title="All 2 branches missed.">        if (currentEvent == EVENT_STARTBRACKET) {</span>
 <span class="nc" id="L110">          currentEvent = EVENT_NODE;</span>
-        } else {
+<span class="nc" id="L111">        } else {</span>
 <span class="nc" id="L112">          currentEvent = EVENT_STRING;</span>
         }  
 <span class="nc" id="L114">        currentStringPosition = -1;</span>
@@ -169,8 +169,8 @@ public class MtasPennTreebankReader {
 <span class="nc" id="L169">        nextStrings = createStrings(sBuilder.toString());</span>
 <span class="nc bnc" id="L170" title="All 2 branches missed.">        if (counterBracket &lt; 0) {</span>
 <span class="nc" id="L171">          throw new IOException(&quot;bracket mismatch&quot;);</span>
-<span class="nc bnc" id="L172" title="All 4 branches missed.">        } else if (nextBracket == CHARACTER_BRACKETSTART</span>
-            &amp;&amp; nextStrings.length == 0) {
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        } else if (nextBracket == CHARACTER_BRACKETSTART</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            &amp;&amp; nextStrings.length == 0) {</span>
 <span class="nc" id="L174">          throw new IOException(&quot;empty brackets&quot;);</span>
         }
 <span class="nc" id="L176">        nextBracket = c;</span>
@@ -178,7 +178,7 @@ public class MtasPennTreebankReader {
       } else {
 <span class="nc" id="L179">        sBuilder.append(c);</span>
       }      
-<span class="nc" id="L181">    }</span>
+    }
 <span class="nc bnc" id="L182" title="All 2 branches missed.">    if (eof) {</span>
 <span class="nc bnc" id="L183" title="All 2 branches missed.">      if(!sBuilder.toString().trim().isEmpty()) {    </span>
 <span class="nc" id="L184">        throw new IOException(&quot;string without closing bracket&quot;);</span>
@@ -239,8 +239,8 @@ public class MtasPennTreebankReader {
 <span class="nc bnc" id="L239" title="All 2 branches missed.">            if(item.replaceAll(pattern, &quot;&quot;).indexOf(CHARACTER_CURLYBRACKETSTART)==-1) {</span>
 <span class="nc" id="L240">              withinCurlyBracket = false;</span>
             } 
-<span class="nc" id="L242">          }</span>
-        } else {
+          }
+<span class="nc" id="L243">        } else {</span>
 <span class="nc" id="L244">          finalList[j] = initialList[i];</span>
 <span class="nc" id="L245">          j++;</span>
 <span class="nc bnc" id="L246" title="All 2 branches missed.">          if(initialList[i].indexOf(CHARACTER_CURLYBRACKETSTART)!=-1) {</span>

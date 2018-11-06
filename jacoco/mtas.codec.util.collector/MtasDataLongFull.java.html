@@ -43,9 +43,9 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
       String[] subSortDirections, Integer[] subStart, Integer[] subNumber,
       String segmentRegistration, String boundary) throws IOException {
 <span class="fc" id="L45">    super(collectorType, CodecUtil.DATA_TYPE_LONG, statsItems, sortType,</span>
-        sortDirection, start, number, subCollectorTypes, subDataTypes,
-        subStatsTypes, subStatsItems, subSortTypes, subSortDirections, subStart,
-        subNumber, new MtasDataLongOperations(), segmentRegistration, boundary);
+<span class="fc" id="L46">        sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
+<span class="fc" id="L47">        subStatsTypes, subStatsItems, subSortTypes, subSortDirections, subStart,</span>
+<span class="fc" id="L48">        subNumber, new MtasDataLongOperations(), segmentRegistration, boundary);</span>
 <span class="fc" id="L49">  }</span>
 
   /*
@@ -58,8 +58,8 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
 <span class="pc bpc" id="L58" title="2 of 4 branches missed.">    if (i &gt;= 0 &amp;&amp; i &lt; size) {</span>
 <span class="fc" id="L59">      return new MtasDataItemLongFull(ArrayUtils.toPrimitive(fullValueList[i]),</span>
 <span class="pc bpc" id="L60" title="1 of 2 branches missed.">          hasSub() ? subCollectorListNextLevel[i] : null, getStatsItems(),</span>
-          sortType, sortDirection, errorNumber[i], errorList[i],
-          sourceNumberList[i]);
+<span class="fc" id="L61">          sortType, sortDirection, errorNumber[i], errorList[i],</span>
+<span class="fc" id="L62">          sourceNumberList[i]);</span>
     } else {
 <span class="nc" id="L64">      return null;</span>
     }
@@ -86,7 +86,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
       throws IOException {
 <span class="fc" id="L87">    MtasDataCollector&lt;?, ?&gt; dataCollector = add(false);</span>
 <span class="fc" id="L88">    setValue(newCurrentPosition, ArrayUtils.toObject(values), number,</span>
-        newCurrentExisting);
+<span class="fc" id="L89">        newCurrentExisting);</span>
 <span class="fc" id="L90">    return dataCollector;</span>
   }
 
@@ -143,7 +143,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
 <span class="nc bnc" id="L143" title="All 2 branches missed.">    if (key != null) {</span>
 <span class="nc" id="L144">      MtasDataCollector&lt;?, ?&gt; subCollector = add(key, false);</span>
 <span class="nc" id="L145">      setValue(newCurrentPosition, ArrayUtils.toObject(values), number,</span>
-          newCurrentExisting);
+<span class="nc" id="L146">          newCurrentExisting);</span>
 <span class="nc" id="L147">      return subCollector;</span>
     } else {
 <span class="nc" id="L149">      return null;</span>
@@ -203,7 +203,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
 <span class="nc bnc" id="L203" title="All 2 branches missed.">      return value &gt;= boundary;</span>
     } else {
 <span class="nc" id="L205">      throw new IOException(</span>
-          &quot;can't compare for segmentRegistration &quot; + segmentRegistration);
+<span class="nc" id="L206">          &quot;can't compare for segmentRegistration &quot; + segmentRegistration);</span>
     }
   }
 
@@ -225,7 +225,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
 <span class="nc" id="L225">      return Math.min(value, boundary);</span>
     } else {
 <span class="nc" id="L227">      throw new IOException(</span>
-          &quot;can't compute last for segmentRegistration &quot; + segmentRegistration);
+<span class="nc" id="L228">          &quot;can't compute last for segmentRegistration &quot; + segmentRegistration);</span>
     }
   }
 
@@ -246,7 +246,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
 <span class="nc" id="L246">      return Collections.min(segmentValueTopList);</span>
     } else {
 <span class="nc" id="L248">      throw new IOException(</span>
-          &quot;can't compute last for segmentRegistration &quot; + segmentRegistration);
+<span class="nc" id="L249">          &quot;can't compute last for segmentRegistration &quot; + segmentRegistration);</span>
     }
   }
 
@@ -275,7 +275,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
 <span class="nc" id="L275">                correctionBoundary += Math.max(0, otherBoundary - boundary);</span>
               }
             }
-<span class="nc" id="L278">          }</span>
+          }
 <span class="nc" id="L279">          return boundary + correctionBoundary;</span>
         } else {
 <span class="nc" id="L281">          return boundary;</span>
@@ -283,7 +283,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
       }
     } else {
 <span class="nc" id="L285">      throw new IOException(&quot;can't compute boundary for segmentRegistration &quot;</span>
-          + segmentRegistration);
+<span class="nc" id="L286">          + segmentRegistration);</span>
     }
   }
 
@@ -306,7 +306,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
       }
     } else {
 <span class="nc" id="L308">      throw new IOException(&quot;can't compute boundary for segmentRegistration &quot;</span>
-          + segmentRegistration);
+<span class="nc" id="L309">          + segmentRegistration);</span>
     }
   }
 
@@ -329,7 +329,7 @@ public class MtasDataLongFull extends MtasDataFull&lt;Long, Double&gt; {
       }
     } else {
 <span class="nc" id="L331">      throw new IOException(</span>
-          &quot;not available for segmentRegistration &quot; + segmentRegistration);
+<span class="nc" id="L332">          &quot;not available for segmentRegistration &quot; + segmentRegistration);</span>
     }
   }
 

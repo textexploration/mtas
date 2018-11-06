@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasSimpleParserWordQuery.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.parser.simple.util</a> &gt; <span class="el_source">MtasSimpleParserWordQuery.java</span></div><h1>MtasSimpleParserWordQuery.java</h1><pre class="source lang-java linenums">package mtas.parser.simple.util;
+
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import mtas.analysis.token.MtasToken;
+import mtas.parser.simple.ParseException;
+import mtas.search.spans.MtasSpanPrefixQuery;
+import mtas.search.spans.MtasSpanRegexpQuery;
+import mtas.search.spans.util.MtasSpanQuery;
+
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.spans.SpanWeight;
+
+/**
+ * The Class MtasSimpleParserWordQuery.
+ */
+public class MtasSimpleParserWordQuery extends MtasSpanQuery {
+
+  /** The query. */
+  MtasSpanQuery query;
+
+  /** The term. */
+  Term term;
+  
+<span class="nc" id="L29">  final Pattern patternWord = Pattern.compile(&quot;^([^:]+):(.*)$&quot;);</span>
+
+  public MtasSimpleParserWordQuery(String field, String prefix) {
+<span class="nc" id="L32">    super(1, 1);</span>
+<span class="nc" id="L33">    term = new Term(field, prefix + MtasToken.DELIMITER);</span>
+<span class="nc" id="L34">    query = new MtasSpanPrefixQuery(term, true);</span>
+<span class="nc" id="L35">  }</span>
+
+  public MtasSimpleParserWordQuery(String field, String prefix, String value)
+      throws ParseException {
+<span class="nc" id="L39">    super(1, 1);</span>
+<span class="nc" id="L40">    Matcher m = patternWord.matcher(value);</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">    if (m.find()) {</span>
+<span class="nc" id="L42">      String termBase = m.group(1) + MtasToken.DELIMITER + m.group(2);</span>
+<span class="nc" id="L43">      term = new Term(field, termBase + &quot;\u0000*&quot;);</span>
+<span class="nc" id="L44">      query = new MtasSpanRegexpQuery(term, true);</span>
+<span class="nc" id="L45">    } else {</span>
+<span class="nc" id="L46">      String termBase = prefix + MtasToken.DELIMITER + value;</span>
+<span class="nc" id="L47">      term = new Term(field, termBase + &quot;\u0000*&quot;);</span>
+<span class="nc" id="L48">      query = new MtasSpanRegexpQuery(term, true);</span>
+    }  
+<span class="nc" id="L50">  }</span>
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.apache.lucene.search.spans.SpanQuery#getField()
+   */
+  @Override
+  public String getField() {
+<span class="nc" id="L59">    return term.field();</span>
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * org.apache.lucene.search.Query#rewrite(org.apache.lucene.index.IndexReader)
+   */
+  @Override
+  public MtasSpanQuery rewrite(IndexReader reader) throws IOException {
+<span class="nc" id="L70">    return query.rewrite(reader);</span>
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * org.apache.lucene.search.spans.SpanQuery#createWeight(org.apache.lucene.
+   * search.IndexSearcher, boolean)
+   */
+  @Override
+  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
+      throws IOException {
+<span class="nc" id="L83">    return query.createWeight(searcher, needsScores, boost);</span>
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.apache.lucene.search.Query#toString(java.lang.String)
+   */
+  @Override
+  public String toString(String field) {
+<span class="nc" id="L93">    return query.toString(term.field());</span>
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.apache.lucene.search.Query#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+<span class="nc bnc" id="L103" title="All 2 branches missed.">    if (this == obj)</span>
+<span class="nc" id="L104">      return true;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">    if (obj == null)</span>
+<span class="nc" id="L106">      return false;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">    if (getClass() != obj.getClass())</span>
+<span class="nc" id="L108">      return false;</span>
+<span class="nc" id="L109">    final MtasSimpleParserWordQuery that = (MtasSimpleParserWordQuery) obj;</span>
+<span class="nc" id="L110">    return query.equals(that.query);</span>
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.apache.lucene.search.Query#hashCode()
+   */
+  @Override
+  public int hashCode() {
+<span class="nc" id="L120">    int h = this.getClass().getSimpleName().hashCode();</span>
+<span class="nc" id="L121">    h = (h * 5) ^ term.hashCode();</span>
+<span class="nc" id="L122">    h = (h * 7) ^ query.hashCode();</span>
+<span class="nc" id="L123">    return h;</span>
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see mtas.search.spans.util.MtasSpanQuery#disableTwoPhaseIterator()
+   */
+  @Override
+  public void disableTwoPhaseIterator() {
+<span class="nc" id="L133">    super.disableTwoPhaseIterator();</span>
+<span class="nc" id="L134">    query.disableTwoPhaseIterator();</span>
+<span class="nc" id="L135">  }</span>
+
+  /* (non-Javadoc)
+   * @see mtas.search.spans.util.MtasSpanQuery#isMatchAllPositionsQuery()
+   */
+  @Override
+  public boolean isMatchAllPositionsQuery() {
+<span class="nc" id="L142">    return false;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

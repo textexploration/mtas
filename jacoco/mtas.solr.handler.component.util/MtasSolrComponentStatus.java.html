@@ -39,7 +39,7 @@ public class MtasSolrComponentStatus
   public static final String NAME_MTAS_STATUS_MTASHANDLER = &quot;mtasHandler&quot;;
 
   public static final String NAME_MTAS_STATUS_NUMBEROFSEGMENTS = &quot;numberOfSegments&quot;;
-  public static final String NAME_MTAS_STATUS_NUMBEROFDOCUMENTS = &quot;numberOfDocuments&quot;;
+<span class="fc" id="L42">  public static final String NAME_MTAS_STATUS_NUMBEROFDOCUMENTS = &quot;numberOfDocuments&quot;;</span>
 
   /**
    * Instantiates a new mtas solr component status.
@@ -67,15 +67,15 @@ public class MtasSolrComponentStatus
 <span class="fc" id="L67">        .get(PARAM_MTAS_STATUS + &quot;.&quot; + NAME_MTAS_STATUS_KEY, null);</span>
 <span class="fc" id="L68">    boolean getHandler = rb.req.getParams()</span>
 <span class="fc" id="L69">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
-            + NAME_MTAS_STATUS_MTASHANDLER, false);
+<span class="fc" id="L70">            + NAME_MTAS_STATUS_MTASHANDLER, false);</span>
 <span class="fc" id="L71">    boolean getNumberOfDocuments = rb.req.getParams()</span>
 <span class="fc" id="L72">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
-            + NAME_MTAS_STATUS_NUMBEROFDOCUMENTS, false);
+<span class="fc" id="L73">            + NAME_MTAS_STATUS_NUMBEROFDOCUMENTS, false);</span>
 <span class="fc" id="L74">    boolean getNumberOfSegments = rb.req.getParams()</span>
 <span class="fc" id="L75">        .getBool(MtasSolrComponentStatus.PARAM_MTAS_STATUS + &quot;.&quot;</span>
-            + NAME_MTAS_STATUS_NUMBEROFSEGMENTS, false);
+<span class="fc" id="L76">            + NAME_MTAS_STATUS_NUMBEROFSEGMENTS, false);</span>
 <span class="fc" id="L77">    mtasFields.status = new ComponentStatus(rb.req.getCore().getName(), key,</span>
-        getHandler, getNumberOfDocuments, getNumberOfSegments);
+<span class="fc" id="L78">        getHandler, getNumberOfDocuments, getNumberOfSegments);</span>
 <span class="fc" id="L79">    mtasFields.status.numberOfDocuments = rb.req.getSearcher().getRawReader()</span>
 <span class="fc" id="L80">        .numDocs();</span>
 <span class="fc" id="L81">    mtasFields.status.numberOfSegments = rb.req.getSearcher().getRawReader()</span>
@@ -98,11 +98,11 @@ public class MtasSolrComponentStatus
     }
 <span class="fc bfc" id="L99" title="All 2 branches covered.">    if (status.getNumberOfDocuments) {</span>
 <span class="fc" id="L100">      mtasStatusResponse.add(NAME_MTAS_STATUS_NUMBEROFDOCUMENTS,</span>
-          status.numberOfDocuments);
+<span class="fc" id="L101">          status.numberOfDocuments);</span>
     }
 <span class="fc bfc" id="L103" title="All 2 branches covered.">    if (status.getNumberOfSegments) {</span>
 <span class="fc" id="L104">      mtasStatusResponse.add(NAME_MTAS_STATUS_NUMBEROFSEGMENTS,</span>
-          status.numberOfSegments);
+<span class="fc" id="L105">          status.numberOfSegments);</span>
     }
 <span class="fc bfc" id="L107" title="All 2 branches covered.">    if(mtasStatusResponse.size()&gt;0) {</span>
 <span class="fc" id="L108">      mtasStatusResponse.add(ShardInformation.NAME_NAME, status.name);</span>

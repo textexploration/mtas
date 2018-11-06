@@ -65,9 +65,9 @@ import mtas.search.spans.util.MtasSpans;
    * @param ignoreSpans the ignore spans
    * @param maximumIgnoreLength the maximum ignore length
    */
-  public MtasSpanRecurrenceSpans(MtasSpanRecurrenceQuery query, Spans spans,
+<span class="fc" id="L68">  public MtasSpanRecurrenceSpans(MtasSpanRecurrenceQuery query, Spans spans,</span>
       int minimumRecurrence, int maximumRecurrence, Spans ignoreSpans,
-<span class="fc" id="L70">      Integer maximumIgnoreLength) {</span>
+      Integer maximumIgnoreLength) {
 <span class="pc bpc" id="L71" title="2 of 4 branches missed.">    assert minimumRecurrence &lt;= maximumRecurrence : &quot;minimumRecurrence &gt; maximumRecurrence&quot;;</span>
 <span class="pc bpc" id="L72" title="2 of 4 branches missed.">    assert minimumRecurrence &gt; 0 : &quot;minimumRecurrence &lt; 1 not supported&quot;;</span>
 <span class="fc" id="L73">    this.query = query;</span>
@@ -273,21 +273,21 @@ import mtas.search.spans.util.MtasSpans;
 <span class="nc" id="L273">          Match additionalMatch = queueSpans.remove(0);</span>
 <span class="nc" id="L274">          matches.add(additionalMatch);</span>
 <span class="nc" id="L275">          matches.addAll(expandWithIgnoreItem(spans.docID(), additionalMatch));</span>
-<span class="nc" id="L276">        }</span>
+        }
         // construct all matches for this startPosition
 <span class="fc bfc" id="L278" title="All 2 branches covered.">        for (Match match : matches) {</span>
 <span class="fc bfc" id="L279" title="All 2 branches covered.">          for (int n = (minimumRecurrence - 1); n &lt;= (maximumRecurrence</span>
 <span class="fc" id="L280">              - 1); n++) {</span>
 <span class="fc" id="L281">            findMatches(match, n);</span>
           }
-<span class="fc" id="L283">        }</span>
+        }
         // check for something in queue of matches
 <span class="fc bfc" id="L285" title="All 2 branches covered.">        if (!queueMatches.isEmpty()) {</span>
 <span class="fc" id="L286">          ignoreItem.removeBefore(spans.docID(),</span>
 <span class="fc" id="L287">              queueMatches.get(0).startPosition());</span>
 <span class="fc" id="L288">          return true;</span>
         }
-<span class="fc" id="L290">      }</span>
+      }
     }
   }
 
@@ -308,10 +308,10 @@ import mtas.search.spans.util.MtasSpans;
         Match span;
 <span class="fc bfc" id="L309" title="All 2 branches covered.">        for (int i = 0; i &lt; queueSpans.size(); i++) {</span>
 <span class="fc" id="L310">          span = queueSpans.get(i);</span>
-<span class="pc bpc" id="L311" title="1 of 4 branches missed.">          if (match.endPosition() == span.startPosition()</span>
-<span class="nc bnc" id="L312" title="All 2 branches missed.">              || (list != null &amp;&amp; list.contains(span.startPosition()))) {</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">          if (match.endPosition() == span.startPosition()</span>
+<span class="pc bpc" id="L312" title="3 of 4 branches missed.">              || (list != null &amp;&amp; list.contains(span.startPosition()))) {</span>
 <span class="fc" id="L313">            findMatches(new Match(match.startPosition(), span.endPosition()),</span>
-                (n - 1));
+<span class="fc" id="L314">                (n - 1));</span>
 <span class="fc" id="L315">            largestMatchingEndPosition = Math.max(largestMatchingEndPosition,</span>
 <span class="fc" id="L316">                span.endPosition());</span>
           }
@@ -321,19 +321,19 @@ import mtas.search.spans.util.MtasSpans;
 <span class="fc bfc" id="L321" title="All 4 branches covered.">      while (!lastSpan &amp;&amp; (largestMatchingEndPosition &gt;= lastStartPosition)) {</span>
 <span class="fc bfc" id="L322" title="All 2 branches covered.">        if (spans.nextStartPosition() == NO_MORE_POSITIONS) {</span>
 <span class="fc" id="L323">          lastSpan = true;</span>
-        } else {
+<span class="fc" id="L324">        } else {</span>
 <span class="fc" id="L325">          Match span = new Match(spans.startPosition(), spans.endPosition());</span>
 <span class="fc" id="L326">          queueSpans.add(span);</span>
 <span class="fc" id="L327">          lastStartPosition = spans.startPosition();</span>
           // check if this provides new match
-<span class="pc bpc" id="L329" title="2 of 4 branches missed.">          if (match.endPosition() == span.startPosition()</span>
-<span class="nc bnc" id="L330" title="All 2 branches missed.">              || (list != null &amp;&amp; list.contains(span.startPosition()))) {</span>
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">          if (match.endPosition() == span.startPosition()</span>
+<span class="pc bpc" id="L330" title="3 of 4 branches missed.">              || (list != null &amp;&amp; list.contains(span.startPosition()))) {</span>
 <span class="nc" id="L331">            findMatches(new Match(match.startPosition(), span.endPosition()),</span>
-                (n - 1));
+<span class="nc" id="L332">                (n - 1));</span>
 <span class="nc" id="L333">            largestMatchingEndPosition = Math.max(largestMatchingEndPosition,</span>
 <span class="nc" id="L334">                span.endPosition());</span>
           }
-<span class="fc" id="L336">        }</span>
+        }
       }
 <span class="fc" id="L338">    } else {</span>
       // only unique spans
@@ -358,11 +358,11 @@ import mtas.search.spans.util.MtasSpans;
 <span class="nc bnc" id="L358" title="All 2 branches missed.">      if (ignoreList != null) {</span>
 <span class="nc bnc" id="L359" title="All 2 branches missed.">        for (Integer endPosition : ignoreList) {</span>
 <span class="nc" id="L360">          list.add(new Match(match.startPosition, endPosition));</span>
-<span class="nc" id="L361">        }</span>
+        }
       }
 <span class="nc" id="L363">    } catch (IOException e) {</span>
 <span class="nc" id="L364">      log.debug(e);</span>
-<span class="nc" id="L365">    }</span>
+    }
 <span class="nc" id="L366">    return list;</span>
   }
 
@@ -420,8 +420,8 @@ import mtas.search.spans.util.MtasSpans;
 <span class="pc bpc" id="L420" title="1 of 2 branches missed.">      if (getClass() != obj.getClass())</span>
 <span class="nc" id="L421">        return false;</span>
 <span class="fc" id="L422">      final Match that = (Match) obj;</span>
-<span class="pc bpc" id="L423" title="2 of 4 branches missed.">      return startPosition == that.startPosition</span>
-          &amp;&amp; endPosition == that.endPosition;
+<span class="pc bpc" id="L423" title="1 of 2 branches missed.">      return startPosition == that.startPosition</span>
+<span class="pc bpc" id="L424" title="1 of 2 branches missed.">          &amp;&amp; endPosition == that.endPosition;</span>
     }
 
     /*

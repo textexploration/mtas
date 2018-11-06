@@ -108,7 +108,7 @@ import mtas.search.spans.util.MtasSpanQuery;
 <span class="nc bnc" id="L108" title="All 4 branches missed.">    if ((minimumOccurence &gt; 1) || (minimumOccurence != maximumOccurence)) {</span>
 <span class="nc bnc" id="L109" title="All 2 branches missed.">      if (minimumOccurence != maximumOccurence) {</span>
 <span class="nc" id="L110">        text += &quot; {&quot; + minimumOccurence + &quot;,&quot; + maximumOccurence + &quot;}&quot;;</span>
-      } else {
+<span class="nc" id="L111">      } else {</span>
 <span class="nc" id="L112">        text += &quot; {&quot; + minimumOccurence + &quot;}&quot;;</span>
       }
     }
@@ -117,7 +117,7 @@ import mtas.search.spans.util.MtasSpanQuery;
 <span class="nc" id="L117">          + getQuery().toString(getQuery().getField());</span>
 <span class="nc" id="L118">    } catch (ParseException e) {</span>
 <span class="nc" id="L119">      text += &quot;\n&quot; + indent + &quot;- Query: &quot; + e.getMessage();</span>
-<span class="nc" id="L120">    }</span>
+    }
 <span class="nc" id="L121">    text += &quot;\n&quot;;</span>
 <span class="nc" id="L122">    return text;</span>
   }

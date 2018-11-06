@@ -111,7 +111,7 @@ public abstract class MtasToken {
 <span class="nc" id="L111">    setType();</span>
 <span class="nc bnc" id="L112" title="All 2 branches missed.">    if (postfix != null) {</span>
 <span class="nc" id="L113">      setValue(prefix + DELIMITER + postfix);</span>
-    } else {
+<span class="nc" id="L114">    } else {</span>
 <span class="nc" id="L115">      setValue(prefix + DELIMITER);</span>
     }
 <span class="nc" id="L117">  }</span>
@@ -279,7 +279,7 @@ public abstract class MtasToken {
   final public void addPosition(int position) {
 <span class="pc bpc" id="L280" title="1 of 2 branches missed.">    if (tokenPosition == null) {</span>
 <span class="fc" id="L281">      tokenPosition = new MtasPosition(position);</span>
-    } else {
+<span class="fc" id="L282">    } else {</span>
 <span class="nc" id="L283">      tokenPosition.add(position);</span>
     }
 <span class="fc" id="L285">  }</span>
@@ -293,7 +293,7 @@ public abstract class MtasToken {
   final public void addPositionRange(int start, int end) {
 <span class="pc bpc" id="L294" title="1 of 2 branches missed.">    if (tokenPosition == null) {</span>
 <span class="fc" id="L295">      tokenPosition = new MtasPosition(start, end);</span>
-    } else {
+<span class="fc" id="L296">    } else {</span>
 <span class="nc" id="L297">      int[] positions = new int[end - start + 1];</span>
 <span class="nc bnc" id="L298" title="All 2 branches missed.">      for (int i = start; i &lt;= end; i++) {</span>
 <span class="nc" id="L299">        positions[i - start] = i;</span>
@@ -311,7 +311,7 @@ public abstract class MtasToken {
 <span class="pc bpc" id="L311" title="2 of 4 branches missed.">    if (positions != null &amp;&amp; positions.length &gt; 0) {</span>
 <span class="fc bfc" id="L312" title="All 2 branches covered.">      if (tokenPosition == null) {</span>
 <span class="fc" id="L313">        tokenPosition = new MtasPosition(positions);</span>
-      } else {
+<span class="fc" id="L314">      } else {</span>
 <span class="fc" id="L315">        tokenPosition.add(positions);</span>
       }
     }
@@ -463,7 +463,7 @@ public abstract class MtasToken {
       // do nothing
 <span class="pc bpc" id="L464" title="1 of 2 branches missed.">    } else if (start &gt; end) {</span>
 <span class="nc" id="L465">      throw new IllegalArgumentException(</span>
-          &quot;Start real offset after end real offset&quot;);
+<span class="nc" id="L466">          &quot;Start real offset after end real offset&quot;);</span>
     } else {
 <span class="fc" id="L468">      tokenRealOffset = new MtasOffset(start, end);</span>
     }
@@ -596,7 +596,7 @@ public abstract class MtasToken {
         } else {
 <span class="fc" id="L597">          i++;</span>
         }
-<span class="nc bnc" id="L599" title="All 2 branches missed.">      } else if ((term.bytes[i] &amp; 0b11100000) == 0b11000000) {</span>
+<span class="pc bnc" id="L599" title="All 2 branches missed.">      } else if ((term.bytes[i] &amp; 0b11100000) == 0b11000000) {</span>
 <span class="nc" id="L600">        i += 2;</span>
 <span class="nc bnc" id="L601" title="All 2 branches missed.">      } else if ((term.bytes[i] &amp; 0b11110000) == 0b11100000) {</span>
 <span class="nc" id="L602">        i += 3;</span>
@@ -606,7 +606,7 @@ public abstract class MtasToken {
 <span class="nc" id="L606">        i += 5;</span>
 <span class="nc bnc" id="L607" title="All 2 branches missed.">      } else if ((term.bytes[i] &amp; 0b11111110) == 0b11111100) {</span>
 <span class="nc" id="L608">        i += 6;</span>
-      } else {
+<span class="nc" id="L609">      } else {</span>
 <span class="nc" id="L610">        return &quot;&quot;;</span>
       }
     }
@@ -618,7 +618,7 @@ public abstract class MtasToken {
         }
 <span class="fc" id="L619">        postfix[i] = term.bytes[i];</span>
 <span class="fc" id="L620">        i++;</span>
-<span class="nc bnc" id="L621" title="All 2 branches missed.">      } else if ((term.bytes[i] &amp; 0b11100000) == 0b11000000) {</span>
+<span class="pc bnc" id="L621" title="All 2 branches missed.">      } else if ((term.bytes[i] &amp; 0b11100000) == 0b11000000) {</span>
 <span class="nc" id="L622">        postfix[i] = term.bytes[i];</span>
 <span class="nc" id="L623">        postfix[i + 1] = term.bytes[i + 1];</span>
 <span class="nc" id="L624">        i += 2;</span>
@@ -648,12 +648,12 @@ public abstract class MtasToken {
 <span class="nc" id="L648">        postfix[i + 4] = term.bytes[i + 4];</span>
 <span class="nc" id="L649">        postfix[i + 5] = term.bytes[i + 5];</span>
 <span class="nc" id="L650">        i += 6;</span>
-      } else {
+<span class="nc" id="L651">      } else {</span>
 <span class="nc" id="L652">        return &quot;&quot;;</span>
       }
     }
 <span class="fc" id="L655">    return new String(Arrays.copyOfRange(postfix, start, i),</span>
-        StandardCharsets.UTF_8);
+<span class="fc" id="L656">        StandardCharsets.UTF_8);</span>
   }
 
   /**
@@ -742,12 +742,12 @@ public abstract class MtasToken {
 <span class="fc bfc" id="L742" title="All 2 branches covered.">      for (String item : valueList) {</span>
 <span class="fc bfc" id="L743" title="All 2 branches covered.">        if (filter) {</span>
 <span class="fc" id="L744">          item = item.replaceAll(&quot;([\\\&quot;\\)\\(\\&lt;\\&gt;\\.\\@\\#\\]\\[\\{\\}])&quot;,</span>
-              &quot;\\\\$1&quot;);
+<span class="fc" id="L745">              &quot;\\\\$1&quot;);</span>
         }
 <span class="fc" id="L747">        automatonMap.put(item,</span>
-            new RegExp(prefix + MtasToken.DELIMITER + item + &quot;\u0000*&quot;)
+<span class="fc" id="L748">            new RegExp(prefix + MtasToken.DELIMITER + item + &quot;\u0000*&quot;)</span>
 <span class="fc" id="L749">                .toAutomaton());</span>
-<span class="fc" id="L750">      }</span>
+      }
     }
 <span class="fc" id="L752">    return automatonMap;</span>
   }
@@ -765,7 +765,7 @@ public abstract class MtasToken {
 <span class="nc bnc" id="L765" title="All 2 branches missed.">      for (Entry&lt;String, Automaton&gt; entry : automatonMap.entrySet()) {</span>
 <span class="nc" id="L766">        byteRunAutomatonMap.put(entry.getKey(),</span>
 <span class="nc" id="L767">            new ByteRunAutomaton(entry.getValue()));</span>
-<span class="nc" id="L768">      }</span>
+      }
     }
 <span class="nc" id="L770">    return byteRunAutomatonMap;</span>
   }
@@ -804,21 +804,21 @@ public abstract class MtasToken {
         Automaton automaton;
 <span class="fc bfc" id="L805" title="All 2 branches covered.">        if (automatonRegexp != null) {</span>
 <span class="fc" id="L806">          automaton = Operations.intersection(automatonList, automatonRegexp);</span>
-        } else {
+<span class="fc" id="L807">        } else {</span>
 <span class="fc" id="L808">          automaton = automatonList;</span>
         }
         try {
 <span class="fc" id="L811">          compiledAutomaton = new CompiledAutomaton(automaton);</span>
-<span class="nc" id="L812">        } catch (TooComplexToDeterminizeException e) {</span>
+<span class="pc" id="L812">        } catch (TooComplexToDeterminizeException e) {</span>
 <span class="nc" id="L813">          log.debug(e);</span>
 <span class="nc" id="L814">          success = false;</span>
 <span class="nc bnc" id="L815" title="All 2 branches missed.">          if (localStep &gt; 1) {</span>
 <span class="nc" id="L816">            localStep /= 2;</span>
-          } else {
+<span class="nc" id="L817">          } else {</span>
 <span class="nc" id="L818">            throw new IOException(&quot;TooComplexToDeterminizeException&quot;);</span>
           }
-<span class="fc" id="L820">        }</span>
-<span class="fc" id="L821">      }</span>
+        }
+      }
 <span class="fc" id="L822">      list.add(compiledAutomaton);</span>
     }
 <span class="fc" id="L824">    return list;</span>
@@ -849,7 +849,7 @@ public abstract class MtasToken {
 <span class="nc bnc" id="L849" title="All 2 branches missed.">        + getPositionEnd() - getPositionStart()))) {</span>
 <span class="nc" id="L850">      text += String.format(&quot;%11s&quot;,</span>
 <span class="nc" id="L851">          &quot;[&quot; + getPositionStart() + &quot;-&quot; + getPositionEnd() + &quot;]&quot;);</span>
-    } else {
+<span class="nc" id="L852">    } else {</span>
 <span class="nc" id="L853">      text += String.format(&quot;%11s&quot;, Arrays.toString(getPositions()));</span>
     }
 <span class="nc bnc" id="L855" title="All 2 branches missed.">    text += ((getParentId() == null) ? &quot;[-----]&quot;</span>
@@ -857,12 +857,12 @@ public abstract class MtasToken {
 <span class="nc bnc" id="L857" title="All 2 branches missed.">    text += (provideParentId ? &quot;  &quot; : &quot;* &quot;);</span>
 <span class="nc" id="L858">    BytesRef payload = getPayload();</span>
 <span class="nc bnc" id="L859" title="All 2 branches missed.">    text += (payload == null) ? &quot;[------] &quot;</span>
-        : &quot;[&quot;
-            + String
+<span class="nc" id="L860">        : &quot;[&quot;</span>
+<span class="nc" id="L861">            + String</span>
 <span class="nc" id="L862">                .format(&quot;%.4f&quot;,</span>
 <span class="nc" id="L863">                    PayloadHelper.decodeFloat(Arrays.copyOfRange(payload.bytes,</span>
-                        payload.offset, (payload.offset + payload.length))))
-            + &quot;] &quot;;
+<span class="nc" id="L864">                        payload.offset, (payload.offset + payload.length))))</span>
+<span class="nc" id="L865">            + &quot;] &quot;;</span>
 <span class="nc" id="L866">    text += String.format(&quot;%25s&quot;, &quot;[&quot; + getPrefix() + &quot;]&quot;) + &quot; &quot;;</span>
 <span class="nc bnc" id="L867" title="All 2 branches missed.">    text += ((getPostfix() == null) ? &quot;---&quot; : &quot;[&quot; + getPostfix() + &quot;]&quot;) + &quot; &quot;;</span>
 <span class="nc" id="L868">    return text;</span>

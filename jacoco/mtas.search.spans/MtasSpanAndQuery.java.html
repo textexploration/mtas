@@ -37,14 +37,14 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
 <span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (item.getMinimumWidth() != null) {</span>
 <span class="fc bfc" id="L38" title="All 2 branches covered.">          if (minimum != null) {</span>
 <span class="fc" id="L39">            minimum = Math.max(minimum, item.getMinimumWidth());</span>
-          } else {
+<span class="fc" id="L40">          } else {</span>
 <span class="fc" id="L41">            minimum = item.getMinimumWidth();</span>
           }
         }
 <span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (item.getMaximumWidth() != null) {</span>
 <span class="fc bfc" id="L45" title="All 2 branches covered.">          if (maximum != null) {</span>
 <span class="fc" id="L46">            maximum = Math.max(maximum, item.getMaximumWidth());</span>
-          } else {
+<span class="fc" id="L47">          } else {</span>
 <span class="fc" id="L48">            maximum = item.getMaximumWidth();</span>
           }
         }
@@ -119,8 +119,8 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
 <span class="nc" id="L119">        MtasSpanQuery[] newFilteredClauses = new MtasSpanQuery[newNumber];</span>
 <span class="nc" id="L120">        int j = 0;</span>
 <span class="nc bnc" id="L121" title="All 2 branches missed.">        for (int i = 0; i &lt; newClauses.length; i++) {</span>
-<span class="nc bnc" id="L122" title="All 4 branches missed.">          if (!(newClauses[i].isSinglePositionQuery()</span>
-              &amp;&amp; (newClauses[i] instanceof MtasSpanMatchAllQuery))) {
+<span class="nc bnc" id="L122" title="All 2 branches missed.">          if (!(newClauses[i].isSinglePositionQuery()</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">              &amp;&amp; (newClauses[i] instanceof MtasSpanMatchAllQuery))) {</span>
 <span class="nc" id="L124">            newFilteredClauses[j] = newClauses[i];</span>
 <span class="nc" id="L125">            j++;</span>
 <span class="nc bnc" id="L126" title="All 2 branches missed.">          } else if (matchAllSinglePositionQueries == singlePositionQueries) {</span>
@@ -197,7 +197,7 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
 <span class="nc" id="L197">    super.disableTwoPhaseIterator();</span>
 <span class="nc bnc" id="L198" title="All 2 branches missed.">    for (MtasSpanQuery item : clauses) {</span>
 <span class="nc" id="L199">      item.disableTwoPhaseIterator();</span>
-<span class="nc" id="L200">    }</span>
+    }
 <span class="nc" id="L201">  }</span>
   
   @Override

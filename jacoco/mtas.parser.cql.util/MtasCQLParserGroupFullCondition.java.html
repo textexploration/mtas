@@ -32,8 +32,8 @@ public class MtasCQLParserGroupFullCondition
    * @param condition the condition
    * @param type the type
    */
-  public MtasCQLParserGroupFullCondition(MtasCQLParserGroupCondition condition,
-<span class="fc" id="L36">      String type) {</span>
+<span class="fc" id="L35">  public MtasCQLParserGroupFullCondition(MtasCQLParserGroupCondition condition,</span>
+      String type) {
 <span class="fc" id="L37">    minimumOccurence = 1;</span>
 <span class="fc" id="L38">    maximumOccurence = 1;</span>
 <span class="fc" id="L39">    optional = false;</span>
@@ -43,7 +43,7 @@ public class MtasCQLParserGroupFullCondition
 <span class="fc" id="L43">      this.type = GROUP_START;</span>
 <span class="fc bfc" id="L44" title="All 2 branches covered.">    } else if (type.equals(GROUP_END)) {</span>
 <span class="fc" id="L45">      this.type = GROUP_END;</span>
-    } else {
+<span class="fc" id="L46">    } else {</span>
 <span class="fc" id="L47">      this.type = GROUP_FULL;</span>
     }
 <span class="fc" id="L49">  }</span>

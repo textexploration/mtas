@@ -30,7 +30,7 @@ public class MtasDataItemDoubleBasic extends MtasDataItemBasic&lt;Double, Double
       String sortDirection, int errorNumber, Map&lt;String, Integer&gt; errorList,
       int sourceNumber) {
 <span class="nc" id="L32">    super(valueSum, valueN, sub, statsItems, sortType, sortDirection,</span>
-        errorNumber, errorList, new MtasDataDoubleOperations(), sourceNumber);
+<span class="nc" id="L33">        errorNumber, errorList, new MtasDataDoubleOperations(), sourceNumber);</span>
 <span class="nc" id="L34">  }</span>
 
   /*
@@ -58,7 +58,7 @@ public class MtasDataItemDoubleBasic extends MtasDataItemBasic&lt;Double, Double
    */
   @Override
   public MtasDataItemNumberComparator&lt;Double&gt; getCompareValue1() {
-<span class="nc bnc" id="L61" title="All 6 branches missed.">    switch (sortType) {</span>
+<span class="nc bnc" id="L61" title="All 4 branches missed.">    switch (sortType) {</span>
     case CodecUtil.STATS_TYPE_SUM:
 <span class="nc" id="L63">      return new MtasDataItemNumberComparator&lt;Double&gt;(valueSum, sortDirection);</span>
     default:
@@ -72,10 +72,10 @@ public class MtasDataItemDoubleBasic extends MtasDataItemBasic&lt;Double, Double
    * @see mtas.codec.util.collector.MtasDataItem#getCompareValue2()
    */
   public MtasDataItemNumberComparator&lt;Double&gt; getCompareValue2() {
-<span class="nc bnc" id="L75" title="All 6 branches missed.">    switch (sortType) {</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">    switch (sortType) {</span>
     case CodecUtil.STATS_TYPE_MEAN:
 <span class="nc" id="L77">      return new MtasDataItemNumberComparator&lt;Double&gt;(getValue(sortType),</span>
-          sortDirection);
+<span class="nc" id="L78">          sortDirection);</span>
     default:
 <span class="nc" id="L80">      return null;</span>
     }
@@ -88,7 +88,7 @@ public class MtasDataItemDoubleBasic extends MtasDataItemBasic&lt;Double, Double
    */
   public String toString() {
 <span class="nc" id="L90">    return this.getClass().getSimpleName() + &quot;[&quot; + valueSum + &quot;,&quot; + valueN</span>
-        + &quot;]&quot;;
+<span class="nc" id="L91">        + &quot;]&quot;;</span>
   }
 
   /*

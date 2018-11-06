@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasSimpleQParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.solr.search</a> &gt; <span class="el_source">MtasSimpleQParser.java</span></div><h1>MtasSimpleQParser.java</h1><pre class="source lang-java linenums">package mtas.solr.search;
+
+import java.io.BufferedReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import mtas.parser.simple.MtasSimpleParser;
+import mtas.search.spans.MtasSpanOrQuery;
+import mtas.search.spans.util.MtasSpanQuery;
+
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
+import org.apache.solr.common.params.SolrParams;
+import org.apache.solr.request.SolrQueryRequest;
+import org.apache.solr.search.QParser;
+import org.apache.solr.search.SyntaxError;
+
+/**
+ * The Class MtasSimpleQParser.
+ */
+public class MtasSimpleQParser extends QParser {
+
+  /** The Constant MTAS_SIMPLE_QPARSER_FIELD. */
+  public static final String MTAS_SIMPLE_QPARSER_FIELD = &quot;field&quot;;
+
+  /** The Constant MTAS_SIMPLE_QPARSER_QUERY. */
+  public static final String MTAS_SIMPLE_QPARSER_QUERY = &quot;query&quot;;
+
+  /** The Constant MTAS_SIMPLE_QPARSER_IGNORE. */
+  public static final String MTAS_SIMPLE_QPARSER_IGNORE = &quot;ignore&quot;;
+
+  /** The Constant MTAS_SIMPLE_QPARSER_MAXIMUM_IGNORE_LENGTH. */
+  public static final String MTAS_SIMPLE_QPARSER_MAXIMUM_IGNORE_LENGTH = &quot;maximumIgnoreLength&quot;;
+
+  /** The Constant MTAS_SIMPLE_QPARSER_PREFIX. */
+  public static final String MTAS_SIMPLE_QPARSER_PREFIX = &quot;prefix&quot;;
+
+  /** The field. */
+<span class="nc" id="L44">  String field = null;</span>
+
+  /** The query. */
+<span class="nc" id="L47">  String simpleQuery = null;</span>
+
+  /** The ignore query. */
+<span class="nc" id="L50">  String ignoreQuery = null;</span>
+
+  /** The maximum ignore length. */
+<span class="nc" id="L53">  Integer maximumIgnoreLength = null;</span>
+
+  /** The default prefix. */
+<span class="nc" id="L56">  String defaultPrefix = null;</span>
+
+  /**
+   * Instantiates a new mtas SimpleQ parser.
+   *
+   * @param qstr the qstr
+   * @param localParams the local params
+   * @param params the params
+   * @param req the req
+   */
+  public MtasSimpleQParser(String qstr, SolrParams localParams, SolrParams params,
+      SolrQueryRequest req) {
+<span class="nc" id="L68">    super(qstr, localParams, params, req);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">    if ((localParams.getParams(MTAS_SIMPLE_QPARSER_FIELD) != null)</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        &amp;&amp; (localParams.getParams(MTAS_SIMPLE_QPARSER_FIELD).length == 1)) {</span>
+<span class="nc" id="L71">      field = localParams.getParams(MTAS_SIMPLE_QPARSER_FIELD)[0];</span>
+    }
+<span class="nc bnc" id="L73" title="All 2 branches missed.">    if ((localParams.getParams(MTAS_SIMPLE_QPARSER_QUERY) != null)</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        &amp;&amp; (localParams.getParams(MTAS_SIMPLE_QPARSER_QUERY).length == 1)) {</span>
+<span class="nc" id="L75">      simpleQuery = localParams.getParams(MTAS_SIMPLE_QPARSER_QUERY)[0];</span>
+    }
+<span class="nc bnc" id="L77" title="All 2 branches missed.">    if ((localParams.getParams(MTAS_SIMPLE_QPARSER_IGNORE) != null)</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        &amp;&amp; (localParams.getParams(MTAS_SIMPLE_QPARSER_IGNORE).length == 1)) {</span>
+<span class="nc" id="L79">      ignoreQuery = localParams.getParams(MTAS_SIMPLE_QPARSER_IGNORE)[0];</span>
+    }
+<span class="nc bnc" id="L81" title="All 2 branches missed.">    if ((localParams.getParams(MTAS_SIMPLE_QPARSER_MAXIMUM_IGNORE_LENGTH) != null)</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        &amp;&amp; (localParams</span>
+<span class="nc" id="L83">            .getParams(MTAS_SIMPLE_QPARSER_MAXIMUM_IGNORE_LENGTH).length == 1)) {</span>
+      try {
+<span class="nc" id="L85">        maximumIgnoreLength = Integer.parseInt(</span>
+<span class="nc" id="L86">            localParams.getParams(MTAS_SIMPLE_QPARSER_MAXIMUM_IGNORE_LENGTH)[0]);</span>
+<span class="nc" id="L87">      } catch (NumberFormatException e) {</span>
+<span class="nc" id="L88">        maximumIgnoreLength = null;</span>
+      }
+    }
+<span class="nc bnc" id="L91" title="All 2 branches missed.">    if ((localParams.getParams(MTAS_SIMPLE_QPARSER_PREFIX) != null)</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        &amp;&amp; (localParams.getParams(MTAS_SIMPLE_QPARSER_PREFIX).length == 1)) {</span>
+<span class="nc" id="L93">      defaultPrefix = localParams.getParams(MTAS_SIMPLE_QPARSER_PREFIX)[0];</span>
+    } 
+<span class="nc" id="L95">  }</span>
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.apache.solr.search.QParser#parse()
+   */
+  @Override
+  public Query parse() throws SyntaxError {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">    if (field == null) {</span>
+<span class="nc" id="L105">      throw new SyntaxError(&quot;no &quot; + MTAS_SIMPLE_QPARSER_FIELD);</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">    } else if (simpleQuery == null) {</span>
+<span class="nc" id="L107">      throw new SyntaxError(&quot;no &quot; + MTAS_SIMPLE_QPARSER_QUERY);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">    } else if (defaultPrefix == null) {</span>
+<span class="nc" id="L109">      throw new SyntaxError(&quot;no &quot; + MTAS_SIMPLE_QPARSER_PREFIX);</span>
+    } else {
+<span class="nc" id="L111">      BooleanQuery q = null;</span>
+<span class="nc" id="L112">      MtasSpanQuery iq = null;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">      if (ignoreQuery != null) {</span>
+<span class="nc" id="L114">        Reader ignoreReader = new BufferedReader(new StringReader(ignoreQuery));</span>
+<span class="nc" id="L115">        MtasSimpleParser ignoreParser = new MtasSimpleParser(ignoreReader);</span>
+        try {
+<span class="nc" id="L117">          List&lt;MtasSpanQuery&gt; iql = ignoreParser.parse(field, null, null, null);</span>
+<span class="nc" id="L118">          MtasSpanQuery[] iqs = new MtasSpanQuery[iql.size()];</span>
+<span class="nc" id="L119">          iq = new MtasSpanOrQuery(iql.toArray(iqs));</span>
+<span class="nc" id="L120">        } catch (mtas.parser.simple.TokenMgrError</span>
+<span class="nc" id="L121">            | mtas.parser.simple.ParseException e) {</span>
+<span class="nc" id="L122">          throw new SyntaxError(e);</span>
+        }
+      }
+<span class="nc" id="L125">      Reader queryReader = new BufferedReader(new StringReader(simpleQuery));</span>
+<span class="nc" id="L126">      MtasSimpleParser queryParser = new MtasSimpleParser(queryReader);</span>
+      try {
+<span class="nc" id="L128">        List&lt;MtasSpanQuery&gt; ql = queryParser.parse(field, defaultPrefix, iq,</span>
+<span class="nc" id="L129">            maximumIgnoreLength);</span>
+<span class="nc" id="L130">        BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        for (Query query : ql) {</span>
+<span class="nc" id="L132">            booleanQuery.add(query, BooleanClause.Occur.MUST);</span>
+        }
+<span class="nc" id="L134">        q = booleanQuery.build();</span>
+<span class="nc" id="L135">      } catch (mtas.parser.simple.TokenMgrError</span>
+<span class="nc" id="L136">          | mtas.parser.simple.ParseException e) {</span>
+<span class="nc" id="L137">        throw new SyntaxError(e);</span>
+      }
+<span class="nc" id="L139">      return q;</span>
+    }
+  }
+
+}
+ 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

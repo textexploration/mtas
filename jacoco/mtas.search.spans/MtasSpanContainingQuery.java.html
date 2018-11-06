@@ -33,8 +33,8 @@ public class MtasSpanContainingQuery extends MtasSpanQuery {
    * @param q2 the q 2
    */
   public MtasSpanContainingQuery(MtasSpanQuery q1, MtasSpanQuery q2) {
-<span class="pc bpc" id="L36" title="2 of 4 branches missed.">    super(q1 != null ? q1.getMinimumWidth() : null,</span>
-<span class="pc" id="L37">        q1 != null ? q1.getMaximumWidth() : null);</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">    super(q1 != null ? q1.getMinimumWidth() : null,</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        q1 != null ? q1.getMaximumWidth() : null);</span>
 <span class="pc bpc" id="L38" title="2 of 4 branches missed.">    if (q2 != null &amp;&amp; q2.getMinimumWidth() != null</span>
 <span class="fc bfc" id="L39" title="All 2 branches covered.">        &amp;&amp; (this.getMinimumWidth() == null</span>
 <span class="pc bpc" id="L40" title="1 of 2 branches missed.">            || this.getMinimumWidth() &lt; q2.getMinimumWidth())) {</span>
@@ -44,18 +44,18 @@ public class MtasSpanContainingQuery extends MtasSpanQuery {
 <span class="fc" id="L44">    smallQuery = q2;</span>
 <span class="pc bpc" id="L45" title="2 of 4 branches missed.">    if (bigQuery != null &amp;&amp; bigQuery.getField() != null) {</span>
 <span class="fc" id="L46">      field = bigQuery.getField();</span>
-<span class="nc bnc" id="L47" title="All 4 branches missed.">    } else if (smallQuery != null &amp;&amp; smallQuery.getField() != null) {</span>
+<span class="pc bnc" id="L47" title="All 4 branches missed.">    } else if (smallQuery != null &amp;&amp; smallQuery.getField() != null) {</span>
 <span class="nc" id="L48">      field = smallQuery.getField();</span>
-    } else {
+<span class="nc" id="L49">    } else {</span>
 <span class="nc" id="L50">      field = null;</span>
     }
 <span class="pc bpc" id="L52" title="3 of 6 branches missed.">    if (field != null &amp;&amp; bigQuery != null &amp;&amp; smallQuery != null) {</span>
 <span class="pc bpc" id="L53" title="2 of 4 branches missed.">      if (bigQuery.getField() != null &amp;&amp; smallQuery.getField() != null) {</span>
 <span class="fc" id="L54">        baseQuery = new SpanContainingQuery(bigQuery, smallQuery);</span>
-      } else {
+<span class="fc" id="L55">      } else {</span>
 <span class="nc" id="L56">        baseQuery = null;</span>
       }
-    } else {
+<span class="nc" id="L58">    } else {</span>
 <span class="nc" id="L59">      baseQuery = null;</span>
     }
 <span class="fc" id="L61">  }</span>
@@ -110,9 +110,9 @@ public class MtasSpanContainingQuery extends MtasSpanQuery {
   public MtasSpanQuery rewrite(IndexReader reader) throws IOException {
 <span class="fc" id="L111">    MtasSpanQuery newBigQuery = bigQuery.rewrite(reader);</span>
 <span class="fc" id="L112">    MtasSpanQuery newSmallQuery = smallQuery.rewrite(reader);</span>
-<span class="pc bpc" id="L113" title="4 of 8 branches missed.">    if (newBigQuery == null || newBigQuery instanceof MtasSpanMatchNoneQuery</span>
-        || newSmallQuery == null
-        || newSmallQuery instanceof MtasSpanMatchNoneQuery) {
+<span class="pc bpc" id="L113" title="2 of 4 branches missed.">    if (newBigQuery == null || newBigQuery instanceof MtasSpanMatchNoneQuery</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        || newSmallQuery == null</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        || newSmallQuery instanceof MtasSpanMatchNoneQuery) {</span>
 <span class="nc" id="L116">      return new MtasSpanMatchNoneQuery(field);</span>
     }
 <span class="pc bpc" id="L118" title="1 of 4 branches missed.">    if (!newBigQuery.equals(bigQuery) || !newSmallQuery.equals(smallQuery)) {</span>

@@ -52,8 +52,8 @@ public class MtasCQLParserSentenceCondition {
    * @param maximumIgnoreLength the maximum ignore length
    * @throws ParseException the parse exception
    */
-  public MtasCQLParserSentenceCondition(MtasCQLParserBasicSentenceCondition s,
-<span class="fc" id="L56">      MtasSpanQuery ignore, Integer maximumIgnoreLength) throws ParseException {</span>
+<span class="fc" id="L55">  public MtasCQLParserSentenceCondition(MtasCQLParserBasicSentenceCondition s,</span>
+      MtasSpanQuery ignore, Integer maximumIgnoreLength) throws ParseException {
 <span class="fc" id="L57">    sequenceList = new ArrayList&lt;List&lt;MtasCQLParserSentenceCondition&gt;&gt;();</span>
 <span class="fc" id="L58">    basicSentence = s;</span>
 <span class="fc" id="L59">    minimumOccurence = 1;</span>
@@ -73,8 +73,8 @@ public class MtasCQLParserSentenceCondition {
    * @param maximumIgnoreLength the maximum ignore length
    * @throws ParseException the parse exception
    */
-  public MtasCQLParserSentenceCondition(MtasCQLParserSentenceCondition sp,
-<span class="fc" id="L77">      MtasSpanQuery ignore, Integer maximumIgnoreLength) throws ParseException {</span>
+<span class="fc" id="L76">  public MtasCQLParserSentenceCondition(MtasCQLParserSentenceCondition sp,</span>
+      MtasSpanQuery ignore, Integer maximumIgnoreLength) throws ParseException {
 <span class="fc" id="L78">    sequenceList = new ArrayList&lt;List&lt;MtasCQLParserSentenceCondition&gt;&gt;();</span>
 <span class="fc" id="L79">    addSentenceToEndLatestSequence(sp);</span>
 <span class="fc" id="L80">    minimumOccurence = 1;</span>
@@ -98,18 +98,18 @@ public class MtasCQLParserSentenceCondition {
 <span class="nc bnc" id="L98" title="All 2 branches missed.">      if (isBasic()) {</span>
 <span class="nc bnc" id="L99" title="All 2 branches missed.">        if (basicSentence == null) {</span>
 <span class="nc" id="L100">          basicSentence = s;</span>
-        } else {
+<span class="nc" id="L101">        } else {</span>
 <span class="nc" id="L102">          basicSentence.addBasicSentence(s);</span>
         }
-      } else {
+<span class="nc" id="L104">      } else {</span>
 <span class="nc" id="L105">        MtasCQLParserSentenceCondition sentenceCurrent = new MtasCQLParserSentenceCondition(</span>
-            s, ignore, maximumIgnoreLength);
+<span class="nc" id="L106">            s, ignore, maximumIgnoreLength);</span>
 <span class="nc bnc" id="L107" title="All 2 branches missed.">        if (sequenceList.size() == 0) {</span>
 <span class="nc" id="L108">          sequenceList.add(new ArrayList&lt;MtasCQLParserSentenceCondition&gt;());</span>
         }
 <span class="nc" id="L110">        sequenceList.get(sequenceList.size() - 1).add(sentenceCurrent);</span>
-<span class="nc" id="L111">      }</span>
-    } else {
+      }
+<span class="nc" id="L112">    } else {</span>
 <span class="nc" id="L113">      throw new ParseException(&quot;already simplified&quot;);</span>
     }
 <span class="nc" id="L115">  }</span>
@@ -228,11 +228,11 @@ public class MtasCQLParserSentenceCondition {
 <span class="nc" id="L228">          sequenceList.add(sentenceSequence);</span>
           // not simple anymore
 <span class="nc" id="L230">          basic = false;</span>
-        } else {
+<span class="nc" id="L231">        } else {</span>
           // add previous basic sentence as first option
 <span class="fc" id="L233">          sentenceSequence = new ArrayList&lt;MtasCQLParserSentenceCondition&gt;();</span>
 <span class="fc" id="L234">          sentenceCurrent = new MtasCQLParserSentenceCondition(basicSentence,</span>
-              ignore, maximumIgnoreLength);
+<span class="fc" id="L235">              ignore, maximumIgnoreLength);</span>
 <span class="fc" id="L236">          sentenceSequence.add(sentenceCurrent);</span>
 <span class="fc" id="L237">          sequenceList.add(sentenceSequence);</span>
 <span class="fc" id="L238">          basicSentence = null;</span>
@@ -242,7 +242,7 @@ public class MtasCQLParserSentenceCondition {
           // not simple anymore
 <span class="fc" id="L243">          basic = false;</span>
         }
-      } else {
+<span class="fc" id="L245">      } else {</span>
 <span class="fc" id="L246">        sentenceCurrent = s;</span>
 <span class="fc bfc" id="L247" title="All 2 branches covered.">        if (sequenceList.size() == 0) {</span>
 <span class="fc" id="L248">          sequenceList.add(new ArrayList&lt;MtasCQLParserSentenceCondition&gt;());</span>
@@ -273,7 +273,7 @@ public class MtasCQLParserSentenceCondition {
 <span class="nc" id="L273">          sequenceList.add(sentenceSequence);</span>
           // not simple anymore
 <span class="nc" id="L275">          basic = false;</span>
-        } else {
+<span class="nc" id="L276">        } else {</span>
           // add sentence as first option
 <span class="fc" id="L278">          sentenceSequence = new ArrayList&lt;MtasCQLParserSentenceCondition&gt;();</span>
 <span class="fc" id="L279">          sentenceCurrent = s;</span>
@@ -282,14 +282,14 @@ public class MtasCQLParserSentenceCondition {
           // add previous basic sentence as new option
 <span class="fc" id="L283">          sentenceSequence = new ArrayList&lt;MtasCQLParserSentenceCondition&gt;();</span>
 <span class="fc" id="L284">          sentenceCurrent = new MtasCQLParserSentenceCondition(basicSentence,</span>
-              ignore, maximumIgnoreLength);
+<span class="fc" id="L285">              ignore, maximumIgnoreLength);</span>
 <span class="fc" id="L286">          sentenceSequence.add(sentenceCurrent);</span>
 <span class="fc" id="L287">          sequenceList.add(sentenceSequence);</span>
 <span class="fc" id="L288">          basicSentence = null;</span>
           // not simple anymore
 <span class="fc" id="L290">          basic = false;</span>
         }
-      } else {
+<span class="fc" id="L292">      } else {</span>
 <span class="fc" id="L293">        sentenceSequence = new ArrayList&lt;MtasCQLParserSentenceCondition&gt;();</span>
 <span class="fc" id="L294">        sentenceCurrent = s;</span>
 <span class="fc" id="L295">        sentenceSequence.add(sentenceCurrent);</span>
@@ -376,7 +376,7 @@ public class MtasCQLParserSentenceCondition {
 <span class="fc bfc" id="L376" title="All 2 branches covered.">      if (!isBasic()) {</span>
 <span class="fc bfc" id="L377" title="All 2 branches covered.">        for (List&lt;MtasCQLParserSentenceCondition&gt; sequence : sequenceList) {</span>
 <span class="fc" id="L378">          simplifySequence(sequence);</span>
-<span class="fc" id="L379">        }</span>
+        }
         // flatten
 <span class="fc bfc" id="L381" title="All 2 branches covered.">        if (sequenceList.size() &gt; 1) {</span>
 <span class="fc" id="L382">          List&lt;List&lt;MtasCQLParserSentenceCondition&gt;&gt; newSequenceList = new ArrayList&lt;List&lt;MtasCQLParserSentenceCondition&gt;&gt;();</span>
@@ -385,11 +385,11 @@ public class MtasCQLParserSentenceCondition {
 <span class="fc" id="L385">              MtasCQLParserSentenceCondition subSentence = sequence.get(0);</span>
 <span class="fc bfc" id="L386" title="All 2 branches covered.">              if (subSentence.isBasic()) {</span>
 <span class="fc" id="L387">                newSequenceList.add(sequence);</span>
-              } else {
+<span class="fc" id="L388">              } else {</span>
 <span class="fc" id="L389">                newSequenceList.addAll(subSentence.sequenceList);</span>
               }
             }
-<span class="fc" id="L392">          }</span>
+          }
 <span class="fc" id="L393">          sequenceList = newSequenceList;</span>
         }
       }
@@ -416,7 +416,7 @@ public class MtasCQLParserSentenceCondition {
 <span class="pc bpc" id="L416" title="1 of 2 branches missed.">            &amp;&amp; sentence.getMaximumOccurence() == 1</span>
 <span class="pc bpc" id="L417" title="1 of 2 branches missed.">            &amp;&amp; lastSentence.getMaximumOccurence() == 1) {</span>
 <span class="fc" id="L418">          lastSentence.basicSentence.addBasicSentence(sentence.basicSentence);</span>
-        } else {
+<span class="fc" id="L419">        } else {</span>
 <span class="fc" id="L420">          newSequence.add(lastSentence);</span>
 <span class="fc" id="L421">          lastSentence = sentence;</span>
         }
@@ -426,12 +426,12 @@ public class MtasCQLParserSentenceCondition {
 <span class="pc bpc" id="L426" title="1 of 2 branches missed.">            &amp;&amp; lastSentence.getMaximumOccurence() == 1) {</span>
           // add all items from (first) sequenceList potentially to the new
           // sequence
-          for (MtasCQLParserSentenceCondition subSentence : sentence.sequenceList
-<span class="fc bfc" id="L430" title="All 2 branches covered.">              .get(0)) {</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">          for (MtasCQLParserSentenceCondition subSentence : sentence.sequenceList</span>
+<span class="fc" id="L430">              .get(0)) {</span>
 <span class="fc" id="L431">            newSequence.add(lastSentence);</span>
 <span class="fc" id="L432">            lastSentence = subSentence;</span>
-<span class="fc" id="L433">          }</span>
-        } else {
+          }
+<span class="fc" id="L434">        } else {</span>
           // add sentence potentially to the new sequence
 <span class="fc" id="L436">          newSequence.add(lastSentence);</span>
 <span class="fc" id="L437">          lastSentence = sentence;</span>
@@ -443,28 +443,28 @@ public class MtasCQLParserSentenceCondition {
           // add basic sentence to end latest sequence
 <span class="nc" id="L444">          lastSentence</span>
 <span class="nc" id="L445">              .addBasicSentenceToEndLatestSequence(sentence.basicSentence);</span>
-        } else {
+<span class="nc" id="L446">        } else {</span>
           // add sentence potentially to the new sequence
 <span class="fc" id="L448">          newSequence.add(lastSentence);</span>
 <span class="fc" id="L449">          lastSentence = sentence;</span>
         }
-      } else {
+<span class="fc" id="L451">      } else {</span>
 <span class="nc bnc" id="L452" title="All 4 branches missed.">        if (sentence.isSingle() &amp;&amp; !sentence.isOptional()</span>
 <span class="nc bnc" id="L453" title="All 4 branches missed.">            &amp;&amp; lastSentence.isSingle() &amp;&amp; !lastSentence.isOptional()</span>
 <span class="nc bnc" id="L454" title="All 2 branches missed.">            &amp;&amp; sentence.getMaximumOccurence() == 1</span>
 <span class="nc bnc" id="L455" title="All 2 branches missed.">            &amp;&amp; lastSentence.getMaximumOccurence() == 1) {</span>
           // combine sentences
-          for (MtasCQLParserSentenceCondition subSentence : sentence.sequenceList
-<span class="nc bnc" id="L458" title="All 2 branches missed.">              .get(0)) {</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">          for (MtasCQLParserSentenceCondition subSentence : sentence.sequenceList</span>
+<span class="nc" id="L458">              .get(0)) {</span>
 <span class="nc" id="L459">            lastSentence.sequenceList.get(0).add(subSentence);</span>
-<span class="nc" id="L460">          }</span>
-        } else {
+          }
+<span class="nc" id="L461">        } else {</span>
           // add sentence potentially to the new sequence (both not basic)
 <span class="nc" id="L463">          newSequence.add(lastSentence);</span>
 <span class="nc" id="L464">          lastSentence = sentence;</span>
         }
       }
-<span class="fc" id="L467">    }</span>
+    }
     // add last to newSequence
 <span class="pc bpc" id="L469" title="1 of 2 branches missed.">    if (lastSentence != null) {</span>
 <span class="fc" id="L470">      newSequence.add(lastSentence);</span>
@@ -555,7 +555,7 @@ public class MtasCQLParserSentenceCondition {
 <span class="fc bfc" id="L555" title="All 2 branches covered.">    if (sentenceSequence.size() == 1) {</span>
 <span class="fc bfc" id="L556" title="All 2 branches covered.">      if (maximumOccurence &gt; 1) {</span>
 <span class="fc" id="L557">        return new MtasSpanRecurrenceQuery(sentenceSequence.get(0).getQuery(),</span>
-            minimumOccurence, maximumOccurence, ignore, maximumIgnoreLength);
+<span class="fc" id="L558">            minimumOccurence, maximumOccurence, ignore, maximumIgnoreLength);</span>
       } else {
 <span class="fc" id="L560">        return sentenceSequence.get(0).getQuery();</span>
       }
@@ -564,11 +564,11 @@ public class MtasCQLParserSentenceCondition {
 <span class="fc bfc" id="L564" title="All 2 branches covered.">      for (MtasCQLParserSentenceCondition sentence : sentenceSequence) {</span>
 <span class="fc" id="L565">        clauses.add(</span>
 <span class="fc" id="L566">            new MtasSpanSequenceItem(sentence.getQuery(), sentence.optional));</span>
-<span class="fc" id="L567">      }</span>
+      }
 <span class="pc bpc" id="L568" title="1 of 2 branches missed.">      if (maximumOccurence &gt; 1) {</span>
 <span class="nc" id="L569">        return new MtasSpanRecurrenceQuery(</span>
-            new MtasSpanSequenceQuery(clauses, ignore, maximumIgnoreLength),
-            minimumOccurence, maximumOccurence, ignore, maximumIgnoreLength);
+<span class="nc" id="L570">            new MtasSpanSequenceQuery(clauses, ignore, maximumIgnoreLength),</span>
+<span class="nc" id="L571">            minimumOccurence, maximumOccurence, ignore, maximumIgnoreLength);</span>
       } else {
 <span class="fc" id="L573">        return new MtasSpanSequenceQuery(clauses, ignore, maximumIgnoreLength);</span>
       }
@@ -594,13 +594,13 @@ public class MtasCQLParserSentenceCondition {
 <span class="nc" id="L594">        query = new MtasSpanSequenceQuery(clauses, ignore, maximumIgnoreLength);</span>
 <span class="nc bnc" id="L595" title="All 2 branches missed.">        if (maximumOccurence &gt; 1) {</span>
 <span class="nc" id="L596">          query = new MtasSpanRecurrenceQuery(query, minimumOccurence,</span>
-              maximumOccurence, ignore, maximumIgnoreLength);
+<span class="nc" id="L597">              maximumOccurence, ignore, maximumIgnoreLength);</span>
         }
 <span class="nc" id="L599">      } else {</span>
 <span class="fc" id="L600">        query = basicSentence.getQuery();</span>
 <span class="fc bfc" id="L601" title="All 2 branches covered.">        if (maximumOccurence &gt; 1) {</span>
 <span class="fc" id="L602">          query = new MtasSpanRecurrenceQuery(query, minimumOccurence,</span>
-              maximumOccurence, ignore, maximumIgnoreLength);
+<span class="fc" id="L603">              maximumOccurence, ignore, maximumIgnoreLength);</span>
         }
       }
 <span class="fc" id="L606">      return query;</span>
@@ -612,7 +612,7 @@ public class MtasCQLParserSentenceCondition {
 <span class="fc" id="L612">      List&lt;MtasSpanQuery&gt; clauses = new ArrayList&lt;MtasSpanQuery&gt;();</span>
 <span class="fc bfc" id="L613" title="All 2 branches covered.">      for (List&lt;MtasCQLParserSentenceCondition&gt; sentenceSequence : sequenceList) {</span>
 <span class="fc" id="L614">        clauses.add(createQuery(sentenceSequence));</span>
-<span class="fc" id="L615">      }</span>
+      }
 <span class="fc" id="L616">      return new MtasSpanOrQuery(</span>
 <span class="fc" id="L617">          clauses.toArray(new MtasSpanQuery[clauses.size()]));</span>
     }
@@ -645,8 +645,8 @@ public class MtasCQLParserSentenceCondition {
 <span class="nc" id="L645">      } catch (ParseException e) {</span>
 <span class="nc bnc" id="L646" title="All 2 branches missed.">        text += firstIndent + &quot;BASIC SENTENCE&quot; + (optional ? &quot; OPTIONAL&quot; : &quot;&quot;)</span>
 <span class="nc" id="L647">            + &quot;: &quot; + e.getMessage() + &quot;\n&quot;;</span>
-<span class="nc" id="L648">      }</span>
-    } else {
+      }
+<span class="nc" id="L649">    } else {</span>
 <span class="nc bnc" id="L650" title="All 2 branches missed.">      text += firstIndent + &quot;SENTENCE&quot; + (optional ? &quot; OPTIONAL&quot; : &quot;&quot;) + &quot;\n&quot;;</span>
 <span class="nc bnc" id="L651" title="All 2 branches missed.">      if (simplified) {</span>
         try {
@@ -654,15 +654,15 @@ public class MtasCQLParserSentenceCondition {
 <span class="nc" id="L654">              + getQuery().toString(getQuery().getField());</span>
 <span class="nc" id="L655">        } catch (ParseException e) {</span>
 <span class="nc" id="L656">          text += indent + &quot;- Query: &quot; + e.getMessage();</span>
-<span class="nc" id="L657">        }</span>
+        }
 <span class="nc" id="L658">        text += &quot;\n&quot;;</span>
-      } else {
+<span class="nc" id="L659">      } else {</span>
 <span class="nc bnc" id="L660" title="All 2 branches missed.">        for (List&lt;MtasCQLParserSentenceCondition&gt; sentenceSequence : sequenceList) {</span>
 <span class="nc" id="L661">          text += indent + &quot;- Sequence :\n&quot;;</span>
 <span class="nc bnc" id="L662" title="All 2 branches missed.">          for (MtasCQLParserSentenceCondition sentence : sentenceSequence) {</span>
 <span class="nc" id="L663">            text += sentence.toString(indent + &quot;  - &quot;, indent + &quot;    &quot;);</span>
-<span class="nc" id="L664">          }</span>
-<span class="nc" id="L665">        }</span>
+          }
+        }
 <span class="nc" id="L666">        text += &quot;\n&quot;;</span>
       }
     }

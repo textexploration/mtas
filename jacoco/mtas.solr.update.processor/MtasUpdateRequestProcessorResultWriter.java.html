@@ -50,10 +50,10 @@ public class MtasUpdateRequestProcessorResultWriter implements Closeable {
 <span class="fc" id="L50">      fileOutputStream = new FileOutputStream(file);</span>
 <span class="fc" id="L51">      objectOutputStream = new ObjectOutputStream(fileOutputStream);</span>
 <span class="fc" id="L52">      objectOutputStream.writeObject(value);</span>
-<span class="nc" id="L53">    } catch (IOException e) {</span>
+<span class="pc" id="L53">    } catch (IOException e) {</span>
 <span class="nc" id="L54">      forceCloseAndDelete();</span>
 <span class="nc" id="L55">      log.debug(e);</span>
-<span class="fc" id="L56">    }</span>
+    }
 <span class="fc" id="L57">  }</span>
 
   /**
@@ -71,15 +71,15 @@ public class MtasUpdateRequestProcessorResultWriter implements Closeable {
 <span class="pc bpc" id="L71" title="1 of 2 branches missed.">    if (!closed) {</span>
 <span class="fc" id="L72">      tokenNumber++;</span>
 <span class="fc" id="L73">      MtasUpdateRequestProcessorResultItem item = new MtasUpdateRequestProcessorResultItem(</span>
-          term, offsetStart, offsetEnd, posIncr, payload, flags);
+<span class="fc" id="L74">          term, offsetStart, offsetEnd, posIncr, payload, flags);</span>
       try {
 <span class="fc" id="L76">        objectOutputStream.writeObject(item);</span>
 <span class="fc" id="L77">        objectOutputStream.reset();</span>
 <span class="fc" id="L78">        objectOutputStream.flush();</span>
-<span class="nc" id="L79">      } catch (IOException e) {</span>
+<span class="pc" id="L79">      } catch (IOException e) {</span>
 <span class="nc" id="L80">        forceCloseAndDelete();</span>
 <span class="nc" id="L81">        log.debug(e);</span>
-<span class="fc" id="L82">      }</span>
+      }
     }
 <span class="fc" id="L84">  }</span>
 
@@ -135,7 +135,7 @@ public class MtasUpdateRequestProcessorResultWriter implements Closeable {
       }
 <span class="nc" id="L136">    } catch (IOException e) {</span>
 <span class="nc" id="L137">      log.debug(e);</span>
-<span class="nc" id="L138">    }</span>
+    }
 <span class="nc" id="L139">    closed = true;</span>
 <span class="nc" id="L140">    tokenNumber = 0;</span>
 <span class="nc bnc" id="L141" title="All 2 branches missed.">    if (file != null) {</span>

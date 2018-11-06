@@ -45,9 +45,9 @@ public class MtasCQLParserSentencePartCondition {
    * @param ignore the ignore
    * @param maximumIgnoreLength the maximum ignore length
    */
-  public MtasCQLParserSentencePartCondition(
+<span class="fc" id="L48">  public MtasCQLParserSentencePartCondition(</span>
       MtasCQLParserBasicSentenceCondition bs, MtasSpanQuery ignore,
-<span class="fc" id="L50">      Integer maximumIgnoreLength) {</span>
+      Integer maximumIgnoreLength) {
 <span class="fc" id="L51">    firstMinimumOccurence = 1;</span>
 <span class="fc" id="L52">    firstMaximumOccurence = 1;</span>
 <span class="fc" id="L53">    firstOptional = false;</span>
@@ -63,8 +63,8 @@ public class MtasCQLParserSentencePartCondition {
    * @param ignore the ignore
    * @param maximumIgnoreLength the maximum ignore length
    */
-  public MtasCQLParserSentencePartCondition(MtasCQLParserSentenceCondition s,
-<span class="fc" id="L67">      MtasSpanQuery ignore, Integer maximumIgnoreLength) {</span>
+<span class="fc" id="L66">  public MtasCQLParserSentencePartCondition(MtasCQLParserSentenceCondition s,</span>
+      MtasSpanQuery ignore, Integer maximumIgnoreLength) {
 <span class="fc" id="L68">    firstMinimumOccurence = 1;</span>
 <span class="fc" id="L69">    firstMaximumOccurence = 1;</span>
 <span class="fc" id="L70">    firstOptional = false;</span>
@@ -90,7 +90,7 @@ public class MtasCQLParserSentencePartCondition {
       }
 <span class="fc" id="L91">      firstMinimumOccurence = Math.max(1, min);</span>
 <span class="fc" id="L92">      firstMaximumOccurence = max;</span>
-    } else {
+<span class="fc" id="L93">    } else {</span>
 <span class="nc" id="L94">      throw new ParseException(&quot;fullCondition already generated&quot;);</span>
     }
 <span class="fc" id="L96">  }</span>
@@ -104,7 +104,7 @@ public class MtasCQLParserSentencePartCondition {
   public void setFirstOptional(boolean status) throws ParseException {
 <span class="nc bnc" id="L105" title="All 2 branches missed.">    if (fullCondition == null) {</span>
 <span class="nc" id="L106">      firstOptional = status;</span>
-    } else {
+<span class="nc" id="L107">    } else {</span>
 <span class="nc" id="L108">      throw new ParseException(&quot;fullCondition already generated&quot;);</span>
     }
 <span class="nc" id="L110">  }</span>
@@ -118,7 +118,7 @@ public class MtasCQLParserSentencePartCondition {
   public void setOr(boolean status) throws ParseException {
 <span class="pc bpc" id="L119" title="1 of 2 branches missed.">    if (fullCondition == null) {</span>
 <span class="fc" id="L120">      orOperator = status;</span>
-    } else {
+<span class="fc" id="L121">    } else {</span>
 <span class="nc" id="L122">      throw new ParseException(&quot;fullCondition already generated&quot;);</span>
     }
 <span class="fc" id="L124">  }</span>
@@ -133,7 +133,7 @@ public class MtasCQLParserSentencePartCondition {
       throws ParseException {
 <span class="pc bpc" id="L134" title="1 of 2 branches missed.">    if (fullCondition == null) {</span>
 <span class="fc" id="L135">      secondSentencePart = sp;</span>
-    } else {
+<span class="fc" id="L136">    } else {</span>
 <span class="nc" id="L137">      throw new ParseException(&quot;fullCondition already generated&quot;);</span>
     }
 <span class="fc" id="L139">  }</span>
@@ -150,13 +150,13 @@ public class MtasCQLParserSentencePartCondition {
 <span class="fc bfc" id="L150" title="All 2 branches covered.">      if (secondSentencePart == null) {</span>
 <span class="fc bfc" id="L151" title="All 2 branches covered.">        if (firstBasicSentence != null) {</span>
 <span class="fc" id="L152">          fullCondition = new MtasCQLParserSentenceCondition(firstBasicSentence,</span>
-              ignoreClause, maximumIgnoreLength);
+<span class="fc" id="L153">              ignoreClause, maximumIgnoreLength);</span>
 
-        } else {
+<span class="fc" id="L155">        } else {</span>
 <span class="fc" id="L156">          fullCondition = firstSentence;</span>
         }
 <span class="fc" id="L158">        fullCondition.setOccurence(firstMinimumOccurence,</span>
-            firstMaximumOccurence);
+<span class="fc" id="L159">            firstMaximumOccurence);</span>
 <span class="fc bfc" id="L160" title="All 2 branches covered.">        if (firstOptional) {</span>
 <span class="fc" id="L161">          fullCondition.setOptional(firstOptional);</span>
         }
@@ -165,27 +165,27 @@ public class MtasCQLParserSentencePartCondition {
 <span class="fc bfc" id="L165" title="All 2 branches covered.">        if (!orOperator) {</span>
 <span class="fc bfc" id="L166" title="All 2 branches covered.">          if (firstBasicSentence != null) {</span>
 <span class="fc" id="L167">            firstBasicSentence.setOccurence(firstMinimumOccurence,</span>
-                firstMaximumOccurence);
+<span class="fc" id="L168">                firstMaximumOccurence);</span>
 <span class="fc" id="L169">            firstBasicSentence.setOptional(firstOptional);</span>
 <span class="fc" id="L170">            fullCondition = new MtasCQLParserSentenceCondition(</span>
-                firstBasicSentence, ignoreClause, maximumIgnoreLength);
-          } else {
+<span class="fc" id="L171">                firstBasicSentence, ignoreClause, maximumIgnoreLength);</span>
+<span class="fc" id="L172">          } else {</span>
 <span class="fc" id="L173">            firstSentence.setOccurence(firstMinimumOccurence,</span>
-                firstMaximumOccurence);
+<span class="fc" id="L174">                firstMaximumOccurence);</span>
 <span class="fc" id="L175">            firstSentence.setOptional(firstOptional);</span>
 <span class="fc" id="L176">            fullCondition = new MtasCQLParserSentenceCondition(firstSentence,</span>
-                ignoreClause, maximumIgnoreLength);
+<span class="fc" id="L177">                ignoreClause, maximumIgnoreLength);</span>
           }
 <span class="fc" id="L179">          fullCondition.addSentenceToEndLatestSequence(</span>
 <span class="fc" id="L180">              secondSentencePart.createFullSentence());</span>
-        } else {
+<span class="fc" id="L181">        } else {</span>
 <span class="fc" id="L182">          MtasCQLParserSentenceCondition sentence = secondSentencePart</span>
 <span class="fc" id="L183">              .createFullSentence();</span>
 <span class="fc bfc" id="L184" title="All 2 branches covered.">          if (firstBasicSentence != null) {</span>
 <span class="fc" id="L185">            sentence.addSentenceAsFirstOption(</span>
-                new MtasCQLParserSentenceCondition(firstBasicSentence,
-                    ignoreClause, maximumIgnoreLength));
-          } else {
+<span class="fc" id="L186">                new MtasCQLParserSentenceCondition(firstBasicSentence,</span>
+<span class="fc" id="L187">                    ignoreClause, maximumIgnoreLength));</span>
+<span class="fc" id="L188">          } else {</span>
 <span class="fc" id="L189">            sentence.addSentenceAsFirstOption(firstSentence);</span>
           }
 <span class="fc" id="L191">          fullCondition = sentence;</span>

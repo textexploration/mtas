@@ -52,8 +52,8 @@ public class MtasMaximumExpandSpanQuery extends MtasSpanQuery {
       int maximumLeft, int minimumRight, int maximumRight) {
 <span class="fc" id="L53">    super(null, null);</span>
 <span class="fc" id="L54">    this.query = query;</span>
-<span class="pc bpc" id="L55" title="4 of 8 branches missed.">    if (minimumLeft &gt; maximumLeft || minimumRight &gt; maximumRight</span>
-        || minimumLeft &lt; 0 || minimumRight &lt; 0) {
+<span class="pc bpc" id="L55" title="2 of 4 branches missed.">    if (minimumLeft &gt; maximumLeft || minimumRight &gt; maximumRight</span>
+<span class="pc bpc" id="L56" title="2 of 4 branches missed.">        || minimumLeft &lt; 0 || minimumRight &lt; 0) {</span>
 <span class="nc" id="L57">      throw new IllegalArgumentException();</span>
     }
 <span class="fc" id="L59">    this.minimumLeft = minimumLeft;</span>
@@ -109,7 +109,7 @@ public class MtasMaximumExpandSpanQuery extends MtasSpanQuery {
 <span class="nc" id="L109">    StringBuilder buffer = new StringBuilder();</span>
 <span class="nc" id="L110">    buffer.append(this.getClass().getSimpleName() + &quot;([&quot;);</span>
 <span class="nc" id="L111">    buffer.append(query.toString(field) + &quot;][&quot; + minimumLeft + &quot;,&quot; + maximumLeft</span>
-        + &quot;][&quot; + minimumRight + &quot;,&quot; + maximumRight + &quot;])&quot;);
+<span class="nc" id="L112">        + &quot;][&quot; + minimumRight + &quot;,&quot; + maximumRight + &quot;])&quot;);</span>
 <span class="nc" id="L113">    return buffer.toString();</span>
   }
 
@@ -168,7 +168,7 @@ public class MtasMaximumExpandSpanQuery extends MtasSpanQuery {
 <span class="fc" id="L168">      return newQuery;</span>
 <span class="pc bpc" id="L169" title="1 of 2 branches missed.">    } else if (!query.equals(newQuery)) {</span>
 <span class="nc" id="L170">      return new MtasMaximumExpandSpanQuery(newQuery, minimumLeft, maximumLeft,</span>
-          minimumRight, maximumRight);
+<span class="nc" id="L171">          minimumRight, maximumRight);</span>
     } else {
 <span class="fc" id="L173">      return super.rewrite(reader);</span>
     }
@@ -214,8 +214,8 @@ public class MtasMaximumExpandSpanQuery extends MtasSpanQuery {
      */
     public MtasMaximumExpandWeight(SpanWeight subWeight, IndexSearcher searcher,
 <span class="fc" id="L216">        boolean needsScores, float boost) throws IOException {</span>
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">      super(MtasMaximumExpandSpanQuery.this, searcher,</span>
-<span class="pc" id="L218">          needsScores ? getTermContexts(subWeight) : null, boost);</span>
+<span class="fc" id="L217">      super(MtasMaximumExpandSpanQuery.this, searcher,</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">          needsScores ? getTermContexts(subWeight) : null, boost);</span>
 <span class="fc" id="L219">      this.subWeight = subWeight;</span>
 <span class="fc" id="L220">    }</span>
 
@@ -261,9 +261,9 @@ public class MtasMaximumExpandSpanQuery extends MtasSpanQuery {
 <span class="nc" id="L261">                break;</span>
               }
             }
-<span class="fc" id="L264">          } // get fieldsproducer</span>
+          } // get fieldsproducer
 <span class="fc" id="L265">          Method fpm = r.getClass().getMethod(METHOD_GET_POSTINGS_READER,</span>
-              (Class&lt;?&gt;[]) null);
+<span class="fc" id="L266">              (Class&lt;?&gt;[]) null);</span>
 <span class="fc" id="L267">          FieldsProducer fp = (FieldsProducer) fpm.invoke(r, (Object[]) null);</span>
           // get MtasFieldsProducer using terms
 <span class="fc" id="L269">          Terms t = fp.terms(field);</span>

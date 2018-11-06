@@ -112,7 +112,7 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
 <span class="nc" id="L112">        } catch (IOException e) {</span>
 <span class="nc" id="L113">          log.debug(e);</span>
           // fail
-<span class="nc" id="L115">        }</span>
+        }
       }
 <span class="nc" id="L117">    }</span>
 
@@ -142,10 +142,10 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
 <span class="nc" id="L142">              break;</span>
             }
           }
-<span class="fc" id="L145">        }</span>
+        }
         // get fieldsproducer
 <span class="fc" id="L147">        Method fpm = r.getClass().getMethod(METHOD_GET_POSTINGS_READER,</span>
-            (Class&lt;?&gt;[]) null);
+<span class="fc" id="L148">            (Class&lt;?&gt;[]) null);</span>
 <span class="fc" id="L149">        FieldsProducer fp = (FieldsProducer) fpm.invoke(r, (Object[]) null);</span>
         // get MtasFieldsProducer using terms
 <span class="fc" id="L151">        Terms t = fp.terms(field);</span>
@@ -154,10 +154,10 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
         } else {
 <span class="fc" id="L155">          CodecInfo mtasCodecInfo = CodecInfo.getCodecInfoFromTerms(t);</span>
 <span class="fc" id="L156">          return new MtasSpanMatchAllSpans(MtasSpanMatchAllQuery.this,</span>
-              mtasCodecInfo, field);
+<span class="fc" id="L157">              mtasCodecInfo, field);</span>
         }
-<span class="nc" id="L159">      } catch (InvocationTargetException | IllegalAccessException</span>
-          | NoSuchMethodException e) {
+      } catch (InvocationTargetException | IllegalAccessException
+<span class="nc" id="L160">          | NoSuchMethodException e) {</span>
 <span class="nc" id="L161">        throw new IOException(&quot;Can't get reader&quot;, e);</span>
       }
 

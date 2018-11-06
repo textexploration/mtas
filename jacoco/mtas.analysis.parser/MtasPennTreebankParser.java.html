@@ -47,7 +47,7 @@ public class MtasPennTreebankParser extends MtasParser {
   private static final String NODE_CODE_PREFIX = &quot;$&quot;;
 
   /** The Constant STRING_SPLITTER. */
-  private static final String STRING_SPLITTER = &quot;_&quot;;
+<span class="nc" id="L50">  private static final String STRING_SPLITTER = &quot;_&quot;;</span>
     
   /** The ignore nodes. */
 <span class="nc" id="L53">  private Set&lt;String&gt; ignoreNodes = new HashSet&lt;&gt;();</span>
@@ -65,7 +65,7 @@ public class MtasPennTreebankParser extends MtasParser {
       // System.out.print(printConfig());
 <span class="nc" id="L66">    } catch (MtasConfigException e) {</span>
 <span class="nc" id="L67">      log.error(e);</span>
-<span class="nc" id="L68">    }</span>
+    }
 <span class="nc" id="L69">  }</span>
 
   /*
@@ -109,7 +109,7 @@ public class MtasPennTreebankParser extends MtasParser {
 //    Map&lt;String,List&lt;MtasToken&gt;&gt; referencesNullElement = new HashMap&lt;&gt;();
     try {
 <span class="nc" id="L111">      MtasPennTreebankReader treebankReader = new MtasPennTreebankReader(</span>
-          reader);
+<span class="nc" id="L112">          reader);</span>
       // variables main administration
 <span class="nc" id="L114">      int event = treebankReader.getEventType();</span>
 <span class="nc" id="L115">      int position = 0;</span>
@@ -124,12 +124,12 @@ public class MtasPennTreebankParser extends MtasParser {
       int stringOffsetStart;
       int stringOffsetEnd;
       // loop
-      while (true) {
+<span class="nc" id="L127">      while (true) {</span>
 <span class="nc bnc" id="L128" title="All 5 branches missed.">        switch (event) {</span>
         case MtasPennTreebankReader.EVENT_STARTBRACKET:
 <span class="nc bnc" id="L130" title="All 4 branches missed.">          if (level != null &amp;&amp; level.code) {</span>
 <span class="nc" id="L131">            throw new MtasParserException(</span>
-                &quot;unexpected start bracket for &quot; + NODE_CODE);
+<span class="nc" id="L132">                &quot;unexpected start bracket for &quot; + NODE_CODE);</span>
           } else {
 <span class="nc" id="L134">            level = new Level();</span>
 <span class="nc" id="L135">            level.ignore = ignore;</span>
@@ -141,7 +141,7 @@ public class MtasPennTreebankParser extends MtasParser {
 <span class="nc" id="L141">          Objects.requireNonNull(level, &quot;no level while ending bracket&quot;);</span>
 <span class="nc" id="L142">          level.realOffsetEnd = treebankReader.getPosition() - 1;</span>
 <span class="nc bnc" id="L143" title="All 2 branches missed.">          Level parentLevel = levels.size() &gt; 1 ? levels.get(levels.size() - 2)</span>
-              : null;
+<span class="nc" id="L144">              : null;</span>
 <span class="nc" id="L145">          createNodeMappings(mtasTokenIdFactory, level, parentLevel);</span>
           // remove level
 <span class="nc bnc" id="L147" title="All 2 branches missed.">          if (parentLevel != null) {</span>
@@ -150,13 +150,13 @@ public class MtasPennTreebankParser extends MtasParser {
 <span class="nc" id="L150">                  level.positionEnd);</span>
             }
 <span class="nc bnc" id="L152" title="All 2 branches missed.">            parentLevel.offsetStart = parentLevel.offsetStart == null</span>
-                ? level.offsetStart : parentLevel.offsetStart;
+<span class="nc" id="L153">                ? level.offsetStart : parentLevel.offsetStart;</span>
 <span class="nc bnc" id="L154" title="All 2 branches missed.">            parentLevel.offsetEnd = level.offsetEnd == null</span>
-                ? parentLevel.offsetEnd : level.offsetEnd;
+<span class="nc" id="L155">                ? parentLevel.offsetEnd : level.offsetEnd;</span>
 <span class="nc" id="L156">            levels.remove(levels.size() - 1);</span>
 <span class="nc" id="L157">            level = parentLevel;</span>
 <span class="nc" id="L158">            ignore = level.ignore;</span>
-          } else {
+<span class="nc" id="L159">          } else {</span>
 <span class="nc" id="L160">            levels.clear();</span>
 <span class="nc" id="L161">            level = null;</span>
 <span class="nc" id="L162">            ignore = false;</span>
@@ -184,8 +184,8 @@ public class MtasPennTreebankParser extends MtasParser {
 <span class="nc bnc" id="L184" title="All 2 branches missed.">              if (!codePositions.isEmpty()) {</span>
 <span class="nc" id="L185">                createCodeMappings(mtasTokenIdFactory, level, stringValue,</span>
 <span class="nc" id="L186">                    codeOffsetStart, codeOffsetEnd, stringOffsetStart,</span>
-                    stringOffsetEnd, codePositions);
-              } else {
+<span class="nc" id="L187">                    stringOffsetEnd, codePositions);</span>
+<span class="nc" id="L188">              } else {</span>
 <span class="nc" id="L189">                log.error(&quot;CODE without codePositions for &quot;+stringValue);                </span>
               }
 <span class="nc" id="L191">              codePositions.clear();</span>
@@ -193,7 +193,7 @@ public class MtasPennTreebankParser extends MtasParser {
 <span class="nc" id="L193">              codeOffsetEnd = null;</span>
             }
           }
-          break;
+<span class="nc" id="L196">          break;</span>
         case MtasPennTreebankReader.EVENT_STRING:
 <span class="nc" id="L198">          Objects.requireNonNull(level, &quot;no level while handling string&quot;);</span>
 <span class="nc bnc" id="L199" title="All 2 branches missed.">          if (level.code) {</span>
@@ -219,11 +219,11 @@ public class MtasPennTreebankParser extends MtasParser {
 <span class="nc" id="L219">            level.addPosition(position);</span>
             // create mappings
 <span class="nc" id="L221">            createStringMappings(mtasTokenIdFactory, level, stringValue,</span>
-                stringOffsetStart, stringOffsetEnd, position);
+<span class="nc" id="L222">                stringOffsetStart, stringOffsetEnd, position);</span>
             // increase position
 <span class="nc" id="L224">            position++;</span>
           }
-          break;
+<span class="nc" id="L226">          break;</span>
         default:
           break;
         }
@@ -237,7 +237,7 @@ public class MtasPennTreebankParser extends MtasParser {
 <span class="nc" id="L237">      log.debug(e);</span>
 <span class="nc" id="L238">      throw new MtasParserException(</span>
 <span class="nc" id="L239">          &quot;No valid Penn Treebank syntax: &quot; + e.getMessage());</span>
-<span class="nc" id="L240">    }</span>
+    }
     // final check
 <span class="nc" id="L242">    tokenCollection.check(autorepair, makeunique);</span>
 <span class="nc" id="L243">    return tokenCollection;</span>
@@ -294,10 +294,10 @@ public class MtasPennTreebankParser extends MtasParser {
   private void createNodeMappings(MtasTokenIdFactory mtasTokenIdFactory,
       Level level, Level parentLevel) {
     MtasToken nodeToken;
-<span class="nc bnc" id="L297" title="All 6 branches missed.">    if (level.node != null &amp;&amp; level.positionStart != null</span>
-        &amp;&amp; level.positionEnd != null) {
+<span class="nc bnc" id="L297" title="All 4 branches missed.">    if (level.node != null &amp;&amp; level.positionStart != null</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">        &amp;&amp; level.positionEnd != null) {</span>
 <span class="nc" id="L299">      nodeToken = new MtasTokenString(mtasTokenIdFactory.createTokenId(),</span>
-          level.node, &quot;&quot;);
+<span class="nc" id="L300">          level.node, &quot;&quot;);</span>
 <span class="nc" id="L301">      nodeToken.setOffset(level.offsetStart, level.offsetEnd);</span>
 <span class="nc" id="L302">      nodeToken.setRealOffset(level.realOffsetStart, level.realOffsetEnd);</span>
 <span class="nc" id="L303">      nodeToken.addPositionRange(level.positionStart, level.positionEnd);</span>
@@ -308,7 +308,7 @@ public class MtasPennTreebankParser extends MtasParser {
       // only for first mapping(?)
 <span class="nc bnc" id="L309" title="All 2 branches missed.">      for (MtasToken token : level.tokens) {</span>
 <span class="nc" id="L310">        token.setParentId(nodeToken.getId());</span>
-<span class="nc" id="L311">      }</span>
+      }
     }
 <span class="nc" id="L313">  }</span>
 

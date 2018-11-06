@@ -52,7 +52,7 @@ public class MtasSolrCollectionCache {
   private static final int DEFAULT_MAXIMUM_NUMBER = 1000;
 
   /** The Constant DEFAULT_MAXIMUM_OVERFLOW. */
-  private static final int DEFAULT_MAXIMUM_OVERFLOW = 10;
+<span class="fc" id="L55">  private static final int DEFAULT_MAXIMUM_OVERFLOW = 10;</span>
 
   /** The id to version. */
   private Map&lt;String, String&gt; idToVersion;
@@ -83,10 +83,10 @@ public class MtasSolrCollectionCache {
    * @param maximumNumber the maximum number
    * @param maximumOverflow the maximum overflow
    */
-  public MtasSolrCollectionCache(String cacheDirectory, Long lifeTime,
-<span class="fc" id="L87">      Integer maximumNumber, Integer maximumOverflow) {</span>
+<span class="fc" id="L86">  public MtasSolrCollectionCache(String cacheDirectory, Long lifeTime,</span>
+      Integer maximumNumber, Integer maximumOverflow) {
 <span class="pc bpc" id="L88" title="2 of 4 branches missed.">    this.lifeTime = (lifeTime != null &amp;&amp; lifeTime &gt; 0) ? lifeTime</span>
-        : DEFAULT_LIFETIME;
+<span class="nc" id="L89">        : DEFAULT_LIFETIME;</span>
 <span class="pc bpc" id="L90" title="2 of 4 branches missed.">    this.maximumNumber = (maximumNumber != null &amp;&amp; maximumNumber &gt; 0)</span>
 <span class="pc" id="L91">        ? maximumNumber : DEFAULT_MAXIMUM_NUMBER;</span>
 <span class="pc bpc" id="L92" title="3 of 4 branches missed.">    this.maximumOverflow = (maximumOverflow != null &amp;&amp; maximumOverflow &gt; 0)</span>
@@ -121,7 +121,7 @@ public class MtasSolrCollectionCache {
 <span class="nc" id="L121">                expirationVersion.put(version,</span>
 <span class="nc" id="L122">                    file.lastModified() + (1000 * lifeTime));</span>
 <span class="nc" id="L123">                versionToItem.put(version, item);</span>
-              } else {
+<span class="nc" id="L124">              } else {</span>
 <span class="nc bnc" id="L125" title="All 2 branches missed.">                if (!file.delete()) {</span>
 <span class="nc" id="L126">                  log.error(&quot;couldn't delete &quot; + file);</span>
                 }
@@ -132,10 +132,10 @@ public class MtasSolrCollectionCache {
           }
 <span class="fc" id="L133">          clear();</span>
         }
-<span class="nc" id="L135">      } catch (IOException e) {</span>
+<span class="pc" id="L135">      } catch (IOException e) {</span>
 <span class="nc" id="L136">        collectionCachePath = null;</span>
 <span class="nc" id="L137">        log.error(&quot;couldn't create cache directory &quot; + cacheDirectory, e);</span>
-<span class="fc" id="L138">      }</span>
+      }
     }
 <span class="fc" id="L140">  }</span>
 
@@ -169,7 +169,7 @@ public class MtasSolrCollectionCache {
       String version;
 <span class="fc bfc" id="L170" title="All 4 branches covered.">      if(originalVersion!=null&amp;&amp;versionToItem.containsKey(originalVersion)) {</span>
 <span class="fc" id="L171">        version = originalVersion;</span>
-      } else {
+<span class="fc" id="L172">      } else {</span>
         do {
 <span class="fc" id="L174">          version = UUID.randomUUID().toString();</span>
 <span class="pc bpc" id="L175" title="1 of 2 branches missed.">        } while (versionToItem.containsKey(version));</span>
@@ -180,7 +180,7 @@ public class MtasSolrCollectionCache {
 <span class="fc" id="L180">        item = new MtasSolrCollectionCacheItem(id, size, data);</span>
         // remove if item with id already exists
 <span class="fc" id="L182">        deleteById(id);</span>
-      } else {
+<span class="fc" id="L183">      } else {</span>
 <span class="nc" id="L184">        item = new MtasSolrCollectionCacheItem(version, size, data);</span>
       }
       // register
@@ -189,9 +189,9 @@ public class MtasSolrCollectionCache {
 <span class="fc" id="L189">      versionToItem.put(version, item);</span>
       // store data in file
 <span class="fc" id="L191">      File file = collectionCachePath.resolve(version).toFile();</span>
-<span class="pc" id="L192">      try (OutputStream outputStream = new FileOutputStream(file);</span>
+<span class="fc" id="L192">      try (OutputStream outputStream = new FileOutputStream(file);</span>
 <span class="fc" id="L193">          Writer outputStreamWriter = new OutputStreamWriter(outputStream,</span>
-              StandardCharsets.UTF_8);) {
+<span class="fc" id="L194">              StandardCharsets.UTF_8);) {</span>
 <span class="fc" id="L195">        outputStreamWriter.write(encode(item));</span>
         // set correct time to reconstruct administration on restart
 <span class="pc bpc" id="L197" title="1 of 2 branches missed.">        if (!file.setLastModified(date.getTime())) {</span>
@@ -200,8 +200,8 @@ public class MtasSolrCollectionCache {
         // don't store data in memory
 <span class="fc" id="L201">        item.data = null;</span>
         // return version
-<span class="fc" id="L203">        return version;</span>
-<span class="pc bpc" id="L204" title="12 of 16 branches missed.">      } catch (IOException e) {</span>
+<span class="pc" id="L203">        return version;</span>
+<span class="pc bpc" id="L204" title="14 of 16 branches missed.">      } catch (IOException e) {</span>
 <span class="nc" id="L205">        idToVersion.remove(id);</span>
 <span class="nc" id="L206">        expirationVersion.remove(version);</span>
 <span class="nc" id="L207">        versionToItem.remove(version);</span>
@@ -226,7 +226,7 @@ public class MtasSolrCollectionCache {
 <span class="fc" id="L226">      item.add(&quot;version&quot;, entry.getValue());</span>
 <span class="fc" id="L227">      item.add(&quot;expiration&quot;, expirationVersion.get(entry.getValue()));</span>
 <span class="fc" id="L228">      list.add(item);</span>
-<span class="fc" id="L229">    }</span>
+    }
 <span class="fc" id="L230">    return list;</span>
   }
 
@@ -302,7 +302,7 @@ public class MtasSolrCollectionCache {
 <span class="fc bfc" id="L302" title="All 2 branches covered.">        for (String item : data) {</span>
 <span class="fc" id="L303">          term = new Term(&quot;dummy&quot;, item);</span>
 <span class="fc" id="L304">          bytesArray.add(term.bytes());</span>
-<span class="fc" id="L305">        }</span>
+        }
 <span class="fc" id="L306">        Collections.sort(bytesArray);</span>
 <span class="fc" id="L307">        return Automata.makeStringUnion(bytesArray);</span>
       }
@@ -375,7 +375,7 @@ public class MtasSolrCollectionCache {
     try {
 <span class="fc" id="L376">      Path path = collectionCachePath.resolve(version);</span>
 <span class="fc" id="L377">      String data = new String(Files.readAllBytes(path),</span>
-          StandardCharsets.UTF_8);
+<span class="fc" id="L378">          StandardCharsets.UTF_8);</span>
 <span class="fc" id="L379">      MtasSolrCollectionCacheItem decodedData = decode(data);</span>
 
       // set correct time to reconstruct administration on restart
@@ -407,7 +407,7 @@ public class MtasSolrCollectionCache {
 <span class="pc bpc" id="L407" title="1 of 2 branches missed.">        if (time != null) {</span>
 <span class="pc bpc" id="L408" title="1 of 2 branches missed.">          if (!file.setLastModified(time)) {</span>
 <span class="nc" id="L409">            log.debug(&quot;couldn't change filetime &quot; + file.getAbsolutePath());</span>
-          } else {
+<span class="nc" id="L410">          } else {</span>
 <span class="fc" id="L411">            expirationVersion.put(version, time + (1000 * lifeTime));</span>
           }
         }
@@ -437,21 +437,21 @@ public class MtasSolrCollectionCache {
 <span class="nc" id="L437">        String version = entry.getKey();</span>
 <span class="nc bnc" id="L438" title="All 2 branches missed.">        if (versionToItem.containsKey(version)) {</span>
 <span class="nc" id="L439">          idsToBeRemoved.add(versionToItem.get(version).id);</span>
-        } else {
+<span class="nc" id="L440">        } else {</span>
 <span class="nc" id="L441">          log.debug(&quot;could not remove &quot; + version);</span>
         }
       }
-<span class="fc" id="L444">    }</span>
+    }
 <span class="pc bpc" id="L445" title="1 of 2 branches missed.">    for (String id : idsToBeRemoved) {</span>
 <span class="nc" id="L446">      deleteById(id);</span>
-<span class="nc" id="L447">    }</span>
+    }
 <span class="fc" id="L448">    idsToBeRemoved.clear();</span>
     // check size
 <span class="pc bpc" id="L450" title="1 of 2 branches missed.">    if (expirationVersion.size() &gt; maximumNumber + maximumOverflow) {</span>
 <span class="nc" id="L451">      Set&lt;Entry&lt;String, Long&gt;&gt; mapEntries = expirationVersion.entrySet();</span>
 <span class="nc" id="L452">      List&lt;Entry&lt;String, Long&gt;&gt; aList = new LinkedList&lt;&gt;(mapEntries);</span>
 <span class="nc" id="L453">      Collections.sort(aList,</span>
-          (Entry&lt;String, Long&gt; ele1, Entry&lt;String, Long&gt; ele2) -&gt; ele2
+<span class="nc" id="L454">          (Entry&lt;String, Long&gt; ele1, Entry&lt;String, Long&gt; ele2) -&gt; ele2</span>
 <span class="nc" id="L455">              .getValue().compareTo(ele1.getValue()));</span>
 <span class="nc" id="L456">      aList.subList(maximumNumber, aList.size()).clear();</span>
 <span class="nc" id="L457">      Iterator&lt;Entry&lt;String, MtasSolrCollectionCacheItem&gt;&gt; versionToItemEntryIterator = versionToItem.entrySet().iterator();</span>
@@ -460,10 +460,10 @@ public class MtasSolrCollectionCache {
 <span class="nc bnc" id="L460" title="All 2 branches missed.">        if (!expirationVersion.containsKey(entry.getKey())) {</span>
 <span class="nc" id="L461">          idsToBeRemoved.add(entry.getValue().id);</span>
         }
-<span class="nc" id="L463">      }</span>
+      }
 <span class="nc bnc" id="L464" title="All 2 branches missed.">      for (String id : idsToBeRemoved) {</span>
 <span class="nc" id="L465">        deleteById(id);</span>
-<span class="nc" id="L466">      }</span>
+      }
 <span class="nc" id="L467">      idsToBeRemoved.clear();</span>
     }
 <span class="fc" id="L469">    return date;</span>
@@ -524,7 +524,7 @@ public class MtasSolrCollectionCache {
 <span class="nc bnc" id="L524" title="All 2 branches missed.">          &amp;&amp; !collectionCachePath.resolve(entry.getValue()).toFile().delete()) {</span>
 <span class="nc" id="L525">        log.debug(&quot;couldn't delete &quot; + entry.getValue());</span>
       }
-<span class="nc" id="L527">    }</span>
+    }
 <span class="nc" id="L528">    idToVersion.clear();</span>
 <span class="nc" id="L529">  }</span>
 
@@ -540,13 +540,13 @@ class MtasSolrCollectionCacheItem implements Serializable {
   public Integer size;
 <span class="fc" id="L541">  public HashSet&lt;String&gt; data = null;</span>
 
-  public MtasSolrCollectionCacheItem(String id, Integer size,
-<span class="fc" id="L544">      HashSet&lt;String&gt; data) throws IOException {</span>
+<span class="fc" id="L543">  public MtasSolrCollectionCacheItem(String id, Integer size,</span>
+      HashSet&lt;String&gt; data) throws IOException {
 <span class="pc bpc" id="L545" title="1 of 2 branches missed.">    if (id != null) {</span>
 <span class="fc" id="L546">      this.id = id;</span>
 <span class="fc" id="L547">      this.size = size;</span>
 <span class="fc" id="L548">      this.data = data;</span>
-    } else {
+<span class="fc" id="L549">    } else {</span>
 <span class="nc" id="L550">      throw new IOException(&quot;no id provided&quot;);</span>
     }
 <span class="fc" id="L552">  }</span>

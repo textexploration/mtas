@@ -128,10 +128,10 @@ public class MorseDistance extends Distance {
 <span class="nc bnc" id="L128" title="All 2 branches missed.">        } else if (entry.getKey().equals(PARAMETER_TRANSPOSITIONDISTANCE)) {</span>
 <span class="nc" id="L129">          transpositionDistance = Double.parseDouble(entry.getValue());</span>
         }
-<span class="nc" id="L131">      }</span>
+      }
     }
-<span class="nc bnc" id="L133" title="All 8 branches missed.">    if (deletionDistance &lt; 0 || insertionDistance &lt; 0 || replaceDistance &lt; 0</span>
-        || transpositionDistance &lt; 0) {
+<span class="nc bnc" id="L133" title="All 6 branches missed.">    if (deletionDistance &lt; 0 || insertionDistance &lt; 0 || replaceDistance &lt; 0</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        || transpositionDistance &lt; 0) {</span>
 <span class="nc" id="L135">      throw new IOException(&quot;distances should be zero or positive&quot;);</span>
     }
 <span class="nc" id="L137">    morseBase = computeMorse(new BytesRef(prefix + MtasToken.DELIMITER + base));</span>
@@ -173,7 +173,7 @@ public class MorseDistance extends Distance {
             }
 <span class="nc" id="L174">            ch2 = ch1;</span>
           }
-        } else {
+<span class="nc" id="L176">        } else {</span>
 <span class="nc" id="L177">          return false;</span>
         }        
       }
@@ -257,13 +257,13 @@ public class MorseDistance extends Distance {
 <span class="nc bnc" id="L257" title="All 2 branches missed.">    for (int i = 0; i &lt; morseBase.length(); i++) {</span>
 <span class="nc bnc" id="L258" title="All 2 branches missed.">      cost = (morseBase.charAt(i) == ch1) ? 0 : replaceDistance;</span>
 <span class="nc" id="L259">      state[2][i + 1] = Math.min(state[2][i] + insertionDistance,</span>
-          state[1][i] + cost);
+<span class="nc" id="L260">          state[1][i] + cost);</span>
 <span class="nc" id="L261">      state[2][i + 1] = Math.min(state[2][i + 1],</span>
-          state[1][i + 1] + deletionDistance);
+<span class="nc" id="L262">          state[1][i + 1] + deletionDistance);</span>
 <span class="nc bnc" id="L263" title="All 6 branches missed.">      if (i &gt; 0 &amp;&amp; ch2 != 0x00 &amp;&amp; (morseBase.charAt(i - 1) == ch1)</span>
 <span class="nc bnc" id="L264" title="All 2 branches missed.">          &amp;&amp; (morseBase.charAt(i) == ch2)) {</span>
 <span class="nc" id="L265">        state[2][i + 1] = Math.min(state[2][i + 1],</span>
-            state[0][i - 1] + transpositionDistance);
+<span class="nc" id="L266">            state[0][i - 1] + transpositionDistance);</span>
       }
     }
 <span class="nc" id="L269">    return state;</span>
@@ -344,7 +344,7 @@ public class MorseDistance extends Distance {
 <span class="nc" id="L344">      b = (byte) ch;</span>
 <span class="nc bnc" id="L345" title="All 2 branches missed.">      if (ALPHABET_MORSE.containsKey(b)) {</span>
 <span class="nc" id="L346">        stringBuilder.append(ALPHABET_MORSE.get(b) + &quot; &quot;);</span>
-      } else {
+<span class="nc" id="L347">      } else {</span>
 <span class="nc" id="L348">        return null;</span>
       } 
     }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasUpdateRequestProcessorResultReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.solr.update.processor</a> &gt; <span class="el_source">MtasUpdateRequestProcessorResultReader.java</span></div><h1>MtasUpdateRequestProcessorResultReader.java</h1><pre class="source lang-java linenums">package mtas.solr.update.processor;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasUpdateRequestProcessorResultReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.solr.update.processor</a> &gt; <span class="el_source">MtasUpdateRequestProcessorResultReader.java</span></div><h1>MtasUpdateRequestProcessorResultReader.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package mtas.solr.update.processor;</span>
 
 import java.io.Closeable;
 import java.io.File;
@@ -44,8 +44,8 @@ public class MtasUpdateRequestProcessorResultReader implements Closeable {
    * @param fileName the file name
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public MtasUpdateRequestProcessorResultReader(String fileName)
-<span class="fc" id="L48">      throws IOException {</span>
+<span class="fc" id="L47">  public MtasUpdateRequestProcessorResultReader(String fileName)</span>
+      throws IOException {
 <span class="fc" id="L49">    file = null;</span>
 <span class="fc" id="L50">    fileInputStream = null;</span>
 <span class="fc" id="L51">    objectInputStream = null;</span>
@@ -59,7 +59,7 @@ public class MtasUpdateRequestProcessorResultReader implements Closeable {
 <span class="fc" id="L59">        Object o = objectInputStream.readObject();</span>
 <span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (o instanceof String) {</span>
 <span class="fc" id="L61">          storedStringValue = (String) o;</span>
-        } else {
+<span class="fc" id="L62">        } else {</span>
 <span class="nc" id="L63">          throw new IOException(&quot;invalid tokenStream&quot;);</span>
         }
 <span class="fc" id="L65">        iterator = new Iterator&lt;MtasUpdateRequestProcessorResultItem&gt;() {</span>
@@ -114,7 +114,7 @@ public class MtasUpdateRequestProcessorResultReader implements Closeable {
                 }
 <span class="fc" id="L115">              } catch (ClassNotFoundException | IOException e) {</span>
 <span class="fc" id="L116">                log.debug(e.getClass().getSimpleName()</span>
-                    + &quot; while retrieving data from &quot; + fileName, e);
+<span class="fc" id="L117">                    + &quot; while retrieving data from &quot; + fileName, e);</span>
 <span class="fc" id="L118">                forceClose();</span>
 <span class="fc" id="L119">                return null;</span>
               }
@@ -123,7 +123,7 @@ public class MtasUpdateRequestProcessorResultReader implements Closeable {
             }
           }
         };
-<span class="nc" id="L126">      } catch (IOException e) {</span>
+<span class="pc" id="L126">      } catch (IOException e) {</span>
 <span class="nc" id="L127">        log.error(e.getClass().getSimpleName() + &quot; while processing &quot; + fileName</span>
 <span class="nc" id="L128">            + &quot; (&quot; + e.getMessage() + &quot;)&quot;, e);</span>
 <span class="nc" id="L129">        forceClose();</span>
@@ -133,7 +133,7 @@ public class MtasUpdateRequestProcessorResultReader implements Closeable {
 <span class="nc" id="L133">            + &quot; (&quot; + e.getMessage() + &quot;)&quot;, e);</span>
 <span class="nc" id="L134">        forceClose();</span>
 <span class="nc" id="L135">        throw new IOException(&quot;invalid tokenStream&quot;);</span>
-<span class="fc" id="L136">      }</span>
+      }
     }
 
 <span class="fc" id="L139">  }</span>
@@ -187,9 +187,9 @@ public class MtasUpdateRequestProcessorResultReader implements Closeable {
     }
     try {
 <span class="fc" id="L189">      objectInputStream.close();</span>
-<span class="nc" id="L190">    } catch (IOException e) {</span>
+<span class="pc" id="L190">    } catch (IOException e) {</span>
 <span class="nc" id="L191">      log.debug(e);</span>
-<span class="fc" id="L192">    }</span>
+    }
 <span class="fc" id="L193">    closed = true;</span>
 <span class="fc" id="L194">  }</span>
 

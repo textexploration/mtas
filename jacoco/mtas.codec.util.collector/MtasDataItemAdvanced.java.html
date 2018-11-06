@@ -66,7 +66,7 @@ abstract class MtasDataItemAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&
       String sortDirection, int errorNumber, Map&lt;String, Integer&gt; errorList,
       MtasDataOperations&lt;T1, T2&gt; operations, int sourceNumber) {
 <span class="fc" id="L68">    super(sub, statsItems, sortType, sortDirection, errorNumber, errorList,</span>
-        sourceNumber);
+<span class="fc" id="L69">        sourceNumber);</span>
 <span class="fc" id="L70">    this.valueSum = valueSum;</span>
 <span class="fc" id="L71">    this.valueSumOfLogs = valueSumOfLogs;</span>
 <span class="fc" id="L72">    this.valueSumOfSquares = valueSumOfSquares;</span>
@@ -88,9 +88,9 @@ abstract class MtasDataItemAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&
 <span class="nc" id="L88">      MtasDataItemAdvanced&lt;T1, T2&gt; newTypedItem = (MtasDataItemAdvanced&lt;T1, T2&gt;) newItem;</span>
 <span class="nc" id="L89">      valueSum = operations.add11(valueSum, newTypedItem.valueSum);</span>
 <span class="nc" id="L90">      valueSumOfLogs = operations.add22(valueSumOfLogs,</span>
-          newTypedItem.valueSumOfLogs);
+<span class="nc" id="L91">          newTypedItem.valueSumOfLogs);</span>
 <span class="nc" id="L92">      valueSumOfSquares = operations.add11(valueSumOfSquares,</span>
-          newTypedItem.valueSumOfSquares);
+<span class="nc" id="L93">          newTypedItem.valueSumOfSquares);</span>
 <span class="nc" id="L94">      valueMin = operations.min11(valueMin, newTypedItem.valueMin);</span>
 <span class="nc" id="L95">      valueMax = operations.max11(valueMax, newTypedItem.valueMax);</span>
 <span class="nc" id="L96">      valueN += newTypedItem.valueN;</span>
@@ -123,7 +123,7 @@ abstract class MtasDataItemAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&
 <span class="nc" id="L123">        response.put(statsItem, valueSumOfLogs);</span>
 <span class="pc bpc" id="L124" title="1 of 2 branches missed.">      } else if (statsItem.equals(CodecUtil.STATS_TYPE_MEAN)) {</span>
 <span class="fc" id="L125">        response.put(statsItem, getValue(statsItem));</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">      } else if (statsItem.equals(CodecUtil.STATS_TYPE_GEOMETRICMEAN)) {</span>
+<span class="pc bnc" id="L126" title="All 2 branches missed.">      } else if (statsItem.equals(CodecUtil.STATS_TYPE_GEOMETRICMEAN)) {</span>
 <span class="nc" id="L127">        response.put(statsItem, getValue(statsItem));</span>
 <span class="nc bnc" id="L128" title="All 2 branches missed.">      } else if (statsItem.equals(CodecUtil.STATS_TYPE_STANDARDDEVIATION)) {</span>
 <span class="nc" id="L129">        response.put(statsItem, getValue(statsItem));</span>
@@ -133,15 +133,15 @@ abstract class MtasDataItemAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&
 <span class="nc" id="L133">        response.put(statsItem, getValue(statsItem));</span>
 <span class="nc bnc" id="L134" title="All 2 branches missed.">      } else if (statsItem.equals(CodecUtil.STATS_TYPE_QUADRATICMEAN)) {</span>
 <span class="nc" id="L135">        response.put(statsItem, getValue(statsItem));</span>
-      } else {
+<span class="nc" id="L136">      } else {</span>
 <span class="nc" id="L137">        response.put(statsItem, null);</span>
       }
-<span class="fc" id="L139">    }</span>
+    }
 <span class="pc bpc" id="L140" title="1 of 2 branches missed.">    if (errorNumber &gt; 0) {</span>
 <span class="nc" id="L141">      Map&lt;String, Object&gt; errorResponse = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L142" title="All 2 branches missed.">      for (Entry&lt;String, Integer&gt; entry : getErrorList().entrySet()) {</span>
 <span class="nc" id="L143">        errorResponse.put(entry.getKey(), entry.getValue());</span>
-<span class="nc" id="L144">      }</span>
+      }
 <span class="nc" id="L145">      response.put(&quot;errorNumber&quot;, errorNumber);</span>
 <span class="nc" id="L146">      response.put(&quot;errorList&quot;, errorResponse);</span>
     }
@@ -174,7 +174,7 @@ abstract class MtasDataItemAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&
 <span class="nc bnc" id="L174" title="All 2 branches missed.">    } else if (statsType.equals(CodecUtil.STATS_TYPE_VARIANCE)) {</span>
 <span class="nc" id="L175">      return operations</span>
 <span class="nc" id="L176">          .divide2(</span>
-              operations
+<span class="nc" id="L177">              operations</span>
 <span class="nc" id="L178">                  .subtract12(valueSumOfSquares,</span>
 <span class="nc" id="L179">                      operations.divide1(</span>
 <span class="nc" id="L180">                          operations.product11(valueSum, valueSum), valueN)),</span>
@@ -182,7 +182,7 @@ abstract class MtasDataItemAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&
 <span class="nc bnc" id="L182" title="All 2 branches missed.">    } else if (statsType.equals(CodecUtil.STATS_TYPE_POPULATIONVARIANCE)) {</span>
 <span class="nc" id="L183">      return operations</span>
 <span class="nc" id="L184">          .divide2(</span>
-              operations
+<span class="nc" id="L185">              operations</span>
 <span class="nc" id="L186">                  .subtract12(valueSumOfSquares,</span>
 <span class="nc" id="L187">                      operations.divide1(</span>
 <span class="nc" id="L188">                          operations.product11(valueSum, valueSum), valueN)),</span>
@@ -201,7 +201,7 @@ abstract class MtasDataItemAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&
    */
   @Override
   public int getCompareValueType() throws IOException {
-<span class="pc bpc" id="L204" title="45 of 50 branches missed.">    switch (sortType) {</span>
+<span class="pc bpc" id="L204" title="34 of 37 branches missed.">    switch (sortType) {</span>
     case CodecUtil.STATS_TYPE_N:
 <span class="nc" id="L206">      return 0;</span>
     case CodecUtil.STATS_TYPE_SUM:
@@ -238,7 +238,7 @@ abstract class MtasDataItemAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&
    */
   @Override
   public final MtasDataItemNumberComparator&lt;Long&gt; getCompareValue0() {
-<span class="nc bnc" id="L241" title="All 6 branches missed.">    switch (sortType) {</span>
+<span class="nc bnc" id="L241" title="All 4 branches missed.">    switch (sortType) {</span>
     case CodecUtil.STATS_TYPE_N:
 <span class="nc" id="L243">      return new MtasDataItemNumberComparator&lt;Long&gt;(valueN, sortDirection);</span>
     default:

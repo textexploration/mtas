@@ -103,7 +103,7 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
 <span class="pc bpc" id="L103" title="1 of 2 branches missed.">          &amp;&amp; variables.get(value) != null) {</span>
 <span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (usedVariables.contains(value)) {</span>
 <span class="nc" id="L105">          throw new ParseException(</span>
-              &quot;variable $&quot; + value + &quot; should be used exactly one time&quot;);
+<span class="nc" id="L106">              &quot;variable $&quot; + value + &quot; should be used exactly one time&quot;);</span>
         } else {
 <span class="fc" id="L108">          usedVariables.add(value);</span>
         }
@@ -119,10 +119,10 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
 <span class="nc" id="L119">          query = new MtasSpanMatchNoneQuery(field);</span>
 <span class="pc bpc" id="L120" title="1 of 2 branches missed.">        } else if (queries.length &gt; 1) {</span>
 <span class="fc" id="L121">          query = new MtasSpanOrQuery(queries);</span>
-        } else {
+<span class="fc" id="L122">        } else {</span>
 <span class="nc" id="L123">          query = queries[0];</span>
         }
-<span class="fc" id="L125">      } else {</span>
+<span class="nc" id="L125">      } else {</span>
 <span class="nc" id="L126">        throw new ParseException(&quot;variable $&quot; + value + &quot; not defined&quot;);</span>
       }
     } else {

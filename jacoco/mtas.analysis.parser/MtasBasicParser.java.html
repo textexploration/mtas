@@ -236,7 +236,7 @@ public abstract class MtasBasicParser extends MtasParser {
   protected static final String MAPPING_VALUE_TEXT = &quot;text&quot;;
 
   /** The Constant MAPPING_VALUE_NOT. */
-  protected static final String MAPPING_VALUE_NOT = &quot;not&quot;;
+<span class="fc" id="L239">  protected static final String MAPPING_VALUE_NOT = &quot;not&quot;;</span>
 
   /** The enc. */
 <span class="pc" id="L242">  private Base64.Encoder enc = Base64.getEncoder();</span>
@@ -269,14 +269,14 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L269">    Map&lt;String, List&lt;MtasParserObject&gt;&gt; currentList = new HashMap&lt;&gt;();</span>
 <span class="fc" id="L270">    currentList.put(MAPPING_TYPE_RELATION, new ArrayList&lt;MtasParserObject&gt;());</span>
 <span class="fc" id="L271">    currentList.put(MAPPING_TYPE_RELATION_ANNOTATION,</span>
-        new ArrayList&lt;MtasParserObject&gt;());
+<span class="fc" id="L272">        new ArrayList&lt;MtasParserObject&gt;());</span>
 <span class="fc" id="L273">    currentList.put(MAPPING_TYPE_REF, new ArrayList&lt;MtasParserObject&gt;());</span>
 <span class="fc" id="L274">    currentList.put(MAPPING_TYPE_GROUP, new ArrayList&lt;MtasParserObject&gt;());</span>
 <span class="fc" id="L275">    currentList.put(MAPPING_TYPE_GROUP_ANNOTATION,</span>
-        new ArrayList&lt;MtasParserObject&gt;());
+<span class="fc" id="L276">        new ArrayList&lt;MtasParserObject&gt;());</span>
 <span class="fc" id="L277">    currentList.put(MAPPING_TYPE_WORD, new ArrayList&lt;MtasParserObject&gt;());</span>
 <span class="fc" id="L278">    currentList.put(MAPPING_TYPE_WORD_ANNOTATION,</span>
-        new ArrayList&lt;MtasParserObject&gt;());
+<span class="fc" id="L279">        new ArrayList&lt;MtasParserObject&gt;());</span>
 <span class="fc" id="L280">    return currentList;</span>
   }
 
@@ -326,12 +326,12 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L326" title="1 of 2 branches missed.">    if (!object.updateableMappingsWithPosition.isEmpty()) {</span>
 <span class="nc bnc" id="L327" title="All 2 branches missed.">      for (int tokenId : object.updateableMappingsWithPosition) {</span>
 <span class="nc" id="L328">        updateList.get(UPDATE_TYPE_POSITION).put(tokenId, object.getRefIds());</span>
-<span class="nc" id="L329">      }</span>
+      }
     }
 <span class="fc bfc" id="L331" title="All 2 branches covered.">    if (!object.updateableMappingsWithOffset.isEmpty()) {</span>
 <span class="fc bfc" id="L332" title="All 2 branches covered.">      for (int tokenId : object.updateableMappingsWithOffset) {</span>
 <span class="fc" id="L333">        updateList.get(UPDATE_TYPE_OFFSET).put(tokenId, object.getRefIds());</span>
-<span class="fc" id="L334">      }</span>
+      }
     }
 <span class="fc bfc" id="L336" title="All 2 branches covered.">    for (MtasParserMapping&lt;?&gt; mapping : mappings) {</span>
       try {
@@ -346,15 +346,15 @@ public abstract class MtasBasicParser extends MtasParser {
             } else {
               // check conditions
 <span class="fc" id="L348">              postcheckMappingConditions(object, mapping.getConditions(),</span>
-                  currentList);
+<span class="fc" id="L349">                  currentList);</span>
 <span class="fc" id="L350">              boolean containsVariables = checkForVariables(</span>
-                  mappingToken.preValues);
+<span class="fc" id="L351">                  mappingToken.preValues);</span>
 <span class="pc bpc" id="L352" title="1 of 2 branches missed.">              containsVariables = !containsVariables</span>
-<span class="pc" id="L353">                  ? checkForVariables(mappingToken.postValues)</span>
-                  : containsVariables;
+<span class="fc" id="L353">                  ? checkForVariables(mappingToken.postValues)</span>
+<span class="nc" id="L354">                  : containsVariables;</span>
               // construct preValue
 <span class="fc" id="L356">              String[] preValue = computeValueFromMappingValues(object,</span>
-                  mappingToken.preValues, currentList, containsVariables);
+<span class="fc" id="L357">                  mappingToken.preValues, currentList, containsVariables);</span>
               // at least preValue
 <span class="pc bpc" id="L359" title="2 of 4 branches missed.">              if (preValue == null || preValue.length == 0) {</span>
 <span class="nc" id="L360">                throw new MtasParserException(&quot;no preValues&quot;);</span>
@@ -369,7 +369,7 @@ public abstract class MtasBasicParser extends MtasParser {
               }
               // construct postValue
 <span class="fc" id="L371">              String[] postValue = computeValueFromMappingValues(object,</span>
-                  mappingToken.postValues, currentList, containsVariables);
+<span class="fc" id="L372">                  mappingToken.postValues, currentList, containsVariables);</span>
               // construct value
               String[] value;
 <span class="pc bpc" id="L375" title="1 of 4 branches missed.">              if (postValue == null || postValue.length == 0) {</span>
@@ -382,25 +382,25 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc bfc" id="L382" title="All 2 branches covered.">                for (int k = 0; k &lt; value.length; k++) {</span>
 <span class="fc" id="L383">                  value[k] = value[k] + MtasToken.DELIMITER + postValue[0];</span>
                 }
-<span class="nc bnc" id="L385" title="All 2 branches missed.">              } else if (preValue.length == 1) {</span>
+<span class="pc bnc" id="L385" title="All 2 branches missed.">              } else if (preValue.length == 1) {</span>
 <span class="nc" id="L386">                value = postValue.clone();</span>
 <span class="nc bnc" id="L387" title="All 2 branches missed.">                for (int k = 0; k &lt; value.length; k++) {</span>
 <span class="nc" id="L388">                  value[k] = preValue[0] + MtasToken.DELIMITER + value[k];</span>
                 }
-              } else {
+<span class="nc" id="L390">              } else {</span>
 <span class="nc" id="L391">                value = new String[preValue.length * postValue.length];</span>
 <span class="nc" id="L392">                int number = 0;</span>
 <span class="nc bnc" id="L393" title="All 2 branches missed.">                for (int k1 = 0; k1 &lt; preValue.length; k1++) {</span>
 <span class="nc bnc" id="L394" title="All 2 branches missed.">                  for (int k2 = 0; k2 &lt; postValue.length; k2++) {</span>
 <span class="nc" id="L395">                    value[number] = preValue[k1] + MtasToken.DELIMITER</span>
-                        + postValue[k2];
+<span class="nc" id="L396">                        + postValue[k2];</span>
 <span class="nc" id="L397">                    number++;</span>
                   }
                 }
               }
               // construct payload
 <span class="fc" id="L402">              BytesRef payload = computePayloadFromMappingPayload(object,</span>
-                  mappingToken.payload, currentList);
+<span class="fc" id="L403">                  mappingToken.payload, currentList);</span>
               // create token and get id: from now on, we must continue, no
               // exceptions allowed...
 <span class="fc bfc" id="L406" title="All 2 branches covered.">              for (int k = 0; k &lt; value.length; k++) {</span>
@@ -445,7 +445,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L445" title="1 of 2 branches missed.">                  if (tokenCollection.get(tmpId) != null) {</span>
 <span class="fc" id="L446">                    tokenCollection.get(tmpId).setParentId(token.getId());</span>
                   }
-<span class="fc" id="L448">                }</span>
+                }
 <span class="fc" id="L449">                object.resetUpdateableMappingsAsParent();</span>
                 // use own position
 <span class="fc bfc" id="L451" title="All 2 branches covered.">                if (mapping.position.equals(MtasParserMapping.SOURCE_OWN)) {</span>
@@ -458,21 +458,21 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L458">                      .get(currentList.get(MAPPING_TYPE_GROUP).size() - 1)</span>
 <span class="nc" id="L459">                      .addUpdateableMappingWithPosition(token.getId());</span>
                   // use position from ancestorWord
-<span class="fc" id="L461">                } else if (mapping.position</span>
+<span class="pc" id="L461">                } else if (mapping.position</span>
 <span class="pc bpc" id="L462" title="1 of 2 branches missed.">                    .equals(MtasParserMapping.SOURCE_ANCESTOR_WORD)</span>
 <span class="nc bnc" id="L463" title="All 2 branches missed.">                    &amp;&amp; (!currentList.get(MAPPING_TYPE_WORD).isEmpty())) {</span>
 <span class="nc" id="L464">                  currentList.get(MAPPING_TYPE_WORD)</span>
 <span class="nc" id="L465">                      .get(currentList.get(MAPPING_TYPE_WORD).size() - 1)</span>
 <span class="nc" id="L466">                      .addUpdateableMappingWithPosition(token.getId());</span>
                   // use position from ancestorRelation
-<span class="fc" id="L468">                } else if (mapping.position</span>
+<span class="pc" id="L468">                } else if (mapping.position</span>
 <span class="pc bpc" id="L469" title="1 of 2 branches missed.">                    .equals(MtasParserMapping.SOURCE_ANCESTOR_RELATION)</span>
 <span class="nc bnc" id="L470" title="All 2 branches missed.">                    &amp;&amp; (!currentList.get(MAPPING_TYPE_RELATION).isEmpty())) {</span>
 <span class="nc" id="L471">                  currentList.get(MAPPING_TYPE_RELATION)</span>
 <span class="nc" id="L472">                      .get(currentList.get(MAPPING_TYPE_RELATION).size() - 1)</span>
 <span class="nc" id="L473">                      .addUpdateableMappingWithPosition(token.getId());</span>
                   // register id to get positions later from references
-<span class="fc" id="L475">                } else if (mapping.position</span>
+<span class="pc" id="L475">                } else if (mapping.position</span>
 <span class="pc bpc" id="L476" title="1 of 2 branches missed.">                    .equals(MtasParserMapping.SOURCE_REFS)) {</span>
 <span class="pc bpc" id="L477" title="1 of 2 branches missed.">                  if (mapping.type.equals(MAPPING_TYPE_GROUP_ANNOTATION)) {</span>
 <span class="nc bnc" id="L478" title="All 4 branches missed.">                    if (mapping.start != null &amp;&amp; mapping.end != null) {</span>
@@ -499,8 +499,8 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L499">                            token.getId(),</span>
 <span class="nc" id="L500">                            new HashSet&lt;String&gt;(Arrays.asList(end)));</span>
                       }
-<span class="nc" id="L502">                    }</span>
-                  } else {
+                    }
+<span class="nc" id="L503">                  } else {</span>
 <span class="fc" id="L504">                    updateList.get(UPDATE_TYPE_POSITION).put(token.getId(),</span>
 <span class="fc" id="L505">                        object.getRefIds());</span>
                   }
@@ -519,7 +519,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L519">                      .get(currentList.get(MAPPING_TYPE_GROUP).size() - 1)</span>
 <span class="nc" id="L520">                      .addUpdateableMappingWithOffset(token.getId());</span>
                   // use offset from ancestorWord
-<span class="fc" id="L522">                } else if (mapping.offset</span>
+<span class="pc" id="L522">                } else if (mapping.offset</span>
 <span class="fc bfc" id="L523" title="All 2 branches covered.">                    .equals(MtasParserMapping.SOURCE_ANCESTOR_WORD)</span>
 <span class="pc bpc" id="L524" title="1 of 2 branches missed.">                    &amp;&amp; !currentList.get(MAPPING_TYPE_WORD).isEmpty()) {</span>
 <span class="fc" id="L525">                  currentList.get(MAPPING_TYPE_WORD)</span>
@@ -533,7 +533,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L533">                      .get(currentList.get(MAPPING_TYPE_RELATION).size() - 1)</span>
 <span class="nc" id="L534">                      .addUpdateableMappingWithOffset(token.getId());</span>
                   // register id to get offset later from refs
-<span class="fc" id="L536">                } else if (mapping.offset</span>
+<span class="pc" id="L536">                } else if (mapping.offset</span>
 <span class="pc bpc" id="L537" title="1 of 2 branches missed.">                    .equals(MtasParserMapping.SOURCE_REFS)) {</span>
 <span class="fc" id="L538">                  updateList.get(UPDATE_TYPE_OFFSET).put(token.getId(),</span>
 <span class="fc" id="L539">                      object.getRefIds());</span>
@@ -555,7 +555,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L555">          String endAttribute = null;</span>
 <span class="nc bnc" id="L556" title="All 2 branches missed.">          if (mapping.start.equals(&quot;#&quot;)) {</span>
 <span class="nc" id="L557">            startAttribute = object.getId();</span>
-          } else {
+<span class="nc" id="L558">          } else {</span>
 <span class="nc" id="L559">            startAttribute = object.getAttribute(mapping.start);</span>
 <span class="nc bnc" id="L560" title="All 4 branches missed.">            if (startAttribute != null &amp;&amp; startAttribute.startsWith(&quot;#&quot;)) {</span>
 <span class="nc" id="L561">              startAttribute = startAttribute.substring(1);</span>
@@ -563,7 +563,7 @@ public abstract class MtasBasicParser extends MtasParser {
           }
 <span class="nc bnc" id="L564" title="All 2 branches missed.">          if (mapping.end.equals(&quot;#&quot;)) {</span>
 <span class="nc" id="L565">            endAttribute = object.getId();</span>
-          } else {
+<span class="nc" id="L566">          } else {</span>
 <span class="nc" id="L567">            endAttribute = object.getAttribute(mapping.end);</span>
 <span class="nc bnc" id="L568" title="All 4 branches missed.">            if (endAttribute != null &amp;&amp; endAttribute.startsWith(&quot;#&quot;)) {</span>
 <span class="nc" id="L569">              endAttribute = endAttribute.substring(1);</span>
@@ -580,11 +580,11 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L580">            object.setReferredEndOffset(endAttribute, object.getOffsetEnd());</span>
           }
         }
-<span class="fc" id="L583">      } catch (MtasParserException e) {</span>
+<span class="pc" id="L583">      } catch (MtasParserException e) {</span>
 <span class="fc" id="L584">        log.debug(&quot;Rejected mapping &quot; + object.getType().getName(), e);</span>
         // ignore, no new token is created
-<span class="fc" id="L586">      }</span>
-<span class="fc" id="L587">    }</span>
+      }
+    }
     // copy remaining updateableMappings to new parent
 <span class="fc bfc" id="L589" title="All 2 branches covered.">    if (!currentList.get(objectType.getType()).isEmpty()) {</span>
 <span class="pc bpc" id="L590" title="1 of 2 branches missed.">      if (currentList.get(objectType.getType()).contains(object)) {</span>
@@ -640,9 +640,9 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L640">              builder.append(subValue);</span>
             }
           }
-<span class="nc" id="L643">        }</span>
+        }
 <span class="nc" id="L644">        variables.get(variable.variable).put(id, builder.toString());</span>
-<span class="nc" id="L645">      }</span>
+      }
     }
 <span class="nc" id="L647">  }</span>
 
@@ -661,7 +661,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L661" title="1 of 2 branches missed.">            .equals(MtasParserMapping.PARSER_TYPE_VARIABLE)) {</span>
 <span class="nc" id="L662">          return true;</span>
         }
-<span class="fc" id="L664">      }</span>
+      }
     }
 <span class="fc" id="L666">    return false;</span>
   }
@@ -677,8 +677,8 @@ public abstract class MtasBasicParser extends MtasParser {
       Map&lt;String, List&lt;MtasParserObject&gt;&gt; currentList,
       Map&lt;String, Map&lt;Integer, Set&lt;String&gt;&gt;&gt; updateList) {
 <span class="fc bfc" id="L679" title="All 2 branches covered.">    if (currentObject.getType().type.equals(MAPPING_TYPE_GROUP)) {</span>
-      for (Integer tokenId : updateList
-<span class="pc bpc" id="L681" title="1 of 2 branches missed.">          .get(UPDATE_TYPE_LOCAL_REF_POSITION_START).keySet()) {</span>
+<span class="pc bpc" id="L680" title="1 of 2 branches missed.">      for (Integer tokenId : updateList</span>
+<span class="pc" id="L681">          .get(UPDATE_TYPE_LOCAL_REF_POSITION_START).keySet()) {</span>
 <span class="nc" id="L682">        if (updateList.get(UPDATE_TYPE_LOCAL_REF_POSITION_END)</span>
 <span class="nc bnc" id="L683" title="All 2 branches missed.">            .containsKey(tokenId)</span>
 <span class="nc" id="L684">            &amp;&amp; updateList.get(UPDATE_TYPE_LOCAL_REF_OFFSET_START)</span>
@@ -706,7 +706,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L706" title="All 2 branches missed.">              startPosition = (startPosition == null) ? newValue</span>
 <span class="nc" id="L707">                  : Math.min(startPosition, newValue);</span>
             }
-<span class="nc" id="L709">          }</span>
+          }
 <span class="nc bnc" id="L710" title="All 2 branches missed.">          while (endPositionIt.hasNext()) {</span>
 <span class="nc" id="L711">            String localKey = endPositionIt.next();</span>
 <span class="nc bnc" id="L712" title="All 2 branches missed.">            if (currentObject.referredEndPosition.containsKey(localKey)) {</span>
@@ -714,7 +714,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L714" title="All 2 branches missed.">              endPosition = (endPosition == null) ? newValue</span>
 <span class="nc" id="L715">                  : Math.max(endPosition, newValue);</span>
             }
-<span class="nc" id="L717">          }</span>
+          }
 <span class="nc bnc" id="L718" title="All 2 branches missed.">          while (startOffsetIt.hasNext()) {</span>
 <span class="nc" id="L719">            String localKey = startOffsetIt.next();</span>
 <span class="nc bnc" id="L720" title="All 2 branches missed.">            if (currentObject.referredStartOffset.containsKey(localKey)) {</span>
@@ -722,7 +722,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L722" title="All 2 branches missed.">              startOffset = (startOffset == null) ? newValue</span>
 <span class="nc" id="L723">                  : Math.min(startOffset, newValue);</span>
             }
-<span class="nc" id="L725">          }</span>
+          }
 <span class="nc bnc" id="L726" title="All 2 branches missed.">          while (endOffsetIt.hasNext()) {</span>
 <span class="nc" id="L727">            String localKey = endOffsetIt.next();</span>
 <span class="nc bnc" id="L728" title="All 2 branches missed.">            if (currentObject.referredEndOffset.containsKey(localKey)) {</span>
@@ -730,15 +730,15 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L730" title="All 2 branches missed.">              endOffset = (endOffset == null) ? newValue</span>
 <span class="nc" id="L731">                  : Math.max(endOffset, newValue);</span>
             }
-<span class="nc" id="L733">          }</span>
-<span class="nc bnc" id="L734" title="All 8 branches missed.">          if (startPosition != null &amp;&amp; endPosition != null</span>
-              &amp;&amp; startOffset != null &amp;&amp; endOffset != null) {
+          }
+<span class="nc bnc" id="L734" title="All 4 branches missed.">          if (startPosition != null &amp;&amp; endPosition != null</span>
+<span class="nc bnc" id="L735" title="All 4 branches missed.">              &amp;&amp; startOffset != null &amp;&amp; endOffset != null) {</span>
 <span class="nc" id="L736">            MtasToken token = tokenCollection.get(tokenId);</span>
 <span class="nc" id="L737">            token.addPositionRange(startPosition, endPosition);</span>
-<span class="nc" id="L738">            token.setOffset(startOffset, endOffset);</span>
+<span class="nc" id="L738">            token.addOffset(startOffset, endOffset);</span>
           }
         }
-<span class="nc" id="L741">      }</span>
+      }
 
     }
 <span class="fc bfc" id="L744" title="All 2 branches covered.">    if (!currentList.get(MAPPING_TYPE_GROUP).isEmpty()) {</span>
@@ -808,7 +808,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L808">    if (mappingValue.get(MAPPING_VALUE_SOURCE)</span>
 <span class="fc bfc" id="L809" title="All 2 branches covered.">        .equals(MtasParserMapping.SOURCE_OWN)) {</span>
 <span class="fc" id="L810">      checkObjects = new MtasParserObject[] { object };</span>
-    } else {
+<span class="fc" id="L811">    } else {</span>
 <span class="fc bfc" id="L812" title="All 2 branches covered.">      ancestorNumber = mappingValue.get(MAPPING_VALUE_ANCESTOR) != null</span>
 <span class="fc" id="L813">          ? Integer.parseInt(mappingValue.get(MAPPING_VALUE_ANCESTOR)) : null;</span>
 <span class="fc" id="L814">      ancestorType = computeTypeFromMappingSource(</span>
@@ -822,7 +822,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L822" title="1 of 2 branches missed.">              .get(ancestorType).get((s - ancestorNumber - 1))) != null) {</span>
 <span class="fc" id="L823">            checkObjects = new MtasParserObject[] { checkObject };</span>
           }
-        } else {
+<span class="fc" id="L825">        } else {</span>
 <span class="fc" id="L826">          checkObjects = new MtasParserObject[s];</span>
 <span class="fc bfc" id="L827" title="All 2 branches covered.">          for (int i = s - 1; i &gt;= 0; i--) {</span>
 <span class="fc" id="L828">            checkObjects[s - i - 1] = currentList.get(ancestorType).get(i);</span>
@@ -862,14 +862,14 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L862" title="1 of 2 branches missed.">          if (subvalue != null) {</span>
 <span class="fc bfc" id="L863" title="All 2 branches covered.">            for (int i = 0; i &lt; value.length; i++) {</span>
 <span class="fc" id="L864">              value[i] = addAndEncodeValue(value[i], subvalue,</span>
-                  containsVariables);
+<span class="fc" id="L865">                  containsVariables);</span>
             }
           }
-<span class="fc" id="L868">        }</span>
+        }
         // from objects
-      } else {
+<span class="fc" id="L870">      } else {</span>
 <span class="fc" id="L871">        MtasParserObject[] checkObjects = computeObjectFromMappingValue(object,</span>
-            mappingValue, currentList);
+<span class="fc" id="L872">            mappingValue, currentList);</span>
         // create value
 <span class="pc bpc" id="L874" title="2 of 4 branches missed.">        if (checkObjects != null &amp;&amp; checkObjects.length &gt; 0) {</span>
 <span class="fc" id="L875">          MtasParserType checkType = checkObjects[0].getType();</span>
@@ -885,7 +885,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L885" title="1 of 2 branches missed.">            if (subvalue != null) {</span>
 <span class="fc bfc" id="L886" title="All 2 branches covered.">              for (int i = 0; i &lt; value.length; i++) {</span>
 <span class="fc" id="L887">                value[i] = addAndEncodeValue(value[i], subvalue,</span>
-                    containsVariables);
+<span class="fc" id="L888">                    containsVariables);</span>
               }
             }
             // add attribute to value
@@ -894,12 +894,12 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L894">            String tmpValue = null;    </span>
 <span class="pc bpc" id="L895" title="1 of 2 branches missed.">            if (mappingValue.get(MAPPING_VALUE_NAME).equals(&quot;#&quot;)) {</span>
 <span class="nc" id="L896">              tmpValue = checkObjects[0].getId();</span>
-            } else {
+<span class="nc" id="L897">            } else {</span>
 <span class="fc" id="L898">              String namespace = mappingValue.get(MAPPING_VALUE_NAMESPACE); </span>
 <span class="pc bpc" id="L899" title="1 of 2 branches missed.">              if(namespace==null) {</span>
 <span class="fc" id="L900">                tmpValue = checkObjects[0]</span>
 <span class="fc" id="L901">                  .getAttribute(mappingValue.get(MAPPING_VALUE_NAME));</span>
-              } else {
+<span class="fc" id="L902">              } else {</span>
 <span class="nc" id="L903">                tmpValue = checkObjects[0]</span>
 <span class="nc" id="L904">                    .getOtherAttribute(namespace, mappingValue.get(MAPPING_VALUE_NAME));</span>
               }
@@ -913,7 +913,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc bfc" id="L913" title="All 2 branches covered.">            if (subvalue != null) {</span>
 <span class="fc bfc" id="L914" title="All 2 branches covered.">              for (int i = 0; i &lt; value.length; i++) {</span>
 <span class="fc" id="L915">                value[i] = addAndEncodeValue(value[i], subvalue,</span>
-                    containsVariables);
+<span class="fc" id="L916">                    containsVariables);</span>
               }
             }
             // value from text
@@ -928,7 +928,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L928" title="1 of 2 branches missed.">            if (subvalue != null) {</span>
 <span class="fc bfc" id="L929" title="All 2 branches covered.">              for (int i = 0; i &lt; value.length; i++) {</span>
 <span class="fc" id="L930">                value[i] = addAndEncodeValue(value[i], subvalue,</span>
-                    containsVariables);
+<span class="fc" id="L931">                    containsVariables);</span>
               }
             }
 <span class="pc" id="L934">          } else if (mappingValue.get(&quot;type&quot;)</span>
@@ -951,7 +951,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L951" title="All 2 branches missed.">                if (subvalue != null) {</span>
 <span class="nc bnc" id="L952" title="All 2 branches missed.">                  for (int i = 0; i &lt; value.length; i++) {</span>
 <span class="nc" id="L953">                    nextValue[number] = addAndEncodeValue(value[i], subvalue,</span>
-                        containsVariables);
+<span class="nc" id="L954">                        containsVariables);</span>
 <span class="nc" id="L955">                    number++;</span>
                   }
 <span class="nc bnc" id="L957" title="All 2 branches missed.">                } else if (!nullValue) {</span>
@@ -982,10 +982,10 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L982" title="All 2 branches missed.">                  for (int i = 0; i &lt; value.length; i++) {</span>
 <span class="nc bnc" id="L983" title="All 4 branches missed.">                    if (prefix != null &amp;&amp; !prefix.isEmpty()) {</span>
 <span class="nc" id="L984">                      value[i] = addAndEncodeValue(value[i], prefix,</span>
-                          containsVariables);
+<span class="nc" id="L985">                          containsVariables);</span>
                     }
 <span class="nc" id="L987">                    value[i] = addAndEncodeVariable(value[i], variableName,</span>
-                        subvalue, containsVariables);
+<span class="nc" id="L988">                        subvalue, containsVariables);</span>
                   }
                 }
               }
@@ -998,7 +998,7 @@ public abstract class MtasBasicParser extends MtasParser {
           }
         }
       }
-<span class="fc" id="L1001">    }</span>
+    }
 <span class="pc bpc" id="L1002" title="1 of 4 branches missed.">    if (value.length == 1 &amp;&amp; value[0].isEmpty()) {</span>
 <span class="fc" id="L1003">      return new String[] {};</span>
     } else {
@@ -1052,17 +1052,17 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L1052" title="All 2 branches missed.">        if (newType == null) {</span>
 <span class="nc" id="L1053">          finalNewValue = new String(</span>
 <span class="nc" id="L1054">              enc.encode(newValue.getBytes(StandardCharsets.UTF_8)),</span>
-              StandardCharsets.UTF_8);
-        } else {
+<span class="nc" id="L1055">              StandardCharsets.UTF_8);</span>
+<span class="nc" id="L1056">        } else {</span>
 <span class="nc" id="L1057">          finalNewValue = new String(</span>
 <span class="nc" id="L1058">              enc.encode(newType.getBytes(StandardCharsets.UTF_8)),</span>
-              StandardCharsets.UTF_8)
-              + &quot;:&quot;
-              + new String(
+<span class="nc" id="L1059">              StandardCharsets.UTF_8)</span>
+<span class="nc" id="L1060">              + &quot;:&quot;</span>
+<span class="nc" id="L1061">              + new String(</span>
 <span class="nc" id="L1062">                  enc.encode(newValue.getBytes(StandardCharsets.UTF_8)),</span>
-                  StandardCharsets.UTF_8);
+<span class="nc" id="L1063">                  StandardCharsets.UTF_8);</span>
         }
-      } else {
+<span class="nc" id="L1065">      } else {</span>
 <span class="fc" id="L1066">        finalNewValue = newValue;</span>
       }
 <span class="pc bpc" id="L1068" title="1 of 4 branches missed.">      if (originalValue == null || originalValue.isEmpty()) {</span>
@@ -1087,12 +1087,12 @@ public abstract class MtasBasicParser extends MtasParser {
     String[] postfixSplit;
 <span class="nc bnc" id="L1088" title="All 4 branches missed.">    if (encodedPrefix != null &amp;&amp; !encodedPrefix.isEmpty()) {</span>
 <span class="nc" id="L1089">      prefixSplit = encodedPrefix.split(&quot; &quot;);</span>
-    } else {
+<span class="nc" id="L1090">    } else {</span>
 <span class="nc" id="L1091">      prefixSplit = new String[0];</span>
     }
 <span class="nc bnc" id="L1093" title="All 4 branches missed.">    if (encodedPostfix != null &amp;&amp; !encodedPostfix.isEmpty()) {</span>
 <span class="nc" id="L1094">      postfixSplit = encodedPostfix.split(&quot; &quot;);</span>
-    } else {
+<span class="nc" id="L1095">    } else {</span>
 <span class="nc" id="L1096">      postfixSplit = new String[0];</span>
     }
     try {
@@ -1121,9 +1121,9 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L1121">        String[] subSplit = split.split(&quot;:&quot;);</span>
 <span class="nc bnc" id="L1122" title="All 2 branches missed.">        if (subSplit.length == 2) {</span>
 <span class="nc" id="L1123">          String decodedVariableName = new String(dec.decode(subSplit[0]),</span>
-              StandardCharsets.UTF_8);
+<span class="nc" id="L1124">              StandardCharsets.UTF_8);</span>
 <span class="nc" id="L1125">          String decodedVariableValue = new String(dec.decode(subSplit[1]),</span>
-              StandardCharsets.UTF_8);
+<span class="nc" id="L1126">              StandardCharsets.UTF_8);</span>
 <span class="nc bnc" id="L1127" title="All 2 branches missed.">          if (variables.containsKey(decodedVariableName)) {</span>
 <span class="nc" id="L1128">            if (variables.get(decodedVariableName)</span>
 <span class="nc bnc" id="L1129" title="All 2 branches missed.">                .containsKey(decodedVariableValue)) {</span>
@@ -1132,19 +1132,19 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L1132">              builder.append(valueFromVariable);</span>
 <span class="nc" id="L1133">            } else {</span>
 <span class="nc" id="L1134">              throw new MtasParserException(&quot;id &quot; + decodedVariableValue</span>
-                  + &quot; not found in &quot; + decodedVariableName);
+<span class="nc" id="L1135">                  + &quot; not found in &quot; + decodedVariableName);</span>
             }
           } else {
 <span class="nc" id="L1138">            throw new MtasParserException(</span>
-                &quot;variable &quot; + decodedVariableName + &quot; unknown&quot;);
+<span class="nc" id="L1139">                &quot;variable &quot; + decodedVariableName + &quot; unknown&quot;);</span>
           }
         }
-<span class="nc" id="L1142">      } else {</span>
+      } else {
         try {
 <span class="nc" id="L1144">          builder.append(new String(dec.decode(split), StandardCharsets.UTF_8));</span>
 <span class="nc" id="L1145">        } catch (IllegalArgumentException e) {</span>
 <span class="nc" id="L1146">          log.info(e);</span>
-<span class="nc" id="L1147">        }</span>
+        }
       }
     }
 <span class="nc" id="L1150">    return builder.toString();</span>
@@ -1173,11 +1173,11 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L1173">          BytesRef subpayload = computeMaximumFilteredPayload(</span>
 <span class="nc" id="L1174">              mappingPayload.get(MAPPING_VALUE_TEXT), payload, null);</span>
 <span class="nc bnc" id="L1175" title="All 2 branches missed.">          payload = (subpayload != null) ? subpayload : payload;</span>
-<span class="nc" id="L1176">        }</span>
+        }
         // from objects
-      } else {
+<span class="nc" id="L1178">      } else {</span>
 <span class="fc" id="L1179">        MtasParserObject[] checkObjects = computeObjectFromMappingValue(object,</span>
-            mappingPayload, currentList);
+<span class="fc" id="L1180">            mappingPayload, currentList);</span>
         // do checks and updates
 <span class="pc bpc" id="L1182" title="1 of 2 branches missed.">        if (checkObjects != null) {</span>
           // payload from attribute
@@ -1197,7 +1197,7 @@ public abstract class MtasBasicParser extends MtasParser {
           }
         }
       }
-<span class="fc" id="L1200">    }</span>
+    }
 <span class="fc" id="L1201">    return payload;</span>
   }
 
@@ -1222,7 +1222,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L1222">      } catch (MtasParserException e) {</span>
 <span class="fc" id="L1223">        log.debug(e);</span>
       }
-<span class="fc" id="L1225">    }</span>
+    }
 <span class="fc" id="L1226">    return false;</span>
   }
 
@@ -1245,14 +1245,14 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L1245">        int number = 0;</span>
         try {
 <span class="fc" id="L1247">          number = Integer.parseInt(mappingCondition.get(&quot;number&quot;));</span>
-<span class="nc" id="L1248">        } catch (Exception e) {</span>
+<span class="pc" id="L1248">        } catch (Exception e) {</span>
 <span class="nc" id="L1249">          log.debug(e);</span>
-<span class="fc" id="L1250">        }</span>
+        }
 <span class="fc" id="L1251">        String type = computeTypeFromMappingSource(</span>
 <span class="fc" id="L1252">            mappingCondition.get(MAPPING_VALUE_SOURCE));</span>
 <span class="fc bfc" id="L1253" title="All 2 branches covered.">        if (number != currentList.get(type).size()) {</span>
 <span class="fc" id="L1254">          throw new MtasParserException(</span>
-              &quot;condition mapping is &quot; + number + &quot; ancestors of &quot; + type
+<span class="fc" id="L1255">              &quot;condition mapping is &quot; + number + &quot; ancestors of &quot; + type</span>
 <span class="fc" id="L1256">                  + &quot; (but &quot; + currentList.get(type).size() + &quot; found)&quot;);</span>
         }
         // condition unknown ancestors
@@ -1261,17 +1261,17 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L1261">        int number = 0;</span>
         try {
 <span class="fc" id="L1263">          number = Integer.parseInt(mappingCondition.get(&quot;number&quot;));</span>
-<span class="nc" id="L1264">        } catch (Exception e) {</span>
+<span class="pc" id="L1264">        } catch (Exception e) {</span>
 <span class="nc" id="L1265">          log.debug(e);</span>
-<span class="fc" id="L1266">        }</span>
+        }
 <span class="fc bfc" id="L1267" title="All 2 branches covered.">        if (number != object.getUnknownAncestorNumber()) {</span>
 <span class="fc" id="L1268">          throw new MtasParserException(</span>
-              &quot;condition mapping is &quot; + number + &quot; unknown ancestors (but &quot;
+<span class="fc" id="L1269">              &quot;condition mapping is &quot; + number + &quot; unknown ancestors (but &quot;</span>
 <span class="fc" id="L1270">                  + object.getUnknownAncestorNumber() + &quot; found)&quot;);</span>
         }
-<span class="fc" id="L1272">      } else {</span>
+      } else {
 <span class="fc" id="L1273">        MtasParserObject[] checkObjects = computeObjectFromMappingValue(object,</span>
-            mappingCondition, currentList);
+<span class="fc" id="L1274">            mappingCondition, currentList);</span>
 <span class="fc" id="L1275">        Boolean notCondition = false;</span>
 <span class="fc bfc" id="L1276" title="All 2 branches covered.">        if (mappingCondition.get(&quot;not&quot;) != null) {</span>
 <span class="fc" id="L1277">          notCondition = true;</span>
@@ -1306,7 +1306,7 @@ public abstract class MtasBasicParser extends MtasParser {
               String attributeValue;
 <span class="pc bpc" id="L1307" title="1 of 2 branches missed.">              if(namespace==null) {</span>
 <span class="fc" id="L1308">                attributeValue = checkObject.getAttribute(mappingCondition.get(MAPPING_VALUE_NAME));</span>
-              } else {
+<span class="fc" id="L1309">              } else {</span>
 <span class="nc" id="L1310">                attributeValue = checkObject.getOtherAttribute(namespace, mappingCondition.get(MAPPING_VALUE_NAME));</span>
               }
 <span class="pc bpc" id="L1312" title="1 of 4 branches missed.">              if ((attributeCondition == null) &amp;&amp; (attributeValue == null)) {</span>
@@ -1314,66 +1314,66 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L1314">                  throw new MtasParserException(&quot;attribute &quot;</span>
 <span class="nc" id="L1315">                      + mappingCondition.get(&quot;name&quot;) + &quot; not available&quot;);</span>
                 }
-<span class="pc bpc" id="L1317" title="1 of 4 branches missed.">              } else if ((attributeCondition != null)</span>
-                  &amp;&amp; (attributeValue == null)) {
+<span class="fc bfc" id="L1317" title="All 2 branches covered.">              } else if ((attributeCondition != null)</span>
+<span class="pc bpc" id="L1318" title="1 of 2 branches missed.">                  &amp;&amp; (attributeValue == null)) {</span>
 <span class="nc bnc" id="L1319" title="All 2 branches missed.">                if (!notCondition) {</span>
 <span class="nc" id="L1320">                  throw new MtasParserException(</span>
-                      &quot;condition &quot; + attributeCondition + &quot; on attribute &quot;
+<span class="nc" id="L1321">                      &quot;condition &quot; + attributeCondition + &quot; on attribute &quot;</span>
 <span class="nc" id="L1322">                          + mappingCondition.get(&quot;name&quot;)</span>
-                          + &quot; not matched (is null)&quot;);
+<span class="nc" id="L1323">                          + &quot; not matched (is null)&quot;);</span>
                 }
 <span class="fc bfc" id="L1325" title="All 2 branches covered.">              } else if (attributeCondition != null) {</span>
 <span class="pc bpc" id="L1326" title="1 of 2 branches missed.">                if (!notCondition</span>
 <span class="nc bnc" id="L1327" title="All 2 branches missed.">                    &amp;&amp; !attributeCondition.equals(attributeValue)) {</span>
 <span class="nc" id="L1328">                  throw new MtasParserException(</span>
-                      &quot;condition &quot; + attributeCondition + &quot; on attribute &quot;
+<span class="nc" id="L1329">                      &quot;condition &quot; + attributeCondition + &quot; on attribute &quot;</span>
 <span class="nc" id="L1330">                          + mappingCondition.get(&quot;name&quot;) + &quot; not matched (is &quot;</span>
-                          + attributeValue + &quot;)&quot;);
+<span class="nc" id="L1331">                          + attributeValue + &quot;)&quot;);</span>
 <span class="pc bpc" id="L1332" title="1 of 2 branches missed.">                } else if (!notCondition</span>
 <span class="nc bnc" id="L1333" title="All 2 branches missed.">                    &amp;&amp; attributeCondition.equals(attributeValue)) {</span>
 <span class="nc" id="L1334">                  break checkObjectLoop;</span>
 <span class="pc bpc" id="L1335" title="1 of 2 branches missed.">                } else if (notCondition</span>
 <span class="fc bfc" id="L1336" title="All 2 branches covered.">                    &amp;&amp; attributeCondition.equals(attributeValue)) {</span>
 <span class="fc" id="L1337">                  throw new MtasParserException(</span>
-                      &quot;condition NOT &quot; + attributeCondition + &quot; on attribute &quot;
+<span class="fc" id="L1338">                      &quot;condition NOT &quot; + attributeCondition + &quot; on attribute &quot;</span>
 <span class="fc" id="L1339">                          + mappingCondition.get(&quot;name&quot;) + &quot; not matched (is &quot;</span>
-                          + attributeValue + &quot;)&quot;);
+<span class="fc" id="L1340">                          + attributeValue + &quot;)&quot;);</span>
                 }
               }
               // condition on text
-<span class="pc" id="L1344">            } else if (mappingCondition.get(&quot;type&quot;)</span>
+<span class="nc" id="L1344">            } else if (mappingCondition.get(&quot;type&quot;)</span>
 <span class="nc bnc" id="L1345" title="All 2 branches missed.">                .equals(MtasParserMapping.PARSER_TYPE_TEXT)</span>
 <span class="nc bnc" id="L1346" title="All 2 branches missed.">                &amp;&amp; object.getType().precheckText()) {</span>
 <span class="nc" id="L1347">              String textCondition = mappingCondition</span>
 <span class="nc" id="L1348">                  .get(MAPPING_VALUE_CONDITION);</span>
 <span class="nc" id="L1349">              String textValue = object.getText();</span>
-<span class="nc bnc" id="L1350" title="All 4 branches missed.">              if ((textCondition == null)</span>
-<span class="nc bnc" id="L1351" title="All 2 branches missed.">                  &amp;&amp; ((textValue == null) || textValue.equals(&quot;&quot;))) {</span>
+<span class="nc bnc" id="L1350" title="All 2 branches missed.">              if ((textCondition == null)</span>
+<span class="nc bnc" id="L1351" title="All 4 branches missed.">                  &amp;&amp; ((textValue == null) || textValue.equals(&quot;&quot;))) {</span>
 <span class="nc bnc" id="L1352" title="All 2 branches missed.">                if (!notCondition) {</span>
 <span class="nc" id="L1353">                  throw new MtasParserException(&quot;no text available&quot;);</span>
                 }
 <span class="nc bnc" id="L1355" title="All 4 branches missed.">              } else if ((textCondition != null) &amp;&amp; (textValue == null)) {</span>
 <span class="nc bnc" id="L1356" title="All 2 branches missed.">                if (!notCondition) {</span>
 <span class="nc" id="L1357">                  throw new MtasParserException(&quot;condition &quot; + textCondition</span>
-                      + &quot; on text not matched (is null)&quot;);
+<span class="nc" id="L1358">                      + &quot; on text not matched (is null)&quot;);</span>
                 }
 <span class="nc bnc" id="L1360" title="All 2 branches missed.">              } else if (textCondition != null) {</span>
 <span class="nc bnc" id="L1361" title="All 4 branches missed.">                if (!notCondition &amp;&amp; !textCondition.equals(textValue)) {</span>
 <span class="nc" id="L1362">                  throw new MtasParserException(&quot;condition &quot; + textCondition</span>
-                      + &quot; on text not matched (is &quot; + textValue + &quot;)&quot;);
+<span class="nc" id="L1363">                      + &quot; on text not matched (is &quot; + textValue + &quot;)&quot;);</span>
 <span class="nc bnc" id="L1364" title="All 4 branches missed.">                } else if (notCondition &amp;&amp; textCondition.equals(textValue)) {</span>
 <span class="nc" id="L1365">                  throw new MtasParserException(&quot;condition NOT &quot; + textCondition</span>
-                      + &quot; on text not matched (is &quot; + textValue + &quot;)&quot;);
+<span class="nc" id="L1366">                      + &quot; on text not matched (is &quot; + textValue + &quot;)&quot;);</span>
                 }
               }
             }
           }
 <span class="pc bpc" id="L1371" title="1 of 2 branches missed.">        } else if (!notCondition) {</span>
 <span class="fc" id="L1372">          throw new MtasParserException(</span>
-              &quot;no object found to match condition&quot; + mappingCondition);
+<span class="fc" id="L1373">              &quot;no object found to match condition&quot; + mappingCondition);</span>
         }
       }
-<span class="fc" id="L1376">    }</span>
+    }
 <span class="fc" id="L1377">  }</span>
 
   /**
@@ -1394,7 +1394,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L1394">      if (mappingCondition.get(&quot;type&quot;)</span>
 <span class="pc bpc" id="L1395" title="1 of 2 branches missed.">          .equals(MtasParserMapping.PARSER_TYPE_TEXT)) {</span>
 <span class="nc" id="L1396">        MtasParserObject[] checkObjects = computeObjectFromMappingValue(object,</span>
-            mappingCondition, currentList);
+<span class="nc" id="L1397">            mappingCondition, currentList);</span>
 <span class="nc bnc" id="L1398" title="All 2 branches missed.">        if (checkObjects != null) {</span>
 <span class="nc" id="L1399">          String textCondition = mappingCondition.get(MAPPING_VALUE_CONDITION);</span>
 <span class="nc" id="L1400">          String textValue = object.getText();</span>
@@ -1402,28 +1402,28 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L1402" title="All 2 branches missed.">          if (mappingCondition.get(&quot;not&quot;) != null) {</span>
 <span class="nc" id="L1403">            notCondition = true;</span>
           }
-<span class="nc bnc" id="L1405" title="All 4 branches missed.">          if ((textCondition == null)</span>
-<span class="nc bnc" id="L1406" title="All 2 branches missed.">              &amp;&amp; ((textValue == null) || textValue.isEmpty())) {</span>
+<span class="nc bnc" id="L1405" title="All 2 branches missed.">          if ((textCondition == null)</span>
+<span class="nc bnc" id="L1406" title="All 4 branches missed.">              &amp;&amp; ((textValue == null) || textValue.isEmpty())) {</span>
 <span class="nc bnc" id="L1407" title="All 2 branches missed.">            if (!notCondition) {</span>
 <span class="nc" id="L1408">              throw new MtasParserException(&quot;no text available&quot;);</span>
             }
 <span class="nc bnc" id="L1410" title="All 4 branches missed.">          } else if ((textCondition != null) &amp;&amp; (textValue == null)) {</span>
 <span class="nc bnc" id="L1411" title="All 2 branches missed.">            if (!notCondition) {</span>
 <span class="nc" id="L1412">              throw new MtasParserException(&quot;condition &quot; + textCondition</span>
-                  + &quot; on text not matched (is null)&quot;);
+<span class="nc" id="L1413">                  + &quot; on text not matched (is null)&quot;);</span>
             }
 <span class="nc bnc" id="L1415" title="All 2 branches missed.">          } else if (textCondition != null) {</span>
 <span class="nc bnc" id="L1416" title="All 4 branches missed.">            if (!notCondition &amp;&amp; !textCondition.equals(textValue)) {</span>
 <span class="nc" id="L1417">              throw new MtasParserException(&quot;condition &quot; + textCondition</span>
-                  + &quot; on text not matched (is &quot; + textValue + &quot;)&quot;);
+<span class="nc" id="L1418">                  + &quot; on text not matched (is &quot; + textValue + &quot;)&quot;);</span>
 <span class="nc bnc" id="L1419" title="All 4 branches missed.">            } else if (notCondition &amp;&amp; textCondition.equals(textValue)) {</span>
 <span class="nc" id="L1420">              throw new MtasParserException(&quot;condition NOT &quot; + textCondition</span>
-                  + &quot; on text not matched (is &quot; + textValue + &quot;)&quot;);
+<span class="nc" id="L1421">                  + &quot; on text not matched (is &quot; + textValue + &quot;)&quot;);</span>
             }
           }
         }
       }
-<span class="fc" id="L1426">    }</span>
+    }
 <span class="fc" id="L1427">  }</span>
 
   /**
@@ -1441,12 +1441,12 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L1441">      boolean[] valuesFilter = new boolean[values.length];</span>
 <span class="nc" id="L1442">      boolean doSplitFilter = false;</span>
 <span class="nc bnc" id="L1443" title="All 2 branches missed.">      for (String item : filters) {</span>
-<span class="nc bnc" id="L1444" title="All 2 branches missed.">        if (item.trim().matches(</span>
-<span class="nc" id="L1445">            &quot;^&quot; + Pattern.quote(MAPPING_FILTER_SPLIT) + &quot;\\([0-9\\-]+\\)$&quot;)) {</span>
+<span class="nc" id="L1444">        if (item.trim().matches(</span>
+<span class="nc bnc" id="L1445" title="All 2 branches missed.">            &quot;^&quot; + Pattern.quote(MAPPING_FILTER_SPLIT) + &quot;\\([0-9\\-]+\\)$&quot;)) {</span>
 <span class="nc" id="L1446">          doSplitFilter = true;</span>
 <span class="nc" id="L1447">          Pattern splitContent = Pattern</span>
 <span class="nc" id="L1448">              .compile(&quot;^&quot; + Pattern.quote(MAPPING_FILTER_SPLIT)</span>
-                  + &quot;\\(([0-9]+)(-([0-9]+))?\\)$&quot;);
+<span class="nc" id="L1449">                  + &quot;\\(([0-9]+)(-([0-9]+))?\\)$&quot;);</span>
 <span class="nc" id="L1450">          Matcher splitContentMatcher = splitContent.matcher(item.trim());</span>
 <span class="nc bnc" id="L1451" title="All 2 branches missed.">          while (splitContentMatcher.find()) {</span>
 <span class="nc bnc" id="L1452" title="All 2 branches missed.">            if (splitContentMatcher.group(3) == null) {</span>
@@ -1461,7 +1461,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L1461">                  i2); i++) {</span>
 <span class="nc" id="L1462">                valuesFilter[i] = true;</span>
               }
-<span class="nc" id="L1464">            }</span>
+            }
           }
         }
       }
@@ -1509,7 +1509,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc bfc" id="L1509" title="All 2 branches covered.">      for (String item : filters) {</span>
 <span class="pc bpc" id="L1510" title="1 of 2 branches missed.">        if (item.trim().equals(MAPPING_FILTER_UPPERCASE)) {</span>
 <span class="nc bnc" id="L1511" title="All 2 branches missed.">          localValue = localValue == null ? null : localValue.toUpperCase();</span>
-<span class="fc bfc" id="L1512" title="All 2 branches covered.">        } else if (item.trim().equals(MAPPING_FILTER_LOWERCASE)) {</span>
+<span class="pc bfc" id="L1512" title="All 2 branches covered.">        } else if (item.trim().equals(MAPPING_FILTER_LOWERCASE)) {</span>
 <span class="pc bpc" id="L1513" title="1 of 2 branches missed.">          localValue = localValue == null ? null : localValue.toLowerCase();</span>
 <span class="pc bpc" id="L1514" title="1 of 2 branches missed.">        } else if (item.trim().equals(MAPPING_FILTER_ASCII)) {</span>
 <span class="pc bpc" id="L1515" title="1 of 2 branches missed.">          if (localValue != null) {</span>
@@ -1518,16 +1518,16 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L1518">            ASCIIFoldingFilter.foldToASCII(old, 0, ascii, 0,</span>
 <span class="fc" id="L1519">                localValue.length());</span>
 <span class="fc" id="L1520">            localValue = new String(ascii);</span>
-<span class="fc" id="L1521">          }</span>
-<span class="nc" id="L1522">        } else if (item.trim()</span>
+          }
+<span class="pc" id="L1522">        } else if (item.trim()</span>
 <span class="nc bnc" id="L1523" title="All 2 branches missed.">            .matches(Pattern.quote(MAPPING_FILTER_SPLIT) + &quot;\\([0-9\\-]+\\)&quot;)) {</span>
 <span class="nc bnc" id="L1524" title="All 2 branches missed.">          if (!type.equals(MtasParserMapping.PARSER_TYPE_TEXT_SPLIT)) {</span>
 <span class="nc" id="L1525">            throw new MtasConfigException(</span>
-                &quot;split filter not allowed for &quot; + type);
+<span class="nc" id="L1526">                &quot;split filter not allowed for &quot; + type);</span>
           }
         } else {
 <span class="nc" id="L1529">          throw new MtasConfigException(</span>
-              &quot;unknown filter &quot; + item + &quot; for value &quot; + localValue);
+<span class="nc" id="L1530">              &quot;unknown filter &quot; + item + &quot; for value &quot; + localValue);</span>
         }
       }
     }
@@ -1551,7 +1551,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc bfc" id="L1551" title="All 2 branches covered.">    if (value != null) {</span>
 <span class="pc bpc" id="L1552" title="1 of 2 branches missed.">      if (payload != null) {</span>
 <span class="nc" id="L1553">        Float payloadFloat = PayloadHelper.decodeFloat(payload.bytes,</span>
-            payload.offset);
+<span class="nc" id="L1554">            payload.offset);</span>
 <span class="nc" id="L1555">        Float valueFloat = Float.parseFloat(value);</span>
 <span class="nc" id="L1556">        return new BytesRef(</span>
 <span class="nc" id="L1557">            PayloadHelper.encodeFloat(Math.max(payloadFloat, valueFloat)));</span>
@@ -1806,15 +1806,15 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L1806">                  .get(m).attributes.get(&quot;type&quot;);</span>
 <span class="nc" id="L1807">              String nameType = config.children.get(k).children</span>
 <span class="nc" id="L1808">                  .get(m).attributes.get(&quot;name&quot;);</span>
-<span class="nc bnc" id="L1809" title="All 6 branches missed.">              if ((valueType != null) &amp;&amp; valueType.equals(&quot;attribute&quot;)</span>
-                  &amp;&amp; nameType != null) {
+<span class="nc bnc" id="L1809" title="All 4 branches missed.">              if ((valueType != null) &amp;&amp; valueType.equals(&quot;attribute&quot;)</span>
+<span class="nc bnc" id="L1810" title="All 2 branches missed.">                  &amp;&amp; nameType != null) {</span>
 <span class="nc" id="L1811">                MtasParserVariableValue variableValue = new MtasParserVariableValue(</span>
-                    valueType, nameType);
+<span class="nc" id="L1812">                    valueType, nameType);</span>
 <span class="nc" id="L1813">                values.add(variableValue);</span>
               }
             }
           }
-        } else {
+<span class="nc" id="L1817">        } else {</span>
 <span class="nc" id="L1818">          throw new MtasConfigException(</span>
 <span class="nc" id="L1819">              &quot;unknown variable subtype &quot; + config.children.get(k).name</span>
 <span class="nc" id="L1820">                  + &quot; in variable &quot; + config.attributes.get(&quot;name&quot;));</span>
@@ -1956,7 +1956,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L1956">          String tokenType = config.children.get(k).attributes.get(&quot;type&quot;);</span>
 <span class="pc bpc" id="L1957" title="2 of 4 branches missed.">          if ((tokenType != null) &amp;&amp; tokenType.equals(&quot;string&quot;)) {</span>
 <span class="fc" id="L1958">            MtasParserMappingToken mappingToken = new MtasParserMappingToken(</span>
-                tokenType);
+<span class="fc" id="L1959">                tokenType);</span>
 <span class="fc" id="L1960">            tokens.add(mappingToken);</span>
             // check attributes
 <span class="fc bfc" id="L1962" title="All 2 branches covered.">            for (String tokenAttributeName : config.children.get(k).attributes</span>
@@ -1967,25 +1967,25 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L1967" title="1 of 2 branches missed.">                if (!attributeValue.equals(&quot;true&quot;)</span>
 <span class="pc bpc" id="L1968" title="1 of 2 branches missed.">                    &amp;&amp; !attributeValue.equals(&quot;1&quot;)) {</span>
 <span class="fc" id="L1969">                  mappingToken.setOffset(false);</span>
-                } else {
+<span class="fc" id="L1970">                } else {</span>
 <span class="nc" id="L1971">                  mappingToken.setOffset(true);</span>
                 }
-<span class="fc bfc" id="L1973" title="All 2 branches covered.">              } else if (tokenAttributeName.equals(TOKEN_REALOFFSET)) {</span>
+<span class="pc bfc" id="L1973" title="All 2 branches covered.">              } else if (tokenAttributeName.equals(TOKEN_REALOFFSET)) {</span>
 <span class="pc bpc" id="L1974" title="1 of 2 branches missed.">                if (!attributeValue.equals(&quot;true&quot;)</span>
 <span class="pc bpc" id="L1975" title="1 of 2 branches missed.">                    &amp;&amp; !attributeValue.equals(&quot;1&quot;)) {</span>
 <span class="fc" id="L1976">                  mappingToken.setRealOffset(false);</span>
-                } else {
+<span class="fc" id="L1977">                } else {</span>
 <span class="nc" id="L1978">                  mappingToken.setRealOffset(true);</span>
                 }
-<span class="fc bfc" id="L1980" title="All 2 branches covered.">              } else if (tokenAttributeName.equals(TOKEN_PARENT)) {</span>
+<span class="pc bfc" id="L1980" title="All 2 branches covered.">              } else if (tokenAttributeName.equals(TOKEN_PARENT)) {</span>
 <span class="pc bpc" id="L1981" title="1 of 2 branches missed.">                if (!attributeValue.equals(&quot;true&quot;)</span>
 <span class="pc bpc" id="L1982" title="1 of 2 branches missed.">                    &amp;&amp; !attributeValue.equals(&quot;1&quot;)) {</span>
 <span class="fc" id="L1983">                  mappingToken.setParent(false);</span>
-                } else {
+<span class="fc" id="L1984">                } else {</span>
 <span class="nc" id="L1985">                  mappingToken.setParent(true);</span>
                 }
               }
-<span class="fc" id="L1988">            }</span>
+            }
 <span class="fc bfc" id="L1989" title="All 2 branches covered.">            for (int m = 0; m &lt; config.children.get(k).children.size(); m++) {</span>
 <span class="fc" id="L1990">              if (config.children.get(k).children.get(m).name</span>
 <span class="fc bfc" id="L1991" title="All 2 branches covered.">                  .equals(MAPPING_SUBTYPE_TOKEN_PRE)</span>
@@ -2013,98 +2013,98 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L2013">                      addString(mappingToken, items.name, valueAttribute);</span>
 <span class="fc bfc" id="L2014" title="All 2 branches covered.">                    } else if (itemType.equals(ITEM_TYPE_NAME)) {</span>
 <span class="fc" id="L2015">                      addName(mappingToken, items.name, prefixAttribute,</span>
-                          filterAttribute);
+<span class="fc" id="L2016">                          filterAttribute);</span>
 <span class="fc bfc" id="L2017" title="All 2 branches covered.">                    } else if (itemType.equals(ITEM_TYPE_ATTRIBUTE)) {</span>
 <span class="fc" id="L2018">                      addAttribute(mappingToken, items.name, nameAttribute, namespaceAttribute,</span>
-                          prefixAttribute, filterAttribute);
+<span class="fc" id="L2019">                          prefixAttribute, filterAttribute);</span>
 <span class="fc bfc" id="L2020" title="All 2 branches covered.">                    } else if (itemType.equals(ITEM_TYPE_TEXT)) {</span>
 <span class="fc" id="L2021">                      addText(mappingToken, items.name, prefixAttribute,</span>
-                          filterAttribute);
+<span class="fc" id="L2022">                          filterAttribute);</span>
 <span class="pc bpc" id="L2023" title="1 of 2 branches missed.">                    } else if (itemType.equals(ITEM_TYPE_TEXT_SPLIT)) {</span>
 <span class="nc" id="L2024">                      addTextSplit(mappingToken, items.name, valueAttribute,</span>
-                          prefixAttribute, filterAttribute);
+<span class="nc" id="L2025">                          prefixAttribute, filterAttribute);</span>
 <span class="pc bpc" id="L2026" title="1 of 2 branches missed.">                    } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR)) {</span>
 <span class="fc" id="L2027">                      addAncestorName(computeAncestorSourceType(type),</span>
-                          mappingToken, items.name,
+<span class="fc" id="L2028">                          mappingToken, items.name,</span>
 <span class="fc" id="L2029">                          computeDistance(distanceAttribute), prefixAttribute,</span>
-                          filterAttribute);
-<span class="nc bnc" id="L2031" title="All 2 branches missed.">                    } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR_GROUP)) {</span>
+<span class="fc" id="L2030">                          filterAttribute);</span>
+<span class="pc bnc" id="L2031" title="All 2 branches missed.">                    } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR_GROUP)) {</span>
 <span class="nc" id="L2032">                      addAncestorName(SOURCE_ANCESTOR_GROUP, mappingToken,</span>
 <span class="nc" id="L2033">                          items.name, computeDistance(distanceAttribute),</span>
-                          prefixAttribute, filterAttribute);
+<span class="nc" id="L2034">                          prefixAttribute, filterAttribute);</span>
 <span class="nc" id="L2035">                    } else if (itemType</span>
 <span class="nc bnc" id="L2036" title="All 2 branches missed.">                        .equals(ITEM_TYPE_NAME_ANCESTOR_GROUP_ANNOTATION)) {</span>
 <span class="nc" id="L2037">                      addAncestorName(SOURCE_ANCESTOR_GROUP_ANNOTATION,</span>
-                          mappingToken, items.name,
+<span class="nc" id="L2038">                          mappingToken, items.name,</span>
 <span class="nc" id="L2039">                          computeDistance(distanceAttribute), prefixAttribute,</span>
-                          filterAttribute);
+<span class="nc" id="L2040">                          filterAttribute);</span>
 <span class="nc bnc" id="L2041" title="All 2 branches missed.">                    } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR_WORD)) {</span>
 <span class="nc" id="L2042">                      addAncestorName(SOURCE_ANCESTOR_WORD, mappingToken,</span>
 <span class="nc" id="L2043">                          items.name, computeDistance(distanceAttribute),</span>
-                          prefixAttribute, filterAttribute);
+<span class="nc" id="L2044">                          prefixAttribute, filterAttribute);</span>
 <span class="nc" id="L2045">                    } else if (itemType</span>
 <span class="nc bnc" id="L2046" title="All 2 branches missed.">                        .equals(ITEM_TYPE_NAME_ANCESTOR_WORD_ANNOTATION)) {</span>
 <span class="nc" id="L2047">                      addAncestorName(SOURCE_ANCESTOR_WORD_ANNOTATION,</span>
-                          mappingToken, items.name,
+<span class="nc" id="L2048">                          mappingToken, items.name,</span>
 <span class="nc" id="L2049">                          computeDistance(distanceAttribute), prefixAttribute,</span>
-                          filterAttribute);
+<span class="nc" id="L2050">                          filterAttribute);</span>
 <span class="nc" id="L2051">                    } else if (itemType</span>
 <span class="nc bnc" id="L2052" title="All 2 branches missed.">                        .equals(ITEM_TYPE_NAME_ANCESTOR_RELATION)) {</span>
 <span class="nc" id="L2053">                      addAncestorName(SOURCE_ANCESTOR_RELATION, mappingToken,</span>
 <span class="nc" id="L2054">                          items.name, computeDistance(distanceAttribute),</span>
-                          prefixAttribute, filterAttribute);
+<span class="nc" id="L2055">                          prefixAttribute, filterAttribute);</span>
 <span class="nc" id="L2056">                    } else if (itemType</span>
 <span class="nc bnc" id="L2057" title="All 2 branches missed.">                        .equals(ITEM_TYPE_NAME_ANCESTOR_RELATION_ANNOTATION)) {</span>
 <span class="nc" id="L2058">                      addAncestorName(SOURCE_ANCESTOR_RELATION_ANNOTATION,</span>
-                          mappingToken, items.name,
+<span class="nc" id="L2059">                          mappingToken, items.name,</span>
 <span class="nc" id="L2060">                          computeDistance(distanceAttribute), prefixAttribute,</span>
-                          filterAttribute);
+<span class="nc" id="L2061">                          filterAttribute);</span>
 <span class="nc" id="L2062">                    } else if (itemType</span>
 <span class="nc bnc" id="L2063" title="All 2 branches missed.">                        .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_GROUP)) {</span>
 <span class="nc" id="L2064">                      addAncestorAttribute(SOURCE_ANCESTOR_GROUP, mappingToken,</span>
 <span class="nc" id="L2065">                          items.name, computeDistance(distanceAttribute),</span>
-                          nameAttribute, prefixAttribute, filterAttribute);
-<span class="nc bnc" id="L2067" title="All 2 branches missed.">                    } else if (itemType.equals(</span>
-                        ITEM_TYPE_ATTRIBUTE_ANCESTOR_GROUP_ANNOTATION)) {
+<span class="nc" id="L2066">                          nameAttribute, prefixAttribute, filterAttribute);</span>
+<span class="nc" id="L2067">                    } else if (itemType.equals(</span>
+<span class="nc bnc" id="L2068" title="All 2 branches missed.">                        ITEM_TYPE_ATTRIBUTE_ANCESTOR_GROUP_ANNOTATION)) {</span>
 <span class="nc" id="L2069">                      addAncestorAttribute(SOURCE_ANCESTOR_GROUP_ANNOTATION,</span>
-                          mappingToken, items.name,
+<span class="nc" id="L2070">                          mappingToken, items.name,</span>
 <span class="nc" id="L2071">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          prefixAttribute, filterAttribute);
+<span class="nc" id="L2072">                          prefixAttribute, filterAttribute);</span>
 <span class="nc" id="L2073">                    } else if (itemType</span>
 <span class="nc bnc" id="L2074" title="All 2 branches missed.">                        .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_WORD)) {</span>
 <span class="nc" id="L2075">                      addAncestorAttribute(SOURCE_ANCESTOR_WORD, mappingToken,</span>
 <span class="nc" id="L2076">                          items.name, computeDistance(distanceAttribute),</span>
-                          nameAttribute, prefixAttribute, filterAttribute);
+<span class="nc" id="L2077">                          nameAttribute, prefixAttribute, filterAttribute);</span>
 <span class="nc" id="L2078">                    } else if (itemType</span>
 <span class="nc bnc" id="L2079" title="All 2 branches missed.">                        .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_WORD_ANNOTATION)) {</span>
 <span class="nc" id="L2080">                      addAncestorAttribute(SOURCE_ANCESTOR_WORD_ANNOTATION,</span>
-                          mappingToken, items.name,
+<span class="nc" id="L2081">                          mappingToken, items.name,</span>
 <span class="nc" id="L2082">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          prefixAttribute, filterAttribute);
+<span class="nc" id="L2083">                          prefixAttribute, filterAttribute);</span>
 <span class="nc" id="L2084">                    } else if (itemType</span>
 <span class="nc bnc" id="L2085" title="All 2 branches missed.">                        .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_RELATION)) {</span>
 <span class="nc" id="L2086">                      addAncestorAttribute(SOURCE_ANCESTOR_RELATION,</span>
-                          mappingToken, items.name,
+<span class="nc" id="L2087">                          mappingToken, items.name,</span>
 <span class="nc" id="L2088">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          prefixAttribute, filterAttribute);
-<span class="nc bnc" id="L2090" title="All 2 branches missed.">                    } else if (itemType.equals(</span>
-                        ITEM_TYPE_ATTRIBUTE_ANCESTOR_RELATION_ANNOTATION)) {
+<span class="nc" id="L2089">                          prefixAttribute, filterAttribute);</span>
+<span class="nc" id="L2090">                    } else if (itemType.equals(</span>
+<span class="nc bnc" id="L2091" title="All 2 branches missed.">                        ITEM_TYPE_ATTRIBUTE_ANCESTOR_RELATION_ANNOTATION)) {</span>
 <span class="nc" id="L2092">                      addAncestorAttribute(SOURCE_ANCESTOR_RELATION_ANNOTATION,</span>
-                          mappingToken, items.name,
+<span class="nc" id="L2093">                          mappingToken, items.name,</span>
 <span class="nc" id="L2094">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          prefixAttribute, filterAttribute);
+<span class="nc" id="L2095">                          prefixAttribute, filterAttribute);</span>
 <span class="nc bnc" id="L2096" title="All 2 branches missed.">                    } else if (itemType.equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR)) {</span>
 <span class="nc" id="L2097">                      addAncestorAttribute(computeAncestorSourceType(this.type),</span>
-                          mappingToken, items.name,
+<span class="nc" id="L2098">                          mappingToken, items.name,</span>
 <span class="nc" id="L2099">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          prefixAttribute, filterAttribute);
+<span class="nc" id="L2100">                          prefixAttribute, filterAttribute);</span>
 <span class="nc" id="L2101">                    } else if (itemType</span>
 <span class="nc bnc" id="L2102" title="All 2 branches missed.">                        .equals(ITEM_TYPE_VARIABLE_FROM_ATTRIBUTE)) {</span>
 <span class="nc" id="L2103">                      addVariableFromAttribute(mappingToken, items.name,</span>
-                          nameAttribute, prefixAttribute, valueAttribute);
-                    } else {
+<span class="nc" id="L2104">                          nameAttribute, prefixAttribute, valueAttribute);</span>
+<span class="nc" id="L2105">                    } else {</span>
 <span class="nc" id="L2106">                      throw new MtasConfigException(String.format(</span>
-                          &quot;unknown itemType %s for %s in mapping %s&quot;, itemType,
+<span class="nc" id="L2107">                          &quot;unknown itemType %s for %s in mapping %s&quot;, itemType,</span>
 <span class="nc" id="L2108">                          items.name, config.attributes.get(&quot;name&quot;)));</span>
                     }
                   }
@@ -2129,53 +2129,53 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc" id="L2129">                      payloadString(mappingToken, valueAttribute);</span>
 <span class="pc bpc" id="L2130" title="1 of 2 branches missed.">                    } else if (itemType.equals(ITEM_TYPE_TEXT)) {</span>
 <span class="nc" id="L2131">                      payloadText(mappingToken, filterAttribute);</span>
-<span class="fc bfc" id="L2132" title="All 2 branches covered.">                    } else if (itemType.equals(ITEM_TYPE_ATTRIBUTE)) {</span>
+<span class="pc bfc" id="L2132" title="All 2 branches covered.">                    } else if (itemType.equals(ITEM_TYPE_ATTRIBUTE)) {</span>
 <span class="fc" id="L2133">                      payloadAttribute(mappingToken, nameAttribute,</span>
-                          filterAttribute);
+<span class="fc" id="L2134">                          filterAttribute);</span>
 <span class="pc bpc" id="L2135" title="1 of 2 branches missed.">                    } else if (itemType.equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR)) {</span>
 <span class="fc" id="L2136">                      payloadAncestorAttribute(mappingToken,</span>
 <span class="fc" id="L2137">                          computeAncestorSourceType(type),</span>
 <span class="fc" id="L2138">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          filterAttribute);
-<span class="nc" id="L2140">                    } else if (itemType</span>
+<span class="fc" id="L2139">                          filterAttribute);</span>
+<span class="pc" id="L2140">                    } else if (itemType</span>
 <span class="nc bnc" id="L2141" title="All 2 branches missed.">                        .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_GROUP)) {</span>
 <span class="nc" id="L2142">                      payloadAncestorAttribute(mappingToken,</span>
-                          SOURCE_ANCESTOR_GROUP,
+<span class="nc" id="L2143">                          SOURCE_ANCESTOR_GROUP,</span>
 <span class="nc" id="L2144">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          filterAttribute);
-<span class="nc bnc" id="L2146" title="All 2 branches missed.">                    } else if (itemType.equals(</span>
-                        ITEM_TYPE_ATTRIBUTE_ANCESTOR_GROUP_ANNOTATION)) {
+<span class="nc" id="L2145">                          filterAttribute);</span>
+<span class="nc" id="L2146">                    } else if (itemType.equals(</span>
+<span class="nc bnc" id="L2147" title="All 2 branches missed.">                        ITEM_TYPE_ATTRIBUTE_ANCESTOR_GROUP_ANNOTATION)) {</span>
 <span class="nc" id="L2148">                      payloadAncestorAttribute(mappingToken,</span>
-                          SOURCE_ANCESTOR_GROUP_ANNOTATION,
+<span class="nc" id="L2149">                          SOURCE_ANCESTOR_GROUP_ANNOTATION,</span>
 <span class="nc" id="L2150">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          filterAttribute);
+<span class="nc" id="L2151">                          filterAttribute);</span>
 <span class="nc" id="L2152">                    } else if (itemType</span>
 <span class="nc bnc" id="L2153" title="All 2 branches missed.">                        .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_WORD)) {</span>
 <span class="nc" id="L2154">                      payloadAncestorAttribute(mappingToken,</span>
-                          SOURCE_ANCESTOR_WORD,
+<span class="nc" id="L2155">                          SOURCE_ANCESTOR_WORD,</span>
 <span class="nc" id="L2156">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          filterAttribute);
+<span class="nc" id="L2157">                          filterAttribute);</span>
 <span class="nc" id="L2158">                    } else if (itemType</span>
 <span class="nc bnc" id="L2159" title="All 2 branches missed.">                        .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_WORD_ANNOTATION)) {</span>
 <span class="nc" id="L2160">                      payloadAncestorAttribute(mappingToken,</span>
-                          SOURCE_ANCESTOR_WORD_ANNOTATION,
+<span class="nc" id="L2161">                          SOURCE_ANCESTOR_WORD_ANNOTATION,</span>
 <span class="nc" id="L2162">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          filterAttribute);
+<span class="nc" id="L2163">                          filterAttribute);</span>
 <span class="nc" id="L2164">                    } else if (itemType</span>
 <span class="nc bnc" id="L2165" title="All 2 branches missed.">                        .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_RELATION)) {</span>
 <span class="nc" id="L2166">                      payloadAncestorAttribute(mappingToken,</span>
-                          SOURCE_ANCESTOR_RELATION,
+<span class="nc" id="L2167">                          SOURCE_ANCESTOR_RELATION,</span>
 <span class="nc" id="L2168">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          filterAttribute);
-<span class="nc bnc" id="L2170" title="All 2 branches missed.">                    } else if (itemType.equals(</span>
-                        ITEM_TYPE_ATTRIBUTE_ANCESTOR_RELATION_ANNOTATION)) {
+<span class="nc" id="L2169">                          filterAttribute);</span>
+<span class="nc" id="L2170">                    } else if (itemType.equals(</span>
+<span class="nc bnc" id="L2171" title="All 2 branches missed.">                        ITEM_TYPE_ATTRIBUTE_ANCESTOR_RELATION_ANNOTATION)) {</span>
 <span class="nc" id="L2172">                      payloadAncestorAttribute(mappingToken,</span>
-                          SOURCE_ANCESTOR_RELATION_ANNOTATION,
+<span class="nc" id="L2173">                          SOURCE_ANCESTOR_RELATION_ANNOTATION,</span>
 <span class="nc" id="L2174">                          computeDistance(distanceAttribute), nameAttribute,</span>
-                          filterAttribute);
-                    } else {
+<span class="nc" id="L2175">                          filterAttribute);</span>
+<span class="nc" id="L2176">                    } else {</span>
 <span class="nc" id="L2177">                      throw new MtasConfigException(String.format(</span>
-                          &quot;unknown itemType %s for %s in mapping %s&quot;, itemType,
+<span class="nc" id="L2178">                          &quot;unknown itemType %s for %s in mapping %s&quot;, itemType,</span>
 <span class="nc" id="L2179">                          items.name, config.attributes.get(&quot;name&quot;)));</span>
                     }
                   }
@@ -2208,13 +2208,13 @@ public abstract class MtasBasicParser extends MtasParser {
               }
 <span class="fc bfc" id="L2209" title="All 2 branches covered.">              if (itemType.equals(ITEM_TYPE_ATTRIBUTE)) {</span>
 <span class="fc" id="L2210">                conditionAttribute(nameAttribute, namespaceAttribute, conditionAttribute,</span>
-                    filterAttribute, notAttribute);
+<span class="fc" id="L2211">                    filterAttribute, notAttribute);</span>
 <span class="pc bpc" id="L2212" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_NAME)) {</span>
 <span class="nc" id="L2213">                conditionName(conditionAttribute, notAttribute);</span>
 <span class="pc bpc" id="L2214" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_TEXT)) {</span>
 <span class="nc" id="L2215">                conditionText(conditionAttribute, filterAttribute,</span>
-                    notAttribute);
-<span class="fc bfc" id="L2217" title="All 2 branches covered.">              } else if (itemType.equals(ITEM_TYPE_UNKNOWN_ANCESTOR)) {</span>
+<span class="nc" id="L2216">                    notAttribute);</span>
+<span class="pc bfc" id="L2217" title="All 2 branches covered.">              } else if (itemType.equals(ITEM_TYPE_UNKNOWN_ANCESTOR)) {</span>
 <span class="fc" id="L2218">                conditionUnknownAncestor(computeNumber(numberAttribute));</span>
 <span class="fc bfc" id="L2219" title="All 2 branches covered.">              } else if (itemType.equals(ITEM_TYPE_ANCESTOR)) {</span>
 <span class="fc" id="L2220">                conditionAncestor(computeAncestorSourceType(type),</span>
@@ -2225,7 +2225,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L2225" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_ANCESTOR_GROUP_ANNOTATION)) {</span>
 <span class="nc" id="L2226">                conditionAncestor(SOURCE_ANCESTOR_GROUP_ANNOTATION,</span>
 <span class="nc" id="L2227">                    computeNumber(numberAttribute));</span>
-<span class="fc bfc" id="L2228" title="All 2 branches covered.">              } else if (itemType.equals(ITEM_TYPE_ANCESTOR_WORD)) {</span>
+<span class="pc bfc" id="L2228" title="All 2 branches covered.">              } else if (itemType.equals(ITEM_TYPE_ANCESTOR_WORD)) {</span>
 <span class="fc" id="L2229">                conditionAncestor(SOURCE_ANCESTOR_WORD,</span>
 <span class="fc" id="L2230">                    computeNumber(numberAttribute));</span>
 <span class="pc bpc" id="L2231" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_ANCESTOR_WORD_ANNOTATION)) {</span>
@@ -2234,74 +2234,74 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="pc bpc" id="L2234" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_ANCESTOR_RELATION)) {</span>
 <span class="nc" id="L2235">                conditionAncestor(SOURCE_ANCESTOR_RELATION,</span>
 <span class="nc" id="L2236">                    computeNumber(numberAttribute));</span>
-<span class="fc" id="L2237">              } else if (itemType</span>
+<span class="pc" id="L2237">              } else if (itemType</span>
 <span class="pc bpc" id="L2238" title="1 of 2 branches missed.">                  .equals(ITEM_TYPE_ANCESTOR_RELATION_ANNOTATION)) {</span>
 <span class="nc" id="L2239">                conditionAncestor(SOURCE_ANCESTOR_RELATION_ANNOTATION,</span>
 <span class="nc" id="L2240">                    computeNumber(numberAttribute));</span>
 <span class="pc bpc" id="L2241" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR)) {</span>
 <span class="nc" id="L2242">                conditionAncestorAttribute(computeAncestorSourceType(type),</span>
 <span class="nc" id="L2243">                    computeDistance(distanceAttribute), nameAttribute,</span>
-                    conditionAttribute, filterAttribute, notAttribute);
+<span class="nc" id="L2244">                    conditionAttribute, filterAttribute, notAttribute);</span>
 <span class="pc bpc" id="L2245" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_GROUP)) {</span>
 <span class="nc" id="L2246">                conditionAncestorAttribute(SOURCE_ANCESTOR_GROUP,</span>
 <span class="nc" id="L2247">                    computeDistance(distanceAttribute), nameAttribute,</span>
-                    conditionAttribute, filterAttribute, notAttribute);
-<span class="fc" id="L2249">              } else if (itemType</span>
+<span class="nc" id="L2248">                    conditionAttribute, filterAttribute, notAttribute);</span>
+<span class="pc" id="L2249">              } else if (itemType</span>
 <span class="pc bpc" id="L2250" title="1 of 2 branches missed.">                  .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_GROUP_ANNOTATION)) {</span>
 <span class="nc" id="L2251">                conditionAncestorAttribute(SOURCE_ANCESTOR_GROUP_ANNOTATION,</span>
 <span class="nc" id="L2252">                    computeDistance(distanceAttribute), nameAttribute,</span>
-                    conditionAttribute, filterAttribute, notAttribute);
+<span class="nc" id="L2253">                    conditionAttribute, filterAttribute, notAttribute);</span>
 <span class="pc bpc" id="L2254" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_WORD)) {</span>
 <span class="nc" id="L2255">                conditionAncestorAttribute(SOURCE_ANCESTOR_WORD,</span>
 <span class="nc" id="L2256">                    computeDistance(distanceAttribute), nameAttribute,</span>
-                    conditionAttribute, filterAttribute, notAttribute);
-<span class="fc" id="L2258">              } else if (itemType</span>
+<span class="nc" id="L2257">                    conditionAttribute, filterAttribute, notAttribute);</span>
+<span class="pc" id="L2258">              } else if (itemType</span>
 <span class="pc bpc" id="L2259" title="1 of 2 branches missed.">                  .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_WORD_ANNOTATION)) {</span>
 <span class="nc" id="L2260">                conditionAncestorAttribute(SOURCE_ANCESTOR_WORD_ANNOTATION,</span>
 <span class="nc" id="L2261">                    computeDistance(distanceAttribute), nameAttribute,</span>
-                    conditionAttribute, filterAttribute, notAttribute);
-<span class="fc" id="L2263">              } else if (itemType</span>
+<span class="nc" id="L2262">                    conditionAttribute, filterAttribute, notAttribute);</span>
+<span class="pc" id="L2263">              } else if (itemType</span>
 <span class="pc bpc" id="L2264" title="1 of 2 branches missed.">                  .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_RELATION)) {</span>
 <span class="nc" id="L2265">                conditionAncestorAttribute(SOURCE_ANCESTOR_RELATION,</span>
 <span class="nc" id="L2266">                    computeDistance(distanceAttribute), nameAttribute,</span>
-                    conditionAttribute, filterAttribute, notAttribute);
-<span class="fc" id="L2268">              } else if (itemType</span>
+<span class="nc" id="L2267">                    conditionAttribute, filterAttribute, notAttribute);</span>
+<span class="pc" id="L2268">              } else if (itemType</span>
 <span class="pc bpc" id="L2269" title="1 of 2 branches missed.">                  .equals(ITEM_TYPE_ATTRIBUTE_ANCESTOR_RELATION_ANNOTATION)) {</span>
 <span class="nc" id="L2270">                conditionAncestorAttribute(SOURCE_ANCESTOR_RELATION_ANNOTATION,</span>
 <span class="nc" id="L2271">                    computeDistance(distanceAttribute), nameAttribute,</span>
-                    conditionAttribute, filterAttribute, notAttribute);
+<span class="nc" id="L2272">                    conditionAttribute, filterAttribute, notAttribute);</span>
 <span class="pc bpc" id="L2273" title="1 of 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR)) {</span>
 <span class="fc" id="L2274">                conditionAncestorName(computeAncestorSourceType(type),</span>
 <span class="fc" id="L2275">                    computeDistance(distanceAttribute), conditionAttribute,</span>
-                    filterAttribute, notAttribute);
-<span class="nc bnc" id="L2277" title="All 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR_GROUP)) {</span>
+<span class="fc" id="L2276">                    filterAttribute, notAttribute);</span>
+<span class="pc bnc" id="L2277" title="All 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR_GROUP)) {</span>
 <span class="nc" id="L2278">                conditionAncestorName(SOURCE_ANCESTOR_GROUP,</span>
 <span class="nc" id="L2279">                    computeDistance(distanceAttribute), conditionAttribute,</span>
-                    filterAttribute, notAttribute);
+<span class="nc" id="L2280">                    filterAttribute, notAttribute);</span>
 <span class="nc" id="L2281">              } else if (itemType</span>
 <span class="nc bnc" id="L2282" title="All 2 branches missed.">                  .equals(ITEM_TYPE_NAME_ANCESTOR_GROUP_ANNOTATION)) {</span>
 <span class="nc" id="L2283">                conditionAncestorName(SOURCE_ANCESTOR_GROUP_ANNOTATION,</span>
 <span class="nc" id="L2284">                    computeDistance(distanceAttribute), conditionAttribute,</span>
-                    filterAttribute, notAttribute);
+<span class="nc" id="L2285">                    filterAttribute, notAttribute);</span>
 <span class="nc bnc" id="L2286" title="All 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR_WORD)) {</span>
 <span class="nc" id="L2287">                conditionAncestorName(SOURCE_ANCESTOR_WORD,</span>
 <span class="nc" id="L2288">                    computeDistance(distanceAttribute), conditionAttribute,</span>
-                    filterAttribute, notAttribute);
+<span class="nc" id="L2289">                    filterAttribute, notAttribute);</span>
 <span class="nc" id="L2290">              } else if (itemType</span>
 <span class="nc bnc" id="L2291" title="All 2 branches missed.">                  .equals(ITEM_TYPE_NAME_ANCESTOR_WORD_ANNOTATION)) {</span>
 <span class="nc" id="L2292">                conditionAncestorName(SOURCE_ANCESTOR_WORD_ANNOTATION,</span>
 <span class="nc" id="L2293">                    computeDistance(distanceAttribute), conditionAttribute,</span>
-                    filterAttribute, notAttribute);
+<span class="nc" id="L2294">                    filterAttribute, notAttribute);</span>
 <span class="nc bnc" id="L2295" title="All 2 branches missed.">              } else if (itemType.equals(ITEM_TYPE_NAME_ANCESTOR_RELATION)) {</span>
 <span class="nc" id="L2296">                conditionAncestorName(SOURCE_ANCESTOR_RELATION,</span>
 <span class="nc" id="L2297">                    computeDistance(distanceAttribute), conditionAttribute,</span>
-                    filterAttribute, notAttribute);
+<span class="nc" id="L2298">                    filterAttribute, notAttribute);</span>
 <span class="nc" id="L2299">              } else if (itemType</span>
 <span class="nc bnc" id="L2300" title="All 2 branches missed.">                  .equals(ITEM_TYPE_NAME_ANCESTOR_RELATION_ANNOTATION)) {</span>
 <span class="nc" id="L2301">                conditionAncestorName(SOURCE_ANCESTOR_RELATION_ANNOTATION,</span>
 <span class="nc" id="L2302">                    computeDistance(distanceAttribute), conditionAttribute,</span>
-                    filterAttribute, notAttribute);
-              } else {
+<span class="nc" id="L2303">                    filterAttribute, notAttribute);</span>
+<span class="nc" id="L2304">              } else {</span>
 <span class="nc" id="L2305">                throw new MtasConfigException(</span>
 <span class="nc" id="L2306">                    String.format(&quot;unknown itemType %s for %s in mapping %s&quot;,</span>
 <span class="nc" id="L2307">                        itemType, config.children.get(k).name,</span>
@@ -2357,7 +2357,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L2357">      mapConstructionItem.put(MAPPING_VALUE_TEXT, text);</span>
 <span class="pc bpc" id="L2358" title="1 of 2 branches missed.">      if (type.equals(MAPPING_SUBTYPE_TOKEN_PRE)) {</span>
 <span class="fc" id="L2359">        mappingToken.preValues.add(mapConstructionItem);</span>
-<span class="nc bnc" id="L2360" title="All 2 branches missed.">      } else if (type.equals(MAPPING_SUBTYPE_TOKEN_POST)) {</span>
+<span class="pc bnc" id="L2360" title="All 2 branches missed.">      } else if (type.equals(MAPPING_SUBTYPE_TOKEN_POST)) {</span>
 <span class="nc" id="L2361">        mappingToken.postValues.add(mapConstructionItem);</span>
       }
 <span class="fc" id="L2363">    }</span>
@@ -2394,7 +2394,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L2394">      mapConstructionItem.put(MAPPING_VALUE_FILTER, filter);</span>
 <span class="pc bpc" id="L2395" title="1 of 2 branches missed.">      if (type.equals(MAPPING_SUBTYPE_TOKEN_PRE)) {</span>
 <span class="fc" id="L2396">        mappingToken.preValues.add(mapConstructionItem);</span>
-<span class="nc bnc" id="L2397" title="All 2 branches missed.">      } else if (type.equals(MAPPING_SUBTYPE_TOKEN_POST)) {</span>
+<span class="pc bnc" id="L2397" title="All 2 branches missed.">      } else if (type.equals(MAPPING_SUBTYPE_TOKEN_POST)) {</span>
 <span class="nc" id="L2398">        mappingToken.postValues.add(mapConstructionItem);</span>
       }
 <span class="fc" id="L2400">    }</span>
@@ -2633,7 +2633,7 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="fc" id="L2633">        mapConstructionItem.put(MAPPING_VALUE_FILTER, filter);</span>
 <span class="pc bpc" id="L2634" title="1 of 2 branches missed.">        if (type.equals(MAPPING_SUBTYPE_TOKEN_PRE)) {</span>
 <span class="fc" id="L2635">          mappingToken.preValues.add(mapConstructionItem);</span>
-<span class="nc bnc" id="L2636" title="All 2 branches missed.">        } else if (type.equals(MAPPING_SUBTYPE_TOKEN_POST)) {</span>
+<span class="pc bnc" id="L2636" title="All 2 branches missed.">        } else if (type.equals(MAPPING_SUBTYPE_TOKEN_POST)) {</span>
 <span class="nc" id="L2637">          mappingToken.postValues.add(mapConstructionItem);</span>
         }
       }
@@ -2847,12 +2847,12 @@ public abstract class MtasBasicParser extends MtasParser {
     public String toString() {
 <span class="nc" id="L2848">      StringBuilder builder = new StringBuilder();</span>
 <span class="nc" id="L2849">      builder.append(&quot;mapping - type:&quot; + type + &quot;, offset:&quot; + offset</span>
-          + &quot;, realOffset:&quot; + realOffset + &quot;, position:&quot; + position);
+<span class="nc" id="L2850">          + &quot;, realOffset:&quot; + realOffset + &quot;, position:&quot; + position);</span>
 <span class="nc bnc" id="L2851" title="All 2 branches missed.">      for (int i = 0; i &lt; conditions.size(); i++) {</span>
 <span class="nc" id="L2852">        builder.append(&quot;\n\tcondition &quot; + i + &quot;: &quot;);</span>
 <span class="nc bnc" id="L2853" title="All 2 branches missed.">        for (Entry&lt;String, String&gt; entry : conditions.get(i).entrySet()) {</span>
 <span class="nc" id="L2854">          builder.append(entry.getKey() + &quot;:&quot; + entry.getValue() + &quot;,&quot;);</span>
-<span class="nc" id="L2855">        }</span>
+        }
       }
 <span class="nc bnc" id="L2857" title="All 2 branches missed.">      for (int i = 0; i &lt; tokens.size(); i++) {</span>
 <span class="nc" id="L2858">        builder.append(&quot;\n\ttoken &quot; + i);</span>
@@ -2865,21 +2865,21 @@ public abstract class MtasBasicParser extends MtasParser {
 <span class="nc bnc" id="L2865" title="All 2 branches missed.">          for (Entry&lt;String, String&gt; entry : tokens.get(i).preValues.get(j)</span>
 <span class="nc" id="L2866">              .entrySet()) {</span>
 <span class="nc" id="L2867">            builder.append(entry.getKey() + &quot;:&quot; + entry.getValue() + &quot;,&quot;);</span>
-<span class="nc" id="L2868">          }</span>
+          }
         }
 <span class="nc bnc" id="L2870" title="All 2 branches missed.">        for (int j = 0; j &lt; tokens.get(i).postValues.size(); j++) {</span>
 <span class="nc" id="L2871">          builder.append(&quot;\n\t- post &quot; + j + &quot;: &quot;);</span>
 <span class="nc bnc" id="L2872" title="All 2 branches missed.">          for (Entry&lt;String, String&gt; entry : tokens.get(i).postValues.get(j)</span>
 <span class="nc" id="L2873">              .entrySet()) {</span>
 <span class="nc" id="L2874">            builder.append(entry.getKey() + &quot;:&quot; + entry.getValue() + &quot;,&quot;);</span>
-<span class="nc" id="L2875">          }</span>
+          }
         }
 <span class="nc bnc" id="L2877" title="All 2 branches missed.">        for (int j = 0; j &lt; tokens.get(i).payload.size(); j++) {</span>
 <span class="nc" id="L2878">          builder.append(&quot;\n\t- payload &quot; + j + &quot;: &quot;);</span>
 <span class="nc bnc" id="L2879" title="All 2 branches missed.">          for (Entry&lt;String, String&gt; entry : tokens.get(i).payload.get(j)</span>
 <span class="nc" id="L2880">              .entrySet()) {</span>
 <span class="nc" id="L2881">            builder.append(entry.getKey() + &quot;:&quot; + entry.getValue() + &quot;,&quot;);</span>
-<span class="nc" id="L2882">          }</span>
+          }
         }
       }
 <span class="nc" id="L2885">      return builder.toString();</span>
@@ -3037,29 +3037,29 @@ public abstract class MtasBasicParser extends MtasParser {
         Map&lt;String, Integer[]&gt; idOffsets) {
 <span class="pc bpc" id="L3038" title="1 of 2 branches missed.">      for (Integer mappingId : updateableMappingsWithPosition) {</span>
 <span class="nc" id="L3039">        tokenCollection.get(mappingId).addPositions(objectPositions);</span>
-<span class="nc" id="L3040">      }</span>
+      }
 <span class="fc bfc" id="L3041" title="All 2 branches covered.">      for (Integer mappingId : updateableMappingsWithOffset) {</span>
 <span class="fc" id="L3042">        tokenCollection.get(mappingId).addOffset(objectOffsetStart,</span>
-            objectOffsetEnd);
-<span class="fc" id="L3044">      }</span>
+<span class="fc" id="L3043">            objectOffsetEnd);</span>
+      }
 <span class="pc bpc" id="L3045" title="1 of 2 branches missed.">      for (String id : updateableIdsWithPosition) {</span>
 <span class="nc bnc" id="L3046" title="All 2 branches missed.">        if (idPositions.containsKey(id)) {</span>
 <span class="nc bnc" id="L3047" title="All 2 branches missed.">          if (idPositions.get(id) == null) {</span>
 <span class="nc" id="L3048">            idPositions.put(id, objectPositions);</span>
-          } else {
+<span class="nc" id="L3049">          } else {</span>
 <span class="nc" id="L3050">            idPositions.get(id).addAll(objectPositions);</span>
           }
         }
-<span class="nc" id="L3053">      }</span>
+      }
 <span class="pc bpc" id="L3054" title="1 of 2 branches missed.">      for (String id : updateableIdsWithOffset) {</span>
 <span class="nc bnc" id="L3055" title="All 2 branches missed.">        if (idOffsets.containsKey(id)) {</span>
 <span class="nc" id="L3056">          Integer[] currentOffset = idOffsets.get(id);</span>
 <span class="nc bnc" id="L3057" title="All 4 branches missed.">          if (currentOffset == null || currentOffset.length == 0) {</span>
 <span class="nc" id="L3058">            idOffsets.put(id,</span>
-                new Integer[] { objectOffsetStart, objectOffsetEnd });
+<span class="nc" id="L3059">                new Integer[] { objectOffsetStart, objectOffsetEnd });</span>
           }
         }
-<span class="nc" id="L3062">      }</span>
+      }
 <span class="fc" id="L3063">    }</span>
 
     /**
@@ -3127,7 +3127,7 @@ public abstract class MtasBasicParser extends MtasParser {
     public void addText(String text) {
 <span class="fc bfc" id="L3128" title="All 2 branches covered.">      if (objectText == null) {</span>
 <span class="fc" id="L3129">        objectText = text;</span>
-      } else {
+<span class="fc" id="L3130">      } else {</span>
 <span class="fc" id="L3131">        objectText += text;</span>
       }
 <span class="fc" id="L3133">    }</span>
@@ -3210,8 +3210,8 @@ public abstract class MtasBasicParser extends MtasParser {
      * @param start the start
      */
     public void addOffsetStart(Integer start) {
-<span class="pc bpc" id="L3213" title="1 of 4 branches missed.">      if ((start != null)</span>
-<span class="pc bpc" id="L3214" title="1 of 2 branches missed.">          &amp;&amp; ((objectOffsetStart == null) || (start &lt; objectOffsetStart))) {</span>
+<span class="pc bpc" id="L3213" title="1 of 2 branches missed.">      if ((start != null)</span>
+<span class="pc bpc" id="L3214" title="1 of 4 branches missed.">          &amp;&amp; ((objectOffsetStart == null) || (start &lt; objectOffsetStart))) {</span>
 <span class="fc" id="L3215">        objectOffsetStart = start;</span>
       }
 <span class="fc" id="L3217">    }</span>
@@ -3222,8 +3222,8 @@ public abstract class MtasBasicParser extends MtasParser {
      * @param end the end
      */
     public void addOffsetEnd(Integer end) {
-<span class="pc bpc" id="L3225" title="1 of 4 branches missed.">      if ((end != null)</span>
-<span class="pc bpc" id="L3226" title="1 of 2 branches missed.">          &amp;&amp; ((objectOffsetEnd == null) || (end &gt; objectOffsetEnd))) {</span>
+<span class="pc bpc" id="L3225" title="1 of 2 branches missed.">      if ((end != null)</span>
+<span class="pc bpc" id="L3226" title="1 of 4 branches missed.">          &amp;&amp; ((objectOffsetEnd == null) || (end &gt; objectOffsetEnd))) {</span>
 <span class="fc" id="L3227">        objectOffsetEnd = end;</span>
       }
 <span class="fc" id="L3229">    }</span>

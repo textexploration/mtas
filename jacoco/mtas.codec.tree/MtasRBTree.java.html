@@ -36,7 +36,7 @@ import mtas.codec.tree.MtasRBTreeNode;
       // do nothing (empty...)
     } else {
 <span class="nc" id="L38">      root = addRange(root, left, right, additionalId, additionalRef, null,</span>
-          null);
+<span class="nc" id="L39">          null);</span>
 <span class="nc" id="L40">      root.color = MtasRBTreeNode.BLACK;</span>
     }
 <span class="nc" id="L42">  }</span>
@@ -65,7 +65,7 @@ import mtas.codec.tree.MtasRBTreeNode;
 <span class="fc" id="L65">    String key = left + &quot;_&quot; + right;</span>
 <span class="fc bfc" id="L66" title="All 2 branches covered.">    if (index.containsKey(key)) {</span>
 <span class="fc" id="L67">      index.get(key).addIdAndRef(id, ref, additionalId, additionalRef);</span>
-    } else {
+<span class="fc" id="L68">    } else {</span>
 <span class="fc" id="L69">      root = addRange(root, left, right, additionalId, additionalRef, id, ref);</span>
 <span class="fc" id="L70">      root.color = MtasRBTreeNode.BLACK;</span>
     }
@@ -94,11 +94,11 @@ import mtas.codec.tree.MtasRBTreeNode;
 <span class="fc" id="L94">    } else {</span>
 <span class="fc bfc" id="L95" title="All 2 branches covered.">      if (left &lt;= localN.left) {</span>
 <span class="fc" id="L96">        localN.leftChild = addRange(localN.leftChild, left, right, additionalId,</span>
-            additionalRef, id, ref);
+<span class="fc" id="L97">            additionalRef, id, ref);</span>
 <span class="fc" id="L98">        updateMax(localN, localN.leftChild);</span>
-      } else {
+<span class="fc" id="L99">      } else {</span>
 <span class="fc" id="L100">        localN.rightChild = addRange(localN.rightChild, left, right,</span>
-            additionalId, additionalRef, id, ref);
+<span class="fc" id="L101">            additionalId, additionalRef, id, ref);</span>
 <span class="fc" id="L102">        updateMax(localN, localN.rightChild);</span>
       }
 <span class="fc bfc" id="L104" title="All 4 branches covered.">      if (isRed(localN.rightChild) &amp;&amp; !isRed(localN.leftChild)) {</span>

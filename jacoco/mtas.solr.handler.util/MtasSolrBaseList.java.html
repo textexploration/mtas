@@ -76,7 +76,7 @@ public abstract class MtasSolrBaseList {
 <span class="pc bpc" id="L76" title="1 of 2 branches missed.">      if (!index.containsKey(status.key())) {</span>
 <span class="fc" id="L77">        index.put(status.key(), status);</span>
 <span class="fc" id="L78">        garbageCollect();</span>
-      } else {
+<span class="fc" id="L79">      } else {</span>
 <span class="nc" id="L80">        garbageCollect();</span>
         // retry
 <span class="nc" id="L82">        MtasSolrStatus oldStatus = index.get(status.key());</span>
@@ -85,7 +85,7 @@ public abstract class MtasSolrBaseList {
 <span class="nc bnc" id="L85" title="All 2 branches missed.">        } else if (oldStatus.finished()) {</span>
 <span class="nc" id="L86">          remove(oldStatus);</span>
 <span class="nc" id="L87">          index.put(status.key(), status);</span>
-        } else {
+<span class="nc" id="L88">        } else {</span>
 <span class="nc" id="L89">          throw new IOException(&quot;key &quot; + status.key() + &quot; already exists&quot;);</span>
         }
       }
@@ -132,7 +132,7 @@ public abstract class MtasSolrBaseList {
 <span class="nc" id="L132">      index.remove(key);</span>
 <span class="nc bnc" id="L133" title="All 2 branches missed.">      if (!index.containsKey(status.key())) {</span>
 <span class="nc" id="L134">        index.put(status.key(), status);</span>
-      } else {
+<span class="nc" id="L135">      } else {</span>
 <span class="nc" id="L136">        throw new IOException(&quot;key already exists&quot;);</span>
       }
     }
@@ -187,13 +187,13 @@ public abstract class MtasSolrBaseList {
 <span class="nc" id="L187">            listData.outputList.add(item.createItemOutput());</span>
 <span class="nc" id="L188">            number++;</span>
           }
-        } else {
+<span class="nc" id="L190">        } else {</span>
 <span class="nc" id="L191">          listData.addNormal();</span>
 <span class="nc" id="L192">          listData.outputList.add(item.createItemOutput());</span>
 <span class="nc" id="L193">          number++;</span>
         }
       }
-<span class="nc" id="L196">    }</span>
+    }
 <span class="nc" id="L197">    output.add(NAME_SIZE_TOTAL, numberTotal);</span>
 <span class="nc" id="L198">    output.add(NAME_SIZE_NORMAL, listData.numberNormal);</span>
 <span class="nc" id="L199">    output.add(NAME_SIZE_SHARDREQUESTS, listData.numberShardRequests);</span>

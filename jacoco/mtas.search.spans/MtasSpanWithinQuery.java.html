@@ -82,7 +82,7 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="fc" id="L82">      maximumWidth = bigQuery.getMaximumWidth();</span>
 <span class="fc bfc" id="L83" title="All 2 branches covered.">      maximumWidth = (maximumWidth != null)</span>
 <span class="fc" id="L84">          ? maximumWidth + rightBoundaryBigMaximum + leftBoundaryBigMaximum</span>
-          : null;
+<span class="fc" id="L85">          : null;</span>
     }
 <span class="pc bpc" id="L87" title="1 of 2 branches missed.">    if (smallQuery != null) {</span>
 <span class="fc bfc" id="L88" title="All 4 branches covered.">      if (smallQuery.getMaximumWidth() != null &amp;&amp; (maximumWidth == null</span>
@@ -95,16 +95,16 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
     // compute field
 <span class="pc bpc" id="L96" title="2 of 4 branches missed.">    if (bigQuery != null &amp;&amp; bigQuery.getField() != null) {</span>
 <span class="fc" id="L97">      field = bigQuery.getField();</span>
-<span class="nc bnc" id="L98" title="All 4 branches missed.">    } else if (smallQuery != null &amp;&amp; smallQuery.getField() != null) {</span>
+<span class="pc bnc" id="L98" title="All 4 branches missed.">    } else if (smallQuery != null &amp;&amp; smallQuery.getField() != null) {</span>
 <span class="nc" id="L99">      field = smallQuery.getField();</span>
-    } else {
+<span class="nc" id="L100">    } else {</span>
 <span class="nc" id="L101">      field = null;</span>
     }
 <span class="pc bpc" id="L103" title="1 of 2 branches missed.">    if (field != null) {</span>
 <span class="fc" id="L104">      baseQuery = new SpanWithinQuery(new MtasMaximumExpandSpanQuery(bigQuery,</span>
-          leftBoundaryBigMinimum, leftBoundaryBigMaximum,
-          rightBoundaryBigMinimum, rightBoundaryBigMaximum), smallQuery);
-    } else {
+<span class="fc" id="L105">          leftBoundaryBigMinimum, leftBoundaryBigMaximum,</span>
+<span class="fc" id="L106">          rightBoundaryBigMinimum, rightBoundaryBigMaximum), smallQuery);</span>
+<span class="fc" id="L107">    } else {</span>
 <span class="nc" id="L108">      baseQuery = null;</span>
     }
 <span class="fc" id="L110">  }</span>
@@ -120,16 +120,16 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="fc" id="L120">    MtasSpanQuery newBigQuery = bigQuery.rewrite(reader);</span>
 <span class="fc" id="L121">    MtasSpanQuery newSmallQuery = smallQuery.rewrite(reader);</span>
 
-<span class="pc bpc" id="L123" title="4 of 8 branches missed.">    if (newBigQuery == null || newBigQuery instanceof MtasSpanMatchNoneQuery</span>
-        || newSmallQuery == null
-        || newSmallQuery instanceof MtasSpanMatchNoneQuery) {
+<span class="pc bpc" id="L123" title="2 of 4 branches missed.">    if (newBigQuery == null || newBigQuery instanceof MtasSpanMatchNoneQuery</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        || newSmallQuery == null</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        || newSmallQuery instanceof MtasSpanMatchNoneQuery) {</span>
 <span class="nc" id="L126">      return new MtasSpanMatchNoneQuery(field);</span>
     }
 
 <span class="pc bpc" id="L129" title="1 of 2 branches missed.">    if (newSmallQuery.getMinimumWidth() != null</span>
 <span class="fc bfc" id="L130" title="All 2 branches covered.">        &amp;&amp; newBigQuery.getMaximumWidth() != null</span>
-<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        &amp;&amp; newSmallQuery.getMinimumWidth() &gt; (newBigQuery.getMaximumWidth()</span>
-            + leftBoundaryBigMaximum + rightBoundaryBigMaximum)) {
+<span class="fc" id="L131">        &amp;&amp; newSmallQuery.getMinimumWidth() &gt; (newBigQuery.getMaximumWidth()</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">            + leftBoundaryBigMaximum + rightBoundaryBigMaximum)) {</span>
 <span class="nc" id="L133">      return new MtasSpanMatchNoneQuery(field);</span>
     }
 
@@ -149,8 +149,8 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
           // + leftBoundaryMinimum + &quot;,&quot; + leftBoundaryMaximum + &quot;],[&quot;
           // + rightBoundaryMinimum + &quot;,&quot; + rightBoundaryMaximum + &quot;])&quot;);
 <span class="nc" id="L151">          return new MtasSpanWithinQuery(newBigQuery, newSmallQuery,</span>
-              leftBoundaryBigMinimum, leftBoundaryBigMaximum,
-              rightBoundaryBigMinimum, rightBoundaryBigMaximum,
+<span class="nc" id="L152">              leftBoundaryBigMinimum, leftBoundaryBigMaximum,</span>
+<span class="nc" id="L153">              rightBoundaryBigMinimum, rightBoundaryBigMaximum,</span>
 <span class="nc" id="L154">              autoAdjustBigQuery).rewrite(reader);</span>
         }
 <span class="pc bpc" id="L156" title="1 of 2 branches missed.">      } else if (newBigQuery instanceof MtasSpanMatchAllQuery) {</span>
@@ -163,8 +163,8 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
           // + leftBoundaryMinimum + &quot;,&quot; + leftBoundaryMaximum + &quot;],[&quot;
           // + rightBoundaryMinimum + &quot;,&quot; + rightBoundaryMaximum + &quot;])&quot;);
 <span class="nc" id="L165">          return new MtasSpanWithinQuery(newBigQuery, newSmallQuery,</span>
-              leftBoundaryBigMinimum, leftBoundaryBigMaximum,
-              rightBoundaryBigMinimum, rightBoundaryBigMaximum,
+<span class="nc" id="L166">              leftBoundaryBigMinimum, leftBoundaryBigMaximum,</span>
+<span class="nc" id="L167">              rightBoundaryBigMinimum, rightBoundaryBigMaximum,</span>
 <span class="nc" id="L168">              autoAdjustBigQuery).rewrite(reader);</span>
         }
 <span class="fc bfc" id="L170" title="All 2 branches covered.">      } else if (newBigQuery instanceof MtasSpanSequenceQuery) {</span>
@@ -184,7 +184,7 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="nc bnc" id="L184" title="All 2 branches missed.">                if (!items.get(i).isOptional()) {</span>
 <span class="nc" id="L185">                  newLeftBoundaryMinimum++;</span>
                 }
-<span class="fc" id="L187">              } else if (items.get(i)</span>
+<span class="pc" id="L187">              } else if (items.get(i)</span>
 <span class="pc bpc" id="L188" title="1 of 2 branches missed.">                  .getQuery() instanceof MtasSpanRecurrenceQuery) {</span>
 <span class="nc" id="L189">                MtasSpanRecurrenceQuery msrq = (MtasSpanRecurrenceQuery) items</span>
 <span class="nc" id="L190">                    .get(i).getQuery();</span>
@@ -193,7 +193,7 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="nc bnc" id="L193" title="All 2 branches missed.">                  if (!items.get(i).isOptional()) {</span>
 <span class="nc" id="L194">                    newLeftBoundaryMinimum += msrq.getMinimumRecurrence();</span>
                   }
-                } else {
+<span class="nc" id="L196">                } else {</span>
 <span class="nc" id="L197">                  newItems.add(items.get(i));</span>
                 }
 <span class="nc" id="L199">              } else {</span>
@@ -206,7 +206,7 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="nc bnc" id="L206" title="All 2 branches missed.">                if (!items.get(i).isOptional()) {</span>
 <span class="nc" id="L207">                  newRightBoundaryMinimum++;</span>
                 }
-<span class="fc" id="L209">              } else if (items.get(i)</span>
+<span class="pc" id="L209">              } else if (items.get(i)</span>
 <span class="pc bpc" id="L210" title="1 of 2 branches missed.">                  .getQuery() instanceof MtasSpanRecurrenceQuery) {</span>
 <span class="nc" id="L211">                MtasSpanRecurrenceQuery msrq = (MtasSpanRecurrenceQuery) items</span>
 <span class="nc" id="L212">                    .get(i).getQuery();</span>
@@ -215,14 +215,14 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="nc bnc" id="L215" title="All 2 branches missed.">                  if (!items.get(i).isOptional()) {</span>
 <span class="nc" id="L216">                    newRightBoundaryMinimum += msrq.getMinimumRecurrence();</span>
                   }
-                } else {
+<span class="nc" id="L218">                } else {</span>
 <span class="nc" id="L219">                  newItems.add(items.get(i));</span>
                 }
 <span class="nc" id="L221">              } else {</span>
 <span class="fc" id="L222">                newItems.add(items.get(i));</span>
               }
               // other items
-            } else {
+<span class="fc" id="L225">            } else {</span>
 <span class="fc" id="L226">              newItems.add(items.get(i));</span>
             }
           }
@@ -232,24 +232,24 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="fc" id="L232">          rightBoundaryBigMinimum += newRightBoundaryMinimum;</span>
 <span class="pc bpc" id="L233" title="1 of 2 branches missed.">          if (newItems.isEmpty()) {</span>
 <span class="nc" id="L234">            rightBoundaryBigMaximum = Math.max(0,</span>
-                rightBoundaryBigMaximum + leftBoundaryBigMaximum - 1);
+<span class="nc" id="L235">                rightBoundaryBigMaximum + leftBoundaryBigMaximum - 1);</span>
 <span class="nc" id="L236">            rightBoundaryBigMinimum = Math.max(0,</span>
-                rightBoundaryBigMinimum + leftBoundaryBigMinimum - 1);
+<span class="nc" id="L237">                rightBoundaryBigMinimum + leftBoundaryBigMinimum - 1);</span>
 <span class="nc" id="L238">            leftBoundaryBigMaximum = 0;</span>
 <span class="nc" id="L239">            leftBoundaryBigMinimum = 0;</span>
 <span class="nc" id="L240">            newItems.add(new MtasSpanSequenceItem(</span>
-                new MtasSpanMatchAllQuery(field), false));
+<span class="nc" id="L241">                new MtasSpanMatchAllQuery(field), false));</span>
           }
-<span class="pc bpc" id="L243" title="3 of 6 branches missed.">          if (!items.equals(newItems) || newLeftBoundaryMaximum &gt; 0</span>
-              || newRightBoundaryMaximum &gt; 0) {
+<span class="pc bpc" id="L243" title="2 of 4 branches missed.">          if (!items.equals(newItems) || newLeftBoundaryMaximum &gt; 0</span>
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">              || newRightBoundaryMaximum &gt; 0) {</span>
 <span class="nc" id="L245">            newBigQuery = (new MtasSpanSequenceQuery(newItems, null, null))</span>
 <span class="nc" id="L246">                .rewrite(reader);</span>
             // System.out.println(&quot;REPLACE WITH &quot; + newBigQuery + &quot; ([&quot;
             // + leftBoundaryMinimum + &quot;,&quot; + leftBoundaryMaximum + &quot;],[&quot;
             // + rightBoundaryMinimum + &quot;,&quot; + rightBoundaryMaximum + &quot;])&quot;);
 <span class="nc" id="L250">            return new MtasSpanWithinQuery(newBigQuery, newSmallQuery,</span>
-                leftBoundaryBigMinimum, leftBoundaryBigMaximum,
-                rightBoundaryBigMinimum, rightBoundaryBigMaximum,
+<span class="nc" id="L251">                leftBoundaryBigMinimum, leftBoundaryBigMaximum,</span>
+<span class="nc" id="L252">                rightBoundaryBigMinimum, rightBoundaryBigMaximum,</span>
 <span class="nc" id="L253">                autoAdjustBigQuery).rewrite(reader);</span>
           }
         }
@@ -258,8 +258,8 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 
 <span class="pc bpc" id="L259" title="1 of 4 branches missed.">    if (!newBigQuery.equals(bigQuery) || !newSmallQuery.equals(smallQuery)) {</span>
 <span class="fc" id="L260">      return (new MtasSpanWithinQuery(newBigQuery, newSmallQuery,</span>
-          leftBoundaryBigMinimum, leftBoundaryBigMaximum,
-          rightBoundaryBigMinimum, rightBoundaryBigMaximum, autoAdjustBigQuery))
+<span class="fc" id="L261">          leftBoundaryBigMinimum, leftBoundaryBigMaximum,</span>
+<span class="fc" id="L262">          rightBoundaryBigMinimum, rightBoundaryBigMaximum, autoAdjustBigQuery))</span>
 <span class="fc" id="L263">              .rewrite(reader);</span>
 <span class="fc bfc" id="L264" title="All 2 branches covered.">    } else if (newBigQuery.equals(newSmallQuery)) {</span>
 <span class="fc" id="L265">      return newBigQuery;</span>
@@ -303,18 +303,18 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="nc" id="L303">    buffer.append(this.getClass().getSimpleName() + &quot;([&quot;);</span>
 <span class="nc bnc" id="L304" title="All 2 branches missed.">    if (smallQuery != null) {</span>
 <span class="nc" id="L305">      buffer.append(smallQuery.toString(smallQuery.getField()));</span>
-    } else {
+<span class="nc" id="L306">    } else {</span>
 <span class="nc" id="L307">      buffer.append(&quot;null&quot;);</span>
     }
 <span class="nc" id="L309">    buffer.append(&quot;,&quot;);</span>
 <span class="nc bnc" id="L310" title="All 2 branches missed.">    if (bigQuery != null) {</span>
 <span class="nc" id="L311">      buffer.append(bigQuery.toString(bigQuery.getField()));</span>
-    } else {
+<span class="nc" id="L312">    } else {</span>
 <span class="nc" id="L313">      buffer.append(&quot;null&quot;);</span>
     }
 <span class="nc" id="L315">    buffer.append(</span>
-        &quot;],[&quot; + leftBoundaryBigMinimum + &quot;,&quot; + leftBoundaryBigMaximum + &quot;],[&quot;
-            + rightBoundaryBigMinimum + &quot;,&quot; + rightBoundaryBigMaximum + &quot;])&quot;);
+<span class="nc" id="L316">        &quot;],[&quot; + leftBoundaryBigMinimum + &quot;,&quot; + leftBoundaryBigMaximum + &quot;],[&quot;</span>
+<span class="nc" id="L317">            + rightBoundaryBigMinimum + &quot;,&quot; + rightBoundaryBigMaximum + &quot;])&quot;);</span>
 <span class="nc" id="L318">    return buffer.toString();</span>
   }
 
@@ -332,11 +332,11 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="pc bpc" id="L332" title="1 of 2 branches missed.">    if (getClass() != obj.getClass())</span>
 <span class="nc" id="L333">      return false;</span>
 <span class="fc" id="L334">    final MtasSpanWithinQuery that = (MtasSpanWithinQuery) obj;</span>
-<span class="pc bpc" id="L335" title="4 of 10 branches missed.">    return baseQuery.equals(that.baseQuery)</span>
-        &amp;&amp; leftBoundaryBigMinimum == that.leftBoundaryBigMinimum
-        &amp;&amp; leftBoundaryBigMaximum == that.leftBoundaryBigMaximum
-        &amp;&amp; rightBoundaryBigMinimum == that.rightBoundaryBigMinimum
-        &amp;&amp; rightBoundaryBigMaximum == that.rightBoundaryBigMaximum;
+<span class="fc bfc" id="L335" title="All 2 branches covered.">    return baseQuery.equals(that.baseQuery)</span>
+<span class="pc bpc" id="L336" title="1 of 2 branches missed.">        &amp;&amp; leftBoundaryBigMinimum == that.leftBoundaryBigMinimum</span>
+<span class="pc bpc" id="L337" title="1 of 2 branches missed.">        &amp;&amp; leftBoundaryBigMaximum == that.leftBoundaryBigMaximum</span>
+<span class="pc bpc" id="L338" title="1 of 2 branches missed.">        &amp;&amp; rightBoundaryBigMinimum == that.rightBoundaryBigMinimum</span>
+<span class="pc bpc" id="L339" title="1 of 2 branches missed.">        &amp;&amp; rightBoundaryBigMaximum == that.rightBoundaryBigMaximum;</span>
   }
 
   /*
@@ -355,10 +355,10 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
 <span class="fc" id="L355">    h = Integer.rotateLeft(h, leftBoundaryBigMaximum) + leftBoundaryBigMaximum;</span>
 <span class="fc" id="L356">    h ^= 3;</span>
 <span class="fc" id="L357">    h = Integer.rotateLeft(h, rightBoundaryBigMinimum)</span>
-        + rightBoundaryBigMinimum;
+<span class="fc" id="L358">        + rightBoundaryBigMinimum;</span>
 <span class="fc" id="L359">    h ^= 5;</span>
 <span class="fc" id="L360">    h = Integer.rotateLeft(h, rightBoundaryBigMaximum)</span>
-        + rightBoundaryBigMaximum;
+<span class="fc" id="L361">        + rightBoundaryBigMaximum;</span>
 <span class="fc" id="L362">    return h;</span>
   }
 

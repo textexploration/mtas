@@ -65,7 +65,7 @@ public class LevenshteinDistance extends Distance {
 <span class="nc bnc" id="L65" title="All 2 branches missed.">        } else if (entry.getKey().equals(PARAMETER_REPLACEDISTANCE)) {</span>
 <span class="nc" id="L66">          replaceDistance = Double.parseDouble(entry.getValue());</span>
         }
-<span class="nc" id="L68">      }</span>
+      }
     }
 <span class="nc bnc" id="L70" title="All 6 branches missed.">    if (deletionDistance &lt; 0 || insertionDistance &lt; 0 || replaceDistance &lt; 0) {</span>
 <span class="nc" id="L71">      throw new IOException(&quot;distances should be zero or positive&quot;);</span>
@@ -170,9 +170,9 @@ public class LevenshteinDistance extends Distance {
 <span class="nc bnc" id="L170" title="All 2 branches missed.">    for (int i = 0; i &lt; base.length(); i++) {</span>
 <span class="nc bnc" id="L171" title="All 2 branches missed.">      cost = (base.charAt(i) == ch1) ? 0 : replaceDistance;</span>
 <span class="nc" id="L172">      state[1][i + 1] = Math.min(state[1][i] + insertionDistance,</span>
-          state[0][i] + cost);
+<span class="nc" id="L173">          state[0][i] + cost);</span>
 <span class="nc" id="L174">      state[1][i + 1] = Math.min(state[1][i + 1],</span>
-          state[0][i + 1] + deletionDistance);
+<span class="nc" id="L175">          state[0][i + 1] + deletionDistance);</span>
     }
 <span class="nc" id="L177">    return state;</span>
   }

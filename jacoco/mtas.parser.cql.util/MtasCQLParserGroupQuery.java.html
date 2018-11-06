@@ -74,11 +74,11 @@ public class MtasCQLParserGroupQuery extends MtasSpanQuery {
 <span class="pc bpc" id="L74" title="1 of 2 branches missed.">    } else if (type == null) {</span>
 <span class="nc" id="L75">      term = new Term(field, prefix + MtasToken.DELIMITER + value);</span>
 <span class="nc" id="L76">      query = new MtasSpanTermQuery(term, false);</span>
-    } else {
-<span class="pc bpc" id="L78" title="10 of 13 branches missed.">      switch (type) {</span>
+<span class="nc" id="L77">    } else {</span>
+<span class="pc bpc" id="L78" title="8 of 10 branches missed.">      switch (type) {</span>
       case MTAS_CQL_REGEXP_QUERY:
 <span class="fc" id="L80">        term = new Term(field,</span>
-            prefix + MtasToken.DELIMITER + value + &quot;\u0000*&quot;);
+<span class="fc" id="L81">            prefix + MtasToken.DELIMITER + value + &quot;\u0000*&quot;);</span>
 <span class="fc" id="L82">        query = new MtasSpanRegexpQuery(term, false);</span>
 <span class="fc" id="L83">        break;</span>
       case MTAS_CQL_WILDCARD_QUERY:

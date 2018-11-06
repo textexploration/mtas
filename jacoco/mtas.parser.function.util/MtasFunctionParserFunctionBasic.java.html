@@ -72,14 +72,14 @@ public class MtasFunctionParserFunctionBasic
    * @param item the item
    * @throws ParseException the parse exception
    */
-  public MtasFunctionParserFunctionBasic(MtasFunctionParserItem item)
-<span class="fc" id="L76">      throws ParseException {</span>
+<span class="fc" id="L75">  public MtasFunctionParserFunctionBasic(MtasFunctionParserItem item)</span>
+      throws ParseException {
 <span class="fc" id="L77">    sumRule = true;</span>
 <span class="fc" id="L78">    String type = item.getType();</span>
     MtasFunctionParserFunction parser;
 <span class="fc" id="L80">    firstType = type;</span>
 <span class="fc" id="L81">    degree = item.getDegree();</span>
-<span class="pc bpc" id="L82" title="14 of 26 branches missed.">    switch (type) {</span>
+<span class="pc bpc" id="L82" title="11 of 19 branches missed.">    switch (type) {</span>
     case MtasFunctionParserItem.TYPE_N:
 <span class="fc" id="L84">      firstId = 0;</span>
 <span class="fc" id="L85">      dataType = CodecUtil.DATA_TYPE_LONG;</span>
@@ -111,7 +111,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="fc" id="L111">        dataType = CodecUtil.DATA_TYPE_LONG;</span>
 <span class="pc bpc" id="L112" title="1 of 2 branches missed.">        needPositions = needPositions ? needPositions : parser.needPositions();</span>
 <span class="fc" id="L113">        needArgument.addAll(parser.needArgument);</span>
-      } else {
+<span class="fc" id="L114">      } else {</span>
 <span class="nc" id="L115">        throw new ParseException(&quot;incorrect dataType&quot;);</span>
       }
       break;
@@ -125,7 +125,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="nc" id="L125">        dataType = CodecUtil.DATA_TYPE_DOUBLE;</span>
 <span class="nc bnc" id="L126" title="All 2 branches missed.">        needPositions = needPositions ? needPositions : parser.needPositions();</span>
 <span class="nc" id="L127">        needArgument.addAll(parser.needArgument);</span>
-      } else {
+<span class="nc" id="L128">      } else {</span>
 <span class="nc" id="L129">        throw new ParseException(&quot;incorrect dataType&quot;);</span>
       }
       break;
@@ -180,7 +180,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="fc" id="L180">            idList[i] = tmpIdList.get(i).intValue();</span>
           }
         }
-      } else {
+<span class="fc" id="L183">      } else {</span>
 <span class="fc" id="L184">        number = 0;</span>
 <span class="fc" id="L185">        operatorList = null;</span>
 <span class="fc" id="L186">        typeList = null;</span>
@@ -255,7 +255,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="fc bfc" id="L255" title="All 2 branches covered.">      if (operator.equals(BASIC_OPERATOR_DIVIDE)) {</span>
 <span class="fc" id="L256">        dataType = CodecUtil.DATA_TYPE_DOUBLE;</span>
       }
-<span class="pc bpc" id="L258" title="8 of 26 branches missed.">      switch (type) {</span>
+<span class="pc bpc" id="L258" title="7 of 19 branches missed.">      switch (type) {</span>
       case MtasFunctionParserItem.TYPE_N:
 <span class="fc" id="L260">        tmpTypeList.add(type);</span>
 <span class="fc" id="L261">        tmpIdList.add(0);</span>
@@ -274,7 +274,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="nc" id="L274">            degree = null;</span>
           }
         }
-        break;
+<span class="nc" id="L277">        break;</span>
       case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L279">        tmpTypeList.add(type);</span>
 <span class="fc" id="L280">        tmpIdList.add(item.getId());</span>
@@ -287,10 +287,10 @@ public class MtasFunctionParserFunctionBasic
             }
 <span class="pc bpc" id="L288" title="1 of 2 branches missed.">            if (degree &gt;= 0) {</span>
 <span class="fc" id="L289">              degree = Math.max(degree, 1);</span>
-            } else {
+<span class="fc" id="L290">            } else {</span>
 <span class="nc" id="L291">              degree = null;</span>
             }
-<span class="fc bfc" id="L293" title="All 2 branches covered.">          } else if (operator.equals(BASIC_OPERATOR_MULTIPLY)) {</span>
+<span class="pc bfc" id="L293" title="All 2 branches covered.">          } else if (operator.equals(BASIC_OPERATOR_MULTIPLY)) {</span>
 <span class="fc bfc" id="L294" title="All 2 branches covered.">            if (degree != 0) {</span>
 <span class="fc" id="L295">              sumRule = false;</span>
             }
@@ -303,7 +303,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="fc" id="L303">            degree = null;</span>
           }
         }
-        break;
+<span class="fc" id="L306">        break;</span>
       case MtasFunctionParserItem.TYPE_CONSTANT_LONG:
 <span class="fc" id="L308">        tmpTypeList.add(type);</span>
 <span class="fc" id="L309">        tmpIdList.add(tmpConstantLongs.size());</span>
@@ -314,15 +314,15 @@ public class MtasFunctionParserFunctionBasic
 <span class="pc bpc" id="L314" title="1 of 2 branches missed.">            if (degree &lt; 0) {</span>
 <span class="nc" id="L315">              sumRule = false;</span>
 <span class="nc" id="L316">              degree = null;</span>
-<span class="fc bfc" id="L317" title="All 2 branches covered.">            } else if (degree &gt; 0) {</span>
+<span class="pc bfc" id="L317" title="All 2 branches covered.">            } else if (degree &gt; 0) {</span>
 <span class="fc" id="L318">              sumRule = false;</span>
             }
-<span class="nc bnc" id="L320" title="All 4 branches missed.">          } else if (operator.equals(BASIC_OPERATOR_POWER) &amp;&amp; (degree != 0)) {</span>
+<span class="pc bnc" id="L320" title="All 4 branches missed.">          } else if (operator.equals(BASIC_OPERATOR_POWER) &amp;&amp; (degree != 0)) {</span>
 <span class="nc" id="L321">            sumRule = false;</span>
 <span class="nc" id="L322">            degree = null;</span>
           }
         }
-        break;
+<span class="nc" id="L325">        break;</span>
       case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
 <span class="fc" id="L327">        tmpTypeList.add(type);</span>
 <span class="fc" id="L328">        tmpIdList.add(tmpConstantDoubles.size());</span>
@@ -342,7 +342,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="nc" id="L342">            degree = null;</span>
           }
         }
-        break;
+<span class="nc" id="L345">        break;</span>
       case MtasFunctionParserItem.TYPE_PARSER_LONG:
 <span class="fc" id="L347">        tmpTypeList.add(type);</span>
 <span class="fc" id="L348">        tmpIdList.add(tmpParserLongs.size());</span>
@@ -353,17 +353,17 @@ public class MtasFunctionParserFunctionBasic
 <span class="fc bfc" id="L353" title="All 2 branches covered.">        needPositions = needPositions ? needPositions : parser.needPositions();</span>
 <span class="fc" id="L354">        needArgument.addAll(parser.needArgument);</span>
 <span class="pc bpc" id="L355" title="1 of 4 branches missed.">        if (sumRule &amp;&amp; degree != null) {</span>
-<span class="pc bpc" id="L356" title="1 of 2 branches missed.">          if (operator.equals(BASIC_OPERATOR_ADD)</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">          if (operator.equals(BASIC_OPERATOR_ADD)</span>
 <span class="pc bpc" id="L357" title="1 of 2 branches missed.">              || operator.equals(BASIC_OPERATOR_SUBTRACT)) {</span>
-<span class="nc bnc" id="L358" title="All 2 branches missed.">            if (!parser.degree.equals(degree)) {</span>
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">            if (!parser.degree.equals(degree)) {</span>
 <span class="nc" id="L359">              sumRule = false;</span>
 <span class="nc bnc" id="L360" title="All 2 branches missed.">              if (degree &lt; 0) {</span>
 <span class="nc" id="L361">                degree = null;</span>
-              } else {
+<span class="nc" id="L362">              } else {</span>
 <span class="nc" id="L363">                degree = Math.max(degree, parser.degree);</span>
               }
             }
-<span class="fc bfc" id="L366" title="All 2 branches covered.">          } else if (operator.equals(BASIC_OPERATOR_MULTIPLY)) {</span>
+<span class="pc bfc" id="L366" title="All 2 branches covered.">          } else if (operator.equals(BASIC_OPERATOR_MULTIPLY)) {</span>
 <span class="pc bpc" id="L367" title="2 of 4 branches missed.">            if (degree != 0 || parser.degree != 0) {</span>
 <span class="fc" id="L368">              sumRule = false;</span>
             }
@@ -373,7 +373,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="nc" id="L373">            degree = null;</span>
           }
         }
-        break;
+<span class="nc" id="L376">        break;</span>
       case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
 <span class="fc" id="L378">        tmpTypeList.add(type);</span>
 <span class="fc" id="L379">        tmpIdList.add(tmpParserDoubles.size());</span>
@@ -391,11 +391,11 @@ public class MtasFunctionParserFunctionBasic
 <span class="fc" id="L391">              sumRule = false;</span>
 <span class="pc bpc" id="L392" title="1 of 2 branches missed.">              if (degree &lt; 0) {</span>
 <span class="nc" id="L393">                degree = null;</span>
-              } else {
+<span class="nc" id="L394">              } else {</span>
 <span class="fc" id="L395">                degree = Math.max(degree, parser.degree);</span>
               }
             }
-<span class="nc bnc" id="L398" title="All 2 branches missed.">          } else if (operator.equals(BASIC_OPERATOR_MULTIPLY)) {</span>
+<span class="pc bnc" id="L398" title="All 2 branches missed.">          } else if (operator.equals(BASIC_OPERATOR_MULTIPLY)) {</span>
 <span class="nc bnc" id="L399" title="All 4 branches missed.">            if (degree != 0 || parser.degree != 0) {</span>
 <span class="nc" id="L400">              sumRule = false;</span>
             }
@@ -405,11 +405,11 @@ public class MtasFunctionParserFunctionBasic
 <span class="nc" id="L405">            degree = null;</span>
           }
         }
-        break;
+<span class="nc" id="L408">        break;</span>
       default:
 <span class="nc" id="L410">        throw new ParseException(&quot;incorrect type&quot;);</span>
       }
-<span class="fc" id="L412">    } else {</span>
+<span class="nc" id="L412">    } else {</span>
 <span class="nc" id="L413">      throw new ParseException(&quot;already defined&quot;);</span>
     }
 <span class="fc" id="L415">  }</span>
@@ -424,7 +424,7 @@ public class MtasFunctionParserFunctionBasic
   @Override
   public double getValueDouble(long[] args, long n) throws IOException {
     double sum;
-<span class="pc bpc" id="L427" title="17 of 26 branches missed.">    switch (firstType) {</span>
+<span class="pc bpc" id="L427" title="13 of 19 branches missed.">    switch (firstType) {</span>
     case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="nc" id="L429">      sum = args[firstId];</span>
 <span class="nc" id="L430">      break;</span>
@@ -447,9 +447,9 @@ public class MtasFunctionParserFunctionBasic
 <span class="nc" id="L447">      throw new IOException(&quot;no first value&quot;);</span>
     }
 <span class="fc bfc" id="L449" title="All 2 branches covered.">    for (int i = 0; i &lt; number; i++) {</span>
-<span class="pc bpc" id="L450" title="10 of 22 branches missed.">      switch (operatorList[i]) {</span>
+<span class="pc bpc" id="L450" title="8 of 16 branches missed.">      switch (operatorList[i]) {</span>
       case BASIC_OPERATOR_ADD:
-<span class="pc bpc" id="L452" title="11 of 26 branches missed.">        switch (typeList[i]) {</span>
+<span class="pc bpc" id="L452" title="9 of 19 branches missed.">        switch (typeList[i]) {</span>
         case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L454">          sum += args[idList[i]];</span>
 <span class="fc" id="L455">          break;</span>
@@ -471,9 +471,9 @@ public class MtasFunctionParserFunctionBasic
         default:
 <span class="nc" id="L472">          throw new IOException(&quot;unknown type&quot;);</span>
         }
-<span class="fc" id="L474">        break;</span>
+        break;
       case BASIC_OPERATOR_SUBTRACT:
-<span class="pc bpc" id="L476" title="20 of 26 branches missed.">        switch (typeList[i]) {</span>
+<span class="pc bpc" id="L476" title="15 of 19 branches missed.">        switch (typeList[i]) {</span>
         case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L478">          sum -= args[idList[i]];</span>
 <span class="fc" id="L479">          break;</span>
@@ -495,9 +495,9 @@ public class MtasFunctionParserFunctionBasic
         default:
 <span class="nc" id="L496">          throw new IOException(&quot;unknown type&quot;);</span>
         }
-<span class="fc" id="L498">        break;</span>
+        break;
       case BASIC_OPERATOR_MULTIPLY:
-<span class="pc bpc" id="L500" title="17 of 26 branches missed.">        switch (typeList[i]) {</span>
+<span class="pc bpc" id="L500" title="13 of 19 branches missed.">        switch (typeList[i]) {</span>
         case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L502">          sum *= args[idList[i]];</span>
 <span class="fc" id="L503">          break;</span>
@@ -519,10 +519,10 @@ public class MtasFunctionParserFunctionBasic
         default:
 <span class="nc" id="L520">          throw new IOException(&quot;unknown type&quot;);</span>
         }
-<span class="fc" id="L522">        break;</span>
+        break;
       case BASIC_OPERATOR_DIVIDE:
         double v;
-<span class="pc bpc" id="L525" title="17 of 26 branches missed.">        switch (typeList[i]) {</span>
+<span class="pc bpc" id="L525" title="13 of 19 branches missed.">        switch (typeList[i]) {</span>
         case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L527">          v = args[idList[i]];</span>
 <span class="fc" id="L528">          break;</span>
@@ -546,12 +546,12 @@ public class MtasFunctionParserFunctionBasic
         }
 <span class="fc bfc" id="L547" title="All 2 branches covered.">        if (v != 0) {</span>
 <span class="fc" id="L548">          sum /= v;</span>
-        } else {
+<span class="fc" id="L549">        } else {</span>
 <span class="fc" id="L550">          throw new IOException(&quot;division by zero&quot;);</span>
         }
         break;
       case BASIC_OPERATOR_POWER:
-<span class="nc bnc" id="L554" title="All 26 branches missed.">        switch (typeList[i]) {</span>
+<span class="nc bnc" id="L554" title="All 19 branches missed.">        switch (typeList[i]) {</span>
         case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="nc" id="L556">          sum = Math.pow(sum, args[idList[i]]);</span>
 <span class="nc" id="L557">          break;</span>
@@ -573,7 +573,7 @@ public class MtasFunctionParserFunctionBasic
         default:
 <span class="nc" id="L574">          throw new IOException(&quot;unknown type&quot;);</span>
         }
-<span class="nc" id="L576">        break;</span>
+        break;
       default:
 <span class="nc" id="L578">        throw new IOException(&quot;unknown operator&quot;);</span>
       }
@@ -592,7 +592,7 @@ public class MtasFunctionParserFunctionBasic
   public long getValueLong(long[] args, long n) throws IOException {
     try {
       long sum;
-<span class="pc bpc" id="L595" title="17 of 26 branches missed.">      switch (firstType) {</span>
+<span class="pc bpc" id="L595" title="13 of 19 branches missed.">      switch (firstType) {</span>
       case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L597">        sum = args[firstId];</span>
 <span class="fc" id="L598">        break;</span>
@@ -615,9 +615,9 @@ public class MtasFunctionParserFunctionBasic
 <span class="nc" id="L615">        throw new IOException(&quot;no first value&quot;);</span>
       }
 <span class="fc bfc" id="L617" title="All 2 branches covered.">      for (int i = 0; i &lt; number; i++) {</span>
-<span class="pc bpc" id="L618" title="10 of 22 branches missed.">        switch (operatorList[i]) {</span>
+<span class="pc bpc" id="L618" title="8 of 16 branches missed.">        switch (operatorList[i]) {</span>
         case BASIC_OPERATOR_ADD:
-<span class="pc bpc" id="L620" title="17 of 26 branches missed.">          switch (typeList[i]) {</span>
+<span class="pc bpc" id="L620" title="11 of 19 branches missed.">          switch (typeList[i]) {</span>
           case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L622">            sum += args[idList[i]];</span>
 <span class="fc" id="L623">            break;</span>
@@ -625,8 +625,8 @@ public class MtasFunctionParserFunctionBasic
 <span class="nc" id="L625">            sum += (long) parserDoubles[idList[i]].getValueDouble(args, n);</span>
 <span class="nc" id="L626">            break;</span>
           case MtasFunctionParserItem.TYPE_PARSER_LONG:
-<span class="nc" id="L628">            sum += parserLongs[idList[i]].getValueLong(args, n);</span>
-<span class="nc" id="L629">            break;</span>
+<span class="fc" id="L628">            sum += parserLongs[idList[i]].getValueLong(args, n);</span>
+<span class="fc" id="L629">            break;</span>
           case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
 <span class="nc" id="L631">            sum += constantDoubles[idList[i]].longValue();</span>
 <span class="nc" id="L632">            break;</span>
@@ -639,9 +639,9 @@ public class MtasFunctionParserFunctionBasic
           default:
 <span class="nc" id="L640">            throw new IOException(&quot;unknown type&quot;);</span>
           }
-<span class="fc" id="L642">          break;</span>
+          break;
         case BASIC_OPERATOR_SUBTRACT:
-<span class="pc bpc" id="L644" title="17 of 26 branches missed.">          switch (typeList[i]) {</span>
+<span class="pc bpc" id="L644" title="13 of 19 branches missed.">          switch (typeList[i]) {</span>
           case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L646">            sum -= args[idList[i]];</span>
 <span class="fc" id="L647">            break;</span>
@@ -663,9 +663,9 @@ public class MtasFunctionParserFunctionBasic
           default:
 <span class="nc" id="L664">            throw new IOException(&quot;unknown type&quot;);</span>
           }
-<span class="fc" id="L666">          break;</span>
+          break;
         case BASIC_OPERATOR_MULTIPLY:
-<span class="pc bpc" id="L668" title="20 of 26 branches missed.">          switch (typeList[i]) {</span>
+<span class="pc bpc" id="L668" title="15 of 19 branches missed.">          switch (typeList[i]) {</span>
           case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L670">            sum *= args[idList[i]];</span>
 <span class="fc" id="L671">            break;</span>
@@ -687,10 +687,10 @@ public class MtasFunctionParserFunctionBasic
           default:
 <span class="nc" id="L688">            throw new IOException(&quot;unknown type&quot;);</span>
           }
-<span class="fc" id="L690">          break;</span>
+          break;
         case BASIC_OPERATOR_DIVIDE:
           long v;
-<span class="nc bnc" id="L693" title="All 26 branches missed.">          switch (typeList[i]) {</span>
+<span class="nc bnc" id="L693" title="All 19 branches missed.">          switch (typeList[i]) {</span>
           case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="nc" id="L695">            v = args[idList[i]];</span>
 <span class="nc" id="L696">            break;</span>
@@ -714,12 +714,12 @@ public class MtasFunctionParserFunctionBasic
           }
 <span class="nc bnc" id="L715" title="All 2 branches missed.">          if (v != 0) {</span>
 <span class="nc" id="L716">            sum /= v;</span>
-          } else {
+<span class="nc" id="L717">          } else {</span>
 <span class="nc" id="L718">            throw new IOException(&quot;division by zero&quot;);</span>
           }
           break;
         case BASIC_OPERATOR_POWER:
-<span class="pc bpc" id="L722" title="23 of 26 branches missed.">          switch (typeList[i]) {</span>
+<span class="pc bpc" id="L722" title="17 of 19 branches missed.">          switch (typeList[i]) {</span>
           case MtasFunctionParserItem.TYPE_ARGUMENT:
 <span class="fc" id="L724">            sum = sum ^ args[idList[i]];</span>
 <span class="fc" id="L725">            break;</span>
@@ -741,7 +741,7 @@ public class MtasFunctionParserFunctionBasic
           default:
 <span class="nc" id="L742">            throw new IOException(&quot;unknown type&quot;);</span>
           }
-<span class="fc" id="L744">          break;</span>
+          break;
         default:
 <span class="nc" id="L746">          throw new IOException(&quot;unknown operator&quot;);</span>
         }
@@ -773,7 +773,7 @@ public class MtasFunctionParserFunctionBasic
 <span class="fc" id="L773">          text.append(&quot; / &quot;);</span>
 <span class="pc bpc" id="L774" title="1 of 2 branches missed.">        } else if (operator.equals(BASIC_OPERATOR_POWER)) {</span>
 <span class="fc" id="L775">          text.append(&quot; ^ &quot;);</span>
-        } else {
+<span class="fc" id="L776">        } else {</span>
 <span class="nc" id="L777">          text.append(&quot; ? &quot;);</span>
         }
 <span class="fc" id="L779">        text.append(toString(tmpTypeList.get(i), tmpIdList.get(i)));</span>

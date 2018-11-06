@@ -30,12 +30,12 @@ import java.util.concurrent.ConcurrentHashMap;
   public void init(long numberOfDocuments, int numberOfSegments) throws IOException {
 <span class="pc bpc" id="L31" title="1 of 2 branches missed.">    if(numberDocumentsTotal==null) {</span>
 <span class="fc" id="L32">      numberDocumentsTotal = numberOfDocuments;</span>
-<span class="nc bnc" id="L33" title="All 2 branches missed.">    } else if(numberDocumentsTotal!=numberOfDocuments) {</span>
+<span class="pc bnc" id="L33" title="All 2 branches missed.">    } else if(numberDocumentsTotal!=numberOfDocuments) {</span>
 <span class="nc" id="L34">      throw new IOException(&quot;conflict number of documents: &quot;+numberDocumentsTotal+&quot; / &quot;+numberOfDocuments);</span>
     }
 <span class="pc bpc" id="L36" title="1 of 2 branches missed.">    if(numberSegmentsTotal==null) {</span>
 <span class="fc" id="L37">      numberSegmentsTotal = numberOfSegments;</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">    } else if(numberSegmentsTotal!=numberOfSegments) {</span>
+<span class="pc bnc" id="L38" title="All 2 branches missed.">    } else if(numberSegmentsTotal!=numberOfSegments) {</span>
 <span class="nc" id="L39">      throw new IOException(&quot;conflict number of segments: &quot;+numberSegmentsTotal+&quot; / &quot;+numberOfSegments);</span>
     }
 <span class="pc bpc" id="L41" title="1 of 2 branches missed.">    numberDocumentsFinished = (numberDocumentsFinished==null) ? Long.valueOf(0) : numberDocumentsFinished;</span>
@@ -53,7 +53,7 @@ import java.util.concurrent.ConcurrentHashMap;
   public void addSubs(Set&lt;String&gt; subItems) {
 <span class="fc bfc" id="L54" title="All 2 branches covered.">    for(String subItem : subItems) {</span>
 <span class="fc" id="L55">      addSub(subItem);</span>
-<span class="fc" id="L56">    }</span>
+    }
 <span class="fc" id="L57">  }</span>
   
   public void addSub(String subItem) {

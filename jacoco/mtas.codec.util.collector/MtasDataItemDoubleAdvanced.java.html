@@ -37,7 +37,7 @@ public class MtasDataItemDoubleAdvanced
       int sourceNumber) {
 <span class="nc" id="L38">    super(valueSum, valueSumOfLogs, valueSumOfSquares, valueMin, valueMax,</span>
 <span class="nc" id="L39">        valueN, sub, statsItems, sortType, sortDirection, errorNumber,</span>
-        errorList, new MtasDataDoubleOperations(), sourceNumber);
+<span class="nc" id="L40">        errorList, new MtasDataDoubleOperations(), sourceNumber);</span>
 <span class="nc" id="L41">  }</span>
 
   /*
@@ -65,7 +65,7 @@ public class MtasDataItemDoubleAdvanced
    */
   @Override
   public MtasDataItemNumberComparator&lt;Double&gt; getCompareValue1() {
-<span class="nc bnc" id="L68" title="All 18 branches missed.">    switch (sortType) {</span>
+<span class="nc bnc" id="L68" title="All 13 branches missed.">    switch (sortType) {</span>
     case CodecUtil.STATS_TYPE_SUM:
 <span class="nc" id="L70">      return new MtasDataItemNumberComparator&lt;&gt;(valueSum, sortDirection);</span>
     case CodecUtil.STATS_TYPE_MAX:
@@ -74,7 +74,7 @@ public class MtasDataItemDoubleAdvanced
 <span class="nc" id="L74">      return new MtasDataItemNumberComparator&lt;&gt;(valueMin, sortDirection);</span>
     case CodecUtil.STATS_TYPE_SUMSQ:
 <span class="nc" id="L76">      return new MtasDataItemNumberComparator&lt;&gt;(valueSumOfSquares,</span>
-          sortDirection);
+<span class="nc" id="L77">          sortDirection);</span>
     default:
 <span class="nc" id="L79">      return null;</span>
     }
@@ -86,7 +86,7 @@ public class MtasDataItemDoubleAdvanced
    * @see mtas.codec.util.collector.MtasDataItem#getCompareValue2()
    */
   public MtasDataItemNumberComparator&lt;Double&gt; getCompareValue2() {
-<span class="nc bnc" id="L89" title="All 25 branches missed.">    switch (sortType) {</span>
+<span class="nc bnc" id="L89" title="All 22 branches missed.">    switch (sortType) {</span>
     case CodecUtil.STATS_TYPE_SUMOFLOGS:
 <span class="nc" id="L91">      return new MtasDataItemNumberComparator&lt;&gt;(valueSumOfLogs, sortDirection);</span>
     case CodecUtil.STATS_TYPE_MEAN:
@@ -96,7 +96,7 @@ public class MtasDataItemDoubleAdvanced
     case CodecUtil.STATS_TYPE_POPULATIONVARIANCE:
     case CodecUtil.STATS_TYPE_QUADRATICMEAN:
 <span class="nc" id="L98">      return new MtasDataItemNumberComparator&lt;&gt;(getValue(sortType),</span>
-          sortDirection);
+<span class="nc" id="L99">          sortDirection);</span>
     default:
 <span class="nc" id="L101">      return null;</span>
     }
@@ -109,7 +109,7 @@ public class MtasDataItemDoubleAdvanced
    */
   public String toString() {
 <span class="nc" id="L111">    return this.getClass().getSimpleName() + &quot;[&quot; + valueSum + &quot;,&quot; + valueN</span>
-        + &quot;]&quot;;
+<span class="nc" id="L112">        + &quot;]&quot;;</span>
   }
 
   /*
