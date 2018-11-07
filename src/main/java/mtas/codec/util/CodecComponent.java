@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenString;
-import mtas.codec.util.CodecComponent.SubComponentFunction;
 import mtas.codec.util.CodecSearchTree.MtasTreeHit;
 import mtas.codec.util.collector.MtasDataCollector;
 import mtas.codec.util.distance.Distance;
@@ -44,8 +43,6 @@ import mtas.parser.function.ParseException;
 import mtas.parser.function.util.MtasFunctionParserFunction;
 import mtas.parser.function.util.MtasFunctionParserFunctionDefault;
 import mtas.search.spans.util.MtasSpanQuery;
-import mtas.solr.handler.component.util.MtasSolrComponentHeatmap;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.lucene.spatial.prefix.PrefixTreeStrategy;
