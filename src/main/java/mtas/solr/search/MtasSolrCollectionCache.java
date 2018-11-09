@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
@@ -553,9 +554,7 @@ class MtasSolrCollectionCacheItem implements Serializable {
 
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 3) ^ id.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), id);   
   }
 
   @Override

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import mtas.codec.util.CodecInfo;
 import mtas.search.similarities.MtasSimScorer;
@@ -230,11 +231,7 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ field.hashCode();
-    h = (h * 13) ^ start;
-    h = (h * 17) ^ end;
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), field, start, end);   
   }
   
   @Override

@@ -10,7 +10,8 @@ import org.apache.lucene.search.spans.SpanWeight;
 import mtas.search.spans.util.MtasSpanQuery;
 
 /**
- * The Class MtasSpanContainingQuery.
+ * Search for a hit from a MtasSpanQuery (big) containing the hit from 
+ * another MtasSpanQuery (small)
  */
 public class MtasSpanContainingQuery extends MtasSpanQuery {
 
@@ -27,21 +28,24 @@ public class MtasSpanContainingQuery extends MtasSpanQuery {
   private String field;
 
   /**
-   * Instantiates a new mtas span containing query.
+   * Instantiates a new MtasSpanContainingQuery.
    *
-   * @param q1 the q 1
-   * @param q2 the q 2
+   * @param bigQuery the big query
+   * @param smallQuery the small query
    */
-  public MtasSpanContainingQuery(MtasSpanQuery q1, MtasSpanQuery q2) {
-    super(q1 != null ? q1.getMinimumWidth() : null,
-        q1 != null ? q1.getMaximumWidth() : null);
-    if (q2 != null && q2.getMinimumWidth() != null
+  public MtasSpanContainingQuery(MtasSpanQuery bigQuery, MtasSpanQuery smallQuery) {    
+    //use minimum and maximum from the big query
+    super(bigQuery != null ? bigQuery.getMinimumWidth() : null,
+        bigQuery != null ? bigQuery.getMaximumWidth() : null);
+    //adjust minimum if necessary from the small query
+    if (smallQuery != null && smallQuery.getMinimumWidth() != null
         && (this.getMinimumWidth() == null
-            || this.getMinimumWidth() < q2.getMinimumWidth())) {
-      this.setWidth(q2.getMinimumWidth(), this.getMaximumWidth());
+            || this.getMinimumWidth() < smallQuery.getMinimumWidth())) {
+      this.setWidth(smallQuery.getMinimumWidth(), this.getMaximumWidth());
     }
-    bigQuery = q1;
-    smallQuery = q2;
+    //define queries and field
+    this.bigQuery = bigQuery;
+    this.smallQuery = smallQuery;
     if (bigQuery != null && bigQuery.getField() != null) {
       field = bigQuery.getField();
     } else if (smallQuery != null && smallQuery.getField() != null) {
@@ -49,6 +53,7 @@ public class MtasSpanContainingQuery extends MtasSpanQuery {
     } else {
       field = null;
     }
+    //define base query if possible
     if (field != null && bigQuery != null && smallQuery != null) {
       if (bigQuery.getField() != null && smallQuery.getField() != null) {
         baseQuery = new SpanContainingQuery(bigQuery, smallQuery);
@@ -108,20 +113,26 @@ public class MtasSpanContainingQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanQuery rewrite(IndexReader reader) throws IOException {
+    //rewrite big and small
     MtasSpanQuery newBigQuery = bigQuery.rewrite(reader);
     MtasSpanQuery newSmallQuery = smallQuery.rewrite(reader);
+    //check if query became trivial
     if (newBigQuery == null || newBigQuery instanceof MtasSpanMatchNoneQuery
         || newSmallQuery == null
         || newSmallQuery instanceof MtasSpanMatchNoneQuery) {
       return new MtasSpanMatchNoneQuery(field);
     }
+    //really new queries
     if (!newBigQuery.equals(bigQuery) || !newSmallQuery.equals(smallQuery)) {
       return new MtasSpanContainingQuery(newBigQuery, newSmallQuery)
           .rewrite(reader);
+    //if equal, then just the big one  
     } else if (newBigQuery.equals(newSmallQuery)) {
       return newBigQuery;
+    //without a baseQuery, everything stops  
     } else if (baseQuery == null) {
       return new MtasSpanMatchNoneQuery(field);
+    //no easy way, just continue  
     } else {
       baseQuery = (SpanContainingQuery) baseQuery.rewrite(reader);
       return super.rewrite(reader);

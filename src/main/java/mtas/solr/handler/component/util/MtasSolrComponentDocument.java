@@ -37,7 +37,7 @@ public class MtasSolrComponentDocument
   /** The Constant PARAM_MTAS_DOCUMENT. */
   public static final String PARAM_MTAS_DOCUMENT = MtasSolrSearchComponent.PARAM_MTAS
       + "." + NAME;
-
+ 
   /** The Constant NAME_MTAS_DOCUMENT_FIELD. */
   public static final String NAME_MTAS_DOCUMENT_FIELD = "field";
 

@@ -3,6 +3,7 @@ package mtas.codec.util.collector;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -293,9 +294,7 @@ public class MtasDataItemDoubleFull extends MtasDataItemFull<Double, Double> {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ getComparableValue().hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), getComparableValue());   
   }
 
 }

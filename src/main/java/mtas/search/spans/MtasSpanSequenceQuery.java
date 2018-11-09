@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.lucene.index.IndexReader;
@@ -369,7 +370,8 @@ public class MtasSpanSequenceQuery extends MtasSpanQuery {
     isEqual &= rightMaximum == other.rightMaximum;
     isEqual &= ((ignoreQuery == null && other.ignoreQuery == null)
         || (ignoreQuery != null && other.ignoreQuery != null
-            && ignoreQuery.equals(other.ignoreQuery)));
+            && ignoreQuery.equals(other.ignoreQuery)
+            && maximumIgnoreLength.equals(other.maximumIgnoreLength)));
     return isEqual;
   }
 
@@ -380,21 +382,7 @@ public class MtasSpanSequenceQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 3) ^ field.hashCode();
-    h = (h * 5) ^ items.hashCode();
-    h = Integer.rotateLeft(h, leftMinimum) + leftMinimum;
-    h ^= 11;
-    h = Integer.rotateLeft(h, leftMaximum) + leftMaximum;
-    h ^= 13;
-    h = Integer.rotateLeft(h, rightMinimum) + rightMinimum;
-    h ^= 17;
-    h = Integer.rotateLeft(h, rightMaximum) + rightMaximum;
-    if (ignoreQuery != null) {
-      h = (h * 7) ^ ignoreQuery.hashCode();
-      h = (h * 11) ^ maximumIgnoreLength.hashCode();
-    }
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), field, items, leftMinimum, leftMaximum, rightMinimum, rightMaximum, ignoreQuery, maximumIgnoreLength);   
   }
 
   /*

@@ -1,6 +1,7 @@
 package mtas.codec.util.collector;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import mtas.codec.util.CodecUtil;
 
@@ -117,9 +118,7 @@ public class MtasDataItemDoubleBasic extends MtasDataItemBasic<Double, Double> {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ getComparableValue().hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), getComparableValue());   
   }
 
 }

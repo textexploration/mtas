@@ -2,6 +2,7 @@ package mtas.parser.cql.util;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import mtas.analysis.token.MtasToken;
@@ -199,10 +200,7 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 5) ^ term.hashCode();
-    h = (h * 7) ^ query.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), term, query);   
   }
 
   /*

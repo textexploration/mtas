@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import mtas.analysis.token.MtasToken;
 import mtas.codec.util.CodecUtil;
@@ -285,12 +286,7 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 5) ^ localTerm.hashCode();
-    if (singlePosition) {
-      h += 1;
-    }
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), localTerm, singlePosition);   
   }
 
 }

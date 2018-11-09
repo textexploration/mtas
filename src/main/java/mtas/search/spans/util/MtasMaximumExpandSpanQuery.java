@@ -3,6 +3,7 @@ package mtas.search.spans.util;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.lucene.codecs.FieldsProducer;
@@ -143,16 +144,7 @@ public class MtasMaximumExpandSpanQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = Integer.rotateLeft(classHash(), 1);
-    h ^= query.hashCode();
-    h = Integer.rotateLeft(h, minimumLeft) + minimumLeft;
-    h ^= 2;
-    h = Integer.rotateLeft(h, maximumLeft) + maximumLeft;
-    h ^= 3;
-    h = Integer.rotateLeft(h, minimumRight) + minimumRight;
-    h ^= 5;
-    h = Integer.rotateLeft(h, maximumRight) + maximumRight;
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), query, minimumLeft, maximumLeft, minimumRight, maximumRight);   
   }
 
   /*

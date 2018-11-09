@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.lucene.index.IndexReader;
@@ -154,11 +155,7 @@ public class MtasSpanIntersectingQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = Integer.rotateLeft(classHash(), 1);
-    h ^= q1.hashCode();
-    h = Integer.rotateLeft(h, 1);
-    h ^= q2.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), q1, q2);   
   }
 
   /*

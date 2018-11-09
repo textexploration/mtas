@@ -1,6 +1,7 @@
 package mtas.parser.function.util;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -78,9 +79,7 @@ public class MtasFunctionParserFunctionResponseDouble
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ (int) value;
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), value);   
   }
 
   /*

@@ -2,6 +2,7 @@ package mtas.search.spans.util;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.lucene.index.IndexReader;
@@ -110,9 +111,7 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = Integer.rotateLeft(classHash(), 1);
-    h ^= subQuery.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), subQuery);       
   }
 
   /*

@@ -3,6 +3,8 @@ package mtas.search.spans;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.spans.SpanOrQuery;
@@ -196,9 +198,7 @@ public class MtasSpanOrQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ clauses.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), clauses);   
   }
 
   /*

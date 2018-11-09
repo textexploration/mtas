@@ -1,14 +1,14 @@
 package mtas.codec.util.collector;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import mtas.codec.util.CodecUtil;
 
 /**
  * The Class MtasDataItemDoubleAdvanced.
  */
-public class MtasDataItemDoubleAdvanced
-    extends MtasDataItemAdvanced<Double, Double> {
+public class MtasDataItemDoubleAdvanced extends MtasDataItemAdvanced<Double, Double> {
 
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 1L;
@@ -16,28 +16,38 @@ public class MtasDataItemDoubleAdvanced
   /**
    * Instantiates a new mtas data item double advanced.
    *
-   * @param valueSum the value sum
-   * @param valueSumOfLogs the value sum of logs
-   * @param valueSumOfSquares the value sum of squares
-   * @param valueMin the value min
-   * @param valueMax the value max
-   * @param valueN the value N
-   * @param sub the sub
-   * @param statsItems the stats items
-   * @param sortType the sort type
-   * @param sortDirection the sort direction
-   * @param errorNumber the error number
-   * @param errorList the error list
-   * @param sourceNumber the source number
+   * @param valueSum
+   *          the value sum
+   * @param valueSumOfLogs
+   *          the value sum of logs
+   * @param valueSumOfSquares
+   *          the value sum of squares
+   * @param valueMin
+   *          the value min
+   * @param valueMax
+   *          the value max
+   * @param valueN
+   *          the value N
+   * @param sub
+   *          the sub
+   * @param statsItems
+   *          the stats items
+   * @param sortType
+   *          the sort type
+   * @param sortDirection
+   *          the sort direction
+   * @param errorNumber
+   *          the error number
+   * @param errorList
+   *          the error list
+   * @param sourceNumber
+   *          the source number
    */
-  public MtasDataItemDoubleAdvanced(Double valueSum, Double valueSumOfLogs,
-      Double valueSumOfSquares, Double valueMin, Double valueMax, long valueN,
-      MtasDataCollector<?, ?> sub, Set<String> statsItems, String sortType,
-      String sortDirection, int errorNumber, Map<String, Integer> errorList,
-      int sourceNumber) {
-    super(valueSum, valueSumOfLogs, valueSumOfSquares, valueMin, valueMax,
-        valueN, sub, statsItems, sortType, sortDirection, errorNumber,
-        errorList, new MtasDataDoubleOperations(), sourceNumber);
+  public MtasDataItemDoubleAdvanced(Double valueSum, Double valueSumOfLogs, Double valueSumOfSquares, Double valueMin,
+      Double valueMax, long valueN, MtasDataCollector<?, ?> sub, Set<String> statsItems, String sortType,
+      String sortDirection, int errorNumber, Map<String, Integer> errorList, int sourceNumber) {
+    super(valueSum, valueSumOfLogs, valueSumOfSquares, valueMin, valueMax, valueN, sub, statsItems, sortType,
+        sortDirection, errorNumber, errorList, new MtasDataDoubleOperations(), sourceNumber);
   }
 
   /*
@@ -73,8 +83,7 @@ public class MtasDataItemDoubleAdvanced
     case CodecUtil.STATS_TYPE_MIN:
       return new MtasDataItemNumberComparator<>(valueMin, sortDirection);
     case CodecUtil.STATS_TYPE_SUMSQ:
-      return new MtasDataItemNumberComparator<>(valueSumOfSquares,
-          sortDirection);
+      return new MtasDataItemNumberComparator<>(valueSumOfSquares, sortDirection);
     default:
       return null;
     }
@@ -95,8 +104,7 @@ public class MtasDataItemDoubleAdvanced
     case CodecUtil.STATS_TYPE_VARIANCE:
     case CodecUtil.STATS_TYPE_POPULATIONVARIANCE:
     case CodecUtil.STATS_TYPE_QUADRATICMEAN:
-      return new MtasDataItemNumberComparator<>(getValue(sortType),
-          sortDirection);
+      return new MtasDataItemNumberComparator<>(getValue(sortType), sortDirection);
     default:
       return null;
     }
@@ -108,8 +116,7 @@ public class MtasDataItemDoubleAdvanced
    * @see java.lang.Object#toString()
    */
   public String toString() {
-    return this.getClass().getSimpleName() + "[" + valueSum + "," + valueN
-        + "]";
+    return this.getClass().getSimpleName() + "[" + valueSum + "," + valueN + "]";
   }
 
   /*
@@ -138,9 +145,7 @@ public class MtasDataItemDoubleAdvanced
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ getComparableValue().hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), getComparableValue());   
   }
 
 }

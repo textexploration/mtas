@@ -25,11 +25,14 @@ import mtas.analysis.util.MtasPennTreebankReader;
 /**
  * The Class MtasPennTreebankParser.
  */
+/**
+ * @author matthijs
+ *
+ */
 public class MtasPennTreebankParser extends MtasParser {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasPennTreebankParser.class);
+  private static final Log log = LogFactory.getLog(MtasPennTreebankParser.class);
 
   /** The Constant PENNTREEBANK_IGNORE. */
   private static final String PENNTREEBANK_IGNORE = "ignore";
@@ -48,7 +51,7 @@ public class MtasPennTreebankParser extends MtasParser {
 
   /** The Constant STRING_SPLITTER. */
   private static final String STRING_SPLITTER = "_";
-    
+
   /** The ignore nodes. */
   private Set<String> ignoreNodes = new HashSet<>();
 
@@ -82,8 +85,7 @@ public class MtasPennTreebankParser extends MtasParser {
         if (current.name.equals(PENNTREEBANK_IGNORE)) {
           for (int j = 0; j < current.children.size(); j++) {
             if (current.children.get(j).name.equals(PENNTREEBANK_NODE)) {
-              String nameVariable = current.children.get(j).attributes
-                  .get(PENNTREEBANK_NODE_NAME);
+              String nameVariable = current.children.get(j).attributes.get(PENNTREEBANK_NODE_NAME);
               if (!nameVariable.isEmpty()) {
                 ignoreNodes.add(nameVariable);
               }
@@ -100,16 +102,14 @@ public class MtasPennTreebankParser extends MtasParser {
    * @see mtas.analysis.parser.MtasParser#createTokenCollection(java.io.Reader)
    */
   @Override
-  public MtasTokenCollection createTokenCollection(Reader reader)
-      throws MtasParserException, MtasConfigException {
+  public MtasTokenCollection createTokenCollection(Reader reader) throws MtasParserException, MtasConfigException {
     tokenCollection = new MtasTokenCollection();
     MtasTokenIdFactory mtasTokenIdFactory = new MtasTokenIdFactory();
     List<Level> levels = new ArrayList<>();
-//    Map<String,MtasToken> referencesNode = new HashMap<>();
-//    Map<String,List<MtasToken>> referencesNullElement = new HashMap<>();
+    // Map<String,MtasToken> referencesNode = new HashMap<>();
+    // Map<String,List<MtasToken>> referencesNullElement = new HashMap<>();
     try {
-      MtasPennTreebankReader treebankReader = new MtasPennTreebankReader(
-          reader);
+      MtasPennTreebankReader treebankReader = new MtasPennTreebankReader(reader);
       // variables main administration
       int event = treebankReader.getEventType();
       int position = 0;
@@ -128,8 +128,7 @@ public class MtasPennTreebankParser extends MtasParser {
         switch (event) {
         case MtasPennTreebankReader.EVENT_STARTBRACKET:
           if (level != null && level.code) {
-            throw new MtasParserException(
-                "unexpected start bracket for " + NODE_CODE);
+            throw new MtasParserException("unexpected start bracket for " + NODE_CODE);
           } else {
             level = new Level();
             level.ignore = ignore;
@@ -140,19 +139,15 @@ public class MtasPennTreebankParser extends MtasParser {
         case MtasPennTreebankReader.EVENT_ENDBRACKET:
           Objects.requireNonNull(level, "no level while ending bracket");
           level.realOffsetEnd = treebankReader.getPosition() - 1;
-          Level parentLevel = levels.size() > 1 ? levels.get(levels.size() - 2)
-              : null;
+          Level parentLevel = levels.size() > 1 ? levels.get(levels.size() - 2) : null;
           createNodeMappings(mtasTokenIdFactory, level, parentLevel);
           // remove level
           if (parentLevel != null) {
             if (level.positionStart != null && level.positionEnd != null) {
-              parentLevel.addPositionRange(level.positionStart,
-                  level.positionEnd);
+              parentLevel.addPositionRange(level.positionStart, level.positionEnd);
             }
-            parentLevel.offsetStart = parentLevel.offsetStart == null
-                ? level.offsetStart : parentLevel.offsetStart;
-            parentLevel.offsetEnd = level.offsetEnd == null
-                ? parentLevel.offsetEnd : level.offsetEnd;
+            parentLevel.offsetStart = parentLevel.offsetStart == null ? level.offsetStart : parentLevel.offsetStart;
+            parentLevel.offsetEnd = level.offsetEnd == null ? parentLevel.offsetEnd : level.offsetEnd;
             levels.remove(levels.size() - 1);
             level = parentLevel;
             ignore = level.ignore;
@@ -160,8 +155,8 @@ public class MtasPennTreebankParser extends MtasParser {
             levels.clear();
             level = null;
             ignore = false;
-//            referencesNode.clear();
-//            referencesNullElement.clear();
+            // referencesNode.clear();
+            // referencesNullElement.clear();
           }
           break;
         case MtasPennTreebankReader.EVENT_NODE:
@@ -174,19 +169,18 @@ public class MtasPennTreebankParser extends MtasParser {
           }
           if (level.node.equals(NODE_CODE)) {
             level.code = true;
-            if (!treebankReader.next() || (event = treebankReader
-                .getEventType()) != MtasPennTreebankReader.EVENT_STRING) {
+            if (!treebankReader.next()
+                || (event = treebankReader.getEventType()) != MtasPennTreebankReader.EVENT_STRING) {
               throw new MtasParserException("expected string for " + NODE_CODE);
             } else if (!level.ignore) {
               stringValue = treebankReader.getString();
               stringOffsetStart = treebankReader.getPosition();
-              stringOffsetEnd = stringOffsetStart + stringValue.length();              
+              stringOffsetEnd = stringOffsetStart + stringValue.length();
               if (!codePositions.isEmpty()) {
-                createCodeMappings(mtasTokenIdFactory, level, stringValue,
-                    codeOffsetStart, codeOffsetEnd, stringOffsetStart,
-                    stringOffsetEnd, codePositions);
+                createCodeMappings(mtasTokenIdFactory, level, stringValue, codeOffsetStart, codeOffsetEnd,
+                    stringOffsetStart, stringOffsetEnd, codePositions);
               } else {
-                log.error("CODE without codePositions for "+stringValue);                
+                log.error("CODE without codePositions for " + stringValue);
               }
               codePositions.clear();
               codeOffsetStart = null;
@@ -202,15 +196,14 @@ public class MtasPennTreebankParser extends MtasParser {
             stringValue = treebankReader.getString();
             stringOffsetStart = treebankReader.getPosition();
             stringOffsetEnd = stringOffsetStart + stringValue.length();
-            if(level.offsetStart == null) {
+            if (level.offsetStart == null) {
               level.offsetStart = stringOffsetStart;
             }
             level.offsetEnd = stringOffsetEnd;
             if (stringValue.startsWith(NODE_CODE_PREFIX)) {
               codePositions.add(position);
-              stringValue = stringValue.substring(NODE_CODE_PREFIX.length(),
-                  stringValue.length());
-              if(codeOffsetStart == null) {
+              stringValue = stringValue.substring(NODE_CODE_PREFIX.length(), stringValue.length());
+              if (codeOffsetStart == null) {
                 codeOffsetStart = stringOffsetStart;
               }
               codeOffsetEnd = stringOffsetEnd;
@@ -218,8 +211,7 @@ public class MtasPennTreebankParser extends MtasParser {
             // register position
             level.addPosition(position);
             // create mappings
-            createStringMappings(mtasTokenIdFactory, level, stringValue,
-                stringOffsetStart, stringOffsetEnd, position);
+            createStringMappings(mtasTokenIdFactory, level, stringValue, stringOffsetStart, stringOffsetEnd, position);
             // increase position
             position++;
           }
@@ -235,8 +227,7 @@ public class MtasPennTreebankParser extends MtasParser {
       }
     } catch (IOException e) {
       log.debug(e);
-      throw new MtasParserException(
-          "No valid Penn Treebank syntax: " + e.getMessage());
+      throw new MtasParserException("No valid Penn Treebank syntax: " + e.getMessage());
     }
     // final check
     tokenCollection.check(autorepair, makeunique);
@@ -266,14 +257,12 @@ public class MtasPennTreebankParser extends MtasParser {
    * @throws IOException
    *           Signals that an I/O exception has occurred.
    */
-  private void createCodeMappings(MtasTokenIdFactory mtasTokenIdFactory,
-      Level level, String stringValue, int offsetStart, int offsetEnd,
-      int realOffsetStart, int realOffsetEnd, List<Integer> codePositions)
+  private void createCodeMappings(MtasTokenIdFactory mtasTokenIdFactory, Level level, String stringValue,
+      int offsetStart, int offsetEnd, int realOffsetStart, int realOffsetEnd, List<Integer> codePositions)
       throws IOException {
-    String[] stringValues = MtasPennTreebankReader.createStrings(stringValue,
-        Pattern.quote(STRING_SPLITTER));
-    MtasToken token = new MtasTokenString(mtasTokenIdFactory.createTokenId(),
-        level.node, filterString(stringValues[0].trim()));
+    String[] stringValues = MtasPennTreebankReader.createStrings(stringValue, Pattern.quote(STRING_SPLITTER));
+    MtasToken token = new MtasTokenString(mtasTokenIdFactory.createTokenId(), level.node,
+        filterString(stringValues[0].trim()));
     token.setOffset(offsetStart, offsetEnd);
     token.setRealOffset(realOffsetStart, realOffsetEnd);
     token.addPositions(codePositions.stream().mapToInt(i -> i).toArray());
@@ -291,13 +280,10 @@ public class MtasPennTreebankParser extends MtasParser {
    * @param parentLevel
    *          the parent level
    */
-  private void createNodeMappings(MtasTokenIdFactory mtasTokenIdFactory,
-      Level level, Level parentLevel) {
+  private void createNodeMappings(MtasTokenIdFactory mtasTokenIdFactory, Level level, Level parentLevel) {
     MtasToken nodeToken;
-    if (level.node != null && level.positionStart != null
-        && level.positionEnd != null) {
-      nodeToken = new MtasTokenString(mtasTokenIdFactory.createTokenId(),
-          level.node, "");
+    if (level.node != null && level.positionStart != null && level.positionEnd != null) {
+      nodeToken = new MtasTokenString(mtasTokenIdFactory.createTokenId(), level.node, "");
       nodeToken.setOffset(level.offsetStart, level.offsetEnd);
       nodeToken.setRealOffset(level.realOffsetStart, level.realOffsetEnd);
       nodeToken.addPositionRange(level.positionStart, level.positionEnd);
@@ -330,28 +316,32 @@ public class MtasPennTreebankParser extends MtasParser {
    * @throws IOException
    *           Signals that an I/O exception has occurred.
    */
-  private void createStringMappings(MtasTokenIdFactory mtasTokenIdFactory,
-      Level level, String stringValue, int offsetStart, int offsetEnd,
-      int position) throws IOException {
+  private void createStringMappings(MtasTokenIdFactory mtasTokenIdFactory, Level level, String stringValue,
+      int offsetStart, int offsetEnd, int position) throws IOException {
     // System.out.println("createStringMappings string ");
-    String[] stringValues = MtasPennTreebankReader.createStrings(stringValue,
-        Pattern.quote(STRING_SPLITTER));
+    String[] stringValues = MtasPennTreebankReader.createStrings(stringValue, Pattern.quote(STRING_SPLITTER));
     if (stringValues.length > 0 && !stringValues[0].trim().isEmpty()) {
-      MtasToken token = new MtasTokenString(mtasTokenIdFactory.createTokenId(),
-          "t", filterString(stringValues[0].trim()), position);
+      MtasToken token = new MtasTokenString(mtasTokenIdFactory.createTokenId(), "t",
+          filterString(stringValues[0].trim()), position);
       token.setOffset(offsetStart, offsetEnd);
       tokenCollection.add(token);
       level.tokens.add(token);
     }
     if (stringValues.length > 1 && !stringValues[1].trim().isEmpty()) {
-      MtasToken token = new MtasTokenString(mtasTokenIdFactory.createTokenId(),
-          "lemma", filterString(stringValues[1].trim()), position);
+      MtasToken token = new MtasTokenString(mtasTokenIdFactory.createTokenId(), "lemma",
+          filterString(stringValues[1].trim()), position);
       token.setOffset(offsetStart, offsetEnd);
       tokenCollection.add(token);
       level.tokens.add(token);
     }
   }
 
+  /**
+   * Filter string.
+   *
+   * @param stringValue the string value
+   * @return the string
+   */
   private String filterString(String stringValue) {
     final String lrb = Pattern.quote("-LRB-");
     final String rrb = Pattern.quote("-RRB-");
@@ -368,17 +358,24 @@ public class MtasPennTreebankParser extends MtasParser {
     filteredValue = filteredValue.replaceAll(rsb, "]");
     return filteredValue;
   }
-  
+
+  /**
+   * Filter null element references.
+   *
+   * @param stringValues the string values
+   * @return the string[]
+   */
   public String[] filterNullElementReferences(String[] stringValues) {
     Objects.requireNonNull(stringValues, "no stringValues");
-    final Pattern pattern = Pattern.compile("^([^"+Pattern.quote("-")+"]*)"+Pattern.quote("-")+"([0-9]+("+Pattern.quote("-")+"[0-9]+)*)$");
-    if(stringValues.length>0) {  
+    final Pattern pattern = Pattern.compile(
+        "^([^" + Pattern.quote("-") + "]*)" + Pattern.quote("-") + "([0-9]+(" + Pattern.quote("-") + "[0-9]+)*)$");
+    if (stringValues.length > 0) {
       Matcher matcher = pattern.matcher(stringValues[0]);
-      stringValues[0] = stringValues[0].replaceAll(Pattern.quote("-")+".*$", "");
-      if(matcher.matches()) {
+      stringValues[0] = stringValues[0].replaceAll(Pattern.quote("-") + ".*$", "");
+      if (matcher.matches()) {
         return matcher.group(2).split(Pattern.quote("-"));
       }
-      
+
     }
     return new String[0];
   }
@@ -430,7 +427,7 @@ public class MtasPennTreebankParser extends MtasParser {
     public Integer positionEnd;
 
     /** The tokens. */
-    public List<MtasToken> tokens;    
+    public List<MtasToken> tokens;
 
     /**
      * Instantiates a new level.
@@ -455,10 +452,8 @@ public class MtasPennTreebankParser extends MtasParser {
      *          the position
      */
     public void addPosition(int position) {
-      positionStart = (positionStart == null) ? position
-          : Math.min(positionStart, position);
-      positionEnd = (positionEnd == null) ? position
-          : Math.max(positionEnd, position);
+      positionStart = (positionStart == null) ? position : Math.min(positionStart, position);
+      positionEnd = (positionEnd == null) ? position : Math.max(positionEnd, position);
     }
 
     /**
@@ -470,10 +465,8 @@ public class MtasPennTreebankParser extends MtasParser {
      *          the end position
      */
     public void addPositionRange(int startPosition, int endPosition) {
-      positionStart = (positionStart == null) ? startPosition
-          : Math.min(positionStart, startPosition);
-      positionEnd = (positionEnd == null) ? endPosition
-          : Math.max(positionEnd, endPosition);
+      positionStart = (positionStart == null) ? startPosition : Math.min(positionStart, startPosition);
+      positionEnd = (positionEnd == null) ? endPosition : Math.max(positionEnd, endPosition);
     }
 
   }

@@ -2,6 +2,7 @@ package mtas.search.spans;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.lucene.index.IndexReader;
@@ -16,7 +17,7 @@ import mtas.search.spans.util.MtasSpanWeight;
 import mtas.search.spans.util.MtasSpans;
 
 /**
- * The Class MtasSpanStartQuery.
+ * Search for the start of a hit for the provided MtasSpanQuery.
  */
 public class MtasSpanStartQuery extends MtasSpanQuery {
 
@@ -41,12 +42,16 @@ public class MtasSpanStartQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanQuery rewrite(IndexReader reader) throws IOException {
+    //rewrite the main query
     MtasSpanQuery newClause = clause.rewrite(reader);
+    //if something changed, retry
     if (!newClause.equals(clause)) {
       return new MtasSpanStartQuery(newClause).rewrite(reader);
+    //if main query has maximum width zero, just use this query instead
     } else if (newClause.getMaximumWidth() != null
         && newClause.getMaximumWidth() == 0) {
       return newClause;
+    //otherwise continue as normal  
     } else {
       return super.rewrite(reader);
     }
@@ -181,9 +186,7 @@ public class MtasSpanStartQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ clause.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), clause);    
   }
 
   /*

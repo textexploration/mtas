@@ -1,6 +1,7 @@
 package mtas.parser.cql.util;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import mtas.analysis.token.MtasToken;
 import mtas.search.spans.MtasSpanPrefixQuery;
@@ -162,10 +163,7 @@ public class MtasCQLParserGroupQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 5) ^ term.hashCode();
-    h = (h * 7) ^ query.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), term, query);   
   }
 
   /*

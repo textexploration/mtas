@@ -1,6 +1,7 @@
 package mtas.parser.simple.util;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,17 +26,37 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
 
   /** The term. */
   Term term;
-  
+
+  /** The pattern word. */
   final Pattern patternWord = Pattern.compile("^([^:]+):(.*)$");
 
+  /**
+   * Instantiates a new mtas simple parser word query.
+   *
+   * @param field
+   *          the field
+   * @param prefix
+   *          the prefix
+   */
   public MtasSimpleParserWordQuery(String field, String prefix) {
     super(1, 1);
     term = new Term(field, prefix + MtasToken.DELIMITER);
     query = new MtasSpanPrefixQuery(term, true);
   }
 
-  public MtasSimpleParserWordQuery(String field, String prefix, String value)
-      throws ParseException {
+  /**
+   * Instantiates a new mtas simple parser word query.
+   *
+   * @param field
+   *          the field
+   * @param prefix
+   *          the prefix
+   * @param value
+   *          the value
+   * @throws ParseException
+   *           the parse exception
+   */
+  public MtasSimpleParserWordQuery(String field, String prefix, String value) throws ParseException {
     super(1, 1);
     Matcher m = patternWord.matcher(value);
     if (m.find()) {
@@ -46,7 +67,7 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
       String termBase = prefix + MtasToken.DELIMITER + value;
       term = new Term(field, termBase + "\u0000*");
       query = new MtasSpanRegexpQuery(term, true);
-    }  
+    }
   }
 
   /*
@@ -73,13 +94,11 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * org.apache.lucene.search.spans.SpanQuery#createWeight(org.apache.lucene.
+   * @see org.apache.lucene.search.spans.SpanQuery#createWeight(org.apache.lucene.
    * search.IndexSearcher, boolean)
    */
   @Override
-  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
-      throws IOException {
+  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost) throws IOException {
     return query.createWeight(searcher, needsScores, boost);
   }
 
@@ -117,10 +136,7 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 5) ^ term.hashCode();
-    h = (h * 7) ^ query.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), term, query);   
   }
 
   /*
@@ -134,7 +150,9 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
     query.disableTwoPhaseIterator();
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see mtas.search.spans.util.MtasSpanQuery#isMatchAllPositionsQuery()
    */
   @Override

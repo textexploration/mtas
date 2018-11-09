@@ -2,6 +2,8 @@ package mtas.analysis.util;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
+
 import mtas.analysis.token.MtasToken;
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
@@ -109,9 +111,7 @@ public class MtasPrefixTokenFilterFactory extends TokenFilterFactory {
      */
     @Override
     public int hashCode() {
-      int h = this.getClass().getSimpleName().hashCode();
-      h = (h * 7) ^ prefix.hashCode();
-      return h;
+      return Objects.hash(this.getClass().getSimpleName(), prefix);         
     }
 
   }

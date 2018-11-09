@@ -2,6 +2,8 @@ package mtas.search.spans;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.spans.SpanNearQuery;
@@ -11,7 +13,7 @@ import mtas.search.spans.util.MtasExtendedSpanAndQuery;
 import mtas.search.spans.util.MtasSpanQuery;
 
 /**
- * The Class MtasSpanAndQuery.
+ * Search for hits from multiple MtasSpanQueries occurring at the same position
  */
 public class MtasSpanAndQuery extends MtasSpanQuery {
 
@@ -28,6 +30,8 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
    */
   public MtasSpanAndQuery(MtasSpanQuery... initialClauses) {
     super(null, null);
+    //define estimates for minimum and maximum to enable
+    //general preliminary optimization of queries
     Integer minimum = null;
     Integer maximum = null;
     clauses = new HashSet<>();
@@ -51,6 +55,7 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
       }
     }
     setWidth(minimum, maximum);
+    //define the base query to be used for the weight
     baseQuery = new MtasExtendedSpanAndQuery(
         clauses.toArray(new MtasSpanQuery[clauses.size()]));
   }
@@ -97,8 +102,10 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
       boolean actuallyRewritten = false;
       for (int i = 0; i < oldClauses.length; i++) {
         newClauses[i] = oldClauses[i].rewrite(reader);
+        //did anything change?
         actuallyRewritten |= !oldClauses[i].equals(newClauses[i]);
-        if (newClauses[i] instanceof MtasSpanMatchNoneQuery) {
+        //no results if one of the clauses never matches
+        if (newClauses[i] instanceof MtasSpanMatchNoneQuery) {          
           return (new MtasSpanMatchNoneQuery(this.getField())).rewrite(reader);
         } else {
           if (newClauses[i].isSinglePositionQuery()) {
@@ -113,6 +120,7 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
       if (matchAllSinglePositionQueries > 0) {
         // compute new number of clauses
         int newNumber = newClauses.length - matchAllSinglePositionQueries;
+        //but there should be always one...
         if (matchAllSinglePositionQueries == singlePositionQueries) {
           newNumber++;
         }
@@ -123,6 +131,7 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
               && (newClauses[i] instanceof MtasSpanMatchAllQuery))) {
             newFilteredClauses[j] = newClauses[i];
             j++;
+          //there should be always one... (matches at most one time)  
           } else if (matchAllSinglePositionQueries == singlePositionQueries) {
             newFilteredClauses[j] = newClauses[i];
             j++;
@@ -132,17 +141,23 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
         newClauses = newFilteredClauses;
       }
       if (newClauses.length == 0) {
+        //no clauses left, so no results
         return (new MtasSpanMatchNoneQuery(this.getField())).rewrite(reader);
       } else if (newClauses.length == 1) {
+        //only a single clause
         return newClauses[0].rewrite(reader);
       } else if (actuallyRewritten || newClauses.length != clauses.size()) {
+        //rewrite again, just to be sure
         return new MtasSpanAndQuery(newClauses).rewrite(reader);
       } else {
+        //do what you parent does
         return super.rewrite(reader);
       }
     } else if (clauses.size() == 1) {
+      //only one, so just return this single clause
       return clauses.iterator().next().rewrite(reader);
     } else {
+      //no clauses, therefore no matches
       return (new MtasSpanMatchNoneQuery(this.getField())).rewrite(reader);
     }
   }
@@ -182,9 +197,7 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ clauses.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), clauses);
   }
 
   /*

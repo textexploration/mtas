@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import mtas.search.similarities.MtasSimScorer;
 import mtas.search.spans.util.MtasSpanQuery;
@@ -195,11 +196,7 @@ public class MtasSpanMatchNoneQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    if (field != null) {
-      h = (h * 7) ^ field.hashCode();
-    }
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), field);   
   }
   
   @Override

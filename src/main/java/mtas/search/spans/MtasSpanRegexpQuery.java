@@ -1,7 +1,7 @@
 package mtas.search.spans;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 
 import mtas.analysis.token.MtasToken;
 import mtas.codec.util.CodecUtil;
@@ -172,10 +172,7 @@ public class MtasSpanRegexpQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ term.hashCode();
-    h += (singlePosition ? 1 : 0);
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), term, singlePosition);   
   }
   
   @Override

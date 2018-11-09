@@ -3733,10 +3733,7 @@ public class CodecComponent {
      */
     @Override
     public int hashCode() {
-      int h = this.getClass().getSimpleName().hashCode();
-      h = (h * 5) ^ startPosition;
-      h = (h * 7) ^ endPosition;
-      return h;
+      return Objects.hash(this.getClass().getSimpleName(), startPosition, endPosition);         
     }
 
   }

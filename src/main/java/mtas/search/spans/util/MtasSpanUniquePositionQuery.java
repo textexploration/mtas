@@ -2,6 +2,7 @@ package mtas.search.spans.util;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.lucene.index.IndexReader;
@@ -77,9 +78,7 @@ public class MtasSpanUniquePositionQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ clause.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), clause);   
   }
 
   /*

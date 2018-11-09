@@ -1,6 +1,7 @@
 package mtas.search.spans;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import mtas.analysis.token.MtasToken;
 import mtas.search.spans.util.MtasSpanQuery;
@@ -161,10 +162,7 @@ public class MtasSpanPrefixQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ term.hashCode();
-    h += (singlePosition ? 1 : 0);
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), term, singlePosition);   
   }
   
   @Override

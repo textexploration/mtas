@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import mtas.codec.util.CodecUtil;
 import mtas.codec.util.CodecComponent.ComponentHeatmap;
 import mtas.codec.util.CodecComponent.SubComponentFunction;
+import mtas.codec.util.CodecUtil;
 
 import org.apache.lucene.index.LeafReaderContext;
 
@@ -21,13 +21,13 @@ import org.apache.lucene.spatial.prefix.tree.SpatialPrefixTree;
 import org.apache.lucene.util.Bits;
 
 /**
- * Based on PrefixTreeFacetCounter 
+ * Based on PrefixTreeFacetCounter. 
  */
 
 public class PrefixTreeMtasCounter {
 
   /** A callback/visitor of gridlevel counts. */
-  public static abstract class GridVisitor {
+  public abstract static class GridVisitor {
     /** Called for cells with a leaf, or cells at the target gridlevel.  {@code count} is greater than zero.
      * When an ancestor cell is given with non-zero count, the count can be considered to be added to all cells
      * below. You won't necessarily get a cell at level {@code gridLevel} if the indexed data is courser (bigger).

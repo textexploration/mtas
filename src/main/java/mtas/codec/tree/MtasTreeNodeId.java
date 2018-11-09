@@ -1,5 +1,7 @@
 package mtas.codec.tree;
 
+import java.util.Objects;
+
 /**
  * The Class MtasTreeNodeId.
  */
@@ -62,11 +64,7 @@ public class MtasTreeNodeId implements Comparable<MtasTreeNodeId> {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 3) ^ ref.hashCode();
-    h = (h * 5) ^ additionalId;
-    h = (h * 7) ^ (int) additionalRef;
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), ref,additionalId, additionalRef);       
   }
 
 }

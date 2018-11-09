@@ -3,6 +3,8 @@ package mtas.search.spans;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.spans.SpanWeight;
@@ -346,20 +348,7 @@ public class MtasSpanWithinQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = Integer.rotateLeft(classHash(), 1);
-    h ^= smallQuery.hashCode();
-    h = Integer.rotateLeft(h, 1);
-    h ^= bigQuery.hashCode();
-    h = Integer.rotateLeft(h, leftBoundaryBigMinimum) + leftBoundaryBigMinimum;
-    h ^= 2;
-    h = Integer.rotateLeft(h, leftBoundaryBigMaximum) + leftBoundaryBigMaximum;
-    h ^= 3;
-    h = Integer.rotateLeft(h, rightBoundaryBigMinimum)
-        + rightBoundaryBigMinimum;
-    h ^= 5;
-    h = Integer.rotateLeft(h, rightBoundaryBigMaximum)
-        + rightBoundaryBigMaximum;
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), smallQuery, bigQuery, leftBoundaryBigMinimum, leftBoundaryBigMaximum, rightBoundaryBigMinimum, rightBoundaryBigMaximum,autoAdjustBigQuery);       
   }
 
   /*

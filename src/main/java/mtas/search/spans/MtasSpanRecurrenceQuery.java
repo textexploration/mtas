@@ -2,6 +2,7 @@ package mtas.search.spans;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.lucene.index.IndexReader;
@@ -248,11 +249,7 @@ public class MtasSpanRecurrenceQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ query.hashCode();
-    h = (h * 11) ^ minimumRecurrence;
-    h = (h * 13) ^ maximumRecurrence;
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), query, minimumRecurrence, maximumRecurrence);   
   }
 
   /*

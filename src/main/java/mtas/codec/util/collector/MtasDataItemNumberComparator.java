@@ -2,6 +2,7 @@ package mtas.codec.util.collector;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Objects;
 
 import mtas.codec.util.CodecUtil;
 
@@ -169,9 +170,7 @@ public final class MtasDataItemNumberComparator<T extends Number & Comparable<T>
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 7) ^ value.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), value, sortDirection);   
   }
 
 }

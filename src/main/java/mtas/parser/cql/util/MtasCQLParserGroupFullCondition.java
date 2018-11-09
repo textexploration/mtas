@@ -1,5 +1,7 @@
 package mtas.parser.cql.util;
 
+import java.util.Objects;
+
 import mtas.parser.cql.ParseException;
 import mtas.search.spans.MtasSpanEndQuery;
 import mtas.search.spans.MtasSpanStartQuery;
@@ -163,10 +165,7 @@ public class MtasCQLParserGroupFullCondition
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
-    h = (h * 5) ^ groupCondition.hashCode();
-    h = (h * 7) ^ type.hashCode();
-    return h;
+    return Objects.hash(this.getClass().getSimpleName(), groupCondition, type);   
   }
 
 }

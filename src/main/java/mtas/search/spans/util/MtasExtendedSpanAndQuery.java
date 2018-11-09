@@ -72,7 +72,7 @@ public class MtasExtendedSpanAndQuery extends SpanNearQuery {
    */
   @Override
   public int hashCode() {
-    int h = this.getClass().getSimpleName().hashCode();
+    int h = classHash();
     h = (h * 7) ^ super.hashCode();
     return h;
   }
