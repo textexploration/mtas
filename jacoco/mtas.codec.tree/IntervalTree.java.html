@@ -88,8 +88,8 @@ abstract public class IntervalTree&lt;T, N extends IntervalTreeNode&lt;T, N&gt;&
 <span class="nc" id="L88">      text.append(String.format(format, &quot;&quot;));</span>
 <span class="nc bnc" id="L89" title="All 2 branches missed.">      if (n.left == n.right) {</span>
 <span class="nc" id="L90">        text.append(&quot;[&quot; + n.left + &quot;] (&quot; + n.max + &quot;) : &quot; + n.lists.size()</span>
-<span class="nc" id="L91">            + &quot; lists\n&quot;);</span>
-<span class="nc" id="L92">      } else {</span>
+            + &quot; lists\n&quot;);
+      } else {
 <span class="nc" id="L93">        text.append(&quot;[&quot; + n.left + &quot;-&quot; + n.right + &quot;] (&quot; + n.max + &quot;) : &quot;</span>
 <span class="nc" id="L94">            + n.lists.size() + &quot; lists\n&quot;);</span>
       }

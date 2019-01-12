@@ -49,14 +49,14 @@ import mtas.solr.update.processor.MtasUpdateRequestProcessorResultReader;
     }
     Iterator&lt;MtasUpdateRequestProcessorResultItem&gt; iterator;
 
-<span class="fc" id="L52">    try (</span>
+<span class="pc" id="L52">    try (</span>
 <span class="fc" id="L53">        MtasUpdateRequestProcessorResultReader result = new MtasUpdateRequestProcessorResultReader(</span>
 <span class="fc" id="L54">            sb.toString());) {</span>
 <span class="fc" id="L55">      iterator = result.getIterator();</span>
 <span class="pc bpc" id="L56" title="2 of 4 branches missed.">      if (iterator != null &amp;&amp; iterator.hasNext()) {</span>
 <span class="fc" id="L57">        res.str = result.getStoredStringValue();</span>
 <span class="fc" id="L58">        res.bin = result.getStoredBinValue();</span>
-<span class="fc" id="L59">      } else {</span>
+      } else {
 <span class="nc" id="L60">        res.str = null;</span>
 <span class="nc" id="L61">        res.bin = null;</span>
 <span class="nc" id="L62">        result.close();</span>
@@ -91,11 +91,11 @@ import mtas.solr.update.processor.MtasUpdateRequestProcessorResultReader;
 <span class="fc" id="L91">        res.states.add(state.clone());</span>
         // reset for reuse
 <span class="fc" id="L93">        parent.clearAttributes();</span>
-      }
-<span class="pc bpc" id="L95" title="9 of 10 branches missed.">    } catch (IOException e) {</span>
+<span class="fc" id="L94">      }</span>
+<span class="pc bpc" id="L95" title="10 of 12 branches missed.">    } catch (IOException e) {</span>
       // ignore
 <span class="nc" id="L97">      log.debug(e);</span>
-    }
+<span class="fc" id="L98">    }</span>
 <span class="fc" id="L99">    return res;</span>
   }
 

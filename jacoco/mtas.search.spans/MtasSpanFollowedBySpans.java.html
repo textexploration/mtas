@@ -75,9 +75,9 @@ public class MtasSpanFollowedBySpans extends MtasSpans {
    */
   @Override
   public int endPosition() {
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">    return calledNextStartPosition</span>
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        ? (noMorePositions ? NO_MORE_POSITIONS : spans1.spans.endPosition())</span>
-<span class="nc" id="L80">        : -1;</span>
+<span class="pc bpc" id="L78" title="2 of 4 branches missed.">    return calledNextStartPosition</span>
+<span class="pc" id="L79">        ? (noMorePositions ? NO_MORE_POSITIONS : spans1.spans.endPosition())</span>
+        : -1;
   }
 
   /*
@@ -127,9 +127,9 @@ public class MtasSpanFollowedBySpans extends MtasSpans {
    */
   @Override
   public int startPosition() {
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">    return calledNextStartPosition</span>
-<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        ? (noMorePositions ? NO_MORE_POSITIONS : spans1.spans.startPosition())</span>
-<span class="nc" id="L132">        : -1;</span>
+<span class="pc bpc" id="L130" title="2 of 4 branches missed.">    return calledNextStartPosition</span>
+<span class="pc" id="L131">        ? (noMorePositions ? NO_MORE_POSITIONS : spans1.spans.startPosition())</span>
+        : -1;
   }
 
   /*
@@ -222,7 +222,7 @@ public class MtasSpanFollowedBySpans extends MtasSpans {
   public int nextDoc() throws IOException {
 <span class="fc" id="L223">    reset();</span>
 <span class="pc bpc" id="L224" title="1 of 2 branches missed.">    while (!goToNextDoc())</span>
-      ;
+<span class="nc" id="L225">      ;</span>
 <span class="fc" id="L226">    return docId;</span>
   }
 
@@ -243,7 +243,7 @@ public class MtasSpanFollowedBySpans extends MtasSpans {
 <span class="pc bpc" id="L243" title="1 of 2 branches missed.">        if (spans1DocId &lt; spans2DocId) {</span>
 <span class="nc" id="L244">          spans1DocId = spans1.spans.advance(spans2DocId);</span>
 <span class="nc" id="L245">          docId = spans1DocId;</span>
-<span class="nc" id="L246">        } else {</span>
+        } else {
 <span class="fc" id="L247">          spans2DocId = spans2.spans.advance(spans1DocId);</span>
 <span class="fc" id="L248">          docId = spans2DocId;</span>
         }
@@ -267,8 +267,8 @@ public class MtasSpanFollowedBySpans extends MtasSpans {
   private boolean goToNextStartPosition() throws IOException {
     int nextSpans1StartPosition;
     int nextSpans1EndPosition;
-<span class="fc bfc" id="L270" title="All 2 branches covered.">    while ((nextSpans1StartPosition = spans1.spans</span>
-<span class="fc" id="L271">        .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
+<span class="fc" id="L270">    while ((nextSpans1StartPosition = spans1.spans</span>
+<span class="fc bfc" id="L271" title="All 2 branches covered.">        .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
 <span class="fc" id="L272">      nextSpans1EndPosition = spans1.spans.endPosition();</span>
 <span class="fc bfc" id="L273" title="All 2 branches covered.">      if (nextSpans1EndPosition == lastSpans2StartPosition) {</span>
 <span class="fc" id="L274">        return true;</span>

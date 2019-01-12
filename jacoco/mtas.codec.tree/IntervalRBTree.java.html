@@ -32,7 +32,7 @@ import mtas.codec.util.CodecSearchTree.MtasTreeHit;
 <span class="fc" id="L32">    this();</span>
 <span class="fc bfc" id="L33" title="All 2 branches covered.">    for (IntervalTreeNodeData&lt;T&gt; positionsHit : positionsHits) {</span>
 <span class="fc" id="L34">      addRange(positionsHit.start, positionsHit.end, positionsHit.list);</span>
-    }
+<span class="fc" id="L35">    }</span>
 <span class="fc" id="L36">    close();</span>
 <span class="fc" id="L37">  }</span>
 
@@ -74,7 +74,7 @@ import mtas.codec.util.CodecSearchTree.MtasTreeHit;
 <span class="fc" id="L74">    String key = left + &quot;_&quot; + right;</span>
 <span class="pc bpc" id="L75" title="1 of 2 branches missed.">    if (index.containsKey(key)) {</span>
 <span class="nc" id="L76">      index.get(key).addList(list);</span>
-<span class="nc" id="L77">    } else {</span>
+    } else {
 <span class="fc" id="L78">      root = addRange(root, left, right, list);</span>
 <span class="fc" id="L79">      root.color = IntervalRBTreeNode.BLACK;</span>
     }
@@ -101,7 +101,7 @@ import mtas.codec.util.CodecSearchTree.MtasTreeHit;
 <span class="pc bpc" id="L101" title="1 of 2 branches missed.">      if (left &lt;= localN.left) {</span>
 <span class="nc" id="L102">        localN.leftChild = addRange(localN.leftChild, left, right, list);</span>
 <span class="nc" id="L103">        updateMaxMin(localN, localN.leftChild);</span>
-<span class="nc" id="L104">      } else {</span>
+      } else {
 <span class="fc" id="L105">        localN.rightChild = addRange(localN.rightChild, left, right, list);</span>
 <span class="fc" id="L106">        updateMaxMin(localN, localN.rightChild);</span>
       }

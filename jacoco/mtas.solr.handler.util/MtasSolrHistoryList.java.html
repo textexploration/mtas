@@ -63,7 +63,7 @@ public class MtasSolrHistoryList extends MtasSolrBaseList {
 <span class="fc" id="L63">      this.softLimit = softLimit;</span>
 <span class="fc" id="L64">      this.hardLimit = hardLimit;</span>
 <span class="fc" id="L65">      garbageCollect();</span>
-<span class="fc" id="L66">    } else {</span>
+    } else {
 <span class="nc" id="L67">      throw new IllegalArgumentException();</span>
     }
 <span class="fc" id="L69">  }</span>
@@ -74,7 +74,7 @@ public class MtasSolrHistoryList extends MtasSolrBaseList {
   public void garbageCollect() {
 <span class="pc bpc" id="L75" title="1 of 2 branches missed.">    if (softLimit == 0) {</span>
 <span class="nc" id="L76">      reset();</span>
-<span class="pc bfc" id="L77" title="All 2 branches covered.">    } else if (data.size() &gt; hardLimit) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">    } else if (data.size() &gt; hardLimit) {</span>
 <span class="fc" id="L78">      long boundaryTime = data.get(softLimit).getStartTime();</span>
 <span class="fc bfc" id="L79" title="All 2 branches covered.">      data.removeIf((MtasSolrStatus status) -&gt; status.getStartTime() &lt; boundaryTime);</span>
 <span class="fc" id="L80">      index.clear();</span>

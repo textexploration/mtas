@@ -52,7 +52,7 @@ public class MtasPosition {
 <span class="pc bpc" id="L52" title="1 of 2 branches missed.">    if (start == end) {</span>
 <span class="nc" id="L53">      mtasPositionType = POSITION_SINGLE;</span>
 <span class="nc" id="L54">      mtasPositionStart = start;</span>
-<span class="nc" id="L55">    } else {</span>
+    } else {
 <span class="fc" id="L56">      mtasPositionType = POSITION_RANGE;</span>
 <span class="fc" id="L57">      mtasPositionStart = start;</span>
 <span class="fc" id="L58">      mtasPositionEnd = end;</span>
@@ -72,14 +72,14 @@ public class MtasPosition {
 <span class="fc bfc" id="L72" title="All 2 branches covered.">    if (list.size() == 1) {</span>
 <span class="fc" id="L73">      mtasPositionType = POSITION_SINGLE;</span>
 <span class="fc" id="L74">      mtasPositionStart = list.first();</span>
-<span class="fc" id="L75">    } else {</span>
+    } else {
 <span class="fc" id="L76">      mtasPositionType = POSITION_SET;</span>
 <span class="fc" id="L77">      mtasPositionList = ArrayUtils</span>
 <span class="fc" id="L78">          .toPrimitive(list.toArray(new Integer[list.size()]));</span>
 <span class="fc" id="L79">      mtasPositionStart = list.first();</span>
 <span class="fc" id="L80">      mtasPositionEnd = list.last();</span>
 <span class="fc bfc" id="L81" title="All 2 branches covered.">      if (mtasPositionList.length == (1 + mtasPositionEnd</span>
-<span class="fc" id="L82">          - mtasPositionStart)) {</span>
+          - mtasPositionStart)) {
 <span class="fc" id="L83">        mtasPositionType = POSITION_RANGE;</span>
 <span class="fc" id="L84">        mtasPositionList = null;</span>
       }
@@ -181,7 +181,7 @@ public class MtasPosition {
 <span class="pc bpc" id="L181" title="1 of 2 branches missed.">    if (list.size() == 1) {</span>
 <span class="nc" id="L182">      mtasPositionType = POSITION_SINGLE;</span>
 <span class="nc" id="L183">      mtasPositionList = null;</span>
-<span class="pc bfc" id="L184" title="All 2 branches covered.">    } else if (list.size() == (1 + mtasPositionEnd - mtasPositionStart)) {</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">    } else if (list.size() == (1 + mtasPositionEnd - mtasPositionStart)) {</span>
 <span class="fc" id="L185">      mtasPositionType = POSITION_RANGE;</span>
 <span class="fc" id="L186">      mtasPositionList = null;</span>
     }
@@ -202,7 +202,7 @@ public class MtasPosition {
 <span class="nc" id="L202">          mtasPositionType = POSITION_RANGE;</span>
 <span class="nc" id="L203">          mtasPositionEnd = mtasPositionStart;</span>
 <span class="nc" id="L204">          mtasPositionStart = position;</span>
-<span class="nc" id="L205">        } else {</span>
+        } else {
 <span class="nc" id="L206">          mtasPositionType = POSITION_SET;</span>
 <span class="nc" id="L207">          SortedSet&lt;Integer&gt; list = new TreeSet&lt;&gt;();</span>
 <span class="nc" id="L208">          list.add(position);</span>
@@ -211,9 +211,9 @@ public class MtasPosition {
 <span class="nc" id="L211">              .toPrimitive(list.toArray(new Integer[list.size()]));</span>
 <span class="nc" id="L212">          mtasPositionStart = list.first();</span>
 <span class="nc" id="L213">          mtasPositionEnd = list.last();</span>
-        }
+<span class="nc" id="L214">        }</span>
       }
-<span class="nc" id="L216">    } else {</span>
+    } else {
 <span class="nc" id="L217">      SortedSet&lt;Integer&gt; list = new TreeSet&lt;&gt;();</span>
 <span class="nc bnc" id="L218" title="All 2 branches missed.">      if (mtasPositionType.equals(POSITION_RANGE)) {</span>
 <span class="nc" id="L219">        mtasPositionType = POSITION_SET;</span>

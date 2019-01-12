@@ -80,7 +80,7 @@ public class MtasJoinQParser extends QParser {
 <span class="fc" id="L80">          mtasSolrJoinCache = ((MtasSolrSearchComponent) item.get())</span>
 <span class="fc" id="L81">              .getCollectionCache();</span>
         }
-      }
+<span class="fc" id="L83">      }</span>
 <span class="pc bpc" id="L84" title="1 of 2 branches missed.">      if (mtasSolrJoinCache != null) {</span>
         Automaton automaton;
         try {
@@ -88,15 +88,15 @@ public class MtasJoinQParser extends QParser {
 <span class="pc bpc" id="L88" title="1 of 2 branches missed.">          if (automaton != null) {</span>
 <span class="fc bfc" id="L89" title="All 2 branches covered.">            for (String field : fields) {</span>
 <span class="fc" id="L90">              booleanQueryBuilder.add(</span>
-<span class="fc" id="L91">                  new AutomatonQuery(new Term(field), automaton), Occur.SHOULD);</span>
+                  new AutomatonQuery(new Term(field), automaton), Occur.SHOULD);
             }
-<span class="fc" id="L93">          } else {</span>
+          } else {
 <span class="nc" id="L94">            throw new IOException(&quot;no data for collection '&quot; + id + &quot;'&quot;);</span>
           }
 <span class="nc" id="L96">        } catch (IOException e) {</span>
 <span class="nc" id="L97">          throw new SyntaxError(</span>
 <span class="nc" id="L98">              &quot;could not construct automaton: &quot; + e.getMessage(), e);</span>
-        }
+<span class="fc" id="L99">        }</span>
 <span class="fc" id="L100">        return booleanQueryBuilder.build();</span>
       } else {
 <span class="nc" id="L102">        throw new SyntaxError(&quot;no MtasSolrSearchComponent found&quot;);</span>

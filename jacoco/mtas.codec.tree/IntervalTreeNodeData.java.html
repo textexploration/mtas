@@ -7,7 +7,8 @@ import mtas.codec.util.CodecSearchTree.MtasTreeHit;
 /**
  * The Class IntervalTreeNodeData.
  *
- * @param &lt;T&gt; the generic type
+ * @param &lt;T&gt;
+ *          the generic type
  */
 public class IntervalTreeNodeData&lt;T&gt; {
 
@@ -29,18 +30,22 @@ public class IntervalTreeNodeData&lt;T&gt; {
   /**
    * Instantiates a new interval tree node data.
    *
-   * @param start the start
-   * @param end the end
-   * @param hitStart the hit start
-   * @param hitEnd the hit end
+   * @param start
+   *          the start
+   * @param end
+   *          the end
+   * @param hitStart
+   *          the hit start
+   * @param hitEnd
+   *          the hit end
    */
-<span class="fc" id="L37">  public IntervalTreeNodeData(int start, int end, int hitStart, int hitEnd) {</span>
-<span class="fc" id="L38">    this.start = start;</span>
-<span class="fc" id="L39">    this.end = end;</span>
-<span class="fc" id="L40">    this.hitStart = hitStart;</span>
-<span class="fc" id="L41">    this.hitEnd = hitEnd;</span>
-<span class="fc" id="L42">    list = new ArrayList&lt;MtasTreeHit&lt;T&gt;&gt;();</span>
-<span class="fc" id="L43">  }</span>
+<span class="fc" id="L42">  public IntervalTreeNodeData(int start, int end, int hitStart, int hitEnd) {</span>
+<span class="fc" id="L43">    this.start = start;</span>
+<span class="fc" id="L44">    this.end = end;</span>
+<span class="fc" id="L45">    this.hitStart = hitStart;</span>
+<span class="fc" id="L46">    this.hitEnd = hitEnd;</span>
+<span class="fc" id="L47">    list = new ArrayList&lt;MtasTreeHit&lt;T&gt;&gt;();</span>
+<span class="fc" id="L48">  }</span>
 
   /*
    * (non-Javadoc)
@@ -48,10 +53,9 @@ public class IntervalTreeNodeData&lt;T&gt; {
    * @see java.lang.Object#toString()
    */
   public String toString() {
-<span class="nc" id="L51">    String text = this.getClass().getName();</span>
-<span class="nc" id="L52">    text += &quot;(s&quot; + start + &quot;|hs&quot; + hitStart + &quot;,hh&quot; + hitEnd + &quot;|e&quot; + end</span>
-<span class="nc" id="L53">        + &quot;) - &quot; + list;</span>
-<span class="nc" id="L54">    return text;</span>
+<span class="nc" id="L56">    String text = this.getClass().getName();</span>
+<span class="nc" id="L57">    text += &quot;(s&quot; + start + &quot;|hs&quot; + hitStart + &quot;,hh&quot; + hitEnd + &quot;|e&quot; + end + &quot;) - &quot; + list;</span>
+<span class="nc" id="L58">    return text;</span>
   }
 
 }

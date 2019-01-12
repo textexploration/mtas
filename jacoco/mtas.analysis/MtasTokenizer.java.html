@@ -46,7 +46,7 @@ public final class MtasTokenizer extends Tokenizer {
   private static final String VALUE_TRUE = &quot;true&quot;;
   private static final String VALUE_FALSE = &quot;false&quot;;
   private static final String VALUE_0 = &quot;0&quot;;
-<span class="fc" id="L49">  private static final String VALUE_1 = &quot;1&quot;;</span>
+  private static final String VALUE_1 = &quot;1&quot;;
   
   /** The current position. */
 <span class="pc" id="L52">  private int currentPosition = 0;</span>
@@ -65,18 +65,18 @@ public final class MtasTokenizer extends Tokenizer {
 
   /** The term att. */
 <span class="pc" id="L67">  private final CharTermAttribute termAtt = addAttribute(</span>
-<span class="pc" id="L68">      CharTermAttribute.class);</span>
+      CharTermAttribute.class);
 
   /** The offset att. */
 <span class="pc" id="L71">  private final OffsetAttribute offsetAtt = addAttribute(OffsetAttribute.class);</span>
 
   /** The payload att. */
 <span class="pc" id="L74">  private final PayloadAttribute payloadAtt = addAttribute(</span>
-<span class="pc" id="L75">      PayloadAttribute.class);</span>
+      PayloadAttribute.class);
 
   /** The position increment att. */
 <span class="pc" id="L78">  private final PositionIncrementAttribute positionIncrementAtt = addAttribute(</span>
-<span class="pc" id="L79">      PositionIncrementAttribute.class);</span>
+      PositionIncrementAttribute.class);
 
   /** The token collection iterator. */
   private Iterator&lt;MtasToken&gt; tokenCollectionIterator;
@@ -170,10 +170,10 @@ public final class MtasTokenizer extends Tokenizer {
     try {
 <span class="fc" id="L171">      constructTokenCollection(input);</span>
 <span class="fc" id="L172">      tokenCollectionIterator = tokenCollection.iterator();</span>
-<span class="pc" id="L173">    } catch (MtasConfigException | MtasParserException e) {      </span>
+<span class="nc" id="L173">    } catch (MtasConfigException | MtasParserException e) {      </span>
 <span class="nc" id="L174">      tokenCollectionIterator = null;</span>
 <span class="nc" id="L175">      throw new IOException(e);</span>
-    }
+<span class="fc" id="L176">    }</span>
 <span class="fc" id="L177">  }</span>
 
   /**
@@ -194,7 +194,7 @@ public final class MtasTokenizer extends Tokenizer {
 <span class="nc" id="L194">    } catch (IOException e) {</span>
 <span class="nc" id="L195">      log.error(e);</span>
 <span class="nc" id="L196">      throw new MtasParserException(e.getClass() + &quot; : &quot; + e.getMessage());</span>
-    }
+<span class="nc" id="L197">    }</span>
 <span class="nc" id="L198">  }</span>
 
   /**
@@ -243,9 +243,9 @@ public final class MtasTokenizer extends Tokenizer {
 <span class="nc" id="L243">      log.debug(e);</span>
 <span class="nc" id="L244">      tokenCollection = new MtasTokenCollection();</span>
 <span class="nc" id="L245">      throw new MtasParserException(e.getMessage());</span>
-    } catch (NoSuchMethodException | InvocationTargetException
+<span class="nc" id="L246">    } catch (NoSuchMethodException | InvocationTargetException</span>
         | IllegalAccessException | ClassNotFoundException
-<span class="nc" id="L248">        | InstantiationException e) {</span>
+        | InstantiationException e) {
 <span class="nc" id="L249">      log.debug(e);</span>
 <span class="nc" id="L250">      throw new MtasConfigException(</span>
 <span class="nc" id="L251">          e.getClass().getName() + &quot; : '&quot; + e.getMessage() + &quot;'&quot;);</span>
@@ -268,7 +268,7 @@ public final class MtasTokenizer extends Tokenizer {
 <span class="nc" id="L268">      log.error(&quot;Couldn't find &quot; + configFile, e);</span>
 <span class="nc" id="L269">    } catch (IOException e) {</span>
 <span class="nc" id="L270">      log.error(&quot;Couldn't read &quot; + configFile, e);</span>
-    }
+<span class="nc" id="L271">    }</span>
 <span class="nc" id="L272">  }</span>
 
   /**
@@ -305,12 +305,12 @@ public final class MtasTokenizer extends Tokenizer {
 <span class="pc bpc" id="L305" title="1 of 2 branches missed.">          if (config.children.get(i).attributes.containsKey(CONFIGURATION_MTAS_PARSER_ATTRIBUTE)) {</span>
 <span class="fc" id="L306">            parserName = config.children.get(i).attributes.get(CONFIGURATION_MTAS_PARSER_ATTRIBUTE);</span>
 <span class="fc" id="L307">            parserConfiguration = config.children.get(i);</span>
-<span class="fc" id="L308">          } else {</span>
+          } else {
 <span class="nc" id="L309">            throw new IOException(&quot;no parser configuration&quot;);</span>
           }
         }
       }
-<span class="fc" id="L313">    } else {</span>
+    } else {
 <span class="nc" id="L314">      throw new IOException(&quot;no (valid) configuration&quot;);</span>
     }
 <span class="fc" id="L316">  }</span>

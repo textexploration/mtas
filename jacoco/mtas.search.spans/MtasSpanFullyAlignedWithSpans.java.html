@@ -190,7 +190,7 @@ public class MtasSpanFullyAlignedWithSpans extends MtasSpans {
   public int nextDoc() throws IOException {
 <span class="fc" id="L191">    reset();</span>
 <span class="pc bpc" id="L192" title="1 of 2 branches missed.">    while (!goToNextDoc())</span>
-      ;
+<span class="nc" id="L193">      ;</span>
 <span class="fc" id="L194">    return docId;</span>
   }
 
@@ -261,7 +261,7 @@ public class MtasSpanFullyAlignedWithSpans extends MtasSpans {
 <span class="pc bpc" id="L261" title="1 of 2 branches missed.">        if (spans1DocId &lt; spans2DocId) {</span>
 <span class="nc" id="L262">          spans1DocId = spans1.spans.advance(spans2DocId);</span>
 <span class="nc" id="L263">          docId = spans1DocId;</span>
-<span class="nc" id="L264">        } else {</span>
+        } else {
 <span class="fc" id="L265">          spans2DocId = spans2.spans.advance(spans1DocId);</span>
 <span class="fc" id="L266">          docId = spans2DocId;</span>
         }
@@ -286,29 +286,29 @@ public class MtasSpanFullyAlignedWithSpans extends MtasSpans {
     int nextSpans2StartPosition;
     int nextSpans2EndPosition;
     // loop over span1
-<span class="fc bfc" id="L289" title="All 2 branches covered.">    while ((nextSpans1StartPosition = spans1.spans</span>
-<span class="fc" id="L290">        .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
+<span class="fc" id="L289">    while ((nextSpans1StartPosition = spans1.spans</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">        .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
 <span class="fc" id="L291">      nextSpans1EndPosition = spans1.spans.endPosition();</span>
-<span class="fc bfc" id="L292" title="All 2 branches covered.">      if (noMorePositionsSpan2</span>
-<span class="fc bfc" id="L293" title="All 2 branches covered.">          &amp;&amp; nextSpans1StartPosition &gt; lastSpans2StartPosition) {</span>
+<span class="fc bfc" id="L292" title="All 4 branches covered.">      if (noMorePositionsSpan2</span>
+          &amp;&amp; nextSpans1StartPosition &gt; lastSpans2StartPosition) {
 <span class="fc" id="L294">        noMorePositions = true;</span>
 <span class="fc" id="L295">        return false;</span>
         // check if start/en span1 matches start/end span2 from last or previous
-<span class="fc bfc" id="L297" title="All 2 branches covered.">      } else if ((nextSpans1StartPosition == lastSpans2StartPosition</span>
-<span class="fc bfc" id="L298" title="All 2 branches covered.">          &amp;&amp; nextSpans1EndPosition == lastSpans2EndPosition)</span>
-<span class="fc bfc" id="L299" title="All 2 branches covered.">          || (nextSpans1StartPosition == previousSpans2StartPosition</span>
+<span class="fc bfc" id="L297" title="All 6 branches covered.">      } else if ((nextSpans1StartPosition == lastSpans2StartPosition</span>
+          &amp;&amp; nextSpans1EndPosition == lastSpans2EndPosition)
+          || (nextSpans1StartPosition == previousSpans2StartPosition
 <span class="fc bfc" id="L300" title="All 2 branches covered.">              &amp;&amp; previousSpans2EndPositions.contains(nextSpans1EndPosition))) {</span>
 <span class="fc" id="L301">        return true;</span>
       } else {
         // try to find matching span2
 <span class="fc bfc" id="L304" title="All 4 branches covered.">        while (!noMorePositionsSpan2</span>
-<span class="fc" id="L305">            &amp;&amp; nextSpans1StartPosition &gt;= lastSpans2StartPosition) {</span>
+            &amp;&amp; nextSpans1StartPosition &gt;= lastSpans2StartPosition) {
           // get new span2
 <span class="fc" id="L307">          nextSpans2StartPosition = spans2.spans.nextStartPosition();</span>
           // check for finished span2
 <span class="fc bfc" id="L309" title="All 2 branches covered.">          if (nextSpans2StartPosition == NO_MORE_POSITIONS) {</span>
 <span class="fc" id="L310">            noMorePositionsSpan2 = true;</span>
-<span class="fc" id="L311">          } else {</span>
+          } else {
             // get end for new span2
 <span class="fc" id="L313">            nextSpans2EndPosition = spans2.spans.endPosition();</span>
             // check for registering last span2 as previous
@@ -323,8 +323,8 @@ public class MtasSpanFullyAlignedWithSpans extends MtasSpans {
 <span class="fc" id="L323">            lastSpans2StartPosition = nextSpans2StartPosition;</span>
 <span class="fc" id="L324">            lastSpans2EndPosition = nextSpans2EndPosition;</span>
             // check for match
-<span class="fc bfc" id="L326" title="All 2 branches covered.">            if (nextSpans1StartPosition == nextSpans2StartPosition</span>
-<span class="fc bfc" id="L327" title="All 2 branches covered.">                &amp;&amp; nextSpans1EndPosition == nextSpans2EndPosition) {</span>
+<span class="fc bfc" id="L326" title="All 4 branches covered.">            if (nextSpans1StartPosition == nextSpans2StartPosition</span>
+                &amp;&amp; nextSpans1EndPosition == nextSpans2EndPosition) {
 <span class="fc" id="L328">              return true;</span>
             }
           }

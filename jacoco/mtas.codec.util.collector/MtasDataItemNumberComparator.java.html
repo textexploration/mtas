@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Objects;
 
 import mtas.codec.util.CodecUtil;
 
@@ -28,10 +29,10 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    * @param value the value
    * @param sortDirection the sort direction
    */
-<span class="fc" id="L31">  public MtasDataItemNumberComparator(T value, String sortDirection) {</span>
-<span class="fc" id="L32">    this.value = value;</span>
-<span class="fc" id="L33">    this.sortDirection = sortDirection;</span>
-<span class="fc" id="L34">  }</span>
+<span class="fc" id="L32">  public MtasDataItemNumberComparator(T value, String sortDirection) {</span>
+<span class="fc" id="L33">    this.value = value;</span>
+<span class="fc" id="L34">    this.sortDirection = sortDirection;</span>
+<span class="fc" id="L35">  }</span>
 
   /*
    * (non-Javadoc)
@@ -40,7 +41,7 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    */
   @Override
   public MtasDataItemNumberComparator&lt;T&gt; clone() {
-<span class="fc" id="L43">    return new MtasDataItemNumberComparator&lt;&gt;(this.value, this.sortDirection);</span>
+<span class="fc" id="L44">    return new MtasDataItemNumberComparator&lt;&gt;(this.value, this.sortDirection);</span>
   }
 
   /*
@@ -50,7 +51,7 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    */
   @Override
   public int compareTo(T compareValue) {
-<span class="fc" id="L53">    return value.compareTo(compareValue);</span>
+<span class="fc" id="L54">    return value.compareTo(compareValue);</span>
   }
 
   /**
@@ -59,7 +60,7 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    * @return the value
    */
   public T getValue() {
-<span class="fc" id="L62">    return value;</span>
+<span class="fc" id="L63">    return value;</span>
   }
 
   /*
@@ -68,7 +69,7 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    * @see java.lang.Object#toString()
    */
   public String toString() {
-<span class="nc" id="L71">    return value.toString();</span>
+<span class="nc" id="L72">    return value.toString();</span>
   }
 
   /**
@@ -79,18 +80,18 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   public void add(T newValue) throws IOException {
-<span class="pc bpc" id="L82" title="3 of 4 branches missed.">    if (value instanceof Integer &amp;&amp; newValue instanceof Integer) {</span>
-<span class="nc" id="L83">      value = (T) Integer.valueOf(value.intValue() + newValue.intValue());</span>
-<span class="pc bpc" id="L84" title="2 of 4 branches missed.">    } else if (value instanceof Long &amp;&amp; newValue instanceof Long) {</span>
-<span class="fc" id="L85">      value = (T) Long.valueOf(value.longValue() + newValue.longValue());</span>
-<span class="pc bnc" id="L86" title="All 4 branches missed.">    } else if (value instanceof Float &amp;&amp; newValue instanceof Float) {</span>
-<span class="nc" id="L87">      value = (T) Float.valueOf(value.floatValue() + newValue.floatValue());</span>
-<span class="nc bnc" id="L88" title="All 4 branches missed.">    } else if (value instanceof Double &amp;&amp; newValue instanceof Double) {</span>
-<span class="nc" id="L89">      value = (T) Double.valueOf(value.doubleValue() + newValue.longValue());</span>
-<span class="nc" id="L90">    } else {</span>
-<span class="nc" id="L91">      throw new IOException(&quot;incompatible NumberComparators&quot;);</span>
+<span class="pc bpc" id="L83" title="3 of 4 branches missed.">    if (value instanceof Integer &amp;&amp; newValue instanceof Integer) {</span>
+<span class="nc" id="L84">      value = (T) Integer.valueOf(value.intValue() + newValue.intValue());</span>
+<span class="pc bpc" id="L85" title="2 of 4 branches missed.">    } else if (value instanceof Long &amp;&amp; newValue instanceof Long) {</span>
+<span class="fc" id="L86">      value = (T) Long.valueOf(value.longValue() + newValue.longValue());</span>
+<span class="nc bnc" id="L87" title="All 4 branches missed.">    } else if (value instanceof Float &amp;&amp; newValue instanceof Float) {</span>
+<span class="nc" id="L88">      value = (T) Float.valueOf(value.floatValue() + newValue.floatValue());</span>
+<span class="nc bnc" id="L89" title="All 4 branches missed.">    } else if (value instanceof Double &amp;&amp; newValue instanceof Double) {</span>
+<span class="nc" id="L90">      value = (T) Double.valueOf(value.doubleValue() + newValue.longValue());</span>
+    } else {
+<span class="nc" id="L92">      throw new IOException(&quot;incompatible NumberComparators&quot;);</span>
     }
-<span class="fc" id="L93">  }</span>
+<span class="fc" id="L94">  }</span>
 
   /**
    * Subtract.
@@ -100,18 +101,18 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    */
   @SuppressWarnings(&quot;unchecked&quot;)
   public void subtract(T newValue) throws IOException {
-<span class="nc bnc" id="L103" title="All 4 branches missed.">    if (value instanceof Integer &amp;&amp; newValue instanceof Integer) {</span>
-<span class="nc" id="L104">      value = (T) Integer.valueOf(value.intValue() - newValue.intValue());</span>
-<span class="nc bnc" id="L105" title="All 4 branches missed.">    } else if (value instanceof Long &amp;&amp; newValue instanceof Long) {</span>
-<span class="nc" id="L106">      value = (T) Long.valueOf(value.longValue() - newValue.longValue());</span>
-<span class="nc bnc" id="L107" title="All 4 branches missed.">    } else if (value instanceof Float &amp;&amp; newValue instanceof Float) {</span>
-<span class="nc" id="L108">      value = (T) Float.valueOf(value.floatValue() - newValue.floatValue());</span>
-<span class="nc bnc" id="L109" title="All 4 branches missed.">    } else if (value instanceof Double &amp;&amp; newValue instanceof Double) {</span>
-<span class="nc" id="L110">      value = (T) Double.valueOf(value.doubleValue() - newValue.longValue());</span>
-<span class="nc" id="L111">    } else {</span>
-<span class="nc" id="L112">      throw new IOException(&quot;incompatible NumberComparators&quot;);</span>
+<span class="nc bnc" id="L104" title="All 4 branches missed.">    if (value instanceof Integer &amp;&amp; newValue instanceof Integer) {</span>
+<span class="nc" id="L105">      value = (T) Integer.valueOf(value.intValue() - newValue.intValue());</span>
+<span class="nc bnc" id="L106" title="All 4 branches missed.">    } else if (value instanceof Long &amp;&amp; newValue instanceof Long) {</span>
+<span class="nc" id="L107">      value = (T) Long.valueOf(value.longValue() - newValue.longValue());</span>
+<span class="nc bnc" id="L108" title="All 4 branches missed.">    } else if (value instanceof Float &amp;&amp; newValue instanceof Float) {</span>
+<span class="nc" id="L109">      value = (T) Float.valueOf(value.floatValue() - newValue.floatValue());</span>
+<span class="nc bnc" id="L110" title="All 4 branches missed.">    } else if (value instanceof Double &amp;&amp; newValue instanceof Double) {</span>
+<span class="nc" id="L111">      value = (T) Double.valueOf(value.doubleValue() - newValue.longValue());</span>
+    } else {
+<span class="nc" id="L113">      throw new IOException(&quot;incompatible NumberComparators&quot;);</span>
     }
-<span class="nc" id="L114">  }</span>
+<span class="nc" id="L115">  }</span>
 
   /**
    * Recompute boundary.
@@ -122,26 +123,26 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    */
   public MtasDataItemNumberComparator&lt;T&gt; recomputeBoundary(int n)
       throws IOException {
-<span class="fc bfc" id="L125" title="All 2 branches covered.">    if (sortDirection.equals(CodecUtil.SORT_DESC)) {</span>
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">      if (value instanceof Integer) {</span>
-<span class="nc" id="L127">        return new MtasDataItemNumberComparator(</span>
-<span class="nc" id="L128">            Math.floorDiv((Integer) value, n), sortDirection);</span>
-<span class="pc bpc" id="L129" title="1 of 2 branches missed.">      } else if (value instanceof Long) {</span>
-<span class="fc" id="L130">        return new MtasDataItemNumberComparator(Math.floorDiv((Long) value, n),</span>
-<span class="fc" id="L131">            sortDirection);</span>
-<span class="nc bnc" id="L132" title="All 2 branches missed.">      } else if (value instanceof Float) {</span>
-<span class="nc" id="L133">        return new MtasDataItemNumberComparator(((Float) value) / n,</span>
-<span class="nc" id="L134">            sortDirection);</span>
-<span class="nc bnc" id="L135" title="All 2 branches missed.">      } else if (value instanceof Double) {</span>
-<span class="nc" id="L136">        return new MtasDataItemNumberComparator(((Double) value) / n,</span>
-<span class="nc" id="L137">            sortDirection);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">    if (sortDirection.equals(CodecUtil.SORT_DESC)) {</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">      if (value instanceof Integer) {</span>
+<span class="nc" id="L128">        return new MtasDataItemNumberComparator(</span>
+<span class="nc" id="L129">            Math.floorDiv((Integer) value, n), sortDirection);</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">      } else if (value instanceof Long) {</span>
+<span class="fc" id="L131">        return new MtasDataItemNumberComparator(Math.floorDiv((Long) value, n),</span>
+            sortDirection);
+<span class="nc bnc" id="L133" title="All 2 branches missed.">      } else if (value instanceof Float) {</span>
+<span class="nc" id="L134">        return new MtasDataItemNumberComparator(((Float) value) / n,</span>
+            sortDirection);
+<span class="nc bnc" id="L136" title="All 2 branches missed.">      } else if (value instanceof Double) {</span>
+<span class="nc" id="L137">        return new MtasDataItemNumberComparator(((Double) value) / n,</span>
+            sortDirection);
       } else {
-<span class="nc" id="L139">        throw new IOException(&quot;unknown NumberComparator&quot;);</span>
+<span class="nc" id="L140">        throw new IOException(&quot;unknown NumberComparator&quot;);</span>
       }
-<span class="pc bpc" id="L141" title="1 of 2 branches missed.">    } else if (sortDirection.equals(CodecUtil.SORT_ASC)) {</span>
-<span class="fc" id="L142">      return new MtasDataItemNumberComparator(getValue(), sortDirection);</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">    } else if (sortDirection.equals(CodecUtil.SORT_ASC)) {</span>
+<span class="fc" id="L143">      return new MtasDataItemNumberComparator(getValue(), sortDirection);</span>
     } else {
-<span class="nc" id="L144">      throw new IOException(&quot;unknown sortDirection &quot; + sortDirection);</span>
+<span class="nc" id="L145">      throw new IOException(&quot;unknown sortDirection &quot; + sortDirection);</span>
     }
   }
 
@@ -152,14 +153,14 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    */
   @Override
   public boolean equals(Object obj) {
-<span class="nc bnc" id="L155" title="All 2 branches missed.">    if (this == obj)</span>
-<span class="nc" id="L156">      return true;</span>
-<span class="nc bnc" id="L157" title="All 2 branches missed.">    if (obj == null)</span>
-<span class="nc" id="L158">      return false;</span>
-<span class="nc bnc" id="L159" title="All 2 branches missed.">    if (getClass() != obj.getClass())</span>
-<span class="nc" id="L160">      return false;</span>
-<span class="nc" id="L161">    MtasDataItemNumberComparator&lt;?&gt; that = (MtasDataItemNumberComparator&lt;?&gt;) obj;</span>
-<span class="nc" id="L162">    return value.equals(that.value);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">    if (this == obj)</span>
+<span class="nc" id="L157">      return true;</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">    if (obj == null)</span>
+<span class="nc" id="L159">      return false;</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">    if (getClass() != obj.getClass())</span>
+<span class="nc" id="L161">      return false;</span>
+<span class="nc" id="L162">    MtasDataItemNumberComparator&lt;?&gt; that = (MtasDataItemNumberComparator&lt;?&gt;) obj;</span>
+<span class="nc" id="L163">    return value.equals(that.value);</span>
   }
 
   /*
@@ -169,9 +170,7 @@ public final class MtasDataItemNumberComparator&lt;T extends Number &amp; Compar
    */
   @Override
   public int hashCode() {
-<span class="nc" id="L172">    int h = this.getClass().getSimpleName().hashCode();</span>
-<span class="nc" id="L173">    h = (h * 7) ^ value.hashCode();</span>
-<span class="nc" id="L174">    return h;</span>
+<span class="nc" id="L173">    return Objects.hash(this.getClass().getSimpleName(), value, sortDirection);   </span>
   }
 
 }

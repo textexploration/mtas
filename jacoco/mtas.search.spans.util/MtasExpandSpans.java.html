@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasExpandSpans.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.search.spans.util</a> &gt; <span class="el_source">MtasExpandSpans.java</span></div><h1>MtasExpandSpans.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package mtas.search.spans.util;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasExpandSpans.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.search.spans.util</a> &gt; <span class="el_source">MtasExpandSpans.java</span></div><h1>MtasExpandSpans.java</h1><pre class="source lang-java linenums">package mtas.search.spans.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -169,7 +169,7 @@ public class MtasExpandSpans extends MtasSpans {
   public int nextDoc() throws IOException {
 <span class="fc" id="L170">    reset();</span>
 <span class="pc bpc" id="L171" title="1 of 2 branches missed.">    while (!goToNextDoc())</span>
-      ;
+<span class="nc" id="L172">      ;</span>
 <span class="fc" id="L173">    return docId;</span>
   }
 
@@ -196,7 +196,7 @@ public class MtasExpandSpans extends MtasSpans {
 <span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if (doc != null) {</span>
 <span class="fc" id="L197">          minPosition = doc.minPosition;</span>
 <span class="fc" id="L198">          maxPosition = doc.maxPosition;</span>
-<span class="fc" id="L199">        } else {</span>
+        } else {
 <span class="nc" id="L200">          minPosition = NO_MORE_POSITIONS;</span>
 <span class="nc" id="L201">          maxPosition = NO_MORE_POSITIONS;</span>
         }
@@ -263,7 +263,7 @@ public class MtasExpandSpans extends MtasSpans {
 <span class="pc bpc" id="L263" title="1 of 2 branches missed.">      if (doc != null) {</span>
 <span class="fc" id="L264">        minPosition = doc.minPosition;</span>
 <span class="fc" id="L265">        maxPosition = doc.maxPosition;</span>
-<span class="fc" id="L266">      } else {</span>
+      } else {
 <span class="nc" id="L267">        minPosition = NO_MORE_POSITIONS;</span>
 <span class="nc" id="L268">        maxPosition = NO_MORE_POSITIONS;</span>
       }
@@ -298,7 +298,7 @@ public class MtasExpandSpans extends MtasSpans {
 <span class="pc bpc" id="L298" title="1 of 2 branches missed.">        if (doc != null) {</span>
 <span class="fc" id="L299">          minPosition = doc.minPosition;</span>
 <span class="fc" id="L300">          maxPosition = doc.maxPosition;</span>
-<span class="fc" id="L301">        } else {</span>
+        } else {
 <span class="nc" id="L302">          minPosition = NO_MORE_POSITIONS;</span>
 <span class="nc" id="L303">          maxPosition = NO_MORE_POSITIONS;</span>
         }
@@ -328,19 +328,19 @@ public class MtasExpandSpans extends MtasSpans {
     } else {
 <span class="fc bfc" id="L329" title="All 2 branches covered.">      if (lastCollectedStartPosition &lt; NO_MORE_POSITIONS</span>
 <span class="fc bfc" id="L330" title="All 2 branches covered.">          &amp;&amp; (collectedPositions.isEmpty()</span>
-<span class="fc" id="L331">              || (collectedPositions.firstKey() &gt;= (lastCollectedStartPosition</span>
-<span class="fc bfc" id="L332" title="All 2 branches covered.">                  - query.maximumLeft)))) {</span>
+<span class="fc bfc" id="L331" title="All 2 branches covered.">              || (collectedPositions.firstKey() &gt;= (lastCollectedStartPosition</span>
+                  - query.maximumLeft)))) {
         // collect new positions
-<span class="fc bfc" id="L334" title="All 2 branches covered.">        while ((lastCollectedStartPosition = subSpans</span>
-<span class="fc" id="L335">            .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
+<span class="fc" id="L334">        while ((lastCollectedStartPosition = subSpans</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">            .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
 <span class="fc" id="L336">          basicEndPosition = subSpans.endPosition();</span>
 <span class="fc" id="L337">          basicStartPositionMin = Math.max(minPosition,</span>
-<span class="fc" id="L338">              lastCollectedStartPosition - query.maximumLeft);</span>
+              lastCollectedStartPosition - query.maximumLeft);
 <span class="fc" id="L339">          basicStartPositionMax = lastCollectedStartPosition</span>
-<span class="fc" id="L340">              - query.minimumLeft;</span>
+              - query.minimumLeft;
 <span class="fc" id="L341">          basicEndPositionMin = basicEndPosition + query.minimumRight;</span>
 <span class="fc" id="L342">          basicEndPositionMax = Math.min(maxPosition + 1,</span>
-<span class="fc" id="L343">              basicEndPosition + query.maximumRight);</span>
+              basicEndPosition + query.maximumRight);
 <span class="fc bfc" id="L344" title="All 2 branches covered.">          for (int cLeft = basicStartPositionMin; cLeft &lt;= basicStartPositionMax; cLeft++) {</span>
 <span class="fc bfc" id="L345" title="All 2 branches covered.">            for (int cRight = basicEndPositionMin; cRight &lt;= basicEndPositionMax; cRight++) {</span>
 <span class="fc bfc" id="L346" title="All 2 branches covered.">              if (!collectedPositions.containsKey(cLeft)) {</span>

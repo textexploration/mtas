@@ -86,7 +86,7 @@ public class MtasPayloadEncoder {
 <span class="pc bpc" id="L86" title="1 of 2 branches missed.">    } else if (mtasToken.checkPositionType(MtasPosition.POSITION_SET)) {</span>
 <span class="fc" id="L87">      byteStream.writeBit(0);</span>
 <span class="fc" id="L88">      byteStream.writeBit(1);</span>
-<span class="fc" id="L89">    } else {</span>
+    } else {
 <span class="nc" id="L90">      byteStream.writeBit(1);</span>
 <span class="nc" id="L91">      byteStream.writeBit(1);</span>
     }
@@ -94,33 +94,33 @@ public class MtasPayloadEncoder {
 <span class="pc bpc" id="L94" title="1 of 2 branches missed.">    if ((encodingFlags &amp; ENCODE_OFFSET) == ENCODE_OFFSET</span>
 <span class="nc bnc" id="L95" title="All 2 branches missed.">        &amp;&amp; mtasToken.checkOffset()) {</span>
 <span class="nc" id="L96">      byteStream.writeBit(1);</span>
-<span class="nc" id="L97">    } else {</span>
+    } else {
 <span class="fc" id="L98">      byteStream.writeBit(0);</span>
     }
     // initial bits - realOffset
 <span class="pc bpc" id="L101" title="1 of 2 branches missed.">    if ((encodingFlags &amp; ENCODE_REALOFFSET) == ENCODE_REALOFFSET</span>
 <span class="nc bnc" id="L102" title="All 2 branches missed.">        &amp;&amp; mtasToken.checkRealOffset()) {</span>
 <span class="nc" id="L103">      byteStream.writeBit(1);</span>
-<span class="nc" id="L104">    } else {</span>
+    } else {
 <span class="fc" id="L105">      byteStream.writeBit(0);</span>
     }
     // initial bits - parentId
 <span class="pc bpc" id="L108" title="1 of 2 branches missed.">    if ((encodingFlags &amp; ENCODE_PARENT) == ENCODE_PARENT</span>
 <span class="fc bfc" id="L109" title="All 2 branches covered.">        &amp;&amp; mtasToken.checkParentId()) {</span>
 <span class="fc" id="L110">      byteStream.writeBit(1);</span>
-<span class="fc" id="L111">    } else {</span>
+    } else {
 <span class="fc" id="L112">      byteStream.writeBit(0);</span>
     }
     // initial bits - original payload
 <span class="pc bpc" id="L115" title="1 of 2 branches missed.">    if ((encodingFlags &amp; ENCODE_PAYLOAD) == ENCODE_PAYLOAD</span>
 <span class="nc bnc" id="L116" title="All 2 branches missed.">        &amp;&amp; mtasToken.getPayload() != null) {</span>
 <span class="nc" id="L117">      byteStream.writeBit(1);</span>
-<span class="nc" id="L118">    } else {</span>
+    } else {
 <span class="fc" id="L119">      byteStream.writeBit(0);</span>
     }
 <span class="pc bpc" id="L121" title="1 of 2 branches missed.">    if (mtasToken.getType().equals(MtasTokenString.TOKEN_TYPE)) {</span>
 <span class="fc" id="L122">      byteStream.writeBit(0);</span>
-<span class="fc" id="L123">    } else {</span>
+    } else {
       // to add other token types later on
 <span class="nc" id="L125">      byteStream.writeBit(1);</span>
     }
@@ -140,7 +140,7 @@ public class MtasPayloadEncoder {
 <span class="fc" id="L140">      int previousPosition = positionList[0];</span>
 <span class="fc bfc" id="L141" title="All 2 branches covered.">      for (int i = 1; i &lt; positionList.length; i++) {</span>
 <span class="fc" id="L142">        byteStream.writeEliasGammaCodingPositiveInteger(</span>
-<span class="fc" id="L143">            positionList[i] - previousPosition);</span>
+            positionList[i] - previousPosition);
 <span class="fc" id="L144">        previousPosition = positionList[i];</span>
       }
     } else {
@@ -163,7 +163,7 @@ public class MtasPayloadEncoder {
 <span class="nc" id="L163">            mtasToken.getRealOffsetStart() - mtasToken.getOffsetStart());</span>
 <span class="nc" id="L164">        byteStream.writeEliasGammaCodingPositiveInteger(</span>
 <span class="nc" id="L165">            1 + mtasToken.getRealOffsetEnd() - mtasToken.getRealOffsetStart());</span>
-<span class="nc" id="L166">      } else {</span>
+      } else {
 <span class="nc" id="L167">        byteStream.writeEliasGammaCodingNonNegativeInteger(</span>
 <span class="nc" id="L168">            mtasToken.getRealOffsetStart());</span>
 <span class="nc" id="L169">        byteStream.writeEliasGammaCodingPositiveInteger(</span>
@@ -183,7 +183,7 @@ public class MtasPayloadEncoder {
 <span class="nc bnc" id="L183" title="All 2 branches missed.">        &amp;&amp; mtasToken.getPayload() != null) {</span>
 <span class="nc" id="L184">      BytesRef payload = mtasToken.getPayload();</span>
 <span class="nc" id="L185">      byteStream.write(Arrays.copyOfRange(payload.bytes, payload.offset,</span>
-<span class="nc" id="L186">          (payload.offset + payload.length)));</span>
+          (payload.offset + payload.length)));
     }
     // construct new payload
 <span class="fc" id="L189">    return new BytesRef(byteStream.toByteArray());</span>

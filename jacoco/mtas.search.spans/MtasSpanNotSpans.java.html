@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasSpanNotSpans.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.search.spans</a> &gt; <span class="el_source">MtasSpanNotSpans.java</span></div><h1>MtasSpanNotSpans.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package mtas.search.spans;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasSpanNotSpans.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.search.spans</a> &gt; <span class="el_source">MtasSpanNotSpans.java</span></div><h1>MtasSpanNotSpans.java</h1><pre class="source lang-java linenums">package mtas.search.spans;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -173,7 +173,7 @@ public class MtasSpanNotSpans extends MtasSpans {
   public int nextDoc() throws IOException {
 <span class="fc" id="L174">    reset();</span>
 <span class="pc bpc" id="L175" title="1 of 2 branches missed.">    while (!goToNextDoc())</span>
-      ;
+<span class="nc" id="L176">      ;</span>
 <span class="fc" id="L177">    return docId;</span>
   }
 
@@ -202,7 +202,7 @@ public class MtasSpanNotSpans extends MtasSpans {
         }
 <span class="nc bnc" id="L203" title="All 2 branches missed.">        if (docId != spans2DocId) {</span>
 <span class="nc bnc" id="L204" title="All 2 branches missed.">          return spans1.spans.nextStartPosition() != NO_MORE_POSITIONS ? docId</span>
-<span class="nc" id="L205">              : NO_MORE_DOCS;</span>
+              : NO_MORE_DOCS;
 <span class="nc bnc" id="L206" title="All 2 branches missed.">        } else if (goToNextStartPosition()) {</span>
 <span class="nc" id="L207">          return docId;</span>
         } else {
@@ -317,24 +317,24 @@ public class MtasSpanNotSpans extends MtasSpans {
   private boolean goToNextStartPosition() throws IOException {
     int nextSpans1StartPosition;
     int nextSpans1EndPosition;
-<span class="fc bfc" id="L320" title="All 2 branches covered.">    while ((nextSpans1StartPosition = spans1.spans</span>
-<span class="fc" id="L321">        .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
+<span class="fc" id="L320">    while ((nextSpans1StartPosition = spans1.spans</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
 <span class="fc bfc" id="L322" title="All 2 branches covered.">      if (spans1.spans.docID() == spans2.spans.docID()) {</span>
         // clean up
 <span class="fc bfc" id="L324" title="All 2 branches covered.">        if (nextSpans1StartPosition &gt; lastSpans2StartPosition) {</span>
 <span class="fc" id="L325">          lastSpans2StartPosition = -1;</span>
         }
         // fast check
-<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (lastSpans2StartPosition == -1</span>
-<span class="fc bfc" id="L329" title="All 2 branches covered.">            &amp;&amp; nextSpans1StartPosition &lt; nextSpans2StartPosition) {</span>
+<span class="fc bfc" id="L328" title="All 4 branches covered.">        if (lastSpans2StartPosition == -1</span>
+            &amp;&amp; nextSpans1StartPosition &lt; nextSpans2StartPosition) {
 <span class="fc" id="L330">          return true;</span>
         }
 <span class="fc" id="L332">        nextSpans1EndPosition = spans1.spans.endPosition();</span>
 <span class="fc bfc" id="L333" title="All 2 branches covered.">        if (nextSpans1StartPosition == lastSpans2StartPosition) {</span>
           // try to collect all lastSpans2Endpositions, and return true if not
           // contained
-<span class="fc" id="L336">          if (collectAndCheckLastSpans(nextSpans1StartPosition,</span>
-<span class="fc bfc" id="L337" title="All 2 branches covered.">              nextSpans1EndPosition)) {</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">          if (collectAndCheckLastSpans(nextSpans1StartPosition,</span>
+              nextSpans1EndPosition)) {
 <span class="fc" id="L338">            return true;</span>
           } else {
             // continue
@@ -350,8 +350,8 @@ public class MtasSpanNotSpans extends MtasSpans {
 <span class="fc bfc" id="L350" title="All 2 branches covered.">          if (nextSpans1StartPosition == nextSpans2StartPosition) {</span>
             // try to collect all lastSpans2Endpositions, and return true if not
             // contained
-<span class="fc" id="L353">            if (collectAndCheckLastSpans(nextSpans1StartPosition,</span>
-<span class="fc bfc" id="L354" title="All 2 branches covered.">                nextSpans1EndPosition)) {</span>
+<span class="fc bfc" id="L353" title="All 2 branches covered.">            if (collectAndCheckLastSpans(nextSpans1StartPosition,</span>
+                nextSpans1EndPosition)) {
 <span class="fc" id="L355">              return true;</span>
             } else {
               // continue
@@ -379,13 +379,13 @@ public class MtasSpanNotSpans extends MtasSpans {
   private boolean collectAndCheckLastSpans(int nextSpans1StartPosition,
       int nextSpans1EndPosition) throws IOException {
     // check next
-<span class="fc bfc" id="L382" title="All 2 branches covered.">    if (nextSpans1StartPosition == nextSpans2StartPosition</span>
-<span class="fc bfc" id="L383" title="All 2 branches covered.">        &amp;&amp; nextSpans1EndPosition == nextSpans2EndPosition) {</span>
+<span class="fc bfc" id="L382" title="All 4 branches covered.">    if (nextSpans1StartPosition == nextSpans2StartPosition</span>
+        &amp;&amp; nextSpans1EndPosition == nextSpans2EndPosition) {
 <span class="fc" id="L384">      return false;</span>
     }
     // check last
-<span class="fc bfc" id="L387" title="All 2 branches covered.">    if (nextSpans1StartPosition == lastSpans2StartPosition</span>
-<span class="fc bfc" id="L388" title="All 2 branches covered.">        &amp;&amp; (nextSpans1EndPosition == lastSpans2EndPosition</span>
+<span class="fc bfc" id="L387" title="All 4 branches covered.">    if (nextSpans1StartPosition == lastSpans2StartPosition</span>
+        &amp;&amp; (nextSpans1EndPosition == lastSpans2EndPosition
 <span class="fc bfc" id="L389" title="All 2 branches covered.">            || lastSpans2EndPositions.contains(nextSpans1EndPosition))) {</span>
 <span class="fc" id="L390">      return false;</span>
     }
@@ -404,8 +404,8 @@ public class MtasSpanNotSpans extends MtasSpans {
 <span class="fc" id="L404">        lastSpans2EndPosition = nextSpans2EndPosition;</span>
 <span class="fc" id="L405">        nextSpans2StartPosition = spans2.spans.nextStartPosition();</span>
 <span class="fc" id="L406">        nextSpans2EndPosition = spans2.spans.endPosition();</span>
-<span class="fc bfc" id="L407" title="All 2 branches covered.">        if (nextSpans1StartPosition == nextSpans2StartPosition</span>
-<span class="fc bfc" id="L408" title="All 2 branches covered.">            &amp;&amp; nextSpans1EndPosition == nextSpans2EndPosition) {</span>
+<span class="fc bfc" id="L407" title="All 4 branches covered.">        if (nextSpans1StartPosition == nextSpans2StartPosition</span>
+            &amp;&amp; nextSpans1EndPosition == nextSpans2EndPosition) {
 <span class="fc" id="L409">          return false;</span>
         }
       }

@@ -266,12 +266,12 @@ public class MtasSpanUniquePositionSpans extends MtasSpans {
 <span class="fc bfc" id="L266" title="All 2 branches covered.">          if (!queueMatches.contains(match)) {</span>
 <span class="fc" id="L267">            queueMatches.add(match);</span>
           }
-        }
+<span class="fc" id="L269">        }</span>
         // check for something in queue of matches
 <span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (!queueMatches.isEmpty()) {</span>
 <span class="fc" id="L272">          return true;</span>
         }
-      }
+<span class="nc" id="L274">      }</span>
     }
   }
 
@@ -329,8 +329,8 @@ public class MtasSpanUniquePositionSpans extends MtasSpans {
 <span class="pc bpc" id="L329" title="1 of 2 branches missed.">      if (getClass() != obj.getClass())</span>
 <span class="nc" id="L330">        return false;</span>
 <span class="fc" id="L331">      final Match that = (Match) obj;</span>
-<span class="pc bpc" id="L332" title="1 of 2 branches missed.">      return startPosition == that.startPosition</span>
-<span class="fc bfc" id="L333" title="All 2 branches covered.">          &amp;&amp; endPosition == that.endPosition;</span>
+<span class="pc bpc" id="L332" title="1 of 4 branches missed.">      return startPosition == that.startPosition</span>
+          &amp;&amp; endPosition == that.endPosition;
     }
 
     /*

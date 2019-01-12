@@ -9,7 +9,7 @@ import org.apache.lucene.search.spans.Spans;
 import mtas.search.spans.util.MtasSpans;
 
 /**
- * The Class MtasSpanEndSpans.
+ * Return just the end of hits.
  */
 public class MtasSpanEndSpans extends MtasSpans {
 

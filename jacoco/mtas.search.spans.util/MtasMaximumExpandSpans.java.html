@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasMaximumExpandSpans.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.search.spans.util</a> &gt; <span class="el_source">MtasMaximumExpandSpans.java</span></div><h1>MtasMaximumExpandSpans.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package mtas.search.spans.util;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasMaximumExpandSpans.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.search.spans.util</a> &gt; <span class="el_source">MtasMaximumExpandSpans.java</span></div><h1>MtasMaximumExpandSpans.java</h1><pre class="source lang-java linenums">package mtas.search.spans.util;
 
 import java.io.IOException;
 
@@ -158,7 +158,7 @@ public class MtasMaximumExpandSpans extends MtasSpans {
   public int nextDoc() throws IOException {
 <span class="fc" id="L159">    reset();</span>
 <span class="pc bpc" id="L160" title="1 of 2 branches missed.">    while (!goToNextDoc())</span>
-      ;
+<span class="nc" id="L161">      ;</span>
 <span class="fc" id="L162">    return docId;</span>
   }
 
@@ -185,7 +185,7 @@ public class MtasMaximumExpandSpans extends MtasSpans {
 <span class="nc bnc" id="L185" title="All 2 branches missed.">        if (doc != null) {</span>
 <span class="nc" id="L186">          minPosition = doc.minPosition;</span>
 <span class="nc" id="L187">          maxPosition = doc.maxPosition;</span>
-<span class="nc" id="L188">        } else {</span>
+        } else {
 <span class="nc" id="L189">          minPosition = NO_MORE_POSITIONS;</span>
 <span class="nc" id="L190">          maxPosition = NO_MORE_POSITIONS;</span>
         }
@@ -253,7 +253,7 @@ public class MtasMaximumExpandSpans extends MtasSpans {
 <span class="nc bnc" id="L253" title="All 2 branches missed.">      if (doc != null) {</span>
 <span class="nc" id="L254">        minPosition = doc.minPosition;</span>
 <span class="nc" id="L255">        maxPosition = doc.maxPosition;</span>
-<span class="nc" id="L256">      } else {</span>
+      } else {
 <span class="nc" id="L257">        minPosition = NO_MORE_POSITIONS;</span>
 <span class="nc" id="L258">        maxPosition = NO_MORE_POSITIONS;</span>
       }
@@ -288,7 +288,7 @@ public class MtasMaximumExpandSpans extends MtasSpans {
 <span class="pc bpc" id="L288" title="1 of 2 branches missed.">        if (doc != null) {</span>
 <span class="fc" id="L289">          minPosition = doc.minPosition;</span>
 <span class="fc" id="L290">          maxPosition = doc.maxPosition;</span>
-<span class="fc" id="L291">        } else {</span>
+        } else {
 <span class="nc" id="L292">          minPosition = NO_MORE_POSITIONS;</span>
 <span class="nc" id="L293">          maxPosition = NO_MORE_POSITIONS;</span>
         }
@@ -313,15 +313,15 @@ public class MtasMaximumExpandSpans extends MtasSpans {
 <span class="pc bpc" id="L313" title="2 of 4 branches missed.">    if (docId == -1 || docId == NO_MORE_DOCS) {</span>
 <span class="nc" id="L314">      throw new IOException(&quot;no document&quot;);</span>
     } else {
-<span class="fc bfc" id="L316" title="All 2 branches covered.">      while ((basicStartPosition = subSpans</span>
-<span class="fc" id="L317">          .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
+<span class="fc" id="L316">      while ((basicStartPosition = subSpans</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">          .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
 <span class="fc" id="L318">        basicEndPosition = subSpans.endPosition();</span>
 <span class="fc" id="L319">        startPosition = Math.max(minPosition,</span>
-<span class="fc" id="L320">            (basicStartPosition - query.maximumLeft));</span>
+            (basicStartPosition - query.maximumLeft));
 <span class="fc" id="L321">        endPosition = Math.min(maxPosition + 1,</span>
-<span class="fc" id="L322">            (basicEndPosition + query.maximumRight));</span>
-<span class="pc bpc" id="L323" title="1 of 2 branches missed.">        if (startPosition &lt;= (basicStartPosition - query.minimumLeft)</span>
-<span class="pc bpc" id="L324" title="1 of 2 branches missed.">            &amp;&amp; endPosition &gt;= (basicEndPosition + query.minimumRight)) {</span>
+            (basicEndPosition + query.maximumRight));
+<span class="pc bpc" id="L323" title="2 of 4 branches missed.">        if (startPosition &lt;= (basicStartPosition - query.minimumLeft)</span>
+            &amp;&amp; endPosition &gt;= (basicEndPosition + query.minimumRight)) {
 <span class="fc" id="L325">          return true;</span>
         }
       }

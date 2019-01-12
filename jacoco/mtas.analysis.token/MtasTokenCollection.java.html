@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasTokenCollection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.analysis.token</a> &gt; <span class="el_source">MtasTokenCollection.java</span></div><h1>MtasTokenCollection.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package mtas.analysis.token;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasTokenCollection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.analysis.token</a> &gt; <span class="el_source">MtasTokenCollection.java</span></div><h1>MtasTokenCollection.java</h1><pre class="source lang-java linenums">package mtas.analysis.token;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import mtas.analysis.util.MtasParserException;
 /**
  * The Class MtasTokenCollection.
  */
-<span class="pc bpc" id="L19" title="1 of 2 branches missed.">public class MtasTokenCollection {</span>
+public class MtasTokenCollection {
 
   /** The token collection. */
 <span class="fc" id="L22">  private HashMap&lt;Integer, MtasToken&gt; tokenCollection = new HashMap&lt;&gt;();</span>
@@ -92,7 +92,7 @@ import mtas.analysis.util.MtasParserException;
 <span class="nc bnc" id="L92" title="All 2 branches missed.">    while (it.hasNext()) {</span>
 <span class="nc" id="L93">      MtasToken token = it.next();</span>
 <span class="nc" id="L94">      System.out.println(token);</span>
-    }
+<span class="nc" id="L95">    }</span>
 <span class="nc" id="L96">  }</span>
 
   /**
@@ -104,9 +104,9 @@ import mtas.analysis.util.MtasParserException;
   public String[][] getList() throws MtasParserException {
 <span class="nc" id="L105">    String[][] result = new String[(tokenCollection.size() + 1)][];</span>
 <span class="nc" id="L106">    result[0] = new String[] { &quot;id&quot;, &quot;start real offset&quot;, &quot;end real offset&quot;,</span>
-<span class="nc" id="L107">        &quot;provide real offset&quot;, &quot;start offset&quot;, &quot;end offset&quot;, &quot;provide offset&quot;,</span>
-<span class="nc" id="L108">        &quot;start position&quot;, &quot;end position&quot;, &quot;multiple positions&quot;, &quot;parent&quot;,</span>
-<span class="nc" id="L109">        &quot;provide parent&quot;, &quot;payload&quot;, &quot;prefix&quot;, &quot;postfix&quot; };</span>
+        &quot;provide real offset&quot;, &quot;start offset&quot;, &quot;end offset&quot;, &quot;provide offset&quot;,
+        &quot;start position&quot;, &quot;end position&quot;, &quot;multiple positions&quot;, &quot;parent&quot;,
+        &quot;provide parent&quot;, &quot;payload&quot;, &quot;prefix&quot;, &quot;postfix&quot; };
 <span class="nc" id="L110">    int number = 1;</span>
 <span class="nc" id="L111">    Iterator&lt;MtasToken&gt; it = this.iterator();</span>
 <span class="nc bnc" id="L112" title="All 2 branches missed.">    while (it.hasNext()) {</span>
@@ -129,12 +129,12 @@ import mtas.analysis.util.MtasParserException;
 <span class="nc" id="L129">          row[8] = token.getPositionEnd().toString();</span>
 <span class="nc" id="L130">          row[9] = null;</span>
 <span class="nc bnc" id="L131" title="All 2 branches missed.">        } else if ((token.getPositions() == null)</span>
-<span class="nc bnc" id="L132" title="All 2 branches missed.">            || (token.getPositions().length == (1 + token.getPositionEnd()</span>
-<span class="nc" id="L133">                - token.getPositionStart()))) {</span>
+<span class="nc" id="L132">            || (token.getPositions().length == (1 + token.getPositionEnd()</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">                - token.getPositionStart()))) {</span>
 <span class="nc" id="L134">          row[7] = token.getPositionStart().toString();</span>
 <span class="nc" id="L135">          row[8] = token.getPositionEnd().toString();</span>
 <span class="nc" id="L136">          row[9] = null;</span>
-<span class="nc" id="L137">        } else {</span>
+        } else {
 <span class="nc" id="L138">          row[7] = null;</span>
 <span class="nc" id="L139">          row[8] = null;</span>
 <span class="nc" id="L140">          row[9] = Arrays.toString(token.getPositions());</span>
@@ -147,13 +147,13 @@ import mtas.analysis.util.MtasParserException;
 <span class="nc bnc" id="L147" title="All 2 branches missed.">      if (token.getPayload() != null) {</span>
 <span class="nc" id="L148">        BytesRef payload = token.getPayload();</span>
 <span class="nc" id="L149">        row[12] = Float.toString(PayloadHelper.decodeFloat(Arrays.copyOfRange(</span>
-<span class="nc" id="L150">            payload.bytes, payload.offset, (payload.offset + payload.length))));</span>
+            payload.bytes, payload.offset, (payload.offset + payload.length))));
       }
 <span class="nc" id="L152">      row[13] = token.getPrefix();</span>
 <span class="nc" id="L153">      row[14] = token.getPostfix();</span>
 <span class="nc" id="L154">      result[number] = row;</span>
 <span class="nc" id="L155">      number++;</span>
-    }
+<span class="nc" id="L156">    }</span>
 <span class="nc" id="L157">    return result;</span>
   }
 
@@ -182,7 +182,7 @@ import mtas.analysis.util.MtasParserException;
 <span class="nc" id="L182">        clear();</span>
 <span class="nc" id="L183">        break;</span>
       }
-    }
+<span class="fc" id="L185">    }</span>
 <span class="fc" id="L186">  }</span>
 
   /**
@@ -198,19 +198,19 @@ import mtas.analysis.util.MtasParserException;
 <span class="fc bfc" id="L198" title="All 2 branches covered.">      if (currentToken.getPositionStart() &gt; currentStartPosition) {</span>
 <span class="fc" id="L199">        currentPositionTokens.clear();</span>
 <span class="fc" id="L200">        currentStartPosition = currentToken.getPositionStart();</span>
-<span class="fc" id="L201">      } else {</span>
+      } else {
 <span class="fc bfc" id="L202" title="All 2 branches covered.">        if (currentPositionTokens.containsKey(currentToken.getValue())) {</span>
 <span class="fc" id="L203">          currentValueTokens = currentPositionTokens</span>
 <span class="fc" id="L204">              .get(currentToken.getValue());</span>
 
-<span class="fc" id="L206">        } else {</span>
+        } else {
 <span class="fc" id="L207">          currentValueTokens = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L208">          currentPositionTokens.put(currentToken.getValue(),</span>
-<span class="fc" id="L209">              currentValueTokens);</span>
+              currentValueTokens);
         }
 <span class="fc" id="L211">        currentValueTokens.add(currentToken);</span>
       }
-    }
+<span class="fc" id="L213">    }</span>
 <span class="fc" id="L214">  }</span>
 
   /**
@@ -238,7 +238,7 @@ import mtas.analysis.util.MtasParserException;
 <span class="pc bpc" id="L238" title="1 of 2 branches missed.">      if (putInTrash) {</span>
 <span class="nc" id="L239">        trash.add(entry.getKey());</span>
       }
-    }
+<span class="fc" id="L241">    }</span>
     // check parentId and offset
 <span class="fc bfc" id="L243" title="All 2 branches covered.">    for (Entry&lt;Integer, MtasToken&gt; entry : tokenCollection.entrySet()) {</span>
 <span class="fc" id="L244">      token = entry.getValue();</span>
@@ -247,19 +247,19 @@ import mtas.analysis.util.MtasParserException;
 <span class="pc bpc" id="L247" title="1 of 2 branches missed.">          || trash.contains(parentId))) {</span>
 <span class="nc" id="L248">        token.setParentId(null);</span>
       }
-    }
+<span class="fc" id="L250">    }</span>
     // empty bin
 <span class="pc bpc" id="L252" title="1 of 2 branches missed.">    if (!trash.isEmpty()) {</span>
 <span class="nc bnc" id="L253" title="All 2 branches missed.">      for (Integer i : trash) {</span>
 <span class="nc" id="L254">        tokenCollection.remove(i);</span>
-      }
+<span class="nc" id="L255">      }</span>
     }
     // always check ids
 <span class="pc bpc" id="L258" title="1 of 2 branches missed.">    if (tokenCollection.size() &gt; 0) {</span>
 <span class="fc bfc" id="L259" title="All 2 branches covered.">      for (Integer i : tokenCollection.keySet()) {</span>
 <span class="fc bfc" id="L260" title="All 2 branches covered.">        maxId = ((maxId == null) ? i : Math.max(maxId, i));</span>
 <span class="fc bfc" id="L261" title="All 2 branches covered.">        minId = ((minId == null) ? i : Math.min(minId, i));</span>
-      }
+<span class="fc" id="L262">      }</span>
       // check
 <span class="pc bpc" id="L264" title="2 of 4 branches missed.">      if ((minId &gt; 0) || ((1 + maxId - minId) != tokenCollection.size())) {</span>
 <span class="nc" id="L265">        int newId = 0;</span>
@@ -267,7 +267,7 @@ import mtas.analysis.util.MtasParserException;
 <span class="nc bnc" id="L267" title="All 2 branches missed.">        for (Integer i : tokenCollection.keySet()) {</span>
 <span class="nc" id="L268">          translation.put(i, newId);</span>
 <span class="nc" id="L269">          newId++;</span>
-        }
+<span class="nc" id="L270">        }</span>
         // translate objects
 <span class="nc bnc" id="L272" title="All 2 branches missed.">        for (Entry&lt;Integer, MtasToken&gt; entry : tokenCollection.entrySet()) {</span>
 <span class="nc" id="L273">          token = entry.getValue();</span>
@@ -276,7 +276,7 @@ import mtas.analysis.util.MtasParserException;
 <span class="nc bnc" id="L276" title="All 2 branches missed.">          if (parentId != null) {</span>
 <span class="nc" id="L277">            token.setParentId(translation.get(parentId));</span>
           }
-        }
+<span class="nc" id="L279">        }</span>
         // new tokenCollection
 <span class="nc" id="L281">        Iterator&lt;Map.Entry&lt;Integer, MtasToken&gt;&gt; iter = tokenCollection</span>
 <span class="nc" id="L282">            .entrySet().iterator();</span>
@@ -285,7 +285,7 @@ import mtas.analysis.util.MtasParserException;
 <span class="nc" id="L285">          newTokenCollection.put(translation.get(entry.getKey()),</span>
 <span class="nc" id="L286">              entry.getValue());</span>
 <span class="nc" id="L287">          iter.remove();</span>
-        }
+<span class="nc" id="L288">        }</span>
 <span class="nc" id="L289">        tokenCollection = newTokenCollection;</span>
       }
     }
@@ -332,7 +332,7 @@ import mtas.analysis.util.MtasParserException;
 <span class="nc" id="L332">              + token.getId() + &quot; (&quot; + token.getValue() + &quot;)&quot;);</span>
         }
 <span class="fc" id="L334">        tokenCollectionIndex.add(entry.getKey());</span>
-      }
+<span class="fc" id="L335">      }</span>
 <span class="pc bpc" id="L336" title="1 of 2 branches missed.">      if ((tokenCollection.size() &gt; 0)</span>
 <span class="pc bpc" id="L337" title="2 of 4 branches missed.">          &amp;&amp; ((minId &gt; 0) || ((1 + maxId - minId) != tokenCollection.size()))) {</span>
 <span class="nc" id="L338">        throw new MtasParserException(&quot;missing ids&quot;);</span>
@@ -347,7 +347,7 @@ import mtas.analysis.util.MtasParserException;
    * @return the comp by name
    */
   public Comparator&lt;Integer&gt; getCompByName() {
-<span class="fc" id="L350">    return new Comparator&lt;Integer&gt;() {</span>
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">    return new Comparator&lt;Integer&gt;() {</span>
       @Override
       public int compare(Integer t1, Integer t2) {
 <span class="fc" id="L353">        Integer p1 = tokenCollection.get(t1).getPositionStart();</span>

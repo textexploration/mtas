@@ -33,19 +33,19 @@ import org.apache.lucene.store.IndexInput;
 <span class="fc" id="L33">    AtomicBoolean isStoreAdditonalId = new AtomicBoolean(false);</span>
 <span class="fc" id="L34">    AtomicLong nodeRefApproxOffset = new AtomicLong(-1);</span>
 <span class="fc" id="L35">    checkList.add(getMtasTreeItem(ref, isSinglePoint, isStoreAdditonalId,</span>
-<span class="fc" id="L36">        nodeRefApproxOffset, in, objectRefApproxOffset));</span>
+        nodeRefApproxOffset, in, objectRefApproxOffset));
 <span class="fc" id="L37">    ArrayList&lt;Long&gt; history = new ArrayList&lt;Long&gt;();</span>
-<span class="fc bfc" id="L38" title="All 2 branches covered.">    do {</span>
+    do {
 <span class="fc" id="L39">      MtasTreeItem checkItem = checkList.remove(checkList.size() - 1);</span>
 <span class="fc" id="L40">      advanceMtasTree(checkItem, position, in, isSinglePoint,</span>
-<span class="fc" id="L41">          isStoreAdditonalId, objectRefApproxOffset, list, nodeRefApproxOffset,</span>
-<span class="fc" id="L42">          checkList);</span>
+          isStoreAdditonalId, objectRefApproxOffset, list, nodeRefApproxOffset,
+          checkList);
 <span class="fc" id="L43">      history.add(checkItem.ref);</span>
 <span class="pc bpc" id="L44" title="1 of 2 branches missed.">      if (history.size() &gt; 1000) {</span>
 <span class="nc" id="L45">        throw new IOException(</span>
-<span class="nc" id="L46">            &quot;ADVANCE &quot; + position + &quot; &quot; + checkList + &quot;\n&quot; + history);</span>
+            &quot;ADVANCE &quot; + position + &quot; &quot; + checkList + &quot;\n&quot; + history);
       }
-<span class="fc" id="L48">    } while (checkList.size() &gt; 0);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">    } while (checkList.size() &gt; 0);</span>
 <span class="fc" id="L49">    return list;</span>
   }
 
@@ -77,28 +77,28 @@ import org.apache.lucene.store.IndexInput;
           }
         }
 <span class="fc bfc" id="L79" title="All 2 branches covered.">        for (int i = 0; i &lt; treeItem.objectRefs.length; i++) {</span>
-<span class="fc" id="L80">          list.add(new MtasTreeHit&lt;&gt;(treeItem.left, treeItem.right,</span>
-<span class="fc" id="L81">              treeItem.objectRefs[i],</span>
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">              treeItem.additionalIds == null ? 0 : treeItem.additionalIds[i],</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">              treeItem.additionalRefs == null ? 0</span>
-<span class="pc" id="L84">                  : treeItem.additionalRefs[i]));</span>
+<span class="pc bpc" id="L80" title="2 of 4 branches missed.">          list.add(new MtasTreeHit&lt;&gt;(treeItem.left, treeItem.right,</span>
+              treeItem.objectRefs[i],
+              treeItem.additionalIds == null ? 0 : treeItem.additionalIds[i],
+              treeItem.additionalRefs == null ? 0
+                  : treeItem.additionalRefs[i]));
         }
         // check leftChild
 <span class="fc bfc" id="L87" title="All 2 branches covered.">        if (!treeItem.leftChild.equals(treeItem.ref)) {</span>
 <span class="fc" id="L88">          MtasTreeItem treeItemLeft = getMtasTreeItem(treeItem.leftChild,</span>
-<span class="fc" id="L89">              isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,</span>
-<span class="fc" id="L90">              objectRefApproxOffset);</span>
+              isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,
+              objectRefApproxOffset);
 <span class="pc bpc" id="L91" title="1 of 2 branches missed.">          if (position &lt;= treeItemLeft.max) {</span>
 <span class="nc" id="L92">            checkList.add(treeItemLeft);</span>
           }
-        }
-<span class="nc" id="L95">      } else {</span>
+<span class="fc" id="L94">        }</span>
+      } else {
         // check right
 <span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (position &lt;= treeItem.max) {</span>
 <span class="pc bpc" id="L98" title="1 of 2 branches missed.">          if (!treeItem.rightChild.equals(treeItem.ref)) {</span>
 <span class="fc" id="L99">            MtasTreeItem treeItemRight = getMtasTreeItem(treeItem.rightChild,</span>
-<span class="fc" id="L100">                isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,</span>
-<span class="fc" id="L101">                objectRefApproxOffset);</span>
+                isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,
+                objectRefApproxOffset);
 <span class="pc bpc" id="L102" title="1 of 2 branches missed.">            if (position &lt;= treeItemRight.max) {</span>
 <span class="fc" id="L103">              checkList.add(treeItemRight);</span>
             }
@@ -144,18 +144,18 @@ import org.apache.lucene.store.IndexInput;
 <span class="fc" id="L144">    AtomicBoolean isStoreAdditionalId = new AtomicBoolean(false);</span>
 <span class="fc" id="L145">    AtomicLong nodeRefApproxOffset = new AtomicLong(-1);</span>
 <span class="fc" id="L146">    checkList.add(getMtasTreeItem(ref, isSinglePoint, isStoreAdditionalId,</span>
-<span class="fc" id="L147">        nodeRefApproxOffset, in, objectRefApproxOffset));</span>
+        nodeRefApproxOffset, in, objectRefApproxOffset));
 <span class="fc" id="L148">    ArrayList&lt;Long&gt; history = new ArrayList&lt;Long&gt;();</span>
-<span class="fc bfc" id="L149" title="All 2 branches covered.">    do {</span>
+    do {
 <span class="fc" id="L150">      MtasTreeItem checkItem = checkList.remove(checkList.size() - 1);</span>
 <span class="fc" id="L151">      searchMtasTree(checkItem, startPosition, endPosition, in, isSinglePoint,</span>
-<span class="fc" id="L152">          isStoreAdditionalId, objectRefApproxOffset, list, nodeRefApproxOffset,</span>
-<span class="fc" id="L153">          checkList);</span>
+          isStoreAdditionalId, objectRefApproxOffset, list, nodeRefApproxOffset,
+          checkList);
 <span class="fc" id="L154">      history.add(checkItem.ref);</span>
 <span class="pc bpc" id="L155" title="1 of 2 branches missed.">      if (history.size() &gt; boundary) {</span>
 <span class="nc" id="L156">        throw new IOException(&quot;Too many items collected from tree&quot;);</span>
       }
-<span class="fc" id="L158">    } while (checkList.size() &gt; 0);</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">    } while (checkList.size() &gt; 0);</span>
 <span class="fc" id="L159">    return list;</span>
   }
 
@@ -183,18 +183,18 @@ import org.apache.lucene.store.IndexInput;
       // match current node
 <span class="fc bfc" id="L184" title="All 4 branches covered.">      if ((endPosition &gt;= treeItem.left) &amp;&amp; (startPosition &lt;= treeItem.right)) {</span>
 <span class="fc bfc" id="L185" title="All 2 branches covered.">        for (int i = 0; i &lt; treeItem.objectRefs.length; i++) {</span>
-<span class="fc" id="L186">          list.add(new MtasTreeHit&lt;&gt;(treeItem.left, treeItem.right,</span>
-<span class="fc" id="L187">              treeItem.objectRefs[i],</span>
-<span class="pc bpc" id="L188" title="1 of 2 branches missed.">              treeItem.additionalIds == null ? 0 : treeItem.additionalIds[i],</span>
-<span class="pc bpc" id="L189" title="1 of 2 branches missed.">              treeItem.additionalRefs == null ? 0</span>
-<span class="pc" id="L190">                  : treeItem.additionalRefs[i]));</span>
+<span class="pc bpc" id="L186" title="2 of 4 branches missed.">          list.add(new MtasTreeHit&lt;&gt;(treeItem.left, treeItem.right,</span>
+              treeItem.objectRefs[i],
+              treeItem.additionalIds == null ? 0 : treeItem.additionalIds[i],
+              treeItem.additionalRefs == null ? 0
+                  : treeItem.additionalRefs[i]));
         }
       }
       // check leftChild
 <span class="fc bfc" id="L194" title="All 2 branches covered.">      if (!treeItem.leftChild.equals(treeItem.ref)) {</span>
 <span class="fc" id="L195">        MtasTreeItem treeItemLeft = getMtasTreeItem(treeItem.leftChild,</span>
-<span class="fc" id="L196">            isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,</span>
-<span class="fc" id="L197">            objectRefApproxOffset);</span>
+            isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,
+            objectRefApproxOffset);
 <span class="fc bfc" id="L198" title="All 2 branches covered.">        if (treeItemLeft.max &gt;= startPosition) {</span>
 <span class="fc" id="L199">          checkList.add(treeItemLeft);</span>
         }
@@ -203,10 +203,10 @@ import org.apache.lucene.store.IndexInput;
 <span class="fc bfc" id="L203" title="All 2 branches covered.">      if (treeItem.left &lt;= endPosition) {</span>
 <span class="fc bfc" id="L204" title="All 2 branches covered.">        if (!treeItem.rightChild.equals(treeItem.ref)) {</span>
 <span class="fc" id="L205">          MtasTreeItem treeItemRight = getMtasTreeItem(treeItem.rightChild,</span>
-<span class="fc" id="L206">              isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,</span>
-<span class="fc" id="L207">              objectRefApproxOffset);</span>
-<span class="pc bpc" id="L208" title="1 of 2 branches missed.">          if ((treeItemRight.left &gt;= endPosition)</span>
-<span class="nc bnc" id="L209" title="All 2 branches missed.">              || (treeItemRight.max &gt;= startPosition)) {</span>
+              isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,
+              objectRefApproxOffset);
+<span class="pc bpc" id="L208" title="3 of 4 branches missed.">          if ((treeItemRight.left &gt;= endPosition)</span>
+              || (treeItemRight.max &gt;= startPosition)) {
 <span class="fc" id="L210">            checkList.add(treeItemRight);</span>
           }
         }
@@ -240,11 +240,11 @@ import org.apache.lucene.store.IndexInput;
 <span class="fc" id="L240">        nodeRefApproxOffset.set(in.readVLong());</span>
 <span class="fc" id="L241">        Byte flag = in.readByte();</span>
 <span class="fc bfc" id="L242" title="All 2 branches covered.">        if ((flag</span>
-<span class="fc" id="L243">            &amp; MtasTree.SINGLE_POSITION_TREE) == MtasTree.SINGLE_POSITION_TREE) {</span>
+            &amp; MtasTree.SINGLE_POSITION_TREE) == MtasTree.SINGLE_POSITION_TREE) {
 <span class="fc" id="L244">          isSinglePoint.set(true);</span>
         }
 <span class="fc bfc" id="L246" title="All 2 branches covered.">        if ((flag</span>
-<span class="fc" id="L247">            &amp; MtasTree.STORE_ADDITIONAL_ID) == MtasTree.STORE_ADDITIONAL_ID) {</span>
+            &amp; MtasTree.STORE_ADDITIONAL_ID) == MtasTree.STORE_ADDITIONAL_ID) {
 <span class="fc" id="L248">          isStoreAdditionalIdAndRef.set(true);</span>
         }
       }
@@ -282,7 +282,7 @@ import org.apache.lucene.store.IndexInput;
         }
       }
 <span class="fc" id="L284">      return new MtasTreeItem(left, right, max, objectRefs, objectAdditionalIds,</span>
-<span class="fc" id="L285">          objectAdditionalRefs, ref, leftChild, rightChild);</span>
+          objectAdditionalRefs, ref, leftChild, rightChild);
 <span class="nc" id="L286">    } catch (Exception e) {</span>
 <span class="nc" id="L287">      throw new IOException(e.getMessage());</span>
     }
@@ -321,9 +321,9 @@ import org.apache.lucene.store.IndexInput;
      * @param leftChild the left child
      * @param rightChild the right child
      */
-<span class="fc" id="L324">    public MtasTreeItem(int left, int right, int max, long[] objectRefs,</span>
+    public MtasTreeItem(int left, int right, int max, long[] objectRefs,
         int[] additionalIds, long[] additionalRefs, Long ref, Long leftChild,
-        Long rightChild) {
+<span class="fc" id="L326">        Long rightChild) {</span>
 <span class="fc" id="L327">      this.left = left;</span>
 <span class="fc" id="L328">      this.right = right;</span>
 <span class="fc" id="L329">      this.max = max;</span>
@@ -370,8 +370,8 @@ import org.apache.lucene.store.IndexInput;
      * @param additionalId the additional id
      * @param additionalRef the additional ref
      */
-<span class="fc" id="L373">    public MtasTreeHit(int startPosition, int endPosition, long ref,</span>
-        int additionalId, long additionalRef) {
+    public MtasTreeHit(int startPosition, int endPosition, long ref,
+<span class="fc" id="L374">        int additionalId, long additionalRef) {</span>
 <span class="fc" id="L375">      this.startPosition = startPosition;</span>
 <span class="fc" id="L376">      this.endPosition = endPosition;</span>
 <span class="fc" id="L377">      this.ref = ref;</span>
@@ -408,8 +408,8 @@ import org.apache.lucene.store.IndexInput;
     @Override
     public String toString() {
 <span class="nc" id="L410">      return &quot;hit[&quot; + startPosition + &quot;,&quot; + endPosition + &quot;,&quot; + ref + &quot;,&quot;</span>
-<span class="nc" id="L411">          + additionalId + &quot;,&quot; + additionalRef + &quot;] - &quot; + idData + &quot; - &quot;</span>
-<span class="nc" id="L412">          + refData;</span>
+          + additionalId + &quot;,&quot; + additionalRef + &quot;] - &quot; + idData + &quot; - &quot;
+          + refData;
     }
   }
 
@@ -434,14 +434,14 @@ import org.apache.lucene.store.IndexInput;
 <span class="fc" id="L434">    AtomicLong nodeRefApproxOffset = new AtomicLong(-1);</span>
 <span class="fc" id="L435">    checkList.add(new IntervalItem&lt;T, N&gt;(</span>
 <span class="fc" id="L436">        getMtasTreeItem(ref, isSinglePoint, isStoreAdditionalId,</span>
-<span class="fc" id="L437">            nodeRefApproxOffset, in, objectRefApproxOffset),</span>
+            nodeRefApproxOffset, in, objectRefApproxOffset),
 <span class="fc" id="L438">        intervalTree.getRoot()));</span>
-<span class="fc bfc" id="L439" title="All 2 branches covered.">    do {</span>
+    do {
 <span class="fc" id="L440">      IntervalItem&lt;T, N&gt; checkItem = checkList.remove(checkList.size() - 1);</span>
 <span class="fc" id="L441">      searchMtasTreeWithIntervalTree(additionalIds, checkItem, in,</span>
-<span class="fc" id="L442">          isSinglePoint, isStoreAdditionalId, objectRefApproxOffset,</span>
-<span class="fc" id="L443">          nodeRefApproxOffset, checkList);</span>
-<span class="fc" id="L444">    } while (checkList.size() &gt; 0);</span>
+          isSinglePoint, isStoreAdditionalId, objectRefApproxOffset,
+          nodeRefApproxOffset, checkList);
+<span class="fc bfc" id="L444" title="All 2 branches covered.">    } while (checkList.size() &gt; 0);</span>
 <span class="fc" id="L445">  }</span>
 
   /**
@@ -478,29 +478,29 @@ import org.apache.lucene.store.IndexInput;
           }
 <span class="pc bpc" id="L479" title="1 of 2 branches missed.">        } else if (intervalTreeNode.leftChild == null) {</span>
 <span class="nc" id="L480">          intervalTreeNode = intervalTreeNode.rightChild;</span>
-<span class="nc" id="L481">        } else {</span>
+        } else {
 <span class="pc bpc" id="L482" title="1 of 2 branches missed.">          if (intervalTreeNode.rightChild.min &gt; treeItem.max) {</span>
 <span class="fc" id="L483">            intervalTreeNode = intervalTreeNode.leftChild;</span>
-<span class="fc" id="L484">          } else {</span>
+          } else {
             break;
           }
         }
       }
       // find intervals matching current node
 <span class="fc" id="L490">      searchMtasTreeItemWithIntervalTree(additionalIds, treeItem,</span>
-<span class="fc" id="L491">          intervalTreeNode);</span>
+          intervalTreeNode);
       // check leftChild
 <span class="fc bfc" id="L493" title="All 2 branches covered.">      if (!treeItem.leftChild.equals(treeItem.ref)) {</span>
 <span class="fc" id="L494">        MtasTreeItem treeItemLeft = getMtasTreeItem(treeItem.leftChild,</span>
-<span class="fc" id="L495">            isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,</span>
-<span class="fc" id="L496">            objectRefApproxOffset);</span>
+            isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,
+            objectRefApproxOffset);
 <span class="fc" id="L497">        checkList.add(new IntervalItem&lt;T, N&gt;(treeItemLeft, intervalTreeNode));</span>
       }
       // check rightChild
 <span class="fc bfc" id="L500" title="All 2 branches covered.">      if (!treeItem.rightChild.equals(treeItem.ref)) {</span>
 <span class="fc" id="L501">        MtasTreeItem treeItemRight = getMtasTreeItem(treeItem.rightChild,</span>
-<span class="fc" id="L502">            isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,</span>
-<span class="fc" id="L503">            objectRefApproxOffset);</span>
+            isSinglePoint, isStoreAdditionalId, nodeRefApproxOffset, in,
+            objectRefApproxOffset);
 <span class="fc" id="L504">        checkList.add(new IntervalItem&lt;T, N&gt;(treeItemRight, intervalTreeNode));</span>
       }
     }
@@ -520,12 +520,12 @@ import org.apache.lucene.store.IndexInput;
       IntervalTreeNode&lt;T, N&gt; intervalTreeNode) {
 <span class="fc" id="L521">    ArrayList&lt;IntervalTreeNode&lt;T, N&gt;&gt; checkList = new ArrayList&lt;IntervalTreeNode&lt;T, N&gt;&gt;();</span>
 <span class="fc" id="L522">    checkList.add(intervalTreeNode);</span>
-<span class="fc bfc" id="L523" title="All 2 branches covered.">    do {</span>
+    do {
 <span class="fc" id="L524">      IntervalTreeNode&lt;T, N&gt; checkItem = checkList.remove(checkList.size() - 1);</span>
 <span class="fc" id="L525">      searchMtasTreeItemWithIntervalTree(additionalIds, checkItem,</span>
-<span class="fc" id="L526">          treeItem.left, treeItem.right, treeItem.objectRefs,</span>
-<span class="fc" id="L527">          treeItem.additionalIds, treeItem.additionalRefs, checkList);</span>
-<span class="fc" id="L528">    } while (checkList.size() &gt; 0);</span>
+          treeItem.left, treeItem.right, treeItem.objectRefs,
+          treeItem.additionalIds, treeItem.additionalRefs, checkList);
+<span class="fc bfc" id="L528" title="All 2 branches covered.">    } while (checkList.size() &gt; 0);</span>
 <span class="fc" id="L529">  }</span>
 
   /**
@@ -549,26 +549,26 @@ import org.apache.lucene.store.IndexInput;
       ArrayList&lt;IntervalTreeNode&lt;T, N&gt;&gt; checkList) {
 <span class="fc bfc" id="L550" title="All 2 branches covered.">    if (startPosition &lt;= intervalTreeItem.max) {</span>
       // match current node
-<span class="fc bfc" id="L552" title="All 2 branches covered.">      if ((endPosition &gt;= intervalTreeItem.left)</span>
-<span class="fc bfc" id="L553" title="All 2 branches covered.">          &amp;&amp; (startPosition &lt;= intervalTreeItem.right)) {</span>
+<span class="fc bfc" id="L552" title="All 4 branches covered.">      if ((endPosition &gt;= intervalTreeItem.left)</span>
+          &amp;&amp; (startPosition &lt;= intervalTreeItem.right)) {
         // System.out.print(&quot;[&quot; + startPosition + &quot;-&quot; + endPosition + &quot;] &quot;);
 <span class="pc bpc" id="L555" title="2 of 4 branches missed.">        if (requiredAdditionalIds == null || additionalIds == null) {</span>
 <span class="nc bnc" id="L556" title="All 2 branches missed.">          for (int i = 0; i &lt; refs.length; i++) {</span>
 <span class="nc" id="L557">            MtasTreeHit&lt;T&gt; hit = new MtasTreeHit&lt;T&gt;(startPosition, endPosition,</span>
-<span class="nc" id="L558">                refs[i], 0, 0);</span>
+                refs[i], 0, 0);
 <span class="nc bnc" id="L559" title="All 2 branches missed.">            for (ArrayList&lt;MtasTreeHit&lt;T&gt;&gt; list : intervalTreeItem.lists) {</span>
 <span class="nc" id="L560">              list.add(hit);</span>
-            }
+<span class="nc" id="L561">            }</span>
           }
-<span class="nc" id="L563">        } else {</span>
+        } else {
 <span class="fc bfc" id="L564" title="All 2 branches covered.">          for (int i = 0; i &lt; refs.length; i++) {</span>
 <span class="fc" id="L565">            MtasTreeHit&lt;T&gt; hit = new MtasTreeHit&lt;T&gt;(startPosition, endPosition,</span>
-<span class="fc" id="L566">                refs[i], additionalIds[i], additionalRefs[i]);</span>
+                refs[i], additionalIds[i], additionalRefs[i]);
 <span class="fc bfc" id="L567" title="All 2 branches covered.">            for (ArrayList&lt;MtasTreeHit&lt;T&gt;&gt; list : intervalTreeItem.lists) {</span>
 <span class="fc bfc" id="L568" title="All 2 branches covered.">              if (requiredAdditionalIds.contains(hit.additionalId)) {</span>
 <span class="fc" id="L569">                list.add(hit);</span>
               }
-            }
+<span class="fc" id="L571">            }</span>
           }
         }
       }
@@ -583,8 +583,8 @@ import org.apache.lucene.store.IndexInput;
 <span class="fc bfc" id="L583" title="All 2 branches covered.">      if (intervalTreeItem.left &lt; endPosition) {</span>
 <span class="fc bfc" id="L584" title="All 2 branches covered.">        if (intervalTreeItem.rightChild != null) {</span>
 <span class="fc" id="L585">          IntervalTreeNode&lt;T, N&gt; treeItemRight = intervalTreeItem.rightChild;</span>
-<span class="fc bfc" id="L586" title="All 2 branches covered.">          if ((treeItemRight.left &gt;= endPosition)</span>
-<span class="pc bpc" id="L587" title="1 of 2 branches missed.">              || (treeItemRight.max &gt;= startPosition)) {</span>
+<span class="pc bpc" id="L586" title="1 of 4 branches missed.">          if ((treeItemRight.left &gt;= endPosition)</span>
+              || (treeItemRight.max &gt;= startPosition)) {
 <span class="fc" id="L588">            checkList.add(treeItemRight);</span>
           }
         }
@@ -613,8 +613,8 @@ import org.apache.lucene.store.IndexInput;
      * @param mtasTreeItem the mtas tree item
      * @param intervalTreeNode the interval tree node
      */
-<span class="fc" id="L616">    public IntervalItem(MtasTreeItem mtasTreeItem,</span>
-        IntervalTreeNode&lt;T, N&gt; intervalTreeNode) {
+    public IntervalItem(MtasTreeItem mtasTreeItem,
+<span class="fc" id="L617">        IntervalTreeNode&lt;T, N&gt; intervalTreeNode) {</span>
 <span class="fc" id="L618">      this.mtasTreeItem = mtasTreeItem;</span>
 <span class="fc" id="L619">      this.intervalTreeNode = intervalTreeNode;</span>
 <span class="fc" id="L620">    }</span>

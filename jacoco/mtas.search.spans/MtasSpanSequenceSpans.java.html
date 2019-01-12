@@ -62,7 +62,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="fc" id="L62">    queueMatches = new ArrayList&lt;&gt;();</span>
 <span class="fc bfc" id="L63" title="All 2 branches covered.">    for (MtasSpanSequenceQuerySpans sequenceSpans : setSequenceSpans) {</span>
 <span class="fc" id="L64">      queueSpans.add(new QueueItem(sequenceSpans));</span>
-    }
+<span class="fc" id="L65">    }</span>
 <span class="fc" id="L66">    ignoreItem = new MtasIgnoreItem(ignoreSpans, maximumIgnoreLength);</span>
 <span class="fc" id="L67">    resetQueue();</span>
 <span class="fc" id="L68">    computeCosts();</span>
@@ -75,7 +75,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="fc" id="L75">    cost = Long.MAX_VALUE;</span>
 <span class="fc bfc" id="L76" title="All 2 branches covered.">    for (QueueItem item : queueSpans) {</span>
 <span class="fc" id="L77">      cost = Math.min(cost, item.sequenceSpans.spans.cost());</span>
-    }
+<span class="fc" id="L78">    }</span>
 <span class="fc" id="L79">  }</span>
 
   /*
@@ -146,7 +146,7 @@ import org.apache.lucene.search.spans.Spans;
   public void collect(SpanCollector collector) throws IOException {
 <span class="nc bnc" id="L147" title="All 2 branches missed.">    for (QueueItem item : queueSpans) {</span>
 <span class="nc" id="L148">      item.sequenceSpans.spans.collect(collector);</span>
-    }
+<span class="nc" id="L149">    }</span>
 <span class="nc" id="L150">  }</span>
 
   /*
@@ -168,7 +168,7 @@ import org.apache.lucene.search.spans.Spans;
   public int nextDoc() throws IOException {
 <span class="fc" id="L169">    resetQueue();</span>
 <span class="fc bfc" id="L170" title="All 2 branches covered.">    while (!goToNextDoc())</span>
-      ;
+<span class="fc" id="L171">      ;</span>
 <span class="fc" id="L172">    return docId;</span>
   }
 
@@ -194,16 +194,16 @@ import org.apache.lucene.search.spans.Spans;
 <span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (!item.noMoreDocs) {</span>
 <span class="pc bpc" id="L195" title="1 of 2 branches missed.">          if (item.sequenceSpans.spans == null) {</span>
 <span class="nc" id="L196">            spanDocId = NO_MORE_DOCS;</span>
-<span class="pc bfc" id="L197" title="All 2 branches covered.">          } else if (newDocId == null) {</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">          } else if (newDocId == null) {</span>
 <span class="fc" id="L198">            spanDocId = item.sequenceSpans.spans.nextDoc();</span>
-<span class="fc" id="L199">          } else {</span>
+          } else {
 <span class="fc bfc" id="L200" title="All 2 branches covered.">            if (!item.sequenceSpans.optional) {</span>
 <span class="fc" id="L201">              spanDocId = item.sequenceSpans.spans.advance(newDocId);</span>
-<span class="fc" id="L202">            } else {</span>
+            } else {
 <span class="fc bfc" id="L203" title="All 2 branches covered.">              if (item.sequenceSpans.spans.docID() == -1</span>
 <span class="pc bpc" id="L204" title="1 of 2 branches missed.">                  || newDocId &gt; item.sequenceSpans.spans.docID()) {</span>
 <span class="fc" id="L205">                spanDocId = item.sequenceSpans.spans.advance(newDocId);</span>
-<span class="fc" id="L206">              } else {</span>
+              } else {
 <span class="nc" id="L207">                spanDocId = item.sequenceSpans.spans.docID();</span>
               }
             }
@@ -235,7 +235,7 @@ import org.apache.lucene.search.spans.Spans;
                   // use spanDocId as potential newDocId
 <span class="fc" id="L236">                  newDocId = spanDocId;</span>
                 }
-<span class="fc" id="L238">              } else {</span>
+              } else {
                 // remember minimum docId optional spans
 <span class="nc bnc" id="L240" title="All 2 branches missed.">                minOptionalDocId = (minOptionalDocId == null) ? spanDocId</span>
 <span class="nc" id="L241">                    : Math.min(minOptionalDocId, spanDocId);</span>
@@ -243,7 +243,7 @@ import org.apache.lucene.search.spans.Spans;
             }
           }
         }
-      }
+<span class="fc" id="L246">      }</span>
       // if all items are optional
 <span class="pc bpc" id="L248" title="5 of 6 branches missed.">      if (allItemsOptional &amp;&amp; newDocId == null &amp;&amp; minOptionalDocId != null) {</span>
 <span class="nc" id="L249">        newDocId = minOptionalDocId;</span>
@@ -320,7 +320,7 @@ import org.apache.lucene.search.spans.Spans;
             }
           }
         }
-      }
+<span class="fc" id="L323">      }</span>
       // find match
 <span class="fc" id="L325">      docId = newDocId;</span>
 <span class="fc" id="L326">      ignoreItem.advanceToDoc(docId);</span>
@@ -400,19 +400,19 @@ import org.apache.lucene.search.spans.Spans;
 <span class="fc" id="L400">                  : Math.min(minStartPositionNext,</span>
 <span class="fc" id="L401">                      queueSpans.get(j).lowestPosition);</span>
               // computing restrictions not possible
-<span class="fc" id="L403">            } else {</span>
+            } else {
 <span class="fc bfc" id="L404" title="All 2 branches covered.">              if (!queueSpans.get(j).sequenceSpans.optional) {</span>
 <span class="fc" id="L405">                minStartPositionNext = null;</span>
               }
-<span class="fc" id="L407">              break;</span>
+              break;
             }
           }
           // fill queue
 <span class="pc bpc" id="L411" title="1 of 4 branches missed.">          if ((minStartPositionPrevious == null) || subMatchesOptional) {</span>
 <span class="fc" id="L412">            fillQueue(item, null, maxEndPositionPrevious, minStartPositionNext);</span>
-<span class="fc" id="L413">          } else {</span>
+          } else {
 <span class="fc" id="L414">            fillQueue(item, minStartPositionPrevious, maxEndPositionPrevious,</span>
-<span class="fc" id="L415">                minStartPositionNext);</span>
+                minStartPositionNext);
           }
           // try to adjust minimum ignoreItem
 <span class="pc bpc" id="L418" title="1 of 4 branches missed.">          if (!adjustedMinimumIgnoreItem &amp;&amp; !item.sequenceSpans.optional</span>
@@ -420,7 +420,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="pc bpc" id="L420" title="1 of 2 branches missed.">            if (minOptionalStartPosition != null) {</span>
 <span class="nc" id="L421">              ignoreItem.removeBefore(docId,</span>
 <span class="nc" id="L422">                  Math.min(minOptionalStartPosition, item.lowestPosition));</span>
-<span class="nc" id="L423">            } else {</span>
+            } else {
 <span class="fc" id="L424">              ignoreItem.removeBefore(docId, item.lowestPosition);</span>
             }
 <span class="fc" id="L426">            adjustedMinimumIgnoreItem = true;</span>
@@ -454,7 +454,7 @@ import org.apache.lucene.search.spans.Spans;
           // update subMatchesStartPosition
 <span class="pc bpc" id="L455" title="1 of 2 branches missed.">          if (subMatchesQueue.isEmpty()) {</span>
 <span class="nc" id="L456">            subMatchesStartPosition = null;</span>
-<span class="nc" id="L457">          } else {</span>
+          } else {
 <span class="fc" id="L458">            subMatchesStartPosition = subMatchesQueue.get(0).startPosition;</span>
           }
           // compute minimum startPosition for next span
@@ -468,11 +468,11 @@ import org.apache.lucene.search.spans.Spans;
             // update stats
 <span class="fc bfc" id="L469" title="All 2 branches covered.">            if (item.lowestPosition != null) {</span>
 <span class="pc bpc" id="L470" title="1 of 2 branches missed.">              minOptionalStartPosition = (minOptionalStartPosition == null)</span>
-<span class="fc" id="L471">                  ? item.lowestPosition</span>
+<span class="pc" id="L471">                  ? item.lowestPosition</span>
 <span class="nc" id="L472">                  : Math.min(minOptionalStartPosition, item.lowestPosition);</span>
             }
             // for not optional spans
-<span class="fc" id="L475">          } else {</span>
+          } else {
             // update stats, item.lowestPosition should be set
 <span class="fc bfc" id="L477" title="All 2 branches covered.">            minStartPosition = (minStartPosition == null) ? item.lowestPosition</span>
 <span class="fc" id="L478">                : Math.min(minStartPosition, item.lowestPosition);</span>
@@ -484,7 +484,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="fc bfc" id="L484" title="All 2 branches covered.">            for (Integer endPosition : item.queue.get(item.lowestPosition)) {</span>
 <span class="fc bfc" id="L485" title="All 2 branches covered.">              maxEndPositionPrevious = (maxEndPositionPrevious == null)</span>
 <span class="fc" id="L486">                  ? endPosition : Math.max(maxEndPositionPrevious, endPosition);</span>
-            }
+<span class="fc" id="L487">            }</span>
           }
         }
       }
@@ -522,7 +522,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="pc bpc" id="L522" title="1 of 2 branches missed.">          if (!queueMatches.contains(m)) {</span>
 <span class="fc" id="L523">            queueMatches.add(m);</span>
           }
-        }
+<span class="fc" id="L525">        }</span>
 <span class="fc" id="L526">        ignoreItem.removeBefore(docId, queueMatches.get(0).startPosition);</span>
 <span class="fc" id="L527">        return true;</span>
       }
@@ -549,7 +549,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="pc bpc" id="L549" title="1 of 2 branches missed.">          if (!newSubMatchesQueue.contains(m)) {</span>
 <span class="fc" id="L550">            newSubMatchesQueue.add(m);</span>
           }
-        }
+<span class="fc" id="L552">        }</span>
       }
 <span class="fc" id="L554">      return newSubMatchesQueue;</span>
       // previous queue
@@ -565,7 +565,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="nc bnc" id="L565" title="All 2 branches missed.">            if (!newSubMatchesQueue.contains(m)) {</span>
 <span class="nc" id="L566">              newSubMatchesQueue.add(m);</span>
             }
-          }
+<span class="nc" id="L568">          }</span>
           // merge with previous
 <span class="nc bnc" id="L570" title="All 2 branches missed.">        } else if (item.filledPosition) {</span>
 <span class="nc bnc" id="L571" title="All 2 branches missed.">          if (item.lowestPosition.equals(startPosition)) {</span>
@@ -574,7 +574,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="nc bnc" id="L574" title="All 2 branches missed.">              if (!newSubMatchesQueue.contains(m)) {</span>
 <span class="nc" id="L575">                newSubMatchesQueue.add(m);</span>
               }
-            }
+<span class="nc" id="L577">            }</span>
           }
 <span class="nc" id="L579">          newSubMatchesQueue.addAll(subMatchesQueue);</span>
 <span class="nc bnc" id="L580" title="All 2 branches missed.">          for (Match m : subMatchesQueue) {</span>
@@ -584,11 +584,11 @@ import org.apache.lucene.search.spans.Spans;
 <span class="nc bnc" id="L584" title="All 2 branches missed.">                if (!newSubMatchesQueue.contains(o)) {</span>
 <span class="nc" id="L585">                  newSubMatchesQueue.add(o);</span>
                 }
-              }
+<span class="nc" id="L587">              }</span>
             }
-          }
+<span class="nc" id="L589">          }</span>
           // no filled position
-<span class="nc" id="L591">        } else {</span>
+        } else {
 <span class="nc" id="L592">          newSubMatchesQueue.addAll(subMatchesQueue);</span>
         }
         // previous queue optional, current item not optional
@@ -601,16 +601,16 @@ import org.apache.lucene.search.spans.Spans;
 <span class="nc bnc" id="L601" title="All 2 branches missed.">            if (!newSubMatchesQueue.contains(m)) {</span>
 <span class="nc" id="L602">              newSubMatchesQueue.add(m);</span>
             }
-          }
+<span class="nc" id="L604">          }</span>
           // merge with previous
-<span class="nc" id="L606">        } else {</span>
+        } else {
 <span class="nc bnc" id="L607" title="All 2 branches missed.">          if (item.lowestPosition.equals(startPosition)) {</span>
 <span class="nc bnc" id="L608" title="All 2 branches missed.">            for (Integer endPosition : item.queue.get(item.lowestPosition)) {</span>
 <span class="nc" id="L609">              Match m = new Match(item.lowestPosition, endPosition);</span>
 <span class="nc bnc" id="L610" title="All 2 branches missed.">              if (!newSubMatchesQueue.contains(m)) {</span>
 <span class="nc" id="L611">                newSubMatchesQueue.add(m);</span>
               }
-            }
+<span class="nc" id="L613">            }</span>
           }
 <span class="nc bnc" id="L615" title="All 2 branches missed.">          for (Match m : subMatchesQueue) {</span>
 <span class="nc bnc" id="L616" title="All 2 branches missed.">            if (item.queue.containsKey(m.endPosition)) {</span>
@@ -619,9 +619,9 @@ import org.apache.lucene.search.spans.Spans;
 <span class="nc bnc" id="L619" title="All 2 branches missed.">                if (!newSubMatchesQueue.contains(o)) {</span>
 <span class="nc" id="L620">                  newSubMatchesQueue.add(o);</span>
                 }
-              }
+<span class="nc" id="L622">              }</span>
             }
-          }
+<span class="nc" id="L624">          }</span>
         }
         // previous queue not optional, current item optional
 <span class="pc bpc" id="L627" title="1 of 4 branches missed.">      } else if (!subMatchesOptional &amp;&amp; item.sequenceSpans.optional) {</span>
@@ -635,9 +635,9 @@ import org.apache.lucene.search.spans.Spans;
 <span class="pc bpc" id="L635" title="1 of 2 branches missed.">                if (!newSubMatchesQueue.contains(o)) {</span>
 <span class="fc" id="L636">                  newSubMatchesQueue.add(o);</span>
                 }
-              }
+<span class="fc" id="L638">              }</span>
             }
-          }
+<span class="fc" id="L640">          }</span>
         }
         // previous queue not optional, current item not optional
 <span class="pc bpc" id="L643" title="2 of 4 branches missed.">      } else if (!subMatchesOptional &amp;&amp; !item.sequenceSpans.optional</span>
@@ -648,7 +648,7 @@ import org.apache.lucene.search.spans.Spans;
           Integer[] checkList;
 <span class="fc bfc" id="L649" title="All 2 branches covered.">          if (ignoreList == null) {</span>
 <span class="fc" id="L650">            checkList = new Integer[] { m.endPosition };</span>
-<span class="fc" id="L651">          } else {</span>
+          } else {
 <span class="fc" id="L652">            checkList = new Integer[1 + ignoreList.size()];</span>
 <span class="fc" id="L653">            checkList = ignoreList.toArray(checkList);</span>
 <span class="fc" id="L654">            checkList[ignoreList.size()] = m.endPosition;</span>
@@ -660,10 +660,10 @@ import org.apache.lucene.search.spans.Spans;
 <span class="pc bpc" id="L660" title="1 of 2 branches missed.">                if (!newSubMatchesQueue.contains(o)) {</span>
 <span class="fc" id="L661">                  newSubMatchesQueue.add(o);</span>
                 }
-              }
+<span class="fc" id="L663">              }</span>
             }
           }
-        }
+<span class="fc" id="L666">        }</span>
       }
     }
 <span class="fc" id="L669">    return newSubMatchesQueue;</span>
@@ -691,10 +691,10 @@ import org.apache.lucene.search.spans.Spans;
     // fill queue
 <span class="fc bfc" id="L692" title="All 2 branches covered.">    while (!item.noMorePositions) {</span>
       boolean doNotCollectAnotherPosition;
-<span class="fc bfc" id="L694" title="All 2 branches covered.">      doNotCollectAnotherPosition = item.filledPosition</span>
-<span class="pc bpc" id="L695" title="1 of 4 branches missed.">          &amp;&amp; (minStartPosition == null) &amp;&amp; (maxStartPosition == null);</span>
-<span class="fc bfc" id="L696" title="All 2 branches covered.">      doNotCollectAnotherPosition |= item.filledPosition</span>
-<span class="pc bpc" id="L697" title="1 of 4 branches missed.">          &amp;&amp; (maxStartPosition != null) &amp;&amp; (item.lastRetrievedPosition != null)</span>
+<span class="pc bpc" id="L694" title="1 of 6 branches missed.">      doNotCollectAnotherPosition = item.filledPosition</span>
+          &amp;&amp; (minStartPosition == null) &amp;&amp; (maxStartPosition == null);
+<span class="fc bfc" id="L696" title="All 4 branches covered.">      doNotCollectAnotherPosition |= item.filledPosition</span>
+<span class="pc bpc" id="L697" title="1 of 2 branches missed.">          &amp;&amp; (maxStartPosition != null) &amp;&amp; (item.lastRetrievedPosition != null)</span>
 <span class="fc bfc" id="L698" title="All 2 branches covered.">          &amp;&amp; (maxStartPosition &lt; item.lastRetrievedPosition);</span>
 <span class="fc bfc" id="L699" title="All 2 branches covered.">      if (doNotCollectAnotherPosition) {</span>
 <span class="fc" id="L700">        return;</span>
@@ -727,7 +727,7 @@ import org.apache.lucene.search.spans.Spans;
           }
         }
       }
-    }
+<span class="fc" id="L730">    }</span>
 <span class="fc" id="L731">  }</span>
 
   /**
@@ -738,7 +738,7 @@ import org.apache.lucene.search.spans.Spans;
 <span class="fc" id="L738">    queueMatches.clear();</span>
 <span class="fc bfc" id="L739" title="All 2 branches covered.">    for (QueueItem item : queueSpans) {</span>
 <span class="fc" id="L740">      item.reset();</span>
-    }
+<span class="fc" id="L741">    }</span>
 <span class="fc" id="L742">    currentMatch = null;</span>
 <span class="fc" id="L743">  }</span>
 
@@ -827,17 +827,17 @@ import org.apache.lucene.search.spans.Spans;
 <span class="fc bfc" id="L827" title="All 2 branches covered.">        if (p &lt;= position) {</span>
 <span class="fc" id="L828">          removePositions.add(p);</span>
         }
-      }
+<span class="fc" id="L830">      }</span>
 <span class="fc bfc" id="L831" title="All 2 branches covered.">      if (!removePositions.isEmpty()) {</span>
         // positions.removeAll(removePositions);
 <span class="fc bfc" id="L833" title="All 2 branches covered.">        for (int p : removePositions) {</span>
 <span class="fc" id="L834">          queue.remove(p);</span>
-        }
+<span class="fc" id="L835">        }</span>
 <span class="fc bfc" id="L836" title="All 2 branches covered.">        if (queue.isEmpty()) {</span>
 <span class="fc" id="L837">          lowestPosition = null;</span>
 <span class="fc" id="L838">          lastFilledPosition = null;</span>
 <span class="fc" id="L839">          filledPosition = false;</span>
-<span class="fc" id="L840">        } else {</span>
+        } else {
 <span class="fc" id="L841">          lowestPosition = Collections.min(queue.keySet());</span>
 <span class="pc bpc" id="L842" title="1 of 4 branches missed.">          if (filledPosition &amp;&amp; !queue.keySet().contains(lastFilledPosition)) {</span>
 <span class="fc" id="L843">            lastFilledPosition = null;</span>
@@ -902,8 +902,8 @@ import org.apache.lucene.search.spans.Spans;
 <span class="pc bpc" id="L902" title="1 of 2 branches missed.">      if (getClass() != obj.getClass())</span>
 <span class="nc" id="L903">        return false;</span>
 <span class="fc" id="L904">      final Match that = (Match) obj;</span>
-<span class="pc bpc" id="L905" title="1 of 2 branches missed.">      return startPosition == that.startPosition</span>
-<span class="pc bpc" id="L906" title="1 of 2 branches missed.">          &amp;&amp; endPosition == that.endPosition;</span>
+<span class="pc bpc" id="L905" title="2 of 4 branches missed.">      return startPosition == that.startPosition</span>
+          &amp;&amp; endPosition == that.endPosition;
     }
 
     /*

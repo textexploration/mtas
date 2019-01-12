@@ -66,8 +66,8 @@ public class MtasCodec extends Codec {
 <span class="pc bpc" id="L66" title="1 of 2 branches missed.">      if (defaultPostingsFormat instanceof PerFieldPostingsFormat) {</span>
 <span class="fc" id="L67">        defaultPostingsFormat = ((PerFieldPostingsFormat) defaultPostingsFormat)</span>
 <span class="fc" id="L68">            .getPostingsFormatForField(null);</span>
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if ((defaultPostingsFormat == null)</span>
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            || (defaultPostingsFormat instanceof PerFieldPostingsFormat)) {</span>
+<span class="pc bpc" id="L69" title="2 of 4 branches missed.">        if ((defaultPostingsFormat == null)</span>
+            || (defaultPostingsFormat instanceof PerFieldPostingsFormat)) {
           // fallback option
 <span class="nc" id="L72">          return new MtasCodecPostingsFormat(</span>
 <span class="nc" id="L73">              PostingsFormat.forName(&quot;Lucene70&quot;));</span>

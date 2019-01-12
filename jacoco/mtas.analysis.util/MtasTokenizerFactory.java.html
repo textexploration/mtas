@@ -35,7 +35,7 @@ public class MtasTokenizerFactory extends TokenizerFactory
   public static final String ARGUMENT_PARSER_ARGS = &quot;parserArgs&quot;;
 
   /** The Constant ARGUMENT_DEFAULT. */
-<span class="fc" id="L38">  public static final String ARGUMENT_DEFAULT = &quot;default&quot;;</span>
+  public static final String ARGUMENT_DEFAULT = &quot;default&quot;;
 
   /** The config argument. */
   private String configArgument;
@@ -90,13 +90,13 @@ public class MtasTokenizerFactory extends TokenizerFactory
     
 <span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (numberOfArgs&gt;1) {</span>
 <span class="nc" id="L92">      throw new IOException(this.getClass().getName() + &quot; can't have multiple of &quot;</span>
-<span class="nc" id="L93">          + ARGUMENT_CONFIGFILE + &quot;, &quot; + ARGUMENT_CONFIG+&quot; AND &quot;+ARGUMENT_PARSER);</span>
+          + ARGUMENT_CONFIGFILE + &quot;, &quot; + ARGUMENT_CONFIG+&quot; AND &quot;+ARGUMENT_PARSER);
 <span class="pc bpc" id="L94" title="1 of 4 branches missed.">    } else if (configArgument == null &amp;&amp; defaultArgument != null) {</span>
 <span class="nc" id="L95">      throw new IOException(this.getClass().getName() + &quot; can't have &quot;</span>
-<span class="nc" id="L96">          + ARGUMENT_DEFAULT + &quot; without &quot; + ARGUMENT_CONFIG);</span>
+          + ARGUMENT_DEFAULT + &quot; without &quot; + ARGUMENT_CONFIG);
 <span class="pc bpc" id="L97" title="1 of 2 branches missed.">    } else if (numberOfArgs==0) {</span>
 <span class="nc" id="L98">      throw new IOException(this.getClass().getName() + &quot; should have &quot;</span>
-<span class="nc" id="L99">          + ARGUMENT_CONFIGFILE + &quot; or &quot; + ARGUMENT_CONFIG+&quot; or &quot;+ARGUMENT_PARSER);</span>
+          + ARGUMENT_CONFIGFILE + &quot; or &quot; + ARGUMENT_CONFIG+&quot; or &quot;+ARGUMENT_PARSER);
     }
 <span class="fc" id="L101">    init(resourceLoader);</span>
 <span class="fc" id="L102">  }</span>
@@ -113,9 +113,9 @@ public class MtasTokenizerFactory extends TokenizerFactory
 <span class="fc" id="L113">    MtasTokenizer tokenizer = null;</span>
     try {
 <span class="fc" id="L115">      tokenizer = create(factory, null);</span>
-<span class="pc" id="L116">    } catch (IOException e) {</span>
+<span class="nc" id="L116">    } catch (IOException e) {</span>
 <span class="nc" id="L117">      log.error(e);</span>
-    }
+<span class="fc" id="L118">    }</span>
 <span class="fc" id="L119">    return tokenizer;</span>
   }
 
@@ -159,7 +159,7 @@ public class MtasTokenizerFactory extends TokenizerFactory
 <span class="nc" id="L159">          return new MtasTokenizer(factory, configs.get(defaultConfiguration));</span>
         } else {
 <span class="nc" id="L161">          throw new IOException(</span>
-<span class="nc" id="L162">              &quot;default configuration &quot; + defaultConfiguration + &quot; not available&quot;);</span>
+              &quot;default configuration &quot; + defaultConfiguration + &quot; not available&quot;);
         }
       } else {
 <span class="fc" id="L165">        MtasConfiguration config = configs.get(configuration);</span>
@@ -169,12 +169,12 @@ public class MtasTokenizerFactory extends TokenizerFactory
 <span class="nc" id="L169">              return new MtasTokenizer(factory, configs.get(defaultConfiguration));</span>
             } else {
 <span class="nc" id="L171">              throw new IOException(&quot;configuration &quot; + configuration</span>
-<span class="nc" id="L172">                  + &quot; not found and default configuration &quot; + defaultConfiguration</span>
-<span class="nc" id="L173">                  + &quot; not available&quot;);</span>
+                  + &quot; not found and default configuration &quot; + defaultConfiguration
+                  + &quot; not available&quot;);
             }
           } else {
 <span class="nc" id="L176">            throw new IOException(&quot;configuration &quot; + configuration</span>
-<span class="nc" id="L177">                + &quot; not available and no default configuration&quot;);</span>
+                + &quot; not available and no default configuration&quot;);
           }
         } else {
 <span class="fc" id="L180">          return new MtasTokenizer(factory, config);</span>
@@ -204,19 +204,19 @@ public class MtasTokenizerFactory extends TokenizerFactory
           try {
 <span class="fc" id="L205">            config = MtasConfiguration.readConfiguration(</span>
 <span class="fc" id="L206">                resourceLoader.openResource(configFileArgument));</span>
-<span class="pc" id="L207">          } catch (IOException e) {</span>
+<span class="nc" id="L207">          } catch (IOException e) {</span>
 <span class="nc" id="L208">            throw new IOException(</span>
-<span class="nc" id="L209">                &quot;Problem loading configuration from &quot; + configFileArgument, e);</span>
-          }
+                &quot;Problem loading configuration from &quot; + configFileArgument, e);
+<span class="fc" id="L210">          }</span>
         }
 <span class="fc bfc" id="L212" title="All 2 branches covered.">        if (configArgument != null) {</span>
           try {
 <span class="fc" id="L214">            configs = MtasConfiguration.readMtasTokenizerConfigurations(</span>
-<span class="fc" id="L215">                resourceLoader, configArgument);</span>
-<span class="pc" id="L216">          } catch (IOException e) {</span>
+                resourceLoader, configArgument);
+<span class="nc" id="L216">          } catch (IOException e) {</span>
 <span class="nc" id="L217">            throw new IOException(</span>
-<span class="nc" id="L218">                &quot;Problem loading configurations from &quot; + configArgument, e);</span>
-          }
+                &quot;Problem loading configurations from &quot; + configArgument, e);
+<span class="fc" id="L219">          }</span>
         }
 <span class="pc bpc" id="L221" title="1 of 2 branches missed.">        if (analyzerArgument != null) {</span>
 <span class="nc" id="L222">          configs = null;</span>

@@ -7,39 +7,96 @@ import org.apache.lucene.util.BytesRef;
 
 import mtas.analysis.token.MtasToken;
 
+/**
+ * The Class Distance.
+ */
 public abstract class Distance {
 
+  /** The prefix. */
   protected final String prefix;
+  
+  /** The base. */
   protected final String base;
+  
+  /** The minimum. */
   public final Double minimum;
+  
+  /** The maximum. */
   public final Double maximum;
-  protected final Map&lt;String,String&gt; parameters;
+  
+  /** The parameters. */
+  protected final Map&lt;String, String&gt; parameters;
+  
+  /** The prefix offset. */
   protected final int prefixOffset;
-  
+
+  /** The Constant DOUBLE_TOLERANCE. */
   private static final double DOUBLE_TOLERANCE = 5E-16;
-  
+
+  /** The Constant NAME. */
   public static final String NAME = &quot;distance&quot;;
-  
-<span class="nc" id="L23">  public Distance(String prefix, String base, Double minimum, Double maximum, Map&lt;String,String&gt; parameters) throws IOException {</span>
-<span class="nc" id="L24">    this.prefix = prefix;</span>
-<span class="nc" id="L25">    this.base = base;</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">    this.minimum = minimum==null?null:minimum-DOUBLE_TOLERANCE;   </span>
-<span class="nc bnc" id="L27" title="All 2 branches missed.">    this.maximum = maximum==null?null:maximum+DOUBLE_TOLERANCE;   </span>
-<span class="nc" id="L28">    this.parameters = parameters;</span>
-<span class="nc" id="L29">    prefixOffset = prefix.length() + MtasToken.DELIMITER.length();</span>
-<span class="nc" id="L30">  }</span>
-    
+
+  /**
+   * Instantiates a new distance.
+   *
+   * @param prefix the prefix
+   * @param base the base
+   * @param minimum the minimum
+   * @param maximum the maximum
+   * @param parameters the parameters
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  public Distance(String prefix, String base, Double minimum, Double maximum, Map&lt;String, String&gt; parameters)
+<span class="nc" id="L50">      throws IOException {</span>
+<span class="nc" id="L51">    this.prefix = prefix;</span>
+<span class="nc" id="L52">    this.base = base;</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">    this.minimum = minimum == null ? null : minimum - DOUBLE_TOLERANCE;</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">    this.maximum = maximum == null ? null : maximum + DOUBLE_TOLERANCE;</span>
+<span class="nc" id="L55">    this.parameters = parameters;</span>
+<span class="nc" id="L56">    prefixOffset = prefix.length() + MtasToken.DELIMITER.length();</span>
+<span class="nc" id="L57">  }</span>
+
+  /**
+   * Compute.
+   *
+   * @param term the term
+   * @return the double
+   */
   public abstract double compute(BytesRef term);
-  
+
+  /**
+   * Compute.
+   *
+   * @param key the key
+   * @return the double
+   */
   public abstract double compute(String key);
-  
+
+  /**
+   * Validate.
+   *
+   * @param term the term
+   * @return true, if successful
+   */
   public boolean validate(BytesRef term) {
-<span class="nc bnc" id="L37" title="All 4 branches missed.">    return validateMaximum(term) &amp;&amp; validateMinimum(term);</span>
+<span class="nc bnc" id="L82" title="All 4 branches missed.">    return validateMaximum(term) &amp;&amp; validateMinimum(term);</span>
   }
-  
+
+  /**
+   * Validate maximum.
+   *
+   * @param term the term
+   * @return true, if successful
+   */
   public abstract boolean validateMaximum(BytesRef term);
-  
+
+  /**
+   * Validate minimum.
+   *
+   * @param term the term
+   * @return true, if successful
+   */
   public abstract boolean validateMinimum(BytesRef term);
-  
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -171,8 +171,8 @@ public class CodecCollector {
 <span class="fc bfc" id="L171" title="All 2 branches covered.">        while (docSetIterator.hasNext()) {</span>
 <span class="fc" id="L172">          docSetId = docSetIterator.next();</span>
           // just to make sure to ignore deleted documents
-<span class="fc bfc" id="L174" title="All 4 branches covered.">          if ((docSetId &gt;= lrc.docBase) &amp;&amp; (docSetId &lt; lrc.docBase + lrc.reader().maxDoc())</span>
-<span class="pc bpc" id="L175" title="3 of 4 branches missed.">              &amp;&amp; (liveDocs == null || liveDocs.get((docSetId - lrc.docBase)))) {</span>
+<span class="pc bpc" id="L174" title="1 of 6 branches missed.">          if ((docSetId &gt;= lrc.docBase) &amp;&amp; (docSetId &lt; lrc.docBase + lrc.reader().maxDoc())</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">              &amp;&amp; (liveDocs == null || liveDocs.get((docSetId - lrc.docBase)))) {</span>
 <span class="fc" id="L176">            docSet.add(docSetId);</span>
           }
         }
@@ -214,7 +214,7 @@ public class CodecCollector {
 <span class="fc" id="L214">          status.numberDocumentsFinished = Collections.max(status.subNumberDocumentsFinished.values());</span>
         }
       }
-    }
+<span class="fc" id="L217">    }</span>
 
     // check termvectors
 <span class="fc bfc" id="L220" title="All 4 branches covered.">    if (!fieldInfo.termVectorList.isEmpty() &amp;&amp; needSecondRoundTermvector(fieldInfo.termVectorList)) {</span>
@@ -225,7 +225,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L225" title="1 of 2 branches missed.">          if (!needPositions) {</span>
 <span class="pc bpc" id="L226" title="1 of 2 branches missed.">            needPositions = ctv.functions != null ? ctv.functionNeedPositions() : needPositions;</span>
           }
-        }
+<span class="fc" id="L228">        }</span>
       }
 <span class="fc" id="L230">      Map&lt;Integer, Integer&gt; positionsData = null;</span>
 
@@ -241,7 +241,7 @@ public class CodecCollector {
 <span class="nc" id="L241">          positionsData = computePositions(mtasCodecInfo, r, lrc, field, docSet);</span>
         }
 <span class="fc" id="L243">        createTermvectorSecondRound(fieldInfo.termVectorList, positionsData, docSets.get(lrc.ord), t, r, lrc, status);</span>
-      }
+<span class="fc" id="L244">      }</span>
 
     }
 <span class="fc" id="L247">  }</span>
@@ -294,9 +294,9 @@ public class CodecCollector {
 <span class="nc" id="L294">                  break;</span>
                 }
               }
-            }
+<span class="fc" id="L297">            }</span>
           }
-        }
+<span class="fc" id="L299">        }</span>
       }
     }
 <span class="fc" id="L302">  }</span>
@@ -363,7 +363,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L363" title="1 of 2 branches missed.">          needPositions = (ctv.functions == null ? ctv.subComponentFunction.parserFunction.needPositions()</span>
 <span class="fc" id="L364">              : ctv.functionNeedPositions());</span>
         }
-      }
+<span class="fc" id="L366">      }</span>
     }
 
     // compute from spans for selected docs
@@ -389,8 +389,8 @@ public class CodecCollector {
 <span class="fc" id="L389">                spansNumberData.put(q, new HashMap&lt;Integer, Integer&gt;());</span>
               }
             }
-          }
-        }
+<span class="fc" id="L392">          }</span>
+<span class="fc" id="L393">        }</span>
       }
       // kwic
 <span class="pc bpc" id="L396" title="1 of 2 branches missed.">      if (!fieldInfo.kwicList.isEmpty()) {</span>
@@ -399,7 +399,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L399" title="All 2 branches missed.">          if (!spansMatchData.containsKey(ck.query)) {</span>
 <span class="nc" id="L400">            spansMatchData.put(ck.query, new HashMap&lt;Integer, List&lt;Match&gt;&gt;());</span>
           }
-        }
+<span class="nc" id="L402">        }</span>
       }
       // list
 <span class="pc bpc" id="L405" title="1 of 2 branches missed.">      if (!fieldInfo.listList.isEmpty()) {</span>
@@ -410,14 +410,14 @@ public class CodecCollector {
               // only if needed
 <span class="nc bnc" id="L411" title="All 2 branches missed.">              if (cl.position &lt; (cl.start + cl.number)) {</span>
 <span class="nc" id="L412">                spansMatchData.put(cl.spanQuery, new HashMap&lt;Integer, List&lt;Match&gt;&gt;());</span>
-<span class="nc" id="L413">              } else {</span>
+              } else {
 <span class="nc" id="L414">                spansNumberData.put(cl.spanQuery, new HashMap&lt;Integer, Integer&gt;());</span>
               }
 <span class="nc bnc" id="L416" title="All 2 branches missed.">            } else if (!spansNumberData.containsKey(cl.spanQuery)) {</span>
 <span class="nc" id="L417">              spansNumberData.put(cl.spanQuery, new HashMap&lt;Integer, Integer&gt;());</span>
             }
           }
-        }
+<span class="nc" id="L420">        }</span>
       }
       // group
 <span class="fc bfc" id="L423" title="All 2 branches covered.">      if (!fieldInfo.groupList.isEmpty()) {</span>
@@ -426,7 +426,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L426" title="1 of 2 branches missed.">          if (!spansMatchData.containsKey(cg.spanQuery)) {</span>
 <span class="fc" id="L427">            spansMatchData.put(cg.spanQuery, new HashMap&lt;Integer, List&lt;Match&gt;&gt;());</span>
           }
-        }
+<span class="fc" id="L429">        }</span>
       }
       // heatmap
 <span class="fc bfc" id="L432" title="All 2 branches covered.">      if (!fieldInfo.heatmapList.isEmpty()) {</span>
@@ -444,8 +444,8 @@ public class CodecCollector {
 <span class="fc" id="L444">                spansNumberData.put(q, new HashMap&lt;Integer, Integer&gt;());</span>
               }
             }
-          }
-        }
+<span class="fc" id="L447">          }</span>
+<span class="fc" id="L448">        }</span>
       }
       // facet
 <span class="pc bpc" id="L451" title="1 of 2 branches missed.">      if (!fieldInfo.facetList.isEmpty()) {</span>
@@ -462,7 +462,7 @@ public class CodecCollector {
 <span class="nc" id="L462">                  spansNumberData.put(q, new HashMap&lt;Integer, Integer&gt;());</span>
                 }
               }
-            }
+<span class="nc" id="L465">            }</span>
 <span class="nc bnc" id="L466" title="All 2 branches missed.">            for (MtasFunctionParserFunction function : cf.baseFunctionParserFunctions[i]) {</span>
 <span class="nc bnc" id="L467" title="All 4 branches missed.">              needSpans = !needSpans ? function.needArgumentsNumber() &gt; 0 : needSpans;</span>
 <span class="nc" id="L468">              arguments = function.needArgument();</span>
@@ -473,24 +473,24 @@ public class CodecCollector {
 <span class="nc" id="L473">                    spansNumberData.put(q, new HashMap&lt;Integer, Integer&gt;());</span>
                   }
                 }
-              }
+<span class="nc" id="L476">              }</span>
             }
 <span class="nc bnc" id="L478" title="All 2 branches missed.">            if (!facetData.containsKey(cf.baseFields[i])) {</span>
 <span class="nc" id="L479">              facetData.put(cf.baseFields[i], new TreeMap&lt;String, int[]&gt;());</span>
 <span class="nc" id="L480">              facetDataType.put(cf.baseFields[i], cf.baseFieldTypes[i]);</span>
             }
           }
-        }
+<span class="nc" id="L483">        }</span>
       }
       // termvector
 <span class="pc bpc" id="L486" title="1 of 2 branches missed.">      if (!fieldInfo.termVectorList.isEmpty()) {</span>
 <span class="nc bnc" id="L487" title="All 2 branches missed.">        for (ComponentTermVector ctv : fieldInfo.termVectorList) {</span>
 <span class="nc bnc" id="L488" title="All 2 branches missed.">          if ((ctv.subComponentFunction.parserFunction != null</span>
-<span class="nc bnc" id="L489" title="All 2 branches missed.">              &amp;&amp; ctv.subComponentFunction.parserFunction.needPositions())</span>
-<span class="nc bnc" id="L490" title="All 4 branches missed.">              || (ctv.functions != null &amp;&amp; ctv.functionNeedPositions())) {</span>
+<span class="nc bnc" id="L489" title="All 4 branches missed.">              &amp;&amp; ctv.subComponentFunction.parserFunction.needPositions())</span>
+<span class="nc bnc" id="L490" title="All 2 branches missed.">              || (ctv.functions != null &amp;&amp; ctv.functionNeedPositions())) {</span>
 <span class="nc" id="L491">            needPositions = true;</span>
           }
-        }
+<span class="nc" id="L493">        }</span>
       }
     }
 
@@ -527,7 +527,7 @@ public class CodecCollector {
 <span class="nc" id="L527">                    } else {</span>
 <span class="nc" id="L528">                      facetDataSubList.get(value).add(docId + lrc.docBase);</span>
                     }
-                  }
+<span class="nc" id="L530">                  }</span>
                 }
                 // sorted numeric
 <span class="nc bnc" id="L533" title="All 2 branches missed.">              } else if (fi.getDocValuesType().equals(DocValuesType.SORTED_NUMERIC)) {</span>
@@ -547,7 +547,7 @@ public class CodecCollector {
 <span class="nc" id="L547">                        facetDataSubList.get(value).add(docId + lrc.docBase);</span>
                       }
                     }
-                  }
+<span class="nc" id="L550">                  }</span>
                 }
                 // sorted set
 <span class="nc bnc" id="L553" title="All 2 branches missed.">              } else if (fi.getDocValuesType().equals(DocValuesType.SORTED_SET)) {</span>
@@ -563,7 +563,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L563" title="All 2 branches missed.">                      if (!dictionary.containsKey(tmpValue)) {</span>
 <span class="nc" id="L564">                        value = docValues.lookupOrd(tmpValue).utf8ToString();</span>
 <span class="nc" id="L565">                        dictionary.put(tmpValue, value);</span>
-<span class="nc" id="L566">                      } else {</span>
+                      } else {
 <span class="nc" id="L567">                        value = dictionary.get(tmpValue);</span>
                       }
 <span class="nc bnc" id="L569" title="All 2 branches missed.">                      if (!facetDataSubList.containsKey(value)) {</span>
@@ -574,7 +574,7 @@ public class CodecCollector {
 <span class="nc" id="L574">                        facetDataSubList.get(value).add(docId + lrc.docBase);</span>
                       }
                     }
-                  }
+<span class="nc" id="L577">                  }</span>
                 }
                 // sorted
 <span class="nc bnc" id="L580" title="All 2 branches missed.">              } else if (fi.getDocValuesType().equals(DocValuesType.SORTED)) {</span>
@@ -591,7 +591,7 @@ public class CodecCollector {
 <span class="nc" id="L591">                    } else {</span>
 <span class="nc" id="L592">                      facetDataSubList.get(value).add(docId + lrc.docBase);</span>
                     }
-                  }
+<span class="nc" id="L594">                  }</span>
                 }
               }
 <span class="nc bnc" id="L597" title="All 2 branches missed.">              if (!facetDataSubList.isEmpty()) {</span>
@@ -609,14 +609,14 @@ public class CodecCollector {
                   }
 <span class="nc bnc" id="L610" title="All 2 branches missed.">                  if (!facetDataList.containsKey(termValue)) {</span>
 <span class="nc" id="L611">                    facetDataList.put(termValue, docIdList);</span>
-<span class="nc" id="L612">                  } else {</span>
+                  } else {
 <span class="nc" id="L613">                    int[] oldList = facetDataList.get(termValue);</span>
 <span class="nc" id="L614">                    int[] newList = new int[oldList.length + docIdList.length];</span>
 <span class="nc" id="L615">                    System.arraycopy(oldList, 0, newList, 0, oldList.length);</span>
 <span class="nc" id="L616">                    System.arraycopy(docIdList, 0, newList, oldList.length, docIdList.length);</span>
 <span class="nc" id="L617">                    facetDataList.put(termValue, newList);</span>
                   }
-                }
+<span class="nc" id="L619">                }</span>
               }
 <span class="nc" id="L621">            } else {</span>
 <span class="nc" id="L622">              throw new IOException(&quot;facets for docValues of type &quot; + fi.getDocValuesType() + &quot; not implemented&quot;);</span>
@@ -640,8 +640,8 @@ public class CodecCollector {
 <span class="nc" id="L640">                postingsEnum = termsEnum.postings(postingsEnum);</span>
 <span class="nc bnc" id="L641" title="All 2 branches missed.">                while (docIterator.hasNext()) {</span>
 <span class="nc" id="L642">                  docId = docIterator.next() - lrc.docBase;</span>
-<span class="nc bnc" id="L643" title="All 2 branches missed.">                  if (docId &gt;= termDocId</span>
-<span class="nc bnc" id="L644" title="All 4 branches missed.">                      &amp;&amp; ((docId == termDocId) || ((termDocId = postingsEnum.advance(docId)) == docId))) {</span>
+<span class="nc bnc" id="L643" title="All 4 branches missed.">                  if (docId &gt;= termDocId</span>
+<span class="nc bnc" id="L644" title="All 2 branches missed.">                      &amp;&amp; ((docId == termDocId) || ((termDocId = postingsEnum.advance(docId)) == docId))) {</span>
 <span class="nc" id="L645">                    facetDataSublist[facetDataSublistCounter] = docId + lrc.docBase;</span>
 <span class="nc" id="L646">                    facetDataSublistCounter++;</span>
                   }
@@ -661,12 +661,12 @@ public class CodecCollector {
                     } else {
                       continue;
                     }
-<span class="nc" id="L664">                  } else {</span>
+                  } else {
 <span class="nc" id="L665">                    termValue = term.utf8ToString();</span>
                   }
 <span class="nc bnc" id="L667" title="All 2 branches missed.">                  if (!facetDataList.containsKey(termValue)) {</span>
 <span class="nc" id="L668">                    facetDataList.put(termValue, Arrays.copyOf(facetDataSublist, facetDataSublistCounter));</span>
-<span class="nc" id="L669">                  } else {</span>
+                  } else {
 <span class="nc" id="L670">                    int[] oldList = facetDataList.get(termValue);</span>
 <span class="nc" id="L671">                    int[] newList = new int[oldList.length + facetDataSublistCounter];</span>
 <span class="nc" id="L672">                    System.arraycopy(oldList, 0, newList, 0, oldList.length);</span>
@@ -674,24 +674,24 @@ public class CodecCollector {
 <span class="nc" id="L674">                    facetDataList.put(termValue, newList);</span>
                   }
                 }
-              }
+<span class="nc" id="L677">              }</span>
             }
           }
         }
-      }
+<span class="nc" id="L681">      }</span>
 
       // collect matches and numbers for queries
 <span class="fc bfc" id="L684" title="All 2 branches covered.">      for (MtasSpanQuery sq : fieldInfo.spanQueryList) {</span>
         // what to collect : numbers
 <span class="fc bfc" id="L686" title="All 2 branches covered.">        if (spansNumberData.containsKey(sq)) {</span>
 <span class="fc" id="L687">          numberData = spansNumberData.get(sq);</span>
-<span class="fc" id="L688">        } else {</span>
+        } else {
 <span class="fc" id="L689">          numberData = null;</span>
         }
         // what to collect: matches
 <span class="fc bfc" id="L692" title="All 2 branches covered.">        if (spansMatchData.containsKey(sq)) {</span>
 <span class="fc" id="L693">          matchData = spansMatchData.get(sq);</span>
-<span class="fc" id="L694">        } else {</span>
+        } else {
 <span class="fc" id="L695">          matchData = null;</span>
         }
 <span class="fc" id="L697">        boolean doNormalCollection = true;</span>
@@ -710,7 +710,7 @@ public class CodecCollector {
             Iterator&lt;Integer&gt; it;
 <span class="pc bpc" id="L711" title="1 of 2 branches missed.">            if (docSet != null) {</span>
 <span class="fc" id="L712">              it = docSet.iterator();</span>
-<span class="fc" id="L713">            } else {</span>
+            } else {
 <span class="nc" id="L714">              it = docList.iterator();</span>
             }
 <span class="pc bpc" id="L716" title="1 of 2 branches missed.">            if (it.hasNext()) {</span>
@@ -738,7 +738,7 @@ public class CodecCollector {
 <span class="fc bfc" id="L738" title="All 2 branches covered.">                    if (matchData != null) {</span>
 <span class="fc" id="L739">                      Match m = new Match(tmpStartPosition, spans.endPosition());</span>
 <span class="fc" id="L740">                      matchDataList.add(m);</span>
-                    }
+<span class="fc" id="L741">                    }</span>
                   }
 <span class="fc bfc" id="L743" title="All 2 branches covered.">                  if ((numberData != null)) {</span>
 <span class="fc" id="L744">                    numberData.put(spansDocId, number);</span>
@@ -751,12 +751,12 @@ public class CodecCollector {
                   } else {
                     break;
                   }
-                }
+<span class="fc" id="L754">                }</span>
               }
             }
           }
         }
-      }
+<span class="fc" id="L759">      }</span>
     }
 
     // collect position stats
@@ -767,27 +767,27 @@ public class CodecCollector {
 <span class="fc" id="L767">          positionsData = new HashMap&lt;&gt;();</span>
 <span class="fc bfc" id="L768" title="All 2 branches covered.">          for (int docId : docSet) {</span>
 <span class="fc" id="L769">            positionsData.put(docId, mtasCodecInfo.getNumberOfPositions(field, (docId - lrc.docBase)));</span>
-          }
+<span class="fc" id="L770">          }</span>
           // compute everything, only use what is needed
-<span class="fc" id="L772">        } else {</span>
+        } else {
 <span class="fc" id="L773">          positionsData = mtasCodecInfo.getAllNumberOfPositions(field, lrc.docBase);</span>
 <span class="fc bfc" id="L774" title="All 2 branches covered.">          for (int docId : docSet) {</span>
 <span class="pc bpc" id="L775" title="1 of 2 branches missed.">            if (!positionsData.containsKey(docId)) {</span>
 <span class="nc" id="L776">              positionsData.put(docId, 0);</span>
             }
-          }
+<span class="fc" id="L778">          }</span>
         }
-<span class="fc" id="L780">      } else {</span>
+      } else {
 <span class="nc" id="L781">        positionsData = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L782" title="All 2 branches missed.">        for (int docId : docSet) {</span>
 <span class="nc" id="L783">          positionsData.put(docId, 0);</span>
-        }
+<span class="nc" id="L784">        }</span>
       }
 <span class="pc bpc" id="L786" title="1 of 4 branches missed.">      if (spansNumberByPositions != null &amp;&amp; spansNumberData != null) {</span>
 <span class="fc bfc" id="L787" title="All 2 branches covered.">        for (MtasSpanQuery sq : spansNumberByPositions) {</span>
 <span class="fc" id="L788">          Map&lt;Integer, Integer&gt; numberData = spansNumberData.get(sq);</span>
 <span class="pc bpc" id="L789" title="1 of 2 branches missed.">          positionsData.forEach((k, v) -&gt; numberData.put(k, v != null ? v : 0));</span>
-        }
+<span class="fc" id="L790">        }</span>
       }
     }
 
@@ -799,21 +799,21 @@ public class CodecCollector {
 <span class="fc" id="L799">          tokensData = new HashMap&lt;&gt;();</span>
 <span class="fc bfc" id="L800" title="All 2 branches covered.">          for (int docId : docSet) {</span>
 <span class="fc" id="L801">            tokensData.put(docId, mtasCodecInfo.getNumberOfTokens(field, (docId - lrc.docBase)));</span>
-          }
+<span class="fc" id="L802">          }</span>
           // compute everything, only use what is needed
-<span class="fc" id="L804">        } else {</span>
+        } else {
 <span class="fc" id="L805">          tokensData = mtasCodecInfo.getAllNumberOfTokens(field, lrc.docBase);</span>
 <span class="fc bfc" id="L806" title="All 2 branches covered.">          for (int docId : docSet) {</span>
 <span class="pc bpc" id="L807" title="1 of 2 branches missed.">            if (!tokensData.containsKey(docId)) {</span>
 <span class="nc" id="L808">              tokensData.put(docId, 0);</span>
             }
-          }
+<span class="fc" id="L810">          }</span>
         }
-<span class="fc" id="L812">      } else {</span>
+      } else {
 <span class="nc" id="L813">        tokensData = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L814" title="All 2 branches missed.">        for (int docId : docSet) {</span>
 <span class="nc" id="L815">          tokensData.put(docId, 0);</span>
-        }
+<span class="nc" id="L816">        }</span>
       }
     }
 
@@ -828,7 +828,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L828" title="1 of 2 branches missed.">    if (!fieldInfo.pageList.isEmpty()) {</span>
       // create pages
 <span class="nc" id="L830">      createPages(fieldInfo.pageList, docList, fieldInfos.fieldInfo(field), field, lrc.docBase,</span>
-<span class="nc" id="L831">          fieldInfo.uniqueKeyField, mtasCodecInfo, searcher);</span>
+          fieldInfo.uniqueKeyField, mtasCodecInfo, searcher);
     }
 <span class="pc bpc" id="L833" title="1 of 2 branches missed.">    if (!fieldInfo.documentList.isEmpty()) {</span>
       // create document
@@ -843,17 +843,17 @@ public class CodecCollector {
 <span class="pc bpc" id="L843" title="1 of 2 branches missed.">      if (!fieldInfo.listList.isEmpty()) {</span>
         // create list
 <span class="nc" id="L845">        createList(fieldInfo.listList, spansNumberData, spansMatchData, docSet, field, lrc.docBase,</span>
-<span class="nc" id="L846">            fieldInfo.uniqueKeyField, mtasCodecInfo, searcher);</span>
+            fieldInfo.uniqueKeyField, mtasCodecInfo, searcher);
       }
 <span class="fc bfc" id="L848" title="All 2 branches covered.">      if (!fieldInfo.groupList.isEmpty()) {</span>
         // create group
 <span class="fc" id="L850">        createGroup(fieldInfo.groupList, spansMatchData, docSet, fieldInfos.fieldInfo(field), field, lrc.docBase,</span>
-<span class="fc" id="L851">            mtasCodecInfo, searcher, lrc, status);</span>
+            mtasCodecInfo, searcher, lrc, status);
       }
 <span class="pc bpc" id="L853" title="1 of 2 branches missed.">      if (!fieldInfo.kwicList.isEmpty()) {</span>
         // create kwic
 <span class="nc" id="L855">        createKwic(fieldInfo.kwicList, spansMatchData, docList, field, lrc.docBase, fieldInfo.uniqueKeyField,</span>
-<span class="nc" id="L856">            mtasCodecInfo, searcher);</span>
+            mtasCodecInfo, searcher);
       }
 <span class="pc bpc" id="L858" title="1 of 2 branches missed.">      if (!fieldInfo.facetList.isEmpty()) {</span>
         // create facets
@@ -862,7 +862,7 @@ public class CodecCollector {
 <span class="fc bfc" id="L862" title="All 2 branches covered.">      if (!fieldInfo.heatmapList.isEmpty()) {</span>
         // create heatmaps
 <span class="fc" id="L864">        createHeatmaps(fieldInfo.heatmapList, positionsData, spansNumberData,</span>
-<span class="fc" id="L865">            docSet, r, lrc);</span>
+            docSet, r, lrc);
       }
     }
 <span class="fc bfc" id="L868" title="All 2 branches covered.">    if (!fieldInfo.termVectorList.isEmpty()) {</span>
@@ -1038,7 +1038,7 @@ public class CodecCollector {
 <span class="nc" id="L1038">          list.put(hit, spans);</span>
         }
       }
-    }
+<span class="nc" id="L1041">    }</span>
 <span class="nc" id="L1042">    return list;</span>
   }
 
@@ -1117,7 +1117,7 @@ public class CodecCollector {
 <span class="nc" id="L1117">        MtasSpanQuery item = null;</span>
 <span class="nc bnc" id="L1118" title="All 2 branches missed.">        if (reverse) {</span>
 <span class="nc" id="L1119">          subHitItem = subHit[(subHit.length - i - 1)];</span>
-<span class="nc" id="L1120">        } else {</span>
+        } else {
 <span class="nc" id="L1121">          subHitItem = subHit[i];</span>
         }
 <span class="nc bnc" id="L1123" title="All 2 branches missed.">        if (subHitItem.isEmpty()) {</span>
@@ -1166,21 +1166,21 @@ public class CodecCollector {
 <span class="nc" id="L1166">        positionsData = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L1167" title="All 2 branches missed.">        for (int docId : docSet) {</span>
 <span class="nc" id="L1168">          positionsData.put(docId, mtasCodecInfo.getNumberOfPositions(field, (docId - lrc.docBase)));</span>
-        }
+<span class="nc" id="L1169">        }</span>
         // compute everything, only use what is needed
-<span class="nc" id="L1171">      } else {</span>
+      } else {
 <span class="nc" id="L1172">        positionsData = mtasCodecInfo.getAllNumberOfPositions(field, lrc.docBase);</span>
 <span class="nc bnc" id="L1173" title="All 2 branches missed.">        for (int docId : docSet) {</span>
 <span class="nc bnc" id="L1174" title="All 2 branches missed.">          if (!positionsData.containsKey(docId)) {</span>
 <span class="nc" id="L1175">            positionsData.put(docId, 0);</span>
           }
-        }
+<span class="nc" id="L1177">        }</span>
       }
-<span class="nc" id="L1179">    } else {</span>
+    } else {
 <span class="nc" id="L1180">      positionsData = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L1181" title="All 2 branches missed.">      for (int docId : docSet) {</span>
 <span class="nc" id="L1182">        positionsData.put(docId, 0);</span>
-      }
+<span class="nc" id="L1183">      }</span>
     }
 <span class="nc" id="L1185">    return positionsData;</span>
   }
@@ -1206,7 +1206,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L1206" title="1 of 4 branches missed.">        if (tmpData != null &amp;&amp; tmpData.containsKey(docId)) {</span>
 <span class="fc bfc" id="L1207" title="All 2 branches covered.">          if (!args.containsKey(docId)) {</span>
 <span class="fc" id="L1208">            tmpList = new long[queries.length];</span>
-<span class="fc" id="L1209">          } else {</span>
+          } else {
 <span class="fc" id="L1210">            tmpList = args.get(docId);</span>
           }
 <span class="fc" id="L1212">          tmpList[q] = tmpData.get(docId);</span>
@@ -1240,7 +1240,7 @@ public class CodecCollector {
 <span class="nc" id="L1240">          ai++;</span>
 <span class="nc bnc" id="L1241" title="All 2 branches missed.">        } else if (facetDocList[ai] &gt; docSet[bi]) {</span>
 <span class="nc" id="L1242">          bi++;</span>
-<span class="nc" id="L1243">        } else {</span>
+        } else {
 <span class="nc bnc" id="L1244" title="All 4 branches missed.">          if (ci == 0 || facetDocList[ai] != c[ci - 1]) {</span>
 <span class="nc" id="L1245">            c[ci++] = facetDocList[ai];</span>
           }
@@ -1277,17 +1277,17 @@ public class CodecCollector {
 <span class="fc bfc" id="L1277" title="All 2 branches covered.">        for (int docId : docSet) {</span>
 <span class="fc" id="L1278">          tmpValue = positionsData.get(docId);</span>
 <span class="pc bpc" id="L1279" title="1 of 2 branches missed.">          value = tmpValue == null ? 0 : tmpValue.intValue();</span>
-<span class="fc bfc" id="L1280" title="All 4 branches covered.">          if (((position.minimumLong == null) || (value &gt;= position.minimumLong))</span>
-<span class="fc bfc" id="L1281" title="All 4 branches covered.">              &amp;&amp; ((position.maximumLong == null) || (value &lt;= position.maximumLong))) {</span>
+<span class="fc bfc" id="L1280" title="All 6 branches covered.">          if (((position.minimumLong == null) || (value &gt;= position.minimumLong))</span>
+<span class="fc bfc" id="L1281" title="All 2 branches covered.">              &amp;&amp; ((position.maximumLong == null) || (value &lt;= position.maximumLong))) {</span>
 <span class="fc" id="L1282">            values[number] = value;</span>
 <span class="fc" id="L1283">            number++;</span>
           }
-        }
+<span class="fc" id="L1285">        }</span>
 <span class="pc bpc" id="L1286" title="1 of 2 branches missed.">        if (number &gt; 0) {</span>
 <span class="fc" id="L1287">          position.dataCollector.add(values, number);</span>
         }
 <span class="fc" id="L1289">        position.dataCollector.closeNewList();</span>
-      }
+<span class="fc" id="L1290">      }</span>
     }
 <span class="fc" id="L1292">  }</span>
 
@@ -1316,18 +1316,18 @@ public class CodecCollector {
 <span class="fc bfc" id="L1316" title="All 2 branches covered.">          for (int docId : docSet) {</span>
 <span class="fc" id="L1317">            tmpValue = tokensData.get(docId);</span>
 <span class="pc bpc" id="L1318" title="1 of 2 branches missed.">            value = tmpValue == null ? 0 : tmpValue.intValue();</span>
-<span class="pc bpc" id="L1319" title="1 of 4 branches missed.">            if (((token.minimumLong == null) || (value &gt;= token.minimumLong))</span>
-<span class="pc bpc" id="L1320" title="1 of 4 branches missed.">                &amp;&amp; ((token.maximumLong == null) || (value &lt;= token.maximumLong))) {</span>
+<span class="pc bpc" id="L1319" title="1 of 6 branches missed.">            if (((token.minimumLong == null) || (value &gt;= token.minimumLong))</span>
+<span class="pc bpc" id="L1320" title="1 of 2 branches missed.">                &amp;&amp; ((token.maximumLong == null) || (value &lt;= token.maximumLong))) {</span>
 <span class="fc" id="L1321">              values[number] = value;</span>
 <span class="fc" id="L1322">              number++;</span>
             }
-          }
+<span class="fc" id="L1324">          }</span>
         }
 <span class="pc bpc" id="L1326" title="1 of 2 branches missed.">        if (number &gt; 0) {</span>
 <span class="fc" id="L1327">          token.dataCollector.add(values, number);</span>
         }
 <span class="fc" id="L1329">        token.dataCollector.closeNewList();</span>
-      }
+<span class="fc" id="L1330">      }</span>
     }
 <span class="fc" id="L1332">  }</span>
 
@@ -1357,8 +1357,8 @@ public class CodecCollector {
 <span class="fc" id="L1357">        Map&lt;Integer, long[]&gt; args = computeArguments(spansNumberData, span.queries, docSet);</span>
 <span class="pc bpc" id="L1358" title="1 of 2 branches missed.">        if (span.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
           // try to call functionParser as little as possible
-<span class="fc bfc" id="L1360" title="All 6 branches covered.">          if (span.statsType.equals(CodecUtil.STATS_BASIC) &amp;&amp; (span.minimumLong == null) &amp;&amp; (span.maximumLong == null)</span>
-<span class="pc bpc" id="L1361" title="1 of 2 branches missed.">              &amp;&amp; (span.functions == null</span>
+<span class="pc bpc" id="L1360" title="1 of 8 branches missed.">          if (span.statsType.equals(CodecUtil.STATS_BASIC) &amp;&amp; (span.minimumLong == null) &amp;&amp; (span.maximumLong == null)</span>
+              &amp;&amp; (span.functions == null
 <span class="pc bpc" id="L1362" title="3 of 6 branches missed.">                  || (span.functionBasic() &amp;&amp; span.functionSumRule() &amp;&amp; !span.functionNeedPositions()))) {</span>
             // initialise
 <span class="fc" id="L1364">            int length = span.parser.needArgumentsNumber();</span>
@@ -1381,10 +1381,10 @@ public class CodecCollector {
               try {
 <span class="fc" id="L1382">                valueLong = span.parser.getValueLong(valueSum, valuePositions);</span>
 <span class="fc" id="L1383">                span.dataCollector.add(valueLong, docSet.length);</span>
-<span class="pc" id="L1384">              } catch (IOException e) {</span>
+<span class="nc" id="L1384">              } catch (IOException e) {</span>
 <span class="nc" id="L1385">                log.debug(e);</span>
 <span class="nc" id="L1386">                span.dataCollector.error(e.getMessage(), 1);</span>
-              }
+<span class="fc" id="L1387">              }</span>
 <span class="pc bpc" id="L1388" title="1 of 2 branches missed.">              if (span.functions != null) {</span>
 <span class="fc bfc" id="L1389" title="All 2 branches covered.">                for (SubComponentFunction function : span.functions) {</span>
 <span class="fc" id="L1390">                  function.dataCollector.initNewList(1);</span>
@@ -1392,10 +1392,10 @@ public class CodecCollector {
                     try {
 <span class="fc" id="L1393">                      valueLong = function.parserFunction.getValueLong(valueSum, valuePositions);</span>
 <span class="fc" id="L1394">                      function.dataCollector.add(valueLong, docSet.length);</span>
-<span class="pc" id="L1395">                    } catch (IOException e) {</span>
+<span class="nc" id="L1395">                    } catch (IOException e) {</span>
 <span class="nc" id="L1396">                      log.debug(e);</span>
 <span class="nc" id="L1397">                      function.dataCollector.error(e.getMessage(), 1);</span>
-                    }
+<span class="pc" id="L1398">                    }</span>
 <span class="nc bnc" id="L1399" title="All 2 branches missed.">                  } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
                     try {
 <span class="nc" id="L1401">                      double valueDouble = function.parserFunction.getValueDouble(valueSum, valuePositions);</span>
@@ -1403,12 +1403,12 @@ public class CodecCollector {
 <span class="nc" id="L1403">                    } catch (IOException e) {</span>
 <span class="nc" id="L1404">                      log.debug(e);</span>
 <span class="nc" id="L1405">                      function.dataCollector.error(e.getMessage(), 1);</span>
-                    }
-<span class="nc" id="L1407">                  } else {</span>
+<span class="nc" id="L1406">                    }</span>
+                  } else {
 <span class="nc" id="L1408">                    throw new IOException(&quot;can't handle function dataType &quot; + function.dataType);</span>
                   }
 <span class="fc" id="L1410">                  function.dataCollector.closeNewList();</span>
-                }
+<span class="fc" id="L1411">                }</span>
               }
 <span class="fc" id="L1413">              span.dataCollector.closeNewList();</span>
             }
@@ -1431,7 +1431,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L1431" title="1 of 2 branches missed.">                  if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
 <span class="fc" id="L1432">                    functionValuesLong[i] = new long[docSet.length];</span>
 <span class="fc" id="L1433">                    functionValuesDouble[i] = null;</span>
-<span class="pc bnc" id="L1434" title="All 2 branches missed.">                  } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc bnc" id="L1434" title="All 2 branches missed.">                  } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L1435">                    functionValuesLong[i] = null;</span>
 <span class="nc" id="L1436">                    functionValuesDouble[i] = new double[docSet.length];</span>
                   }
@@ -1441,12 +1441,12 @@ public class CodecCollector {
 <span class="fc bfc" id="L1441" title="All 2 branches covered.">              for (int docId : docSet) {</span>
 <span class="fc bfc" id="L1442" title="All 2 branches covered.">                if (positionsData == null) {</span>
 <span class="fc" id="L1443">                  positions = 0;</span>
-<span class="fc" id="L1444">                } else {</span>
+                } else {
 <span class="pc bpc" id="L1445" title="1 of 2 branches missed.">                  positions = (positionsData.get(docId) == null ? 0 : positionsData.get(docId));</span>
                 }
 <span class="fc" id="L1447">                valueLong = span.parser.getValueLong(args.get(docId), positions);</span>
-<span class="fc bfc" id="L1448" title="All 4 branches covered.">                if (((span.minimumLong == null) || (valueLong &gt;= span.minimumLong))</span>
-<span class="fc bfc" id="L1449" title="All 4 branches covered.">                    &amp;&amp; ((span.maximumLong == null) || (valueLong &lt;= span.maximumLong))) {</span>
+<span class="fc bfc" id="L1448" title="All 6 branches covered.">                if (((span.minimumLong == null) || (valueLong &gt;= span.minimumLong))</span>
+<span class="fc bfc" id="L1449" title="All 2 branches covered.">                    &amp;&amp; ((span.maximumLong == null) || (valueLong &lt;= span.maximumLong))) {</span>
 <span class="fc" id="L1450">                  values[number] = valueLong;</span>
 <span class="pc bpc" id="L1451" title="1 of 2 branches missed.">                  if (span.functions != null) {</span>
 <span class="fc bfc" id="L1452" title="All 2 branches covered.">                    for (int i = 0; i &lt; span.functions.size(); i++) {</span>
@@ -1455,14 +1455,14 @@ public class CodecCollector {
 <span class="pc bpc" id="L1455" title="1 of 2 branches missed.">                        if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
 <span class="fc" id="L1456">                          valueLong = function.parserFunction.getValueLong(args.get(docId), positions);</span>
 <span class="fc" id="L1457">                          functionValuesLong[i][number] = valueLong;</span>
-<span class="pc bnc" id="L1458" title="All 2 branches missed.">                        } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc bnc" id="L1458" title="All 2 branches missed.">                        } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L1459">                          valueDouble = function.parserFunction.getValueDouble(args.get(docId), positions);</span>
 <span class="nc" id="L1460">                          functionValuesDouble[i][number] = valueDouble;</span>
                         }
 <span class="nc" id="L1462">                      } catch (IOException e) {</span>
 <span class="nc" id="L1463">                        log.debug(e);</span>
 <span class="nc" id="L1464">                        function.dataCollector.error(e.getMessage(), 1);</span>
-                      }
+<span class="fc" id="L1465">                      }</span>
                     }
                   }
 <span class="fc" id="L1468">                  number++;</span>
@@ -1475,7 +1475,7 @@ public class CodecCollector {
 <span class="fc" id="L1475">                    SubComponentFunction function = span.functions.get(i);</span>
 <span class="pc bpc" id="L1476" title="1 of 2 branches missed.">                    if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
 <span class="fc" id="L1477">                      function.dataCollector.add(functionValuesLong[i], number);</span>
-<span class="pc bnc" id="L1478" title="All 2 branches missed.">                    } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc bnc" id="L1478" title="All 2 branches missed.">                    } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L1479">                      function.dataCollector.add(functionValuesDouble[i], number);</span>
                     }
                   }
@@ -1485,14 +1485,14 @@ public class CodecCollector {
 <span class="pc bpc" id="L1485" title="1 of 2 branches missed.">              if (span.functions != null) {</span>
 <span class="fc bfc" id="L1486" title="All 2 branches covered.">                for (SubComponentFunction function : span.functions) {</span>
 <span class="fc" id="L1487">                  function.dataCollector.closeNewList();</span>
-                }
+<span class="fc" id="L1488">                }</span>
               }
-            }
+<span class="fc" id="L1490">            }</span>
           }
-<span class="fc" id="L1492">        } else {</span>
+        } else {
 <span class="nc" id="L1493">          throw new IOException(&quot;unexpected dataType &quot; + span.dataType);</span>
         }
-      }
+<span class="fc" id="L1495">      }</span>
     }
 <span class="fc" id="L1497">  }</span>
 
@@ -1545,7 +1545,7 @@ public class CodecCollector {
 <span class="nc" id="L1545">                      int startPosition = m.startPosition;</span>
 <span class="nc" id="L1546">                      int endPosition = m.endPosition - 1;</span>
 <span class="nc" id="L1547">                      List&lt;MtasTreeHit&lt;String&gt;&gt; terms = mtasCodecInfo.getPositionedTermsByPrefixesAndPositionRange(</span>
-<span class="nc" id="L1548">                          field, (docId - docBase), list.prefixes, startPosition - list.left, endPosition + list.right);</span>
+                          field, (docId - docBase), list.prefixes, startPosition - list.left, endPosition + list.right);
                       // construct hit
 <span class="nc" id="L1550">                      Map&lt;Integer, List&lt;String&gt;&gt; kwicListHits = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L1551" title="All 2 branches missed.">                      for (int position = Math.max(0, startPosition - list.left); position &lt;= (endPosition</span>
@@ -1554,12 +1554,12 @@ public class CodecCollector {
                       }
                       List&lt;String&gt; termList;
 <span class="nc bnc" id="L1556" title="All 2 branches missed.">                      for (MtasTreeHit&lt;String&gt; term : terms) {</span>
-<span class="nc bnc" id="L1557" title="All 2 branches missed.">                        for (int position = Math.max((startPosition - list.left), term.startPosition); position &lt;= Math</span>
-<span class="nc" id="L1558">                            .min((endPosition + list.right), term.endPosition); position++) {</span>
+<span class="nc" id="L1557">                        for (int position = Math.max((startPosition - list.left), term.startPosition); position &lt;= Math</span>
+<span class="nc bnc" id="L1558" title="All 2 branches missed.">                            .min((endPosition + list.right), term.endPosition); position++) {</span>
 <span class="nc" id="L1559">                          termList = kwicListHits.get(position);</span>
 <span class="nc" id="L1560">                          termList.add(term.data);</span>
                         }
-                      }
+<span class="nc" id="L1562">                      }</span>
 <span class="nc" id="L1563">                      list.hits.add(new ListHit(docId, i, m, kwicListHits));</span>
                     }
 <span class="nc" id="L1565">                    list.position++;</span>
@@ -1576,7 +1576,7 @@ public class CodecCollector {
                       Map&lt;String, Object&gt; docFieldValues;
 <span class="nc bnc" id="L1577" title="All 2 branches missed.">                      if (list.fieldValues.containsKey(docId)) {</span>
 <span class="nc" id="L1578">                        docFieldValues = list.fieldValues.get(docId);</span>
-<span class="nc" id="L1579">                      } else {</span>
+                      } else {
 <span class="nc" id="L1580">                        docFieldValues = new HashMap&lt;&gt;();</span>
 <span class="nc" id="L1581">                        list.fieldValues.put(docId, docFieldValues);</span>
                       }
@@ -1598,7 +1598,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L1598" title="All 2 branches missed.">                          if (matcherAlias.find()) {</span>
 <span class="nc" id="L1599">                            finalFieldName = matcherAlias.group(1);</span>
 <span class="nc" id="L1600">                            indexFieldName = matcherAlias.group(2);</span>
-<span class="nc" id="L1601">                          } else {</span>
+                          } else {
 <span class="nc" id="L1602">                            finalFieldName = fieldName;</span>
 <span class="nc" id="L1603">                            indexFieldName = fieldName;</span>
                           }
@@ -1627,7 +1627,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L1627" title="All 2 branches missed.">                                if (!fieldValues.isEmpty()) {</span>
 <span class="nc bnc" id="L1628" title="All 2 branches missed.">                                  if (fieldValues.size() == 1) {</span>
 <span class="nc" id="L1629">                                    docFieldValues.put(finalFieldName, fieldValues.get(0));</span>
-<span class="nc" id="L1630">                                  } else {</span>
+                                  } else {
 <span class="nc" id="L1631">                                    docFieldValues.put(finalFieldName, fieldValues);</span>
                                   }
 <span class="nc" id="L1633">                                  fieldValues = new ArrayList&lt;&gt;();</span>
@@ -1644,12 +1644,12 @@ public class CodecCollector {
 <span class="nc bnc" id="L1644" title="All 2 branches missed.">                          if (!fieldValues.isEmpty()) {</span>
 <span class="nc bnc" id="L1645" title="All 2 branches missed.">                            if (fieldValues.size() == 1) {</span>
 <span class="nc" id="L1646">                              docFieldValues.put(finalFieldName, fieldValues.get(0));</span>
-<span class="nc" id="L1647">                            } else {</span>
+                            } else {
 <span class="nc" id="L1648">                              docFieldValues.put(finalFieldName, fieldValues);</span>
                             }
                           }
                         }
-                      }
+<span class="nc" id="L1652">                      }</span>
                     }
                     // get other doc info
 <span class="nc" id="L1655">                    list.subTotal.put(docId, matchList.size());</span>
@@ -1665,7 +1665,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L1665" title="All 4 branches missed.">              } else if (numberData != null &amp;&amp; (matchNumber = numberData.get(docId)) != null) {</span>
 <span class="nc" id="L1666">                list.position += matchNumber;</span>
               }
-            }
+<span class="nc" id="L1668">            }</span>
 <span class="nc" id="L1669">            list.total = list.position;</span>
 <span class="nc bnc" id="L1670" title="All 2 branches missed.">          } else if (list.output.equals(ComponentList.LIST_OUTPUT_TOKEN)) {</span>
 <span class="nc bnc" id="L1671" title="All 2 branches missed.">            for (int docId : docSet) {</span>
@@ -1681,7 +1681,7 @@ public class CodecCollector {
 <span class="nc" id="L1681">                      int endPosition = m.endPosition - 1;</span>
                       List&lt;MtasTokenString&gt; tokens;
 <span class="nc" id="L1683">                      tokens = mtasCodecInfo.getPrefixFilteredObjectsByPositions(field, (docId - docBase),</span>
-<span class="nc" id="L1684">                          list.prefixes, startPosition - list.left, endPosition + list.right);</span>
+                          list.prefixes, startPosition - list.left, endPosition + list.right);
 <span class="nc" id="L1685">                      list.tokens.add(new ListToken(docId, i, m, tokens));</span>
                     }
 <span class="nc" id="L1687">                    list.position++;</span>
@@ -1707,7 +1707,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L1707" title="All 4 branches missed.">              } else if (numberData != null &amp;&amp; (matchNumber = numberData.get(docId)) != null) {</span>
 <span class="nc" id="L1708">                list.position += matchNumber;</span>
               }
-            }
+<span class="nc" id="L1710">            }</span>
 <span class="nc" id="L1711">            list.total = list.position;</span>
           }
 
@@ -1719,11 +1719,11 @@ public class CodecCollector {
 <span class="nc bnc" id="L1719" title="All 2 branches missed.">              if (matchNumber != null) {</span>
 <span class="nc" id="L1720">                list.position += matchNumber;</span>
               }
-            }
+<span class="nc" id="L1722">            }</span>
 <span class="nc" id="L1723">            list.total = list.position;</span>
           }
         }
-      }
+<span class="nc" id="L1726">      }</span>
     }
 <span class="nc" id="L1728">  }</span>
 
@@ -1773,7 +1773,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L1773" title="1 of 2 branches missed.">          if (!intersectionGroupPrefixes) {</span>
 <span class="fc bfc" id="L1774" title="All 2 branches covered.">            for (Entry&lt;Integer, List&lt;Match&gt;&gt; entry : matchData.entrySet()) {</span>
 <span class="fc" id="L1775">              sortMatchList(entry.getValue());</span>
-            }
+<span class="fc" id="L1776">            }</span>
           }
           // init
 <span class="fc" id="L1779">          group.dataCollector.initNewList(1);</span>
@@ -1799,33 +1799,33 @@ public class CodecCollector {
 <span class="nc" id="L1799">                  hitKey = null;</span>
 <span class="nc bnc" id="L1800" title="All 2 branches missed.">                  if (!hits.containsKey(length)) {</span>
 <span class="nc" id="L1801">                    hit = new GroupHit(positionHit.list, positionHit.start, positionHit.end, positionHit.hitStart,</span>
-<span class="nc" id="L1802">                        positionHit.hitEnd, group, knownPrefixes);</span>
+                        positionHit.hitEnd, group, knownPrefixes);
 <span class="nc" id="L1803">                    hits.put(length, hit);</span>
-<span class="nc" id="L1804">                  } else {</span>
+                  } else {
 <span class="nc" id="L1805">                    hit = hits.get(length);</span>
 <span class="nc bnc" id="L1806" title="All 2 branches missed.">                    for (GroupHit hitKeyItem : occurencesSum.keySet()) {</span>
 <span class="nc bnc" id="L1807" title="All 2 branches missed.">                      if (hitKeyItem.equals(hit)) {</span>
 <span class="nc" id="L1808">                        hitKey = hitKeyItem;</span>
 <span class="nc" id="L1809">                        break;</span>
                       }
-                    }
+<span class="nc" id="L1811">                    }</span>
                   }
 <span class="nc bnc" id="L1813" title="All 2 branches missed.">                  if (hitKey == null) {</span>
 <span class="nc" id="L1814">                    occurencesSum.put(hit, Long.valueOf(1));</span>
 <span class="nc" id="L1815">                    occurencesN.put(hit, 1);</span>
 <span class="nc" id="L1816">                    occurencesInCurrentDocument.add(hit);</span>
-<span class="nc" id="L1817">                  } else {</span>
+                  } else {
 <span class="nc" id="L1818">                    occurencesSum.put(hitKey, occurencesSum.get(hitKey) + 1);</span>
 <span class="nc bnc" id="L1819" title="All 2 branches missed.">                    if (!occurencesInCurrentDocument.contains(hitKey)) {</span>
 <span class="nc bnc" id="L1820" title="All 2 branches missed.">                      if (occurencesN.containsKey(hitKey)) {</span>
 <span class="nc" id="L1821">                        occurencesN.put(hitKey, occurencesN.get(hitKey) + 1);</span>
-<span class="nc" id="L1822">                      } else {</span>
+                      } else {
 <span class="nc" id="L1823">                        occurencesN.put(hitKey, 1);</span>
                       }
 <span class="nc" id="L1825">                      occurencesInCurrentDocument.add(hitKey);</span>
                     }
                   }
-                }
+<span class="nc" id="L1828">                }</span>
               }
             }
 <span class="nc" id="L1831">          } else {</span>
@@ -1843,36 +1843,36 @@ public class CodecCollector {
 <span class="fc bfc" id="L1843" title="All 2 branches covered.">                while (it.hasNext()) {</span>
 <span class="fc" id="L1844">                  Match m = it.next();</span>
 <span class="fc" id="L1845">                  positionsHits.add(createPositionHit(m, group));</span>
-                }
+<span class="fc" id="L1846">                }</span>
 <span class="fc" id="L1847">                mtasCodecInfo.collectTermsByPrefixesForListOfHitPositions(field, (docId - docBase), group.prefixes,</span>
-<span class="fc" id="L1848">                    positionsHits);</span>
+                    positionsHits);
                 // administration
 <span class="fc bfc" id="L1850" title="All 2 branches covered.">                for (IntervalTreeNodeData&lt;String&gt; positionHit : positionsHits) {</span>
 <span class="fc" id="L1851">                  GroupHit hit = new GroupHit(positionHit.list, positionHit.start, positionHit.end,</span>
-<span class="fc" id="L1852">                      positionHit.hitStart, positionHit.hitEnd, group, knownPrefixes);</span>
+                      positionHit.hitStart, positionHit.hitEnd, group, knownPrefixes);
 <span class="fc" id="L1853">                  GroupHit hitKey = null;</span>
 <span class="fc bfc" id="L1854" title="All 2 branches covered.">                  for (GroupHit hitKeyItem : occurencesSum.keySet()) {</span>
 <span class="fc bfc" id="L1855" title="All 2 branches covered.">                    if (hitKeyItem.equals(hit)) {</span>
 <span class="fc" id="L1856">                      hitKey = hitKeyItem;</span>
 <span class="fc" id="L1857">                      break;</span>
                     }
-                  }
+<span class="fc" id="L1859">                  }</span>
 <span class="fc bfc" id="L1860" title="All 2 branches covered.">                  if (hitKey == null) {</span>
 <span class="fc" id="L1861">                    occurencesSum.put(hit, Long.valueOf(1));</span>
 <span class="fc" id="L1862">                    occurencesN.put(hit, 1);</span>
 <span class="fc" id="L1863">                    occurencesInCurrentDocument.add(hit);</span>
-<span class="fc" id="L1864">                  } else {</span>
+                  } else {
 <span class="fc" id="L1865">                    occurencesSum.put(hitKey, occurencesSum.get(hitKey) + 1);</span>
 <span class="fc bfc" id="L1866" title="All 2 branches covered.">                    if (!occurencesInCurrentDocument.contains(hitKey)) {</span>
 <span class="pc bpc" id="L1867" title="1 of 2 branches missed.">                      if (occurencesN.containsKey(hitKey)) {</span>
 <span class="fc" id="L1868">                        occurencesN.put(hitKey, occurencesN.get(hitKey) + 1);</span>
-<span class="fc" id="L1869">                      } else {</span>
+                      } else {
 <span class="nc" id="L1870">                        occurencesN.put(hitKey, 1);</span>
                       }
 <span class="fc" id="L1872">                      occurencesInCurrentDocument.add(hitKey);</span>
                     }
                   }
-                }
+<span class="fc" id="L1875">                }</span>
 <span class="pc bpc" id="L1876" title="1 of 2 branches missed.">                if (!intersectionGroupPrefixes) {</span>
 <span class="fc bfc" id="L1877" title="All 2 branches covered.">                  for (GroupHit groupHit : occurencesInCurrentDocument) {</span>
 <span class="fc" id="L1878">                    int tmpNumber = occurencesN.get(groupHit);</span>
@@ -1880,15 +1880,15 @@ public class CodecCollector {
 <span class="fc bfc" id="L1880" title="All 2 branches covered.">                    if (tmpNumber &gt; boundaryMinimumNumberOfDocuments) {</span>
 <span class="fc" id="L1881">                      administrationOccurrences.add(groupHit);</span>
                     }
-                  }
+<span class="fc" id="L1883">                  }</span>
                   // collect spans
 <span class="pc bpc" id="L1885" title="1 of 2 branches missed.">                  if (maximumNumberOfDocuments &gt; boundaryMaximumNumberOfDocuments) {</span>
 <span class="nc bnc" id="L1886" title="All 2 branches missed.">                    if (!administrationOccurrences.isEmpty()) {</span>
 <span class="nc" id="L1887">                      Map&lt;GroupHit, Spans&gt; list = collectSpansForOccurences(administrationOccurrences, knownPrefixes,</span>
-<span class="nc" id="L1888">                          field, searcher, lrc);</span>
+                          field, searcher, lrc);
 <span class="nc bnc" id="L1889" title="All 2 branches missed.">                      if (list.size() &gt; 0) {</span>
 <span class="nc" id="L1890">                        collectGroupUsingSpans(list, docSet, docBase, docCounter, matchData, occurencesSum,</span>
-<span class="nc" id="L1891">                            occurencesN);</span>
+                            occurencesN);
                       }
                     }
 <span class="nc" id="L1894">                    administrationOccurrences.clear();</span>
@@ -1903,10 +1903,10 @@ public class CodecCollector {
 
 <span class="fc bfc" id="L1904" title="All 2 branches covered.">          for (Entry&lt;GroupHit, Long&gt; entry : occurencesSum.entrySet()) {</span>
 <span class="fc" id="L1905">            group.dataCollector.add(entry.getKey().toString(), entry.getValue(), occurencesN.get(entry.getKey()));</span>
-          }
+<span class="fc" id="L1906">          }</span>
 <span class="fc" id="L1907">          group.dataCollector.closeNewList();</span>
         }
-      }
+<span class="fc" id="L1909">      }</span>
     }
 <span class="fc" id="L1911">  }</span>
 
@@ -1925,7 +1925,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L1925" title="1 of 2 branches missed.">        if (knownPrefixes.contains(prefix)) {</span>
 <span class="fc" id="L1926">          return true;</span>
         }
-      }
+<span class="nc" id="L1928">      }</span>
     }
 <span class="nc" id="L1930">    return false;</span>
   }
@@ -1945,7 +1945,7 @@ public class CodecCollector {
 <span class="pc bpc" id="L1945" title="1 of 2 branches missed.">        if (intersectionPrefixes.contains(prefix)) {</span>
 <span class="nc" id="L1946">          return true;</span>
         }
-      }
+<span class="fc" id="L1948">      }</span>
     }
 <span class="fc" id="L1950">    return false;</span>
   }
@@ -1965,7 +1965,7 @@ public class CodecCollector {
 <span class="fc bfc" id="L1965" title="All 6 branches covered.">    if (group.hitInside != null || group.hitInsideLeft != null || group.hitInsideRight != null) {</span>
 <span class="fc" id="L1966">      start = m.startPosition;</span>
 <span class="fc" id="L1967">      end = m.endPosition - 1;</span>
-<span class="fc" id="L1968">    } else {</span>
+    } else {
 <span class="fc" id="L1969">      start = null;</span>
 <span class="fc" id="L1970">      end = null;</span>
     }
@@ -2061,7 +2061,7 @@ public class CodecCollector {
 <span class="nc" id="L2061">                int tmpStartPosition = spansList[i].nextStartPosition();</span>
 <span class="nc bnc" id="L2062" title="All 2 branches missed.">                if (tmpStartPosition &lt; Spans.NO_MORE_POSITIONS) {</span>
 <span class="nc" id="L2063">                  finishedSpansList[i] = false;</span>
-<span class="nc" id="L2064">                } else {</span>
+                } else {
 <span class="nc" id="L2065">                  finishedSpansList[i] = true;</span>
                 }
                 // compute position
@@ -2081,8 +2081,8 @@ public class CodecCollector {
 <span class="nc" id="L2081">                break;</span>
               } else {
                 // advance matches
-<span class="nc bnc" id="L2084" title="All 4 branches missed.">                while (currentMatchPosition &lt; matchList.size()</span>
-<span class="nc" id="L2085">                    &amp;&amp; currentSpanPosition &gt; matchList.get(currentMatchPosition).startPosition) {</span>
+<span class="nc bnc" id="L2084" title="All 2 branches missed.">                while (currentMatchPosition &lt; matchList.size()</span>
+<span class="nc bnc" id="L2085" title="All 2 branches missed.">                    &amp;&amp; currentSpanPosition &gt; matchList.get(currentMatchPosition).startPosition) {</span>
                   // store current match, not relevant
 <span class="nc" id="L2087">                  newMatchList.add(matchList.get(currentMatchPosition));</span>
 <span class="nc" id="L2088">                  currentMatchPosition++;</span>
@@ -2119,19 +2119,19 @@ public class CodecCollector {
 <span class="nc" id="L2119">                currentSpanPosition = Spans.NO_MORE_POSITIONS;</span>
 <span class="nc bnc" id="L2120" title="All 2 branches missed.">                for (int i = 0; i &lt; spansList.length; i++) {</span>
 <span class="nc bnc" id="L2121" title="All 4 branches missed.">                  if (!finishedSpansList[i] &amp;&amp; (spansList[i].docID() == nextDoc)) {</span>
-<span class="nc bnc" id="L2122" title="All 4 branches missed.">                    while (!finishedSpansList[i]</span>
-<span class="nc" id="L2123">                        &amp;&amp; spansList[i].startPosition() &lt; matchList.get(currentMatchPosition).startPosition) {</span>
+<span class="nc bnc" id="L2122" title="All 2 branches missed.">                    while (!finishedSpansList[i]</span>
+<span class="nc bnc" id="L2123" title="All 2 branches missed.">                        &amp;&amp; spansList[i].startPosition() &lt; matchList.get(currentMatchPosition).startPosition) {</span>
 <span class="nc" id="L2124">                      int tmpStartPosition = spansList[i].nextStartPosition();</span>
 <span class="nc bnc" id="L2125" title="All 2 branches missed.">                      if (tmpStartPosition == Spans.NO_MORE_POSITIONS) {</span>
 <span class="nc" id="L2126">                        finishedSpansList[i] = true;</span>
                       }
-                    }
+<span class="nc" id="L2128">                    }</span>
 <span class="nc bnc" id="L2129" title="All 2 branches missed.">                    if (!finishedSpansList[i]) {</span>
 <span class="nc bnc" id="L2130" title="All 2 branches missed.">                      currentSpanPosition = (currentSpanPosition == Spans.NO_MORE_POSITIONS)</span>
 <span class="nc" id="L2131">                          ? spansList[i].startPosition()</span>
 <span class="nc" id="L2132">                          : Math.min(currentSpanPosition, spansList[i].startPosition());</span>
                     }
-<span class="nc" id="L2134">                  } else {</span>
+                  } else {
 <span class="nc" id="L2135">                    finishedSpansList[i] = true;</span>
                   }
                 }
@@ -2146,7 +2146,7 @@ public class CodecCollector {
               // update administration
 <span class="nc bnc" id="L2147" title="All 2 branches missed.">              if (!newMatchList.isEmpty()) {</span>
 <span class="nc" id="L2148">                matchData.put(nextDoc + docBase, newMatchList);</span>
-<span class="nc" id="L2149">              } else {</span>
+              } else {
 <span class="nc" id="L2150">                matchData.put(nextDoc + docBase, null);</span>
               }
             }
@@ -2262,12 +2262,12 @@ public class CodecCollector {
 <span class="nc bnc" id="L2262" title="All 2 branches missed.">                for (MtasTokenString token : tokens) {</span>
 <span class="nc bnc" id="L2263" title="All 2 branches missed.">                  if (wordList.containsKey(token.getPositionStart())) {</span>
 <span class="nc" id="L2264">                    wordData = wordList.get(token.getPositionStart());</span>
-<span class="nc" id="L2265">                  } else {</span>
+                  } else {
 <span class="nc" id="L2266">                    wordData = new PageWordData();</span>
 <span class="nc" id="L2267">                    wordList.put(token.getPositionStart(), wordData);</span>
                   }
 <span class="nc" id="L2269">                  wordData.add(token);</span>
-                }
+<span class="nc" id="L2270">                }</span>
 <span class="nc" id="L2271">                page.wordList.put(docId, wordList);</span>
               }
             }
@@ -2289,12 +2289,12 @@ public class CodecCollector {
 <span class="nc bnc" id="L2289" title="All 2 branches missed.">                for (MtasTokenString token : tokens) {</span>
 <span class="nc bnc" id="L2290" title="All 2 branches missed.">                  if (rangeList.containsKey(token.getPositionStart())) {</span>
 <span class="nc" id="L2291">                    rangeData = rangeList.get(token.getPositionStart());</span>
-<span class="nc" id="L2292">                  } else {</span>
+                  } else {
 <span class="nc" id="L2293">                    rangeData = new PageRangeData();</span>
 <span class="nc" id="L2294">                    rangeList.put(token.getPositionStart(), rangeData);</span>
                   }
 <span class="nc" id="L2296">                  rangeData.add(token);</span>
-                }
+<span class="nc" id="L2297">                }</span>
 <span class="nc" id="L2298">                page.rangeList.put(docId, rangeList);</span>
               }
             }
@@ -2313,18 +2313,18 @@ public class CodecCollector {
 <span class="nc bnc" id="L2313" title="All 2 branches missed.">                for (MtasTokenString token : tokens) {</span>
 <span class="nc bnc" id="L2314" title="All 2 branches missed.">                  if (setList.containsKey(token.getPositionStart())) {</span>
 <span class="nc" id="L2315">                    setData = setList.get(token.getPositionStart());</span>
-<span class="nc" id="L2316">                  } else {</span>
+                  } else {
 <span class="nc" id="L2317">                    setData = new PageSetData();</span>
 <span class="nc" id="L2318">                    setList.put(token.getPositionStart(), setData);</span>
                   }
 <span class="nc" id="L2320">                  setData.add(token);</span>
-                }
+<span class="nc" id="L2321">                }</span>
 <span class="nc" id="L2322">                page.setList.put(docId, setList);</span>
               }
             }
           }
-        }
-      }
+<span class="nc" id="L2326">        }</span>
+<span class="nc" id="L2327">      }</span>
     }
 <span class="nc" id="L2329">  }</span>
 
@@ -2370,12 +2370,12 @@ public class CodecCollector {
 <span class="fc bfc" id="L2370" title="All 2 branches covered.">            for (int docId : docSet) {</span>
 <span class="pc bpc" id="L2371" title="1 of 2 branches missed.">              if (positionsData == null) {</span>
 <span class="fc" id="L2372">                docPositions = 0;</span>
-<span class="fc" id="L2373">              } else {</span>
+              } else {
 <span class="nc bnc" id="L2374" title="All 2 branches missed.">                docPositions = (positionsData.get(docId) == null ? 0 : positionsData.get(docId));</span>
               }
 <span class="fc" id="L2376">              docValueLong = heatmap.parser.getValueLong(args.get(docId), docPositions);</span>
-<span class="pc bpc" id="L2377" title="2 of 4 branches missed.">              if (((heatmap.minimumLong == null) || (docValueLong &gt;= heatmap.minimumLong))</span>
-<span class="pc bpc" id="L2378" title="3 of 4 branches missed.">                  &amp;&amp; ((heatmap.maximumLong == null) || (docValueLong &lt;= heatmap.maximumLong))) {</span>
+<span class="pc bpc" id="L2377" title="3 of 6 branches missed.">              if (((heatmap.minimumLong == null) || (docValueLong &gt;= heatmap.minimumLong))</span>
+<span class="nc bnc" id="L2378" title="All 2 branches missed.">                  &amp;&amp; ((heatmap.maximumLong == null) || (docValueLong &lt;= heatmap.maximumLong))) {</span>
 <span class="fc" id="L2379">                values[number] = docValueLong;</span>
 <span class="fc" id="L2380">                docs[number] = docId-lrc.docBase;</span>
 <span class="fc" id="L2381">                positions[number] = docPositions;</span>
@@ -2406,11 +2406,11 @@ public class CodecCollector {
 <span class="pc bpc" id="L2406" title="1 of 2 branches missed.">            if (number &gt; 0) {</span>
 <span class="fc" id="L2407">              HeatmapMtasCounter.calcValues(heatmap.strategy, lrc, heatmap, number, docs, values, arguments, positions);</span>
             }  
-          }
-<span class="fc" id="L2410">        } else {</span>
+<span class="fc" id="L2409">          }</span>
+        } else {
 <span class="nc" id="L2411">          throw new IOException(&quot;unexpected dataType &quot; + heatmap.dataType);</span>
         }
-      }
+<span class="fc" id="L2413">      }</span>
     }
 <span class="fc" id="L2415">  }</span>
 
@@ -2447,7 +2447,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L2447" title="All 2 branches missed.">          if (indxfld != null) {</span>
 <span class="nc" id="L2448">            document.uniqueKey.put(docId, indxfld.stringValue());</span>
 <span class="nc" id="L2449">            MtasDataCollector&lt;?, ?&gt; stats = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_DATA,</span>
-<span class="nc" id="L2450">                document.dataType, document.statsType, document.statsItems, null, null, null, null, null, null);</span>
+                document.dataType, document.statsType, document.statsItems, null, null, null, null, null, null);
 <span class="nc" id="L2451">            document.statsData.put(docId, stats);</span>
 <span class="nc bnc" id="L2452" title="All 2 branches missed.">            if (document.statsList != null) {</span>
               MtasDataCollector&lt;?, ?&gt; list;
@@ -2456,9 +2456,9 @@ public class CodecCollector {
 <span class="nc" id="L2456">                list = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_LIST, CodecUtil.DATA_TYPE_LONG,</span>
 <span class="nc" id="L2457">                    listStatsType, listStatsItems, CodecUtil.STATS_TYPE_SUM, CodecUtil.SORT_DESC, 0,</span>
 <span class="nc" id="L2458">                    document.listNumber, new String[] { DataCollector.COLLECTOR_TYPE_LIST },</span>
-<span class="nc" id="L2459">                    new String[] { CodecUtil.DATA_TYPE_LONG }, new String[] { listStatsType },</span>
+                    new String[] { CodecUtil.DATA_TYPE_LONG }, new String[] { listStatsType },
 <span class="nc" id="L2460">                    Arrays.copyOfRange(baseStatsItems, 0, baseStatsItems.length),</span>
-<span class="nc" id="L2461">                    new String[] { CodecUtil.STATS_TYPE_SUM }, new String[] { CodecUtil.SORT_DESC },</span>
+                    new String[] { CodecUtil.STATS_TYPE_SUM }, new String[] { CodecUtil.SORT_DESC },
 <span class="nc" id="L2462">                    new Integer[] { 0 }, new Integer[] { document.listExpandNumber }, null, null);</span>
 <span class="nc" id="L2463">              } else {</span>
 <span class="nc" id="L2464">                list = DataCollector.getCollector(DataCollector.COLLECTOR_TYPE_LIST, CodecUtil.DATA_TYPE_LONG,</span>
@@ -2468,8 +2468,8 @@ public class CodecCollector {
 <span class="nc" id="L2468">              document.statsList.put(docId, list);</span>
             }
           }
-        }
-      }
+<span class="nc" id="L2471">        }</span>
+<span class="nc" id="L2472">      }</span>
       // collect
 <span class="nc bnc" id="L2474" title="All 2 branches missed.">      if (t != null) {</span>
         BytesRef term;
@@ -2497,8 +2497,8 @@ public class CodecCollector {
 <span class="nc" id="L2497">            compiledAutomaton = new CompiledAutomaton(automaton);</span>
 <span class="nc" id="L2498">            listAutomata.add(compiledAutomaton);</span>
 <span class="nc" id="L2499">          } else {</span>
-<span class="nc" id="L2500">            automatonMap = MtasToken.createAutomatonMap(document.prefix, new ArrayList&lt;String&gt;(document.list),</span>
-<span class="nc bnc" id="L2501" title="All 2 branches missed.">                document.listRegexp ? false : true);</span>
+<span class="nc bnc" id="L2500" title="All 2 branches missed.">            automatonMap = MtasToken.createAutomatonMap(document.prefix, new ArrayList&lt;String&gt;(document.list),</span>
+<span class="nc" id="L2501">                document.listRegexp ? false : true);</span>
 <span class="nc" id="L2502">            byteRunAutomatonMap = MtasToken.byteRunAutomatonMap(automatonMap);</span>
 <span class="nc" id="L2503">            listAutomata = MtasToken.createAutomata(document.prefix, document.regexp, automatonMap);</span>
           }
@@ -2512,11 +2512,11 @@ public class CodecCollector {
 <span class="nc bnc" id="L2512" title="All 2 branches missed.">            if (ignoreByteRunAutomatonList == null) {</span>
 <span class="nc" id="L2513">              ignoreByteRunAutomatonList = new ArrayList&lt;&gt;();</span>
             }
-<span class="nc" id="L2515">            Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(document.prefix,</span>
-<span class="nc bnc" id="L2516" title="All 2 branches missed.">                new ArrayList&lt;String&gt;(document.ignoreList), document.ignoreListRegexp ? false : true);</span>
+<span class="nc bnc" id="L2515" title="All 2 branches missed.">            Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(document.prefix,</span>
+<span class="nc" id="L2516">                new ArrayList&lt;String&gt;(document.ignoreList), document.ignoreListRegexp ? false : true);</span>
 <span class="nc bnc" id="L2517" title="All 2 branches missed.">            for (Automaton automaton : list.values()) {</span>
 <span class="nc" id="L2518">              ignoreByteRunAutomatonList.add(new ByteRunAutomaton(automaton));</span>
-            }
+<span class="nc" id="L2519">            }</span>
           }
 
 <span class="nc bnc" id="L2522" title="All 2 branches missed.">          for (CompiledAutomaton compiledAutomaton : listAutomata) {</span>
@@ -2525,7 +2525,7 @@ public class CodecCollector {
               // init
 <span class="nc" id="L2526">              int initBaseSize = Math.min((int) t.size(), 1000);</span>
 <span class="nc bnc" id="L2527" title="All 2 branches missed.">              int initListSize = document.statsList != null ? Math.min(document.statsList.size(), initBaseSize)</span>
-<span class="nc" id="L2528">                  : initBaseSize;</span>
+                  : initBaseSize;
 <span class="nc" id="L2529">              HashSet&lt;MtasDataCollector&lt;?, ?&gt;&gt; initialised = new HashSet&lt;&gt;();</span>
 <span class="nc bnc" id="L2530" title="All 2 branches missed.">              for (int docId : docList) {</span>
 <span class="nc" id="L2531">                document.statsData.get(docId).initNewList(1);</span>
@@ -2534,7 +2534,7 @@ public class CodecCollector {
 <span class="nc" id="L2534">                  document.statsList.get(docId).initNewList(initListSize);</span>
 <span class="nc" id="L2535">                  initialised.add(document.statsList.get(docId));</span>
                 }
-              }
+<span class="nc" id="L2537">              }</span>
               // fill
               int termDocId;
               boolean acceptedTerm;
@@ -2549,7 +2549,7 @@ public class CodecCollector {
 <span class="nc" id="L2549">                      acceptedTerm = false;</span>
 <span class="nc" id="L2550">                      break;</span>
                     }
-                  }
+<span class="nc" id="L2552">                  }</span>
                 }
 <span class="nc bnc" id="L2554" title="All 2 branches missed.">                if (acceptedTerm) {</span>
 <span class="nc bnc" id="L2555" title="All 2 branches missed.">                  while (docIterator.hasNext()) {</span>
@@ -2568,7 +2568,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L2568" title="All 2 branches missed.">                            if (bra.run(term.bytes, term.offset, term.length)) {</span>
 <span class="nc" id="L2569">                              dataCollector = document.statsList.get(segmentDocId + lrc.docBase);</span>
 <span class="nc" id="L2570">                              subSataCollector = dataCollector.add(entry.getKey(), new long[] { postingsEnum.freq() },</span>
-<span class="nc" id="L2571">                                  1);</span>
+                                  1);
 <span class="nc bnc" id="L2572" title="All 4 branches missed.">                              if (document.listExpand &amp;&amp; subSataCollector != null) {</span>
 <span class="nc bnc" id="L2573" title="All 2 branches missed.">                                if (!initialised.contains(subSataCollector)) {</span>
 <span class="nc" id="L2574">                                  subSataCollector.initNewList(initBaseSize);</span>
@@ -2578,24 +2578,24 @@ public class CodecCollector {
 <span class="nc" id="L2578">                                    new long[] { postingsEnum.freq() }, 1);</span>
                               }
                             }
-                          }
-<span class="nc" id="L2582">                        } else {</span>
+<span class="nc" id="L2581">                          }</span>
+                        } else {
 <span class="nc" id="L2583">                          document.statsList.get(segmentDocId + lrc.docBase).add(MtasToken.getPostfixFromValue(term),</span>
 <span class="nc" id="L2584">                              new long[] { postingsEnum.freq() }, 1);</span>
                         }
                       }
                     }
-                  }
+<span class="nc" id="L2588">                  }</span>
                 }
-              }
+<span class="nc" id="L2590">              }</span>
               // close
 <span class="nc bnc" id="L2592" title="All 2 branches missed.">              for (MtasDataCollector&lt;?, ?&gt; item : initialised) {</span>
 <span class="nc" id="L2593">                item.closeNewList();</span>
-              }
+<span class="nc" id="L2594">              }</span>
 <span class="nc" id="L2595">              initialised.clear();</span>
             }
-          }
-        }
+<span class="nc" id="L2597">          }</span>
+<span class="nc" id="L2598">        }</span>
       }
     }
 <span class="nc" id="L2601">  }</span>
@@ -2664,25 +2664,25 @@ public class CodecCollector {
 <span class="nc" id="L2664">                      Math.min(mDoc.maxPosition, endPosition + kwic.right));</span>
                   // construct hit
 <span class="nc" id="L2666">                  Map&lt;Integer, List&lt;String&gt;&gt; kwicListHits = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L2667" title="All 2 branches missed.">                  for (int position = Math.max(mDoc.minPosition, startPosition - kwic.left); position &lt;= Math</span>
-<span class="nc" id="L2668">                      .min(mDoc.maxPosition, endPosition + kwic.right); position++) {</span>
+<span class="nc" id="L2667">                  for (int position = Math.max(mDoc.minPosition, startPosition - kwic.left); position &lt;= Math</span>
+<span class="nc bnc" id="L2668" title="All 2 branches missed.">                      .min(mDoc.maxPosition, endPosition + kwic.right); position++) {</span>
 <span class="nc" id="L2669">                    kwicListHits.put(position, new ArrayList&lt;String&gt;());</span>
                   }
                   List&lt;String&gt; termList;
 <span class="nc bnc" id="L2672" title="All 2 branches missed.">                  for (MtasTreeHit&lt;String&gt; term : terms) {</span>
-<span class="nc bnc" id="L2673" title="All 2 branches missed.">                    for (int position = Math.max((startPosition - kwic.left), term.startPosition); position &lt;= Math</span>
-<span class="nc" id="L2674">                        .min((endPosition + kwic.right), term.endPosition); position++) {</span>
+<span class="nc" id="L2673">                    for (int position = Math.max((startPosition - kwic.left), term.startPosition); position &lt;= Math</span>
+<span class="nc bnc" id="L2674" title="All 2 branches missed.">                        .min((endPosition + kwic.right), term.endPosition); position++) {</span>
 <span class="nc" id="L2675">                      termList = kwicListHits.get(position);</span>
 <span class="nc" id="L2676">                      termList.add(term.data);</span>
                     }
-                  }
+<span class="nc" id="L2678">                  }</span>
 <span class="nc" id="L2679">                  kwicItemList.add(new KwicHit(m, kwicListHits));</span>
                 }
 <span class="nc" id="L2681">                number++;</span>
-              }
+<span class="nc" id="L2682">              }</span>
 <span class="nc" id="L2683">              kwic.hits.put(docId, kwicItemList);</span>
             }
-          }
+<span class="nc" id="L2685">          }</span>
 <span class="nc bnc" id="L2686" title="All 2 branches missed.">        } else if (kwic.output.equals(ComponentKwic.KWIC_OUTPUT_TOKEN)) {</span>
 <span class="nc bnc" id="L2687" title="All 2 branches missed.">          for (int docId : docList) {</span>
 <span class="nc bnc" id="L2688" title="All 4 branches missed.">            if (matchData != null &amp;&amp; (matchList = matchData.get(docId)) != null) {</span>
@@ -2718,13 +2718,13 @@ public class CodecCollector {
 <span class="nc" id="L2718">                    kwicItemList.add(new KwicToken(m, tokens));</span>
                   }
 <span class="nc" id="L2720">                  number++;</span>
-                }
+<span class="nc" id="L2721">                }</span>
 <span class="nc" id="L2722">                kwic.tokens.put(docId, kwicItemList);</span>
               }
             }
-          }
+<span class="nc" id="L2725">          }</span>
         }
-      }
+<span class="nc" id="L2727">      }</span>
     }
 <span class="nc" id="L2729">  }</span>
 
@@ -2774,9 +2774,9 @@ public class CodecCollector {
 
 <span class="nc" id="L2775">            } catch (ParseException e) {</span>
 <span class="nc" id="L2776">              throw new IOException(e.getMessage());</span>
-            }
+<span class="nc" id="L2777">            }</span>
           }
-<span class="nc" id="L2779">        } else {</span>
+        } else {
 <span class="nc" id="L2780">          tmpList = cf.baseFunctionList[level].get(dataCollector);</span>
         }
 <span class="nc bnc" id="L2782" title="All 2 branches missed.">        for (SubComponentFunction function : tmpList) {</span>
@@ -2807,18 +2807,18 @@ public class CodecCollector {
 <span class="nc bnc" id="L2807" title="All 2 branches missed.">            if (docLists.containsKey(groupedKeys.get(entry.getKey()))) {</span>
 <span class="nc" id="L2808">              docLists.put(groupedKeys.get(entry.getKey()),</span>
 <span class="nc" id="L2809">                  mergeDocLists(docLists.get(groupedKeys.get(entry.getKey())), docList));</span>
-<span class="nc" id="L2810">            } else {</span>
+            } else {
 <span class="nc" id="L2811">              docLists.put(groupedKeys.get(entry.getKey()), docList);</span>
             }
-          }
+<span class="nc" id="L2813">          }</span>
           // compute stats for each key
 <span class="nc bnc" id="L2815" title="All 2 branches missed.">          if (documentsInFacets) {</span>
 <span class="nc" id="L2816">            Map&lt;Integer, long[]&gt; args = computeArguments(spansNumberData, cf.spanQueries, docSet);</span>
 <span class="nc bnc" id="L2817" title="All 2 branches missed.">            if (cf.baseDataTypes[level].equals(CodecUtil.DATA_TYPE_LONG)) {</span>
               // check functions
 <span class="nc" id="L2819">              boolean applySumRule = false;</span>
-<span class="nc bnc" id="L2820" title="All 4 branches missed.">              if (cf.baseStatsTypes[level].equals(CodecUtil.STATS_BASIC) &amp;&amp; cf.baseParsers[level].sumRule()</span>
-<span class="nc bnc" id="L2821" title="All 4 branches missed.">                  &amp;&amp; (cf.baseMinimumLongs[level] == null) &amp;&amp; (cf.baseMaximumLongs[level] == null)) {</span>
+<span class="nc bnc" id="L2820" title="All 8 branches missed.">              if (cf.baseStatsTypes[level].equals(CodecUtil.STATS_BASIC) &amp;&amp; cf.baseParsers[level].sumRule()</span>
+                  &amp;&amp; (cf.baseMinimumLongs[level] == null) &amp;&amp; (cf.baseMaximumLongs[level] == null)) {
 <span class="nc" id="L2822">                applySumRule = true;</span>
 <span class="nc bnc" id="L2823" title="All 2 branches missed.">                if (cf.baseFunctionList[level].get(dataCollector) != null) {</span>
 <span class="nc bnc" id="L2824" title="All 2 branches missed.">                  for (SubComponentFunction function : cf.baseFunctionList[level].get(dataCollector)) {</span>
@@ -2861,7 +2861,7 @@ public class CodecCollector {
 <span class="nc" id="L2861">                        log.debug(e);</span>
 <span class="nc" id="L2862">                        dataCollector.error(key, e.getMessage(), 1);</span>
 <span class="nc" id="L2863">                        subDataCollector = null;</span>
-                      }
+<span class="nc" id="L2864">                      }</span>
 <span class="nc bnc" id="L2865" title="All 4 branches missed.">                      if (cf.baseFunctionList[level] != null &amp;&amp; cf.baseFunctionList[level].containsKey(dataCollector)) {</span>
 <span class="nc" id="L2866">                        SubComponentFunction[] functionList = cf.baseFunctionList[level].get(dataCollector);</span>
 <span class="nc bnc" id="L2867" title="All 2 branches missed.">                        for (SubComponentFunction function : functionList) {</span>
@@ -2872,7 +2872,7 @@ public class CodecCollector {
 <span class="nc" id="L2872">                            } catch (IOException e) {</span>
 <span class="nc" id="L2873">                              log.debug(e);</span>
 <span class="nc" id="L2874">                              function.dataCollector.error(key, e.getMessage(), 1);</span>
-                            }
+<span class="nc" id="L2875">                            }</span>
 <span class="nc bnc" id="L2876" title="All 2 branches missed.">                          } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
                             try {
 <span class="nc" id="L2878">                              double valueDouble = function.parserFunction.getValueDouble(valueSum, valuePositions);</span>
@@ -2880,18 +2880,18 @@ public class CodecCollector {
 <span class="nc" id="L2880">                            } catch (IOException e) {</span>
 <span class="nc" id="L2881">                              log.debug(e);</span>
 <span class="nc" id="L2882">                              function.dataCollector.error(key, e.getMessage(), 1);</span>
-                            }
+<span class="nc" id="L2883">                            }</span>
                           }
                         }
                       }
 <span class="nc bnc" id="L2887" title="All 2 branches missed.">                      if (subDataCollector != null) {</span>
 <span class="nc" id="L2888">                        createFacetBase(cf, (level + 1), subDataCollector, positionsData, spansNumberData, facetData,</span>
-<span class="nc" id="L2889">                            subDocSet);</span>
+                            subDocSet);
                       }
                     }
                   }
-                }
-<span class="nc" id="L2894">              } else {</span>
+<span class="nc" id="L2893">                }</span>
+              } else {
 <span class="nc bnc" id="L2895" title="All 2 branches missed.">                for (String key : new LinkedHashSet&lt;String&gt;(groupedKeys.values())) {</span>
 <span class="nc bnc" id="L2896" title="All 2 branches missed.">                  if (docLists.get(key).length &gt; 0) {</span>
                     // initialise
@@ -2922,8 +2922,8 @@ public class CodecCollector {
 <span class="nc bnc" id="L2922" title="All 2 branches missed.">                        int tmpPositions = (positionsData == null) ? 0</span>
 <span class="nc bnc" id="L2923" title="All 2 branches missed.">                            : (positionsData.get(docId) == null ? 0 : positionsData.get(docId));</span>
 <span class="nc" id="L2924">                        long value = cf.baseParsers[level].getValueLong(tmpArgs, tmpPositions);</span>
-<span class="nc bnc" id="L2925" title="All 4 branches missed.">                        if ((cf.baseMinimumLongs[level] == null || value &gt;= cf.baseMinimumLongs[level])</span>
-<span class="nc bnc" id="L2926" title="All 4 branches missed.">                            &amp;&amp; (cf.baseMaximumLongs[level] == null || value &lt;= cf.baseMaximumLongs[level])) {</span>
+<span class="nc bnc" id="L2925" title="All 6 branches missed.">                        if ((cf.baseMinimumLongs[level] == null || value &gt;= cf.baseMinimumLongs[level])</span>
+<span class="nc bnc" id="L2926" title="All 2 branches missed.">                            &amp;&amp; (cf.baseMaximumLongs[level] == null || value &lt;= cf.baseMaximumLongs[level])) {</span>
 <span class="nc" id="L2927">                          values[number] = value;</span>
 <span class="nc" id="L2928">                          restrictedSubDocSet[number] = docId;</span>
 <span class="nc" id="L2929">                          number++;</span>
@@ -2938,7 +2938,7 @@ public class CodecCollector {
 <span class="nc" id="L2938">                                } catch (IOException e) {</span>
 <span class="nc" id="L2939">                                  log.debug(e);</span>
 <span class="nc" id="L2940">                                  function.dataCollector.error(key, e.getMessage(), 1);</span>
-                                }
+<span class="nc" id="L2941">                                }</span>
 <span class="nc bnc" id="L2942" title="All 2 branches missed.">                              } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
                                 try {
 <span class="nc" id="L2944">                                  functionValuesDouble[i][functionNumber[i]] = function.parserFunction</span>
@@ -2947,7 +2947,7 @@ public class CodecCollector {
 <span class="nc" id="L2947">                                } catch (IOException e) {</span>
 <span class="nc" id="L2948">                                  log.debug(e);</span>
 <span class="nc" id="L2949">                                  function.dataCollector.error(key, e.getMessage(), 1);</span>
-                                }
+<span class="nc" id="L2950">                                }</span>
                               }
                             }
                           }
@@ -2973,13 +2973,13 @@ public class CodecCollector {
                       }
                     }
                   }
-                }
+<span class="nc" id="L2976">                }</span>
               }
 <span class="nc" id="L2978">            } else {</span>
 <span class="nc" id="L2979">              throw new IOException(&quot;unexpected dataType &quot; + cf.baseDataTypes[level]);</span>
             }
           }
-        }
+<span class="nc" id="L2982">        }</span>
       } else {
 <span class="nc" id="L2984">        throw new IOException(&quot;unexpected type &quot; + dataCollector.getCollectorType());</span>
       }
@@ -3023,7 +3023,7 @@ public class CodecCollector {
 <span class="nc" id="L3023">        doubleEnd = doubleStart + baseRangeSize;</span>
 <span class="nc" id="L3024">      } catch (NumberFormatException e) {</span>
 <span class="nc" id="L3025">        return key;</span>
-      }
+<span class="nc" id="L3026">      }</span>
       // integer
 <span class="nc bnc" id="L3028" title="All 2 branches missed.">      if (Math.abs(baseRangeSize - Math.floor(baseRangeSize)) &lt; precision</span>
 <span class="nc bnc" id="L3029" title="All 2 branches missed.">          &amp;&amp; Math.abs(doubleBase - Math.floor(doubleBase)) &lt; precision) {</span>
@@ -3106,7 +3106,7 @@ public class CodecCollector {
 <span class="nc" id="L3106">          createFacetBase(cf, 0, cf.dataCollector, positionsData, spansNumberData, facetData,</span>
 <span class="nc" id="L3107">              docSet.toArray(new Integer[docSet.size()]));</span>
         }
-      }
+<span class="nc" id="L3109">      }</span>
     }
 <span class="nc" id="L3111">  }</span>
 
@@ -3159,8 +3159,8 @@ public class CodecCollector {
 <span class="fc" id="L3159">            compiledAutomaton = new CompiledAutomaton(automaton);</span>
 <span class="fc" id="L3160">            listAutomata.add(compiledAutomaton);</span>
 <span class="fc" id="L3161">          } else {</span>
-<span class="fc" id="L3162">            automatonMap = MtasToken.createAutomatonMap(termVector.prefix, new ArrayList&lt;String&gt;(termVector.list),</span>
-<span class="fc bfc" id="L3163" title="All 2 branches covered.">                termVector.listRegexp ? false : true);</span>
+<span class="fc bfc" id="L3162" title="All 2 branches covered.">            automatonMap = MtasToken.createAutomatonMap(termVector.prefix, new ArrayList&lt;String&gt;(termVector.list),</span>
+<span class="fc" id="L3163">                termVector.listRegexp ? false : true);</span>
 <span class="fc" id="L3164">            listAutomata = MtasToken.createAutomata(termVector.prefix, termVector.regexp, automatonMap);</span>
           }
 <span class="fc" id="L3166">          List&lt;ByteRunAutomaton&gt; ignoreByteRunAutomatonList = null;</span>
@@ -3173,11 +3173,11 @@ public class CodecCollector {
 <span class="pc bpc" id="L3173" title="1 of 2 branches missed.">            if (ignoreByteRunAutomatonList == null) {</span>
 <span class="nc" id="L3174">              ignoreByteRunAutomatonList = new ArrayList&lt;&gt;();</span>
             }
-<span class="fc" id="L3176">            Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(termVector.prefix,</span>
-<span class="pc bpc" id="L3177" title="1 of 2 branches missed.">                new ArrayList&lt;String&gt;(termVector.ignoreList), termVector.ignoreListRegexp ? false : true);</span>
+<span class="pc bpc" id="L3176" title="1 of 2 branches missed.">            Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(termVector.prefix,</span>
+<span class="fc" id="L3177">                new ArrayList&lt;String&gt;(termVector.ignoreList), termVector.ignoreListRegexp ? false : true);</span>
 <span class="fc bfc" id="L3178" title="All 2 branches covered.">            for (Automaton automaton : list.values()) {</span>
 <span class="fc" id="L3179">              ignoreByteRunAutomatonList.add(new ByteRunAutomaton(automaton));</span>
-            }
+<span class="fc" id="L3180">            }</span>
           }
 <span class="fc bfc" id="L3182" title="All 2 branches covered.">          for (CompiledAutomaton compiledAutomaton : listAutomata) {</span>
 <span class="fc bfc" id="L3183" title="All 2 branches covered.">            if (!compiledAutomaton.type.equals(CompiledAutomaton.AUTOMATON_TYPE.NORMAL)) {</span>
@@ -3190,7 +3190,7 @@ public class CodecCollector {
 <span class="fc" id="L3190">              termsEnum = t.intersect(compiledAutomaton, null);</span>
 <span class="fc" id="L3191">              int initSize = Math.min((int) t.size(), 1000);</span>
 <span class="fc" id="L3192">              termVector.subComponentFunction.dataCollector.initNewList(initSize, segmentName, segmentNumber,</span>
-<span class="fc" id="L3193">                  termVector.boundary);</span>
+                  termVector.boundary);
 <span class="fc" id="L3194">              boolean doBasic = termVector.subComponentFunction.dataCollector.getStatsType()</span>
 <span class="fc" id="L3195">                  .equals(CodecUtil.STATS_BASIC);</span>
 <span class="pc bpc" id="L3196" title="1 of 2 branches missed.">              if (termVector.functions != null) {</span>
@@ -3199,8 +3199,8 @@ public class CodecCollector {
 <span class="nc bnc" id="L3199" title="All 2 branches missed.">                  doBasic = doBasic</span>
 <span class="nc bnc" id="L3200" title="All 4 branches missed.">                      ? (function.parserFunction.sumRule() &amp;&amp; !function.parserFunction.needPositions()</span>
 <span class="nc bnc" id="L3201" title="All 2 branches missed.">                          &amp;&amp; function.dataCollector.getStatsType().equals(CodecUtil.STATS_BASIC))</span>
-<span class="nc" id="L3202">                      : doBasic;</span>
-                }
+                      : doBasic;
+<span class="nc" id="L3203">                }</span>
               }
               // only if documents
 <span class="pc bpc" id="L3206" title="1 of 2 branches missed.">              if (!docSet.isEmpty()) {</span>
@@ -3218,13 +3218,13 @@ public class CodecCollector {
 <span class="fc" id="L3218">                          acceptedTerm = false;</span>
 <span class="fc" id="L3219">                          break;</span>
                         }
-                      }
+<span class="fc" id="L3221">                      }</span>
                     }
 <span class="fc bfc" id="L3223" title="All 2 branches covered.">                    if (acceptedTerm) {</span>
 <span class="fc bfc" id="L3224" title="All 2 branches covered.">                      if (doBasic) {</span>
                         // compute numbers;
 <span class="fc" id="L3226">                        TermvectorNumberBasic numberBasic = computeTermvectorNumberBasic(docSet, termDocId, termsEnum,</span>
-<span class="fc" id="L3227">                            r, lrc, postingsEnum);</span>
+                            r, lrc, postingsEnum);
                         // register
 <span class="pc bpc" id="L3229" title="1 of 2 branches missed.">                        if (numberBasic.docNumber &gt; 0) {</span>
 <span class="fc" id="L3230">                          long valueLong = 0;</span>
@@ -3232,11 +3232,11 @@ public class CodecCollector {
                           try {
 <span class="fc" id="L3233">                            valueLong = termVector.subComponentFunction.parserFunction</span>
 <span class="fc" id="L3234">                                .getValueLong(numberBasic.valueSum, 1);</span>
-<span class="pc" id="L3235">                          } catch (IOException e) {</span>
+<span class="nc" id="L3235">                          } catch (IOException e) {</span>
 <span class="nc" id="L3236">                            log.debug(e);</span>
 <span class="nc" id="L3237">                            termVector.subComponentFunction.dataCollector.error(MtasToken.getPostfixFromValue(term),</span>
 <span class="nc" id="L3238">                                e.getMessage(),1);</span>
-                          }
+<span class="fc" id="L3239">                          }</span>
 <span class="fc" id="L3240">                          termVector.subComponentFunction.dataCollector.add(key, valueLong, numberBasic.docNumber);</span>
 <span class="pc bpc" id="L3241" title="1 of 2 branches missed.">                          if (termVector.functions != null) {</span>
 <span class="pc bpc" id="L3242" title="1 of 2 branches missed.">                            for (SubComponentFunction function : termVector.functions) {</span>
@@ -3247,12 +3247,12 @@ public class CodecCollector {
 <span class="nc" id="L3247">                                double valueFunction = function.parserFunction.getValueDouble(numberBasic.valueSum, 0);</span>
 <span class="nc" id="L3248">                                function.dataCollector.add(key, valueFunction, numberBasic.docNumber);</span>
                               }
-                            }
+<span class="nc" id="L3250">                            }</span>
                           }
                         }
 <span class="fc" id="L3253">                      } else {</span>
 <span class="fc" id="L3254">                        TermvectorNumberFull numberFull = computeTermvectorNumberFull(docSet, termDocId, termsEnum, lrc,</span>
-<span class="fc" id="L3255">                            postingsEnum, positionsData);</span>
+                            postingsEnum, positionsData);
 <span class="pc bpc" id="L3256" title="1 of 2 branches missed.">                        if (numberFull.docNumber &gt; 0) {</span>
 <span class="fc" id="L3257">                          long[] valuesLong = new long[numberFull.docNumber];</span>
 <span class="fc" id="L3258">                          key = MtasToken.getPostfixFromValue(term);</span>
@@ -3260,10 +3260,10 @@ public class CodecCollector {
                             try {
 <span class="fc" id="L3261">                              valuesLong[i] = termVector.subComponentFunction.parserFunction</span>
 <span class="fc" id="L3262">                                  .getValueLong(new long[] { numberFull.args[i] }, numberFull.positions[i]);</span>
-<span class="pc" id="L3263">                            } catch (IOException e) {</span>
+<span class="nc" id="L3263">                            } catch (IOException e) {</span>
 <span class="nc" id="L3264">                              log.debug(e);</span>
 <span class="nc" id="L3265">                              termVector.subComponentFunction.dataCollector.error(key, e.getMessage(), 1);</span>
-                            }
+<span class="fc" id="L3266">                            }</span>
                           }
 <span class="fc" id="L3268">                          termVector.subComponentFunction.dataCollector.add(key, valuesLong, valuesLong.length);</span>
 <span class="pc bpc" id="L3269" title="1 of 2 branches missed.">                          if (termVector.functions != null) {</span>
@@ -3277,7 +3277,7 @@ public class CodecCollector {
 <span class="nc" id="L3277">                                  } catch (IOException e) {</span>
 <span class="nc" id="L3278">                                    log.debug(e);</span>
 <span class="nc" id="L3279">                                    function.dataCollector.error(key, e.getMessage(), 1);</span>
-                                  }
+<span class="nc" id="L3280">                                  }</span>
                                 }
 <span class="nc" id="L3282">                                function.dataCollector.add(key, valuesLong, valuesLong.length);</span>
 <span class="nc bnc" id="L3283" title="All 2 branches missed.">                              } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
@@ -3289,15 +3289,15 @@ public class CodecCollector {
 <span class="nc" id="L3289">                                  } catch (IOException e) {</span>
 <span class="nc" id="L3290">                                    log.debug(e);</span>
 <span class="nc" id="L3291">                                    function.dataCollector.error(key, e.getMessage(), 1);</span>
-                                  }
+<span class="nc" id="L3292">                                  }</span>
                                 }
 <span class="nc" id="L3294">                                function.dataCollector.add(key, valuesDouble, valuesDouble.length);</span>
                               }
-                            }
+<span class="nc" id="L3296">                            }</span>
                           }
                         }
 
-                      }
+<span class="fc" id="L3300">                      }</span>
                     }
                   }
                 }
@@ -3306,12 +3306,12 @@ public class CodecCollector {
 <span class="pc bpc" id="L3306" title="1 of 2 branches missed.">              if (termVector.functions != null) {</span>
 <span class="pc bpc" id="L3307" title="1 of 2 branches missed.">                for (SubComponentFunction function : termVector.functions) {</span>
 <span class="nc" id="L3308">                  function.dataCollector.closeNewList();</span>
-                }
+<span class="nc" id="L3309">                }</span>
               }
             }
-          }
+<span class="fc" id="L3312">          }</span>
         }
-      }
+<span class="fc" id="L3314">      }</span>
     }
 <span class="fc" id="L3316">  }</span>
 
@@ -3363,21 +3363,21 @@ public class CodecCollector {
 <span class="pc bpc" id="L3363" title="1 of 2 branches missed.">          if (ignoreByteRunAutomatonList == null) {</span>
 <span class="nc" id="L3364">            ignoreByteRunAutomatonList = new ArrayList&lt;&gt;();</span>
           }
-<span class="fc" id="L3366">          Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(termVector.prefix,</span>
-<span class="pc bpc" id="L3367" title="1 of 2 branches missed.">              new ArrayList&lt;String&gt;(termVector.ignoreList), termVector.ignoreListRegexp ? false : true);</span>
+<span class="pc bpc" id="L3366" title="1 of 2 branches missed.">          Map&lt;String, Automaton&gt; list = MtasToken.createAutomatonMap(termVector.prefix,</span>
+<span class="fc" id="L3367">              new ArrayList&lt;String&gt;(termVector.ignoreList), termVector.ignoreListRegexp ? false : true);</span>
 <span class="fc bfc" id="L3368" title="All 2 branches covered.">          for (Automaton automaton : list.values()) {</span>
 <span class="fc" id="L3369">            ignoreByteRunAutomatonList.add(new ByteRunAutomaton(automaton));</span>
-          }
+<span class="fc" id="L3370">          }</span>
         }
 <span class="fc bfc" id="L3372" title="All 4 branches covered.">        if (!termVector.full &amp;&amp; termVector.list == null) {</span>
 <span class="fc" id="L3373">          termsEnum = t.intersect(compiledAutomaton, null);</span>
 <span class="fc" id="L3374">          int initSize = Math.min((int) t.size(), 1000);</span>
 <span class="fc" id="L3375">          termVector.subComponentFunction.dataCollector.initNewList(initSize, segmentName, segmentNumber,</span>
-<span class="fc" id="L3376">              termVector.boundary);</span>
+              termVector.boundary);
 <span class="pc bpc" id="L3377" title="1 of 2 branches missed.">          if (termVector.functions != null) {</span>
 <span class="pc bpc" id="L3378" title="1 of 2 branches missed.">            for (SubComponentFunction function : termVector.functions) {</span>
 <span class="nc" id="L3379">              function.dataCollector.initNewList(initSize);</span>
-            }
+<span class="nc" id="L3380">            }</span>
           }
           // only if documents
 <span class="pc bpc" id="L3383" title="1 of 2 branches missed.">          if (!docSet.isEmpty()) {</span>
@@ -3398,7 +3398,7 @@ public class CodecCollector {
               }
               // loop over terms
               boolean acceptedTerm;
-<span class="pc bfc" id="L3401" title="All 2 branches covered.">              while ((term = termsEnum.next()) != null) {</span>
+<span class="fc bfc" id="L3401" title="All 2 branches covered.">              while ((term = termsEnum.next()) != null) {</span>
 <span class="pc bpc" id="L3402" title="2 of 4 branches missed.">                if (validateTermWithStartValue(term, termVector) &amp;&amp; validateTermWithDistance(term, termVector)) {</span>
 <span class="fc" id="L3403">                  termDocId = -1;</span>
 <span class="fc" id="L3404">                  acceptedTerm = true;</span>
@@ -3408,7 +3408,7 @@ public class CodecCollector {
 <span class="nc" id="L3408">                        acceptedTerm = false;</span>
 <span class="nc" id="L3409">                        break;</span>
                       }
-                    }
+<span class="fc" id="L3411">                    }</span>
                   }
 <span class="pc bpc" id="L3413" title="1 of 2 branches missed.">                  if (acceptedTerm) {</span>
 <span class="fc" id="L3414">                    continueAfterPreliminaryCheck = true;</span>
@@ -3419,23 +3419,23 @@ public class CodecCollector {
 <span class="nc bnc" id="L3419" title="All 2 branches missed.">                        if (preliminaryNumberBasic.docNumber &gt; 0) {</span>
 <span class="nc" id="L3420">                          continueAfterPreliminaryCheck = preliminaryRegisterValue(term, termVector,</span>
 <span class="nc" id="L3421">                              preliminaryNumberBasic, termNumberMaximum, segmentNumber, mutableKey);</span>
-<span class="nc" id="L3422">                        } else {</span>
+                        } else {
 <span class="nc" id="L3423">                          continueAfterPreliminaryCheck = false;</span>
                         }
 <span class="nc" id="L3425">                      } catch (IOException e) {</span>
 <span class="nc" id="L3426">                        log.debug(e);</span>
 <span class="nc" id="L3427">                        continueAfterPreliminaryCheck = true;</span>
-                      }
+<span class="nc" id="L3428">                      }</span>
                     }
 <span class="pc bpc" id="L3430" title="1 of 2 branches missed.">                    if (continueAfterPreliminaryCheck) {</span>
                       // compute numbers;
 <span class="fc" id="L3432">                      TermvectorNumberBasic numberBasic = computeTermvectorNumberBasic(docSet, termDocId, termsEnum, r,</span>
-<span class="fc" id="L3433">                          lrc, postingsEnum);</span>
+                          lrc, postingsEnum);
                       // register
 <span class="pc bpc" id="L3435" title="1 of 2 branches missed.">                      if (numberBasic.docNumber &gt; 0) {</span>
 <span class="fc" id="L3436">                        termCounter++;</span>
 <span class="fc" id="L3437">                        registerStatus = registerValue(term, termVector, numberBasic, termNumberMaximum, segmentNumber,</span>
-<span class="fc" id="L3438">                            false, mutableKey);</span>
+                            false, mutableKey);
 <span class="fc bfc" id="L3439" title="All 2 branches covered.">                        if (registerStatus != null) {</span>
 <span class="fc" id="L3440">                          computeFullList.put(BytesRef.deepCopyOf(term), registerStatus);</span>
                         }
@@ -3443,8 +3443,8 @@ public class CodecCollector {
                     }
                     // stop after termCounterMaximum
 <span class="fc bfc" id="L3445" title="All 2 branches covered.">                    if (termVector.subComponentFunction.sortType.equals(CodecUtil.SORT_TERM)</span>
-<span class="fc bfc" id="L3446" title="All 2 branches covered.">                        &amp;&amp; termVector.subComponentFunction.sortDirection.equals(CodecUtil.SORT_ASC)</span>
-<span class="fc bfc" id="L3447" title="All 2 branches covered.">                        &amp;&amp; termCounter &gt;= termNumberMaximum) {</span>
+<span class="fc bfc" id="L3446" title="All 4 branches covered.">                        &amp;&amp; termVector.subComponentFunction.sortDirection.equals(CodecUtil.SORT_ASC)</span>
+                        &amp;&amp; termCounter &gt;= termNumberMaximum) {
 <span class="fc" id="L3448">                      break;</span>
                     }
                   }
@@ -3470,37 +3470,37 @@ public class CodecCollector {
 <span class="fc" id="L3470">                          .validateSegmentBoundary(registerStatus.sortValue);</span>
 <span class="fc bfc" id="L3471" title="All 2 branches covered.">                      if (doAdd) {</span>
 <span class="fc" id="L3472">                        TermvectorNumberFull numberFull = computeTermvectorNumberFull(docSet, termDocId, termsEnum, lrc,</span>
-<span class="fc" id="L3473">                            postingsEnum, positionsData);</span>
+                            postingsEnum, positionsData);
 <span class="pc bpc" id="L3474" title="1 of 2 branches missed.">                        if (numberFull.docNumber &gt; 0) {</span>
 <span class="fc" id="L3475">                          termCounter++;</span>
 <span class="fc" id="L3476">                          registerValue(term, termVector, numberFull, mutableKey);</span>
                         }
                       }
-                    }
+<span class="fc" id="L3479">                    }</span>
                   }
                 }
 <span class="fc" id="L3482">                computeFullList.clear();</span>
               }
 <span class="fc" id="L3484">            } else {</span>
 <span class="nc" id="L3485">              throw new IOException(&quot;sort '&quot; + termVector.subComponentFunction.sortType + &quot; &quot;</span>
-<span class="nc" id="L3486">                  + termVector.subComponentFunction.sortDirection + &quot;' not supported&quot;);</span>
+                  + termVector.subComponentFunction.sortDirection + &quot;' not supported&quot;);
             }
             // finish if segments are used
 <span class="fc" id="L3489">            termVector.subComponentFunction.dataCollector.closeSegmentKeyValueRegistration();</span>
 <span class="pc bpc" id="L3490" title="1 of 2 branches missed.">            if (termVector.functions != null) {</span>
 <span class="pc bpc" id="L3491" title="1 of 2 branches missed.">              for (SubComponentFunction function : termVector.functions) {</span>
 <span class="nc" id="L3492">                function.dataCollector.closeSegmentKeyValueRegistration();</span>
-              }
+<span class="nc" id="L3493">              }</span>
             }
           }
 <span class="fc" id="L3496">          termVector.subComponentFunction.dataCollector.closeNewList();</span>
 <span class="pc bpc" id="L3497" title="1 of 2 branches missed.">          if (termVector.functions != null) {</span>
 <span class="pc bpc" id="L3498" title="1 of 2 branches missed.">            for (SubComponentFunction function : termVector.functions) {</span>
 <span class="nc" id="L3499">              function.dataCollector.closeNewList();</span>
-            }
+<span class="nc" id="L3500">            }</span>
           }
         }
-      }
+<span class="fc" id="L3503">      }</span>
     }
 <span class="fc" id="L3505">  }</span>
 
@@ -3535,8 +3535,8 @@ public class CodecCollector {
 <span class="fc" id="L3535">      int segmentNumber = lrc.parent.leaves().size();</span>
 <span class="fc" id="L3536">      String[] mutableKey = new String[1];</span>
 <span class="fc bfc" id="L3537" title="All 2 branches covered.">      for (ComponentTermVector termVector : termVectorList) {</span>
-<span class="pc bpc" id="L3538" title="2 of 4 branches missed.">        if (!termVector.full &amp;&amp; termVector.list == null</span>
-<span class="pc bpc" id="L3539" title="1 of 2 branches missed.">            &amp;&amp; (termVector.subComponentFunction.dataCollector.segmentRecomputeKeyList != null</span>
+<span class="pc bpc" id="L3538" title="3 of 6 branches missed.">        if (!termVector.full &amp;&amp; termVector.list == null</span>
+            &amp;&amp; (termVector.subComponentFunction.dataCollector.segmentRecomputeKeyList != null
 <span class="fc bfc" id="L3540" title="All 2 branches covered.">                &amp;&amp; termVector.subComponentFunction.dataCollector.segmentRecomputeKeyList.containsKey(segmentName))) {</span>
 <span class="fc" id="L3541">          Set&lt;String&gt; recomputeKeyList = termVector.subComponentFunction.dataCollector.segmentRecomputeKeyList</span>
 <span class="fc" id="L3542">              .get(segmentName);</span>
@@ -3544,18 +3544,18 @@ public class CodecCollector {
 <span class="fc" id="L3544">            Map&lt;String, Automaton&gt; automatonMap = MtasToken.createAutomatonMap(termVector.prefix,</span>
 <span class="fc" id="L3545">                new ArrayList&lt;String&gt;(recomputeKeyList), true);</span>
 <span class="fc" id="L3546">            List&lt;CompiledAutomaton&gt; listCompiledAutomata = MtasToken.createAutomata(termVector.prefix,</span>
-<span class="fc" id="L3547">                termVector.regexp, automatonMap);</span>
+                termVector.regexp, automatonMap);
 <span class="fc bfc" id="L3548" title="All 2 branches covered.">            for (CompiledAutomaton compiledAutomaton : listCompiledAutomata) {</span>
 <span class="pc bpc" id="L3549" title="1 of 2 branches missed.">              if (!compiledAutomaton.type.equals(CompiledAutomaton.AUTOMATON_TYPE.NONE)) {</span>
 <span class="fc" id="L3550">                termsEnum = t.intersect(compiledAutomaton, null);</span>
 <span class="fc" id="L3551">                termVector.subComponentFunction.dataCollector.initNewList(</span>
 <span class="fc" id="L3552">                    termVector.subComponentFunction.dataCollector.segmentKeys.size(), segmentName, segmentNumber,</span>
-<span class="fc" id="L3553">                    termVector.boundary);</span>
+                    termVector.boundary);
 <span class="fc" id="L3554">                RegisterStatus registerStatus = null;</span>
 <span class="pc bpc" id="L3555" title="1 of 2 branches missed.">                if (termVector.functions != null) {</span>
 <span class="pc bpc" id="L3556" title="1 of 2 branches missed.">                  for (SubComponentFunction function : termVector.functions) {</span>
 <span class="nc" id="L3557">                    function.dataCollector.initNewList((int) t.size(), segmentName, segmentNumber, null);</span>
-                  }
+<span class="nc" id="L3558">                  }</span>
                 }
 <span class="pc bpc" id="L3560" title="1 of 2 branches missed.">                if (!docSet.isEmpty()) {</span>
                   int termDocId;
@@ -3565,32 +3565,32 @@ public class CodecCollector {
 <span class="fc" id="L3565">                      mutableKey[0] = null;</span>
                       // compute numbers;
 <span class="fc" id="L3567">                      TermvectorNumberBasic numberBasic = computeTermvectorNumberBasic(docSet, termDocId, termsEnum, r,</span>
-<span class="fc" id="L3568">                          lrc, postingsEnum);</span>
+                          lrc, postingsEnum);
 <span class="pc bpc" id="L3569" title="1 of 2 branches missed.">                      if (numberBasic.docNumber &gt; 0) {</span>
 <span class="fc" id="L3570">                        registerStatus = registerValue(term, termVector, numberBasic, 0, segmentNumber, true,</span>
-<span class="fc" id="L3571">                            mutableKey);</span>
+                            mutableKey);
 <span class="fc bfc" id="L3572" title="All 2 branches covered.">                        if (registerStatus != null) {</span>
 <span class="fc" id="L3573">                          TermvectorNumberFull numberFull = computeTermvectorNumberFull(docSet, termDocId, termsEnum,</span>
-<span class="fc" id="L3574">                              lrc, postingsEnum, positionsData);</span>
+                              lrc, postingsEnum, positionsData);
 <span class="pc bpc" id="L3575" title="1 of 2 branches missed.">                          if (numberFull.docNumber &gt; 0) {</span>
 <span class="fc" id="L3576">                            registerValue(term, termVector, numberFull, mutableKey);</span>
                           }
                         }
                       }
-                    }
+<span class="fc" id="L3580">                    }</span>
                   }
                 }
 <span class="fc" id="L3583">                termVector.subComponentFunction.dataCollector.closeNewList();</span>
 <span class="pc bpc" id="L3584" title="1 of 2 branches missed.">                if (termVector.functions != null) {</span>
 <span class="pc bpc" id="L3585" title="1 of 2 branches missed.">                  for (SubComponentFunction function : termVector.functions) {</span>
 <span class="nc" id="L3586">                    function.dataCollector.closeNewList();</span>
-                  }
+<span class="nc" id="L3587">                  }</span>
                 }
               }
-            }
+<span class="fc" id="L3590">            }</span>
           }
         }
-      }
+<span class="fc" id="L3593">      }</span>
     }
 <span class="fc" id="L3595">  }</span>
 
@@ -3614,7 +3614,7 @@ public class CodecCollector {
 <span class="nc" id="L3614">        System.arraycopy(termVector.startValue.bytes, 0, newBytes, 0, termVector.startValue.length);</span>
 <span class="nc bnc" id="L3615" title="All 2 branches missed.">        for (int i = 0; i &lt; n; i++) {</span>
 <span class="nc" id="L3616">          System.arraycopy(zeroBytes, 0, newBytes, termVector.startValue.length + i * zeroBytes.length,</span>
-<span class="nc" id="L3617">              zeroBytes.length);</span>
+              zeroBytes.length);
         }
 <span class="nc" id="L3619">        termVector.startValue = new BytesRef(newBytes);</span>
       }
@@ -3652,7 +3652,7 @@ public class CodecCollector {
 <span class="nc" id="L3652">            return false;</span>
           }
         }
-      }
+<span class="nc" id="L3655">      }</span>
       // then check minimum for all distances
 <span class="nc bnc" id="L3657" title="All 2 branches missed.">      for (SubComponentDistance item : termVector.distances) {</span>
 <span class="nc bnc" id="L3658" title="All 2 branches missed.">        if (item.minimum == null) {</span>
@@ -3662,7 +3662,7 @@ public class CodecCollector {
 <span class="nc" id="L3662">            return false;</span>
           }
         }
-      }
+<span class="nc" id="L3665">      }</span>
 <span class="nc" id="L3666">      return true;</span>
     }
   }
@@ -3681,18 +3681,18 @@ public class CodecCollector {
 <span class="fc bfc" id="L3681" title="All 2 branches covered.">    for (ComponentTermVector termVector : termVectorList) {</span>
 <span class="fc bfc" id="L3682" title="All 4 branches covered.">      if (!termVector.full &amp;&amp; termVector.list == null) {</span>
         boolean doCheck;
-<span class="pc bpc" id="L3684" title="1 of 4 branches missed.">        doCheck = termVector.subComponentFunction.dataCollector.segmentRegistration != null</span>
-<span class="fc" id="L3685">            &amp;&amp; (termVector.subComponentFunction.dataCollector.segmentRegistration</span>
+<span class="fc bfc" id="L3684" title="All 2 branches covered.">        doCheck = termVector.subComponentFunction.dataCollector.segmentRegistration != null</span>
+            &amp;&amp; (termVector.subComponentFunction.dataCollector.segmentRegistration
 <span class="fc bfc" id="L3686" title="All 2 branches covered.">                .equals(MtasDataCollector.SEGMENT_SORT_ASC)</span>
-<span class="fc" id="L3687">                || termVector.subComponentFunction.dataCollector.segmentRegistration</span>
-<span class="pc bpc" id="L3688" title="1 of 2 branches missed.">                    .equals(MtasDataCollector.SEGMENT_SORT_DESC))</span>
-<span class="fc" id="L3689">            &amp;&amp; termVector.number &gt; 0;</span>
+                || termVector.subComponentFunction.dataCollector.segmentRegistration
+<span class="pc bpc" id="L3688" title="2 of 4 branches missed.">                    .equals(MtasDataCollector.SEGMENT_SORT_DESC))</span>
+            &amp;&amp; termVector.number &gt; 0;
 <span class="fc bfc" id="L3690" title="All 2 branches covered.">        doCheck |= termVector.subComponentFunction.dataCollector.segmentRegistration != null</span>
-<span class="fc" id="L3691">            &amp;&amp; (termVector.subComponentFunction.dataCollector.segmentRegistration</span>
+            &amp;&amp; (termVector.subComponentFunction.dataCollector.segmentRegistration
 <span class="pc bpc" id="L3692" title="1 of 2 branches missed.">                .equals(MtasDataCollector.SEGMENT_BOUNDARY_ASC)</span>
-<span class="fc" id="L3693">                || termVector.subComponentFunction.dataCollector.segmentRegistration</span>
-<span class="pc bpc" id="L3694" title="1 of 2 branches missed.">                    .equals(MtasDataCollector.SEGMENT_BOUNDARY_DESC))</span>
-<span class="pc bnc" id="L3695" title="All 2 branches missed.">            &amp;&amp; termVector.number &gt; 0;</span>
+                || termVector.subComponentFunction.dataCollector.segmentRegistration
+<span class="pc bpc" id="L3694" title="3 of 4 branches missed.">                    .equals(MtasDataCollector.SEGMENT_BOUNDARY_DESC))</span>
+            &amp;&amp; termVector.number &gt; 0;
 <span class="fc bfc" id="L3696" title="All 2 branches covered.">        if (doCheck) {</span>
 <span class="fc" id="L3697">          termVector.subComponentFunction.dataCollector.recomputeSegmentKeys();</span>
 <span class="fc bfc" id="L3698" title="All 2 branches covered.">          if (!termVector.subComponentFunction.dataCollector.checkExistenceNecessaryKeys()) {</span>
@@ -3701,7 +3701,7 @@ public class CodecCollector {
 <span class="fc" id="L3701">          termVector.subComponentFunction.dataCollector.reduceToSegmentKeys();</span>
         }
       }
-    }
+<span class="fc" id="L3704">    }</span>
 <span class="fc" id="L3705">    return needSecondRound;</span>
   }
 
@@ -3839,9 +3839,9 @@ public class CodecCollector {
           } else {
             // shouldn't happen
           }
-        }
+<span class="nc" id="L3842">        }</span>
         // no boundary
-<span class="nc" id="L3844">      } else {</span>
+      } else {
 <span class="fc" id="L3845">        String segmentStatus = dataCollector.validateSegmentValue(sortValue, termNumberMaximum, segmentNumber);</span>
 <span class="fc bfc" id="L3846" title="All 2 branches covered.">        if (segmentStatus != null) {</span>
           boolean possibleAddItem;
@@ -3853,10 +3853,10 @@ public class CodecCollector {
 <span class="fc" id="L3853">                segmentNumber, true);</span>
 <span class="fc bfc" id="L3854" title="All 2 branches covered.">            if (segmentStatus != null) {</span>
 <span class="fc" id="L3855">              possibleAddItem = true;</span>
-<span class="fc" id="L3856">            } else {</span>
+            } else {
 <span class="fc" id="L3857">              possibleAddItem = false;</span>
             }
-<span class="fc" id="L3859">          } else {</span>
+          } else {
             // should never happen?
 <span class="nc" id="L3861">            possibleAddItem = false;</span>
           }
@@ -3877,9 +3877,9 @@ public class CodecCollector {
 <span class="fc" id="L3877">        } else {</span>
 <span class="fc" id="L3878">          addItem = false;</span>
         }
-      }
+<span class="fc" id="L3880">      }</span>
       // don't sort?
-<span class="fc" id="L3882">    } else {</span>
+    } else {
 <span class="nc" id="L3883">      addItem = false;</span>
     }
 <span class="fc bfc" id="L3885" title="All 2 branches covered.">    if (addItem) {</span>
@@ -3890,7 +3890,7 @@ public class CodecCollector {
       // check dataCollector type
 <span class="fc bfc" id="L3891" title="All 2 branches covered.">      if (termVector.subComponentFunction.statsType.equals(CodecUtil.STATS_BASIC)) {</span>
 <span class="fc" id="L3892">        dataCollector.add(mutableKey[0], value, number.docNumber);</span>
-<span class="fc" id="L3893">      } else {</span>
+      } else {
 <span class="fc" id="L3894">        computeFull = true;</span>
       }
       // functions
@@ -3904,11 +3904,11 @@ public class CodecCollector {
 <span class="nc bnc" id="L3904" title="All 2 branches missed.">            } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L3905">              double valueFunction = function.parserFunction.getValueDouble(number.valueSum, 0);</span>
 <span class="nc" id="L3906">              function.dataCollector.add(mutableKey[0], valueFunction, number.docNumber);</span>
-            }
-<span class="nc" id="L3908">          } else {</span>
+<span class="nc" id="L3907">            }</span>
+          } else {
 <span class="nc" id="L3909">            computeFull = true;</span>
           }
-        }
+<span class="nc" id="L3911">        }</span>
       }
       // add as full?
 <span class="fc bfc" id="L3914" title="All 2 branches covered.">      return computeFull ? new RegisterStatus(sortValue, addItemForced) : null;</span>
@@ -3946,7 +3946,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L3946" title="All 2 branches missed.">    } else if (termVector.subComponentFunction.sortDirection.equals(CodecUtil.SORT_DESC)</span>
 <span class="nc bnc" id="L3947" title="All 2 branches missed.">        &amp;&amp; termVector.subComponentFunction.sortType.equals(CodecUtil.STATS_TYPE_N)) {</span>
 <span class="nc" id="L3948">      sortValue = number.docNumber;</span>
-<span class="nc" id="L3949">    } else {</span>
+    } else {
 <span class="nc" id="L3950">      return true;</span>
     }
 <span class="nc" id="L3952">    MtasDataCollector&lt;Long, ?&gt; dataCollector = (MtasDataCollector&lt;Long, ?&gt;) termVector.subComponentFunction.dataCollector;</span>
@@ -3960,7 +3960,7 @@ public class CodecCollector {
 <span class="nc bnc" id="L3960" title="All 2 branches missed.">        } else if (segmentStatus.equals(MtasDataCollector.SEGMENT_POSSIBLE_KEY)) {</span>
 <span class="nc" id="L3961">          mutableKey[0] = MtasToken.getPostfixFromValue(term);</span>
 <span class="nc" id="L3962">          segmentStatus = dataCollector.validateSegmentValue(mutableKey[0], sortValue, termNumberMaximum, segmentNumber,</span>
-<span class="nc" id="L3963">              true);</span>
+              true);
 <span class="nc bnc" id="L3964" title="All 2 branches missed.">          return segmentStatus != null;</span>
         } else {
           // should never happen?
@@ -3998,11 +3998,11 @@ public class CodecCollector {
 <span class="fc bfc" id="L3998" title="All 2 branches covered.">      for (int i = 0; i &lt; number.docNumber; i++) {</span>
         try {
 <span class="fc" id="L4000">          valuesLong[i] = termVector.subComponentFunction.parserFunction.getValueLong(new long[] { number.args[i] },</span>
-<span class="fc" id="L4001">              number.positions[i]);</span>
-<span class="pc" id="L4002">        } catch (IOException e) {</span>
+              number.positions[i]);
+<span class="nc" id="L4002">        } catch (IOException e) {</span>
 <span class="nc" id="L4003">          log.debug(e);</span>
 <span class="nc" id="L4004">          dataCollector.error(mutableKey[0], e.getMessage(), 1);</span>
-        }
+<span class="fc" id="L4005">        }</span>
       }
 <span class="pc bpc" id="L4007" title="1 of 2 branches missed.">      if (!termVector.subComponentFunction.statsType.equals(CodecUtil.STATS_BASIC)) {</span>
 <span class="fc" id="L4008">        dataCollector.add(mutableKey[0], valuesLong, valuesLong.length);</span>
@@ -4015,11 +4015,11 @@ public class CodecCollector {
 <span class="nc bnc" id="L4015" title="All 2 branches missed.">            for (int i = 0; i &lt; number.docNumber; i++) {</span>
               try {
 <span class="nc" id="L4017">                valuesLong[i] = function.parserFunction.getValueLong(new long[] { number.args[i] },</span>
-<span class="nc" id="L4018">                    number.positions[i]);</span>
+                    number.positions[i]);
 <span class="nc" id="L4019">              } catch (IOException e) {</span>
 <span class="nc" id="L4020">                log.debug(e);</span>
 <span class="nc" id="L4021">                function.dataCollector.error(mutableKey[0], e.getMessage(), 1);</span>
-              }
+<span class="nc" id="L4022">              }</span>
             }
 <span class="nc" id="L4024">            function.dataCollector.add(mutableKey[0], valuesLong, valuesLong.length);</span>
 <span class="nc bnc" id="L4025" title="All 2 branches missed.">          } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
@@ -4027,16 +4027,16 @@ public class CodecCollector {
 <span class="nc bnc" id="L4027" title="All 2 branches missed.">            for (int i = 0; i &lt; number.docNumber; i++) {</span>
               try {
 <span class="nc" id="L4029">                valuesDouble[i] = function.parserFunction.getValueDouble(new long[] { number.args[i] },</span>
-<span class="nc" id="L4030">                    number.positions[i]);</span>
+                    number.positions[i]);
 <span class="nc" id="L4031">              } catch (IOException e) {</span>
 <span class="nc" id="L4032">                log.debug(e);</span>
 <span class="nc" id="L4033">                function.dataCollector.error(mutableKey[0], e.getMessage(), 1);</span>
-              }
+<span class="nc" id="L4034">              }</span>
             }
 <span class="nc" id="L4036">            function.dataCollector.add(mutableKey[0], valuesDouble, valuesDouble.length);</span>
           }
         }
-      }
+<span class="nc" id="L4039">      }</span>
     }
 <span class="fc" id="L4041">  }</span>
 
@@ -4104,8 +4104,8 @@ public class CodecCollector {
     int docId;
 <span class="nc bnc" id="L4105" title="All 2 branches missed.">    while (docIterator.hasNext()) {</span>
 <span class="nc" id="L4106">      docId = docIterator.next() - lrc.docBase;</span>
-<span class="nc bnc" id="L4107" title="All 2 branches missed.">      if (docId &gt;= localTermDocId</span>
-<span class="nc bnc" id="L4108" title="All 4 branches missed.">          &amp;&amp; ((docId == localTermDocId) || ((localTermDocId = postingsEnum.advance(docId)) == docId))) {</span>
+<span class="nc bnc" id="L4107" title="All 4 branches missed.">      if (docId &gt;= localTermDocId</span>
+<span class="nc bnc" id="L4108" title="All 2 branches missed.">          &amp;&amp; ((docId == localTermDocId) || ((localTermDocId = postingsEnum.advance(docId)) == docId))) {</span>
 <span class="nc" id="L4109">        result.docNumber++;</span>
 <span class="nc" id="L4110">        result.valueSum[0] += postingsEnum.freq();</span>
       }
@@ -4144,13 +4144,13 @@ public class CodecCollector {
 <span class="fc" id="L4144">    postingsEnum = termsEnum.postings(postingsEnum, PostingsEnum.FREQS);</span>
 <span class="fc bfc" id="L4145" title="All 2 branches covered.">    while (docIterator.hasNext()) {</span>
 <span class="fc" id="L4146">      int docId = docIterator.next() - lrc.docBase;</span>
-<span class="fc bfc" id="L4147" title="All 2 branches covered.">      if (docId &gt;= localTermDocId</span>
-<span class="fc bfc" id="L4148" title="All 4 branches covered.">          &amp;&amp; ((docId == localTermDocId) || ((localTermDocId = postingsEnum.advance(docId)) == docId))) {</span>
+<span class="fc bfc" id="L4147" title="All 4 branches covered.">      if (docId &gt;= localTermDocId</span>
+<span class="fc bfc" id="L4148" title="All 2 branches covered.">          &amp;&amp; ((docId == localTermDocId) || ((localTermDocId = postingsEnum.advance(docId)) == docId))) {</span>
 <span class="fc" id="L4149">        result.args[result.docNumber] = postingsEnum.freq();</span>
 <span class="pc bpc" id="L4150" title="1 of 2 branches missed.">        result.positions[result.docNumber] = (positionsData == null) ? 0 : positionsData.get(docId + lrc.docBase);</span>
 <span class="fc" id="L4151">        result.docNumber++;</span>
       }
-    }
+<span class="fc" id="L4153">    }</span>
 <span class="fc" id="L4154">    return result;</span>
   }
 

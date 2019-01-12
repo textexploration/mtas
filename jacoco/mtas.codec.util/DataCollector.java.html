@@ -50,8 +50,8 @@ public class DataCollector {
       String sortType, String sortDirection, Integer start, Integer number,
       String segmentRegistration, String boundary) throws IOException {
 <span class="fc" id="L52">    return getCollector(collectorType, dataType, statsType, statsItems,</span>
-<span class="fc" id="L53">        sortType, sortDirection, start, number, null, null, null, null, null,</span>
-<span class="fc" id="L54">        null, null, null, segmentRegistration, boundary);</span>
+        sortType, sortDirection, start, number, null, null, null, null, null,
+        null, null, null, segmentRegistration, boundary);
   }
 
   /**
@@ -88,19 +88,19 @@ public class DataCollector {
 <span class="pc bpc" id="L88" title="2 of 4 branches missed.">    if (dataType != null &amp;&amp; dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
 <span class="fc bfc" id="L89" title="All 2 branches covered.">      if (statsType.equals(CodecUtil.STATS_BASIC)) {</span>
 <span class="fc" id="L90">        return new MtasDataLongBasic(collectorType, statsItems, sortType,</span>
-<span class="fc" id="L91">            sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
-<span class="fc" id="L92">            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,</span>
-<span class="fc" id="L93">            subStart, subNumber, segmentRegistration, boundary);</span>
+            sortDirection, start, number, subCollectorTypes, subDataTypes,
+            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,
+            subStart, subNumber, segmentRegistration, boundary);
 <span class="fc bfc" id="L94" title="All 2 branches covered.">      } else if (statsType.equals(CodecUtil.STATS_ADVANCED)) {</span>
 <span class="fc" id="L95">        return new MtasDataLongAdvanced(collectorType, statsItems, sortType,</span>
-<span class="fc" id="L96">            sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
-<span class="fc" id="L97">            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,</span>
-<span class="fc" id="L98">            subStart, subNumber, segmentRegistration, boundary);</span>
+            sortDirection, start, number, subCollectorTypes, subDataTypes,
+            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,
+            subStart, subNumber, segmentRegistration, boundary);
 <span class="pc bpc" id="L99" title="1 of 2 branches missed.">      } else if (statsType.equals(CodecUtil.STATS_FULL)) {</span>
 <span class="fc" id="L100">        return new MtasDataLongFull(collectorType, statsItems, sortType,</span>
-<span class="fc" id="L101">            sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
-<span class="fc" id="L102">            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,</span>
-<span class="fc" id="L103">            subStart, subNumber, segmentRegistration, boundary);</span>
+            sortDirection, start, number, subCollectorTypes, subDataTypes,
+            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,
+            subStart, subNumber, segmentRegistration, boundary);
       } else {
 <span class="nc" id="L105">        throw new IOException(&quot;unknown statsType &quot; + statsType);</span>
       }
@@ -108,19 +108,19 @@ public class DataCollector {
 <span class="nc bnc" id="L108" title="All 2 branches missed.">        &amp;&amp; dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc bnc" id="L109" title="All 2 branches missed.">      if (statsType.equals(CodecUtil.STATS_BASIC)) {</span>
 <span class="nc" id="L110">        return new MtasDataDoubleBasic(collectorType, statsItems, sortType,</span>
-<span class="nc" id="L111">            sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
-<span class="nc" id="L112">            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,</span>
-<span class="nc" id="L113">            subStart, subNumber, segmentRegistration, boundary);</span>
+            sortDirection, start, number, subCollectorTypes, subDataTypes,
+            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,
+            subStart, subNumber, segmentRegistration, boundary);
 <span class="nc bnc" id="L114" title="All 2 branches missed.">      } else if (statsType.equals(CodecUtil.STATS_ADVANCED)) {</span>
 <span class="nc" id="L115">        return new MtasDataDoubleAdvanced(collectorType, statsItems, sortType,</span>
-<span class="nc" id="L116">            sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
-<span class="nc" id="L117">            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,</span>
-<span class="nc" id="L118">            subStart, subNumber, segmentRegistration, boundary);</span>
+            sortDirection, start, number, subCollectorTypes, subDataTypes,
+            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,
+            subStart, subNumber, segmentRegistration, boundary);
 <span class="nc bnc" id="L119" title="All 2 branches missed.">      } else if (statsType.equals(CodecUtil.STATS_FULL)) {</span>
 <span class="nc" id="L120">        return new MtasDataDoubleFull(collectorType, statsItems, sortType,</span>
-<span class="nc" id="L121">            sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
-<span class="nc" id="L122">            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,</span>
-<span class="nc" id="L123">            subStart, subNumber, segmentRegistration, boundary);</span>
+            sortDirection, start, number, subCollectorTypes, subDataTypes,
+            subStatsTypes, subStatsItems, subSortTypes, subSortDirections,
+            subStart, subNumber, segmentRegistration, boundary);
       } else {
 <span class="nc" id="L125">        throw new IOException(&quot;unknown statsType &quot; + statsType);</span>
       }

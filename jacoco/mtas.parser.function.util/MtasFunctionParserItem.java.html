@@ -53,7 +53,7 @@ public class MtasFunctionParserItem {
 <span class="pc bpc" id="L53" title="1 of 2 branches missed.">    if (t.equals(TYPE_N)) {</span>
 <span class="fc" id="L54">      type = t;</span>
 <span class="fc" id="L55">      degree = 0;</span>
-<span class="fc" id="L56">    } else {</span>
+    } else {
 <span class="nc" id="L57">      throw new ParseException(&quot;unknown type &quot; + t);</span>
     }
 <span class="fc" id="L59">  }</span>
@@ -70,7 +70,7 @@ public class MtasFunctionParserItem {
 <span class="fc" id="L70">      type = t;</span>
 <span class="fc" id="L71">      id = i;</span>
 <span class="fc" id="L72">      degree = 1;</span>
-<span class="fc" id="L73">    } else {</span>
+    } else {
 <span class="nc" id="L74">      throw new ParseException(&quot;unknown type &quot; + t);</span>
     }
 <span class="fc" id="L76">  }</span>
@@ -87,7 +87,7 @@ public class MtasFunctionParserItem {
 <span class="fc" id="L87">      type = t;</span>
 <span class="fc" id="L88">      valueLong = l;</span>
 <span class="fc" id="L89">      degree = 0;</span>
-<span class="fc" id="L90">    } else {</span>
+    } else {
 <span class="nc" id="L91">      throw new ParseException(&quot;unknown type &quot; + t);</span>
     }
 <span class="fc" id="L93">  }</span>
@@ -104,7 +104,7 @@ public class MtasFunctionParserItem {
 <span class="fc" id="L104">      type = t;</span>
 <span class="fc" id="L105">      valueDouble = d;</span>
 <span class="fc" id="L106">      degree = 0;</span>
-<span class="fc" id="L107">    } else {</span>
+    } else {
 <span class="nc" id="L108">      throw new ParseException(&quot;unknown type &quot; + t);</span>
     }
 <span class="fc" id="L110">  }</span>
@@ -116,8 +116,8 @@ public class MtasFunctionParserItem {
    * @param p the p
    * @throws ParseException the parse exception
    */
-<span class="fc" id="L119">  public MtasFunctionParserItem(String t, MtasFunctionParserFunction p)</span>
-      throws ParseException {
+  public MtasFunctionParserItem(String t, MtasFunctionParserFunction p)
+<span class="fc" id="L120">      throws ParseException {</span>
 <span class="fc bfc" id="L121" title="All 2 branches covered.">    if (t.equals(TYPE_PARSER_LONG)) {</span>
 <span class="fc" id="L122">      type = t;</span>
 <span class="fc" id="L123">      parser = p;</span>
@@ -126,7 +126,7 @@ public class MtasFunctionParserItem {
 <span class="fc" id="L126">      type = t;</span>
 <span class="fc" id="L127">      parser = p;</span>
 <span class="fc" id="L128">      degree = parser.degree;</span>
-<span class="fc" id="L129">    } else {</span>
+    } else {
 <span class="nc" id="L130">      throw new ParseException(&quot;unknown type &quot; + t);</span>
     }
 <span class="fc" id="L132">  }</span>

@@ -149,38 +149,38 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L149">        fields[tmpCounter] = rb.req.getParams()</span>
 <span class="nc" id="L150">            .get(PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_FIELD, null);</span>
 <span class="nc" id="L151">        queryTypes[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L152">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_TYPE, null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_TYPE, null);
 <span class="nc" id="L153">        queryValues[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L154">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_VALUE,</span>
-<span class="nc" id="L155">            null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_VALUE,
+            null);
 <span class="nc" id="L156">        queryPrefixes[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L157">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_PREFIX,</span>
-<span class="nc" id="L158">            null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_PREFIX,
+            null);
 <span class="nc" id="L159">        queryIgnores[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L160">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_IGNORE,</span>
-<span class="nc" id="L161">            null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_IGNORE,
+            null);
 <span class="nc" id="L162">        queryMaximumIgnoreLengths[tmpCounter] = rb.req.getParams()</span>
 <span class="nc" id="L163">            .get(PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot;</span>
-<span class="nc" id="L164">                + NAME_MTAS_KWIC_QUERY_MAXIMUM_IGNORE_LENGTH, null);</span>
+                + NAME_MTAS_KWIC_QUERY_MAXIMUM_IGNORE_LENGTH, null);
 <span class="nc" id="L165">        Set&lt;String&gt; vIds = MtasSolrResultUtil.getIdsFromParameters(</span>
 <span class="nc" id="L166">            rb.req.getParams(),</span>
-<span class="nc" id="L167">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_VARIABLE);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_VARIABLE);
 <span class="nc" id="L168">        queryVariables[tmpCounter] = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L169" title="All 2 branches missed.">        if (!vIds.isEmpty()) {</span>
 <span class="nc" id="L170">          HashMap&lt;String, ArrayList&lt;String&gt;&gt; tmpVariables = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L171" title="All 2 branches missed.">          for (String vId : vIds) {</span>
 <span class="nc" id="L172">            String name = rb.req.getParams().get(</span>
-<span class="nc" id="L173">                PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_VARIABLE</span>
-<span class="nc" id="L174">                    + &quot;.&quot; + vId + &quot;.&quot; + SUBNAME_MTAS_KWIC_QUERY_VARIABLE_NAME,</span>
-<span class="nc" id="L175">                null);</span>
+                PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_VARIABLE
+                    + &quot;.&quot; + vId + &quot;.&quot; + SUBNAME_MTAS_KWIC_QUERY_VARIABLE_NAME,
+                null);
 <span class="nc bnc" id="L176" title="All 2 branches missed.">            if (name != null) {</span>
 <span class="nc bnc" id="L177" title="All 2 branches missed.">              if (!tmpVariables.containsKey(name)) {</span>
 <span class="nc" id="L178">                tmpVariables.put(name, new ArrayList&lt;String&gt;());</span>
               }
 <span class="nc" id="L180">              String value = rb.req.getParams()</span>
 <span class="nc" id="L181">                  .get(PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot;</span>
-<span class="nc" id="L182">                      + NAME_MTAS_KWIC_QUERY_VARIABLE + &quot;.&quot; + vId + &quot;.&quot;</span>
-<span class="nc" id="L183">                      + SUBNAME_MTAS_KWIC_QUERY_VARIABLE_VALUE, null);</span>
+                      + NAME_MTAS_KWIC_QUERY_VARIABLE + &quot;.&quot; + vId + &quot;.&quot;
+                      + SUBNAME_MTAS_KWIC_QUERY_VARIABLE_VALUE, null);
 <span class="nc bnc" id="L184" title="All 2 branches missed.">              if (value != null) {</span>
 <span class="nc" id="L185">                ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</span>
 <span class="nc" id="L186">                String[] subList = value.split(&quot;(?&lt;!\\\\),&quot;);</span>
@@ -191,27 +191,27 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L191">                tmpVariables.get(name).addAll(list);</span>
               }
             }
-          }
+<span class="nc" id="L194">          }</span>
 <span class="nc bnc" id="L195" title="All 2 branches missed.">          for (Entry&lt;String, ArrayList&lt;String&gt;&gt; entry : tmpVariables</span>
 <span class="nc" id="L196">              .entrySet()) {</span>
 <span class="nc" id="L197">            queryVariables[tmpCounter].put(entry.getKey(),</span>
 <span class="nc" id="L198">                entry.getValue().toArray(new String[entry.getValue().size()]));</span>
-          }
+<span class="nc" id="L199">          }</span>
         }
 <span class="nc" id="L201">        keys[tmpCounter] = rb.req.getParams()</span>
 <span class="nc" id="L202">            .get(PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_KEY,</span>
 <span class="nc" id="L203">                String.valueOf(tmpCounter))</span>
 <span class="nc" id="L204">            .trim();</span>
 <span class="nc" id="L205">        prefixes[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L206">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_PREFIX, null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_PREFIX, null);
 <span class="nc" id="L207">        numbers[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L208">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_NUMBER, null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_NUMBER, null);
 <span class="nc" id="L209">        starts[tmpCounter] = rb.req.getParams()</span>
 <span class="nc" id="L210">            .get(PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_START, null);</span>
 <span class="nc" id="L211">        pageStarts[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L212">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_PAGE_START, null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_PAGE_START, null);
 <span class="nc" id="L213">        pageEnds[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L214">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_PAGE_END, null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_PAGE_END, null);
 <span class="nc" id="L215">        lefts[tmpCounter] = rb.req.getParams()</span>
 <span class="nc" id="L216">            .get(PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_LEFT, null);</span>
 <span class="nc" id="L217">        rights[tmpCounter] = rb.req.getParams()</span>
@@ -219,9 +219,9 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L219">        starts[tmpCounter] = rb.req.getParams()</span>
 <span class="nc" id="L220">            .get(PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_START, null);</span>
 <span class="nc" id="L221">        outputs[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L222">            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_OUTPUT, null);</span>
+            PARAM_MTAS_KWIC + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_KWIC_OUTPUT, null);
 <span class="nc" id="L223">        tmpCounter++;</span>
-      }
+<span class="nc" id="L224">      }</span>
 <span class="nc" id="L225">      String uniqueKeyField = rb.req.getSchema().getUniqueKeyField().getName();</span>
 <span class="nc" id="L226">      mtasFields.doKwic = true;</span>
 <span class="nc" id="L227">      rb.setNeedDocList(true);</span>
@@ -243,7 +243,7 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L243">      MtasSolrResultUtil.compareAndCheck(queryIgnores, fields,</span>
 <span class="nc" id="L244">          NAME_MTAS_KWIC_QUERY_IGNORE, NAME_MTAS_KWIC_FIELD, false);</span>
 <span class="nc" id="L245">      MtasSolrResultUtil.compareAndCheck(queryMaximumIgnoreLengths, fields,</span>
-<span class="nc" id="L246">          NAME_MTAS_KWIC_QUERY_MAXIMUM_IGNORE_LENGTH, NAME_MTAS_KWIC_FIELD,</span>
+          NAME_MTAS_KWIC_QUERY_MAXIMUM_IGNORE_LENGTH, NAME_MTAS_KWIC_FIELD,
 <span class="nc" id="L247">          false);</span>
 <span class="nc" id="L248">      MtasSolrResultUtil.compareAndCheck(prefixes, fields,</span>
 <span class="nc" id="L249">          NAME_MTAS_KWIC_PREFIX, NAME_MTAS_KWIC_FIELD, false);</span>
@@ -266,12 +266,12 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc bnc" id="L266" title="All 2 branches missed.">        Integer maximumIgnoreLength = (queryMaximumIgnoreLengths[i] == null)</span>
 <span class="nc" id="L267">            ? null : Integer.parseInt(queryMaximumIgnoreLengths[i]);</span>
 <span class="nc" id="L268">        MtasSpanQuery q = MtasSolrResultUtil.constructQuery(queryValues[i],</span>
-<span class="nc" id="L269">            queryTypes[i], queryPrefixes[i], queryVariables[i], fields[i],</span>
-<span class="nc" id="L270">            queryIgnores[i], maximumIgnoreLength);</span>
+            queryTypes[i], queryPrefixes[i], queryVariables[i], fields[i],
+            queryIgnores[i], maximumIgnoreLength);
         // minimize number of queries
 <span class="nc bnc" id="L272" title="All 2 branches missed.">        if (cf.spanQueryList.contains(q)) {</span>
 <span class="nc" id="L273">          q = cf.spanQueryList.get(cf.spanQueryList.indexOf(q));</span>
-<span class="nc" id="L274">        } else {</span>
+        } else {
 <span class="nc" id="L275">          cf.spanQueryList.add(q);</span>
         }
 <span class="nc bnc" id="L277" title="All 4 branches missed.">        String key = (keys[i] == null) || (keys[i].isEmpty())</span>
@@ -279,7 +279,7 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L279">            : keys[i].trim();</span>
 <span class="nc" id="L280">        String prefix = prefixes[i];</span>
 <span class="nc bnc" id="L281" title="All 2 branches missed.">        Integer number = (numbers[i] != null) ? getPositiveInteger(numbers[i])</span>
-<span class="nc" id="L282">            : null;</span>
+            : null;
 <span class="nc" id="L283">        int start = getPositiveInteger(starts[i]);</span>
 <span class="nc bnc" id="L284" title="All 4 branches missed.">        Integer pageStart = (pageStarts[i]!=null &amp;&amp; pageEnds[i]!=null)?getPositiveInteger(pageStarts[i]):null;</span>
 <span class="nc bnc" id="L285" title="All 4 branches missed.">        Integer pageEnd = (pageStarts[i]!=null &amp;&amp; pageEnds[i]!=null)?getPositiveInteger(pageEnds[i]):null;</span>
@@ -287,7 +287,7 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L287">        int right = getPositiveInteger(rights[i]);</span>
 <span class="nc" id="L288">        String output = outputs[i];</span>
 <span class="nc" id="L289">        mtasFields.list.get(fields[i]).kwicList.add(new ComponentKwic(q, key,</span>
-<span class="nc" id="L290">            prefix, number, start, pageStart, pageEnd, left, right, output));</span>
+            prefix, number, start, pageStart, pageEnd, left, right, output));
       }
     }
 <span class="nc" id="L293">  }</span>
@@ -319,8 +319,8 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc bnc" id="L319" title="All 2 branches missed.">          if (kwic.right &gt; 0) {</span>
 <span class="nc" id="L320">            rightData = new TreeMap&lt;&gt;();</span>
           }
-<span class="nc bnc" id="L322" title="All 2 branches missed.">          for (int position = Math.max(0,</span>
-<span class="nc" id="L323">              h.startPosition - kwic.left); position &lt;= (h.endPosition</span>
+<span class="nc" id="L322">          for (int position = Math.max(0,</span>
+<span class="nc bnc" id="L323" title="All 2 branches missed.">              h.startPosition - kwic.left); position &lt;= (h.endPosition</span>
 <span class="nc" id="L324">                  + kwic.right); position++) {</span>
 <span class="nc bnc" id="L325" title="All 2 branches missed.">            if (h.hits.containsKey(position)) {</span>
 <span class="nc" id="L326">              List&lt;List&lt;String&gt;&gt; hitDataItem = new ArrayList&lt;&gt;();</span>
@@ -329,7 +329,7 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L329">                hitDataSubItem.add(CodecUtil.termPrefix(term));</span>
 <span class="nc" id="L330">                hitDataSubItem.add(CodecUtil.termValue(term));</span>
 <span class="nc" id="L331">                hitDataItem.add(hitDataSubItem);</span>
-              }
+<span class="nc" id="L332">              }</span>
 <span class="nc bnc" id="L333" title="All 2 branches missed.">              if (position &lt; h.startPosition) {</span>
 <span class="nc bnc" id="L334" title="All 2 branches missed.">                if (leftData != null) {</span>
 <span class="nc" id="L335">                  leftData.put(position, hitDataItem);</span>
@@ -338,7 +338,7 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc bnc" id="L338" title="All 2 branches missed.">                if (rightData != null) {</span>
 <span class="nc" id="L339">                  rightData.put(position, hitDataItem);</span>
                 }
-<span class="nc" id="L341">              } else {</span>
+              } else {
 <span class="nc" id="L342">                hitData.put(position, hitDataItem);</span>
               }
             }
@@ -351,7 +351,7 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L351">            mtasKwicItemResponseItem.add(&quot;right&quot;, rightData);</span>
           }
 <span class="nc" id="L353">          mtasKwicItemResponseItems.add(mtasKwicItemResponseItem);</span>
-        }
+<span class="nc" id="L354">        }</span>
 <span class="nc" id="L355">        mtasKwicItemResponse.add(&quot;documentKey&quot;, kwic.uniqueKey.get(docId));</span>
 <span class="nc" id="L356">        mtasKwicItemResponse.add(&quot;documentTotal&quot;, kwic.subTotal.get(docId));</span>
 <span class="nc" id="L357">        mtasKwicItemResponse.add(&quot;documentMinPosition&quot;,</span>
@@ -360,7 +360,7 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L360">            kwic.maxPosition.get(docId));</span>
 <span class="nc" id="L361">        mtasKwicItemResponse.add(&quot;list&quot;, mtasKwicItemResponseItems);</span>
 <span class="nc" id="L362">        mtasKwicItemResponses.add(mtasKwicItemResponse);</span>
-      }
+<span class="nc" id="L363">      }</span>
 <span class="nc bnc" id="L364" title="All 2 branches missed.">    } else if (kwic.output.equals(ComponentKwic.KWIC_OUTPUT_TOKEN)) {</span>
 <span class="nc bnc" id="L365" title="All 2 branches missed.">      for (int docId : kwic.tokens.keySet()) {</span>
 <span class="nc" id="L366">        NamedList&lt;Object&gt; mtasKwicItemResponse = new SimpleOrderedMap&lt;&gt;();</span>
@@ -408,11 +408,11 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L408">                  token.getRealOffsetEnd());</span>
             }
 <span class="nc" id="L410">            mtasKwicItemResponseItemTokens.add(mtasKwicItemResponseItemToken);</span>
-          }
+<span class="nc" id="L411">          }</span>
 <span class="nc" id="L412">          mtasKwicItemResponseItem.add(&quot;tokens&quot;,</span>
-<span class="nc" id="L413">              mtasKwicItemResponseItemTokens);</span>
+              mtasKwicItemResponseItemTokens);
 <span class="nc" id="L414">          mtasKwicItemResponseItems.add(mtasKwicItemResponseItem);</span>
-        }
+<span class="nc" id="L415">        }</span>
 <span class="nc" id="L416">        mtasKwicItemResponse.add(&quot;documentKey&quot;, kwic.uniqueKey.get(docId));</span>
 <span class="nc" id="L417">        mtasKwicItemResponse.add(&quot;documentTotal&quot;, kwic.subTotal.get(docId));</span>
 <span class="nc" id="L418">        mtasKwicItemResponse.add(&quot;documentMinPosition&quot;,</span>
@@ -421,7 +421,7 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L421">            kwic.maxPosition.get(docId));</span>
 <span class="nc" id="L422">        mtasKwicItemResponse.add(&quot;list&quot;, mtasKwicItemResponseItems);</span>
 <span class="nc" id="L423">        mtasKwicItemResponses.add(mtasKwicItemResponse);</span>
-      }
+<span class="nc" id="L424">      }</span>
     }
 <span class="nc" id="L426">    mtasKwicResponse.add(&quot;list&quot;, mtasKwicItemResponses);</span>
 <span class="nc" id="L427">    return mtasKwicResponse;</span>
@@ -439,8 +439,8 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
   public void modifyRequest(ResponseBuilder rb, SearchComponent who,
       ShardRequest sreq) {
 <span class="nc bnc" id="L441" title="All 2 branches missed.">    if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)) {</span>
-<span class="nc bnc" id="L442" title="All 2 branches missed.">      if (sreq.params.getBool(PARAM_MTAS_KWIC, false)</span>
-<span class="nc bnc" id="L443" title="All 2 branches missed.">          &amp;&amp; (sreq.purpose &amp; ShardRequest.PURPOSE_GET_FIELDS) != 0) {</span>
+<span class="nc bnc" id="L442" title="All 4 branches missed.">      if (sreq.params.getBool(PARAM_MTAS_KWIC, false)</span>
+          &amp;&amp; (sreq.purpose &amp; ShardRequest.PURPOSE_GET_FIELDS) != 0) {
         // do nothing
       } else {
 <span class="nc" id="L446">        Set&lt;String&gt; keys = MtasSolrResultUtil</span>
@@ -450,28 +450,28 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
 <span class="nc" id="L450">          sreq.params</span>
 <span class="nc" id="L451">              .remove(PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_FIELD);</span>
 <span class="nc" id="L452">          sreq.params.remove(</span>
-<span class="nc" id="L453">              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_TYPE);</span>
+              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_TYPE);
 <span class="nc" id="L454">          sreq.params.remove(</span>
-<span class="nc" id="L455">              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_VALUE);</span>
+              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_VALUE);
 <span class="nc" id="L456">          sreq.params.remove(</span>
-<span class="nc" id="L457">              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_PREFIX);</span>
+              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_PREFIX);
 <span class="nc" id="L458">          sreq.params.remove(</span>
-<span class="nc" id="L459">              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_IGNORE);</span>
+              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_QUERY_IGNORE);
 <span class="nc" id="L460">          sreq.params.remove(PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot;</span>
-<span class="nc" id="L461">              + NAME_MTAS_KWIC_QUERY_MAXIMUM_IGNORE_LENGTH);</span>
+              + NAME_MTAS_KWIC_QUERY_MAXIMUM_IGNORE_LENGTH);
 <span class="nc" id="L462">          sreq.params</span>
 <span class="nc" id="L463">              .remove(PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_KEY);</span>
 <span class="nc" id="L464">          sreq.params.remove(</span>
-<span class="nc" id="L465">              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_PREFIX);</span>
+              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_PREFIX);
 <span class="nc" id="L466">          sreq.params.remove(</span>
-<span class="nc" id="L467">              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_NUMBER);</span>
+              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_NUMBER);
 <span class="nc" id="L468">          sreq.params</span>
 <span class="nc" id="L469">              .remove(PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_LEFT);</span>
 <span class="nc" id="L470">          sreq.params</span>
 <span class="nc" id="L471">              .remove(PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_RIGHT);</span>
 <span class="nc" id="L472">          sreq.params.remove(</span>
-<span class="nc" id="L473">              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_OUTPUT);</span>
-        }
+              PARAM_MTAS_KWIC + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_KWIC_OUTPUT);
+<span class="nc" id="L474">        }</span>
       }
     }
 <span class="nc" id="L477">  }</span>
@@ -484,15 +484,15 @@ public class MtasSolrComponentKwic implements MtasSolrComponent&lt;ComponentKwic
    * solr.handler.component.ResponseBuilder)
    */
   public void finishStage(ResponseBuilder rb) {
-<span class="nc bnc" id="L487" title="All 2 branches missed.">    if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
-<span class="nc bnc" id="L488" title="All 2 branches missed.">        &amp;&amp; rb.stage &gt;= ResponseBuilder.STAGE_EXECUTE_QUERY</span>
-<span class="nc bnc" id="L489" title="All 2 branches missed.">        &amp;&amp; rb.stage &lt; ResponseBuilder.STAGE_GET_FIELDS) {</span>
+<span class="nc bnc" id="L487" title="All 6 branches missed.">    if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
+        &amp;&amp; rb.stage &gt;= ResponseBuilder.STAGE_EXECUTE_QUERY
+        &amp;&amp; rb.stage &lt; ResponseBuilder.STAGE_GET_FIELDS) {
 <span class="nc bnc" id="L490" title="All 2 branches missed.">      for (ShardRequest sreq : rb.finished) {</span>
 <span class="nc bnc" id="L491" title="All 2 branches missed.">        if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
-<span class="nc" id="L492">            &amp;&amp; sreq.params.getBool(PARAM_MTAS_KWIC, false)) {</span>
+<span class="nc bnc" id="L492" title="All 2 branches missed.">            &amp;&amp; sreq.params.getBool(PARAM_MTAS_KWIC, false)) {</span>
           // nothing to do
         }
-      }
+<span class="nc" id="L495">      }</span>
     }
 <span class="nc" id="L497">  }</span>
 

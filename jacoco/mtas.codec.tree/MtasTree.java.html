@@ -128,11 +128,11 @@ abstract public class MtasTree&lt;N extends MtasTreeNode&lt;N&gt;&gt; {
 <span class="fc bfc" id="L128" title="All 2 branches covered.">          if (entry.getKey().equals(entry.getValue())) {</span>
 <span class="fc" id="L129">            addSinglePoint(entry.getKey(), prefixId, token.getTermRef(),</span>
 <span class="fc" id="L130">                token.getId(), ref);</span>
-<span class="fc" id="L131">          } else {</span>
+          } else {
 <span class="fc" id="L132">            addRange(entry.getKey(), entry.getValue(), prefixId,</span>
 <span class="fc" id="L133">                token.getTermRef(), token.getId(), ref);</span>
           }
-        }
+<span class="fc" id="L135">        }</span>
       }
     }
 <span class="fc" id="L138">  }</span>
@@ -225,7 +225,7 @@ abstract public class MtasTree&lt;N extends MtasTreeNode&lt;N&gt;&gt; {
 <span class="nc bnc" id="L225" title="All 2 branches missed.">      if (n.left == n.right) {</span>
 <span class="nc" id="L226">        System.out.println(</span>
 <span class="nc" id="L227">            &quot;[&quot; + n.left + &quot;] (&quot; + n.max + &quot;) : &quot; + n.ids.size() + &quot; tokens&quot;);</span>
-<span class="nc" id="L228">      } else {</span>
+      } else {
 <span class="nc" id="L229">        System.out.println(&quot;[&quot; + n.left + &quot;-&quot; + n.right + &quot;] (&quot; + n.max + &quot;) : &quot;</span>
 <span class="nc" id="L230">            + n.ids.size() + &quot; tokens&quot;);</span>
       }

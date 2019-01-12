@@ -39,7 +39,7 @@ public class DamerauLevenshteinDistance extends LevenshteinDistance {
 <span class="nc bnc" id="L39" title="All 2 branches missed.">        if (entry.getKey().equals(PARAMETER_TRANSPOSITIONDISTANCE)) {</span>
 <span class="nc" id="L40">          transpositionDistance = Double.parseDouble(entry.getValue());</span>
         }
-      }
+<span class="nc" id="L42">      }</span>
     }
 <span class="nc bnc" id="L44" title="All 2 branches missed.">    if (transpositionDistance &lt; 0) {</span>
 <span class="nc" id="L45">      throw new IOException(&quot;distances should be zero or positive&quot;);</span>
@@ -141,13 +141,13 @@ public class DamerauLevenshteinDistance extends LevenshteinDistance {
 <span class="nc bnc" id="L141" title="All 2 branches missed.">    for (int i = 0; i &lt; base.length(); i++) {</span>
 <span class="nc bnc" id="L142" title="All 2 branches missed.">      cost = (base.charAt(i) == ch1) ? 0 : replaceDistance;</span>
 <span class="nc" id="L143">      state[2][i + 1] = Math.min(state[2][i] + insertionDistance,</span>
-<span class="nc" id="L144">          state[1][i] + cost);</span>
+          state[1][i] + cost);
 <span class="nc" id="L145">      state[2][i + 1] = Math.min(state[2][i + 1],</span>
-<span class="nc" id="L146">          state[1][i + 1] + deletionDistance);</span>
+          state[1][i + 1] + deletionDistance);
 <span class="nc bnc" id="L147" title="All 6 branches missed.">      if (i &gt; 0 &amp;&amp; ch2 != 0x00 &amp;&amp; (base.charAt(i - 1) == ch1)</span>
 <span class="nc bnc" id="L148" title="All 2 branches missed.">          &amp;&amp; (base.charAt(i) == ch2)) {</span>
 <span class="nc" id="L149">        state[2][i + 1] = Math.min(state[2][i + 1],</span>
-<span class="nc" id="L150">            state[0][i - 1] + transpositionDistance);</span>
+            state[0][i - 1] + transpositionDistance);
       }
     }
 <span class="nc" id="L153">    return state;</span>

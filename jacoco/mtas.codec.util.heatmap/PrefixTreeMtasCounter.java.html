@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrefixTreeMtasCounter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.codec.util.heatmap</a> &gt; <span class="el_source">PrefixTreeMtasCounter.java</span></div><h1>PrefixTreeMtasCounter.java</h1><pre class="source lang-java linenums"><span class="pc" id="L1">package mtas.codec.util.heatmap;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrefixTreeMtasCounter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.codec.util.heatmap</a> &gt; <span class="el_source">PrefixTreeMtasCounter.java</span></div><h1>PrefixTreeMtasCounter.java</h1><pre class="source lang-java linenums">package mtas.codec.util.heatmap;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import mtas.codec.util.CodecUtil;
 import mtas.codec.util.CodecComponent.ComponentHeatmap;
 import mtas.codec.util.CodecComponent.SubComponentFunction;
+import mtas.codec.util.CodecUtil;
 
 import org.apache.lucene.index.LeafReaderContext;
 
@@ -21,13 +21,13 @@ import org.apache.lucene.spatial.prefix.tree.SpatialPrefixTree;
 import org.apache.lucene.util.Bits;
 
 /**
- * Based on PrefixTreeFacetCounter 
+ * Based on PrefixTreeFacetCounter. 
  */
 
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">public class PrefixTreeMtasCounter {</span>
+public class PrefixTreeMtasCounter {
 
   /** A callback/visitor of gridlevel counts. */
-<span class="fc" id="L30">  public static abstract class GridVisitor {</span>
+<span class="fc" id="L30">  public abstract static class GridVisitor {</span>
     /** Called for cells with a leaf, or cells at the target gridlevel.  {@code count} is greater than zero.
      * When an ancestor cell is given with non-zero count, the count can be considered to be added to all cells
      * below. You won't necessarily get a cell at level {@code gridLevel} if the indexed data is courser (bigger).
@@ -55,7 +55,7 @@ import org.apache.lucene.util.Bits;
 <span class="nc" id="L55">      acceptDocs = new Bits.MatchNoBits(context.reader().maxDoc());</span>
 <span class="pc bpc" id="L56" title="1 of 2 branches missed.">    } else if (number == context.reader().maxDoc()) {</span>
 <span class="fc" id="L57">      acceptDocs = new Bits.MatchAllBits(context.reader().maxDoc());</span>
-<span class="fc" id="L58">    } else {</span>
+    } else {
 <span class="nc" id="L59">      acceptDocs = new Bits() {</span>
 <span class="nc" id="L60">        int p = docSet[0];</span>
 <span class="nc" id="L61">        int i = 0;</span>
@@ -70,7 +70,7 @@ import org.apache.lucene.util.Bits;
 <span class="nc" id="L70">            i++; </span>
 <span class="nc bnc" id="L71" title="All 2 branches missed.">            if(i&lt;number) {</span>
 <span class="nc" id="L72">              p=docSet[i];</span>
-<span class="nc" id="L73">            } else {</span>
+            } else {
 <span class="nc" id="L74">              return false;</span>
             }
           } 
@@ -90,7 +90,7 @@ import org.apache.lucene.util.Bits;
 <span class="fc" id="L90">    final int scanLevel = tree.getMaxLevels();</span>
     //AbstractVisitingPrefixTreeFilter is a Lucene Filter.  We don't need a filter; we use it for its great prefix-tree
     // traversal code.  TODO consider refactoring if/when it makes sense (more use cases than this)
-<span class="fc" id="L93">    new AbstractVisitingPrefixTreeQuery(heatmap.boundsShape, strategy.getFieldName(), tree, heatmap.gridLevel, scanLevel) {</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">    new AbstractVisitingPrefixTreeQuery(heatmap.boundsShape, strategy.getFieldName(), tree, heatmap.gridLevel, scanLevel) {</span>
 
       @Override
       public String toString(String field) {
@@ -152,7 +152,7 @@ import org.apache.lucene.util.Bits;
 <span class="pc bpc" id="L152" title="1 of 2 branches missed.">              if(f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
 <span class="fc" id="L153">                functionValuesLong[i] = new long[number];</span>
 <span class="fc" id="L154">                functionValuesDouble[i] = null;</span>
-<span class="pc bnc" id="L155" title="All 2 branches missed.">              } else if(f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">              } else if(f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L156">                functionValuesLong[i] = null;</span>
 <span class="nc" id="L157">                functionValuesDouble[i] = new double[number];</span>
               }  
@@ -186,7 +186,7 @@ import org.apache.lucene.util.Bits;
 <span class="fc" id="L186">                        functionValueLong = f.parserFunction.getValueLong(args[docSetCounter], positions[docSetCounter]); </span>
 <span class="fc" id="L187">                        functionValuesLong[i][functionValuesCounter[i]] = functionValueLong;</span>
 <span class="fc" id="L188">                        functionValuesCounter[i]++;</span>
-<span class="pc bnc" id="L189" title="All 2 branches missed.">                      } else if(f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {                      </span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                      } else if(f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {                      </span>
 <span class="nc" id="L190">                        functionValueDouble = f.parserFunction.getValueDouble(args[docSetCounter], positions[docSetCounter]); </span>
 <span class="nc" id="L191">                        functionValuesDouble[i][functionValuesCounter[i]] = functionValueDouble;</span>
 <span class="nc" id="L192">                        functionValuesCounter[i]++;</span>
@@ -195,10 +195,10 @@ import org.apache.lucene.util.Bits;
 <span class="nc" id="L195">                      functionValueError = e.getMessage();</span>
 <span class="nc bnc" id="L196" title="All 2 branches missed.">                      if(functionValuesError[i].containsKey(functionValueError)) {</span>
 <span class="nc" id="L197">                        functionValuesError[i].put(functionValueError, functionValuesError[i].get(functionValueError)+1);</span>
-<span class="nc" id="L198">                      } else {</span>
+                      } else {
 <span class="nc" id="L199">                        functionValuesError[i].put(functionValueError, 1);</span>
                       }
-                    }
+<span class="fc" id="L201">                    }</span>
                   }                  
                 }
               }  
@@ -209,7 +209,7 @@ import org.apache.lucene.util.Bits;
 <span class="fc" id="L209">              SubComponentFunction f = heatmap.hm.functions.get(i);</span>
 <span class="pc bpc" id="L210" title="1 of 2 branches missed.">              if(f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
 <span class="fc" id="L211">                functionValuesLong[i] = Arrays.copyOf(functionValuesLong[i], functionValuesCounter[i]);</span>
-<span class="pc bnc" id="L212" title="All 2 branches missed.">              } else if(f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">              } else if(f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L213">                functionValuesDouble[i] = Arrays.copyOf(functionValuesDouble[i], functionValuesCounter[i]);</span>
               }
             }            

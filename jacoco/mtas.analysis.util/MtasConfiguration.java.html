@@ -47,7 +47,7 @@ public class MtasConfiguration {
   public static final String CHARFILTER_CONFIGURATION_PREFIX = &quot;prefix&quot;;
 
   /** The Constant CHARFILTER_CONFIGURATION_POSTFIX. */
-<span class="fc" id="L50">  public static final String CHARFILTER_CONFIGURATION_POSTFIX = &quot;postfix&quot;;</span>
+  public static final String CHARFILTER_CONFIGURATION_POSTFIX = &quot;postfix&quot;;
 
   /** The name. */
   public String name;
@@ -99,7 +99,7 @@ public class MtasConfiguration {
 <span class="fc" id="L99">      boolean skipCurrentConfigurations = false;</span>
       try {
 <span class="fc" id="L101">        int event = streamReader.getEventType();</span>
-<span class="fc" id="L102">        while (true) {</span>
+        while (true) {
 <span class="pc bpc" id="L103" title="1 of 6 branches missed.">          switch (event) {</span>
           case XMLStreamConstants.START_DOCUMENT:
 <span class="pc bpc" id="L105" title="1 of 2 branches missed.">            if (!streamReader.getCharacterEncodingScheme().equals(&quot;UTF-8&quot;)) {</span>
@@ -116,7 +116,7 @@ public class MtasConfiguration {
 <span class="fc bfc" id="L116" title="All 2 branches covered.">            if (configs == null) {</span>
 <span class="pc bpc" id="L117" title="1 of 2 branches missed.">              if (qname.getLocalPart().equals(CONFIGURATIONS_MTAS)) {</span>
 <span class="fc" id="L118">                configs = new HashMap&lt;String, HashMap&lt;String, String&gt;&gt;();</span>
-<span class="fc" id="L119">              } else {</span>
+              } else {
 <span class="nc" id="L120">                throw new IOException(&quot;no Mtas Configurations File&quot;);</span>
               }
 <span class="pc bpc" id="L122" title="1 of 2 branches missed.">            } else if (currentElement != null</span>
@@ -132,12 +132,12 @@ public class MtasConfiguration {
                     }
                   }
                 }
-<span class="fc" id="L135">              } else {</span>
+              } else {
 <span class="nc" id="L136">                throw new IOException(&quot;unexpected &quot; + qname.getLocalPart());</span>
               }
 <span class="pc bpc" id="L138" title="1 of 2 branches missed.">            } else if (currentElement != null</span>
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">                &amp;&amp; currentElement.equals(CONFIGURATIONS_CONFIGURATIONS)</span>
-<span class="fc bfc" id="L140" title="All 2 branches covered.">                &amp;&amp; !skipCurrentConfigurations) {</span>
+<span class="pc bpc" id="L139" title="1 of 4 branches missed.">                &amp;&amp; currentElement.equals(CONFIGURATIONS_CONFIGURATIONS)</span>
+                &amp;&amp; !skipCurrentConfigurations) {
 <span class="pc bpc" id="L141" title="1 of 2 branches missed.">              if (qname.getLocalPart().equals(CONFIGURATIONS_CONFIGURATION)) {</span>
 <span class="fc" id="L142">                String configurationName = null;</span>
 <span class="fc" id="L143">                HashMap&lt;String, String&gt; configurationValues = new HashMap&lt;String, String&gt;();</span>
@@ -145,7 +145,7 @@ public class MtasConfiguration {
 <span class="fc" id="L145">                  if (streamReader.getAttributeLocalName(i)</span>
 <span class="fc bfc" id="L146" title="All 2 branches covered.">                      .equals(CONFIGURATIONS_CONFIGURATION_NAME)) {</span>
 <span class="fc" id="L147">                    configurationName = streamReader.getAttributeValue(i);</span>
-<span class="fc" id="L148">                  } else {</span>
+                  } else {
 <span class="fc" id="L149">                    configurationValues.put(</span>
 <span class="fc" id="L150">                        streamReader.getAttributeLocalName(i),</span>
 <span class="fc" id="L151">                        streamReader.getAttributeValue(i));</span>
@@ -153,11 +153,11 @@ public class MtasConfiguration {
                 }
 <span class="pc bpc" id="L154" title="1 of 2 branches missed.">                if (configurationName != null) {</span>
 <span class="fc" id="L155">                  configs.put(configurationName, configurationValues);</span>
-<span class="fc" id="L156">                } else {</span>
+                } else {
 <span class="nc" id="L157">                  throw new IOException(&quot;configuration without &quot;</span>
                       + CONFIGURATIONS_CONFIGURATION_NAME);
                 }
-              } else {
+<span class="fc" id="L160">              } else {</span>
 <span class="nc" id="L161">                throw new IOException(&quot;unexpected tag &quot; + qname.getLocalPart());</span>
               }
             }
@@ -173,7 +173,7 @@ public class MtasConfiguration {
 <span class="fc" id="L173">            currentElements.remove((i - 1));</span>
 <span class="fc bfc" id="L174" title="All 2 branches covered.">            if (i &gt; 1) {</span>
 <span class="fc" id="L175">              currentElement = currentElements.get(i - 2);</span>
-<span class="fc" id="L176">            } else {</span>
+            } else {
 <span class="fc" id="L177">              currentElement = null;</span>
             }
 <span class="fc" id="L179">            break;</span>
@@ -185,12 +185,12 @@ public class MtasConfiguration {
           }
 <span class="fc" id="L186">          event = streamReader.next();</span>
         }
-<span class="nc" id="L188">      } finally {</span>
+      } finally {
 <span class="pc" id="L189">        streamReader.close();</span>
-<span class="nc" id="L190">      }</span>
-<span class="pc" id="L191">    } catch (XMLStreamException e) {</span>
+<span class="pc" id="L190">      }</span>
+<span class="nc" id="L191">    } catch (XMLStreamException e) {</span>
 <span class="nc" id="L192">      log.debug(e);</span>
-    }
+<span class="fc" id="L193">    }</span>
 <span class="fc" id="L194">    return configs;</span>
   }
 
@@ -226,9 +226,9 @@ public class MtasConfiguration {
 <span class="fc" id="L226">          result.put(entry.getKey(), item);</span>
 <span class="fc" id="L227">        } else {</span>
 <span class="nc" id="L228">          throw new IOException(&quot;configuration &quot; + entry.getKey() + &quot; has no &quot;</span>
-<span class="nc" id="L229">              + CHARFILTER_CONFIGURATION_TYPE);</span>
+              + CHARFILTER_CONFIGURATION_TYPE);
         }
-      }
+<span class="fc" id="L231">      }</span>
 <span class="fc" id="L232">      return result;</span>
     }
   }
@@ -257,11 +257,11 @@ public class MtasConfiguration {
 <span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (config.containsKey(TOKENIZER_CONFIGURATION_FILE)) {</span>
 <span class="fc" id="L258">          result.put(entry.getKey(), readConfiguration(resourceLoader</span>
 <span class="fc" id="L259">              .openResource(config.get(TOKENIZER_CONFIGURATION_FILE))));</span>
-<span class="fc" id="L260">        } else {</span>
+        } else {
 <span class="nc" id="L261">          throw new IOException(&quot;configuration &quot; + entry.getKey() + &quot; has no &quot;</span>
-<span class="nc" id="L262">              + TOKENIZER_CONFIGURATION_FILE);</span>
+              + TOKENIZER_CONFIGURATION_FILE);
         }
-      }
+<span class="fc" id="L264">      }</span>
 <span class="fc" id="L265">      return result;</span>
     }
   }
@@ -285,7 +285,7 @@ public class MtasConfiguration {
       QName qname;
       try {
 <span class="fc" id="L287">        int event = streamReader.getEventType();</span>
-<span class="fc" id="L288">        while (true) {</span>
+        while (true) {
 <span class="pc bpc" id="L289" title="1 of 5 branches missed.">          switch (event) {</span>
           case XMLStreamConstants.START_DOCUMENT:
 <span class="pc bpc" id="L291" title="1 of 2 branches missed.">            if (!streamReader.getCharacterEncodingScheme().equals(&quot;UTF-8&quot;)) {</span>
@@ -301,7 +301,7 @@ public class MtasConfiguration {
 <span class="fc bfc" id="L301" title="All 2 branches covered.">            if (currentConfig == null) {</span>
 <span class="pc bpc" id="L302" title="1 of 2 branches missed.">              if (qname.getLocalPart().equals(&quot;mtas&quot;)) {</span>
 <span class="fc" id="L303">                currentConfig = new MtasConfiguration();</span>
-<span class="fc" id="L304">              } else {</span>
+              } else {
 <span class="nc" id="L305">                throw new IOException(&quot;no Mtas Configuration&quot;);</span>
               }
             } else {
@@ -332,12 +332,12 @@ public class MtasConfiguration {
           }
 <span class="fc" id="L333">          event = streamReader.next();</span>
         }
-<span class="nc" id="L335">      } finally {</span>
+      } finally {
 <span class="pc" id="L336">        streamReader.close();</span>
 <span class="nc" id="L337">      }</span>
 <span class="nc" id="L338">    } catch (XMLStreamException e) {</span>
 <span class="nc" id="L339">      log.debug(e);</span>
-    }
+<span class="nc" id="L340">    }</span>
 <span class="nc" id="L341">    return null;</span>
   }
 
@@ -349,19 +349,19 @@ public class MtasConfiguration {
 <span class="nc" id="L349">    String text = &quot;&quot;;</span>
 <span class="nc bnc" id="L350" title="All 2 branches missed.">    if (name != null) {</span>
 <span class="nc bnc" id="L351" title="All 2 branches missed.">      text += (indent &gt; 0 ? String.format(&quot;%&quot; + indent + &quot;s&quot;, &quot;&quot;) : &quot;&quot;)</span>
-<span class="nc" id="L352">          + &quot;name: &quot; + name + &quot;\n&quot;;</span>
+          + &quot;name: &quot; + name + &quot;\n&quot;;
     }
 <span class="nc bnc" id="L354" title="All 2 branches missed.">    if (attributes != null) {</span>
 <span class="nc bnc" id="L355" title="All 2 branches missed.">      for (Entry&lt;String,String&gt; entry : attributes.entrySet()) {</span>
 <span class="nc bnc" id="L356" title="All 2 branches missed.">        text += (indent &gt; 0 ? String.format(&quot;%&quot; + indent + &quot;s&quot;, &quot;&quot;) : &quot;&quot;) + entry.getKey()</span>
 <span class="nc" id="L357">            + &quot;:&quot; + entry.getValue() + &quot;\n&quot;;</span>
-      }
+<span class="nc" id="L358">      }</span>
     }
 <span class="nc bnc" id="L360" title="All 2 branches missed.">    if (children != null) {</span>
 <span class="nc bnc" id="L361" title="All 2 branches missed.">      for (MtasConfiguration child : children) {</span>
 <span class="nc bnc" id="L362" title="All 2 branches missed.">        text += (indent &gt; 0 ? String.format(&quot;%&quot; + indent + &quot;s&quot;, &quot;&quot;) : &quot;&quot;)</span>
 <span class="nc" id="L363">            + child.toString(indent + 2);</span>
-      }
+<span class="nc" id="L364">      }</span>
     }
 <span class="nc" id="L366">    return text;</span>
   }

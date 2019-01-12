@@ -84,13 +84,13 @@ public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage
 <span class="nc" id="L84">                String.valueOf(tmpCounter))</span>
 <span class="nc" id="L85">            .trim();</span>
 <span class="nc" id="L86">        prefixes[tmpCounter] = rb.req.getParams().get(</span>
-<span class="nc" id="L87">            PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_PREFIX, null);</span>
+            PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_PREFIX, null);
 <span class="nc" id="L88">        starts[tmpCounter] = rb.req.getParams()</span>
 <span class="nc" id="L89">            .get(PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_START, null);</span>
 <span class="nc" id="L90">        ends[tmpCounter] = rb.req.getParams()</span>
 <span class="nc" id="L91">            .get(PARAM_MTAS_PAGE + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_PAGE_END, null);</span>
 <span class="nc" id="L92">        tmpCounter++;</span>
-      }
+<span class="nc" id="L93">      }</span>
 <span class="nc" id="L94">      String uniqueKeyField = rb.req.getSchema().getUniqueKeyField().getName();</span>
 <span class="nc" id="L95">      mtasFields.doPage = true;</span>
 <span class="nc" id="L96">      rb.setNeedDocSet(true);</span>
@@ -119,7 +119,7 @@ public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage
 <span class="nc bnc" id="L119" title="All 4 branches missed.">        int end = (starts[i] == null) || (ends[i].isEmpty()) ? 0</span>
 <span class="nc" id="L120">            : Integer.parseInt(ends[i]);</span>
 <span class="nc" id="L121">        mtasFields.list.get(fields[i]).pageList.add(new ComponentPage(</span>
-<span class="nc" id="L122">            fields[i], key, prefix, start, end));</span>
+            fields[i], key, prefix, start, end));
       }
     }
 <span class="nc" id="L125">  }</span>
@@ -157,9 +157,9 @@ public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage
               }
             }  
 <span class="nc" id="L159">            wordPositionResult.add(itemResult);</span>
-          }
+<span class="nc" id="L160">          }</span>
 <span class="nc" id="L161">          wordListResult.add(Integer.toString(entry.getKey()), wordPositionResult);</span>
-        }
+<span class="nc" id="L162">        }</span>
 <span class="nc" id="L163">        mtasPageItemData.add(&quot;word&quot;, wordListResult);</span>
       }  
       //ranges
@@ -180,9 +180,9 @@ public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage
               }
             }  
 <span class="nc" id="L182">            rangePositionResult.add(itemResult);</span>
-          }
+<span class="nc" id="L183">          }</span>
 <span class="nc" id="L184">          rangeListResult.add(Integer.toString(entry.getKey()), rangePositionResult);</span>
-        }
+<span class="nc" id="L185">        }</span>
 <span class="nc" id="L186">        mtasPageItemData.add(&quot;range&quot;, rangeListResult);</span>
       }
       //sets 
@@ -205,15 +205,15 @@ public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage
               }
             }  
 <span class="nc" id="L207">            setPositionResult.add(itemResult);</span>
-          }
+<span class="nc" id="L208">          }</span>
 <span class="nc" id="L209">          setListResult.add(Integer.toString(entry.getKey()), setPositionResult);</span>
-        }
+<span class="nc" id="L210">        }</span>
 <span class="nc" id="L211">        mtasPageItemData.add(&quot;set&quot;, setListResult);</span>
       }
 <span class="nc" id="L213">      mtasPageItemResponse.add(&quot;data&quot;,</span>
-<span class="nc" id="L214">          mtasPageItemData);</span>
+          mtasPageItemData);
 <span class="nc" id="L215">      mtasPageItemResponses.add(mtasPageItemResponse);</span>
-    }
+<span class="nc" id="L216">    }</span>
 <span class="nc" id="L217">    mtasPageResponse.add(&quot;list&quot;, mtasPageItemResponses);</span>
 <span class="nc" id="L218">    return mtasPageResponse;</span>
   }
@@ -224,8 +224,8 @@ public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage
   @Override
   public void modifyRequest(ResponseBuilder rb, SearchComponent who, ShardRequest sreq) {
 <span class="nc bnc" id="L226" title="All 2 branches missed.">    if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)) {</span>
-<span class="nc bnc" id="L227" title="All 2 branches missed.">      if (sreq.params.getBool(PARAM_MTAS_PAGE, false)</span>
-<span class="nc bnc" id="L228" title="All 2 branches missed.">          &amp;&amp; (sreq.purpose &amp; ShardRequest.PURPOSE_GET_FIELDS) != 0) {</span>
+<span class="nc bnc" id="L227" title="All 4 branches missed.">      if (sreq.params.getBool(PARAM_MTAS_PAGE, false)</span>
+          &amp;&amp; (sreq.purpose &amp; ShardRequest.PURPOSE_GET_FIELDS) != 0) {
         // do nothing
       } else {
 <span class="nc" id="L231">        Set&lt;String&gt; keys = MtasSolrResultUtil</span>
@@ -237,12 +237,12 @@ public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage
 <span class="nc" id="L237">          sreq.params</span>
 <span class="nc" id="L238">              .remove(PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_KEY);</span>
 <span class="nc" id="L239">          sreq.params.remove(</span>
-<span class="nc" id="L240">              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_PREFIX);</span>
+              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_PREFIX);
 <span class="nc" id="L241">          sreq.params.remove(</span>
-<span class="nc" id="L242">              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_START);</span>
+              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_START);
 <span class="nc" id="L243">          sreq.params.remove(</span>
-<span class="nc" id="L244">              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_END);</span>
-        }
+              PARAM_MTAS_PAGE + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_PAGE_END);
+<span class="nc" id="L245">        }</span>
       }
     }
 <span class="nc" id="L248">  }</span>
@@ -252,15 +252,15 @@ public class MtasSolrComponentPage implements MtasSolrComponent&lt;ComponentPage
    */
   @Override
   public void finishStage(ResponseBuilder rb) {
-<span class="nc bnc" id="L255" title="All 2 branches missed.">    if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
-<span class="nc bnc" id="L256" title="All 2 branches missed.">        &amp;&amp; rb.stage &gt;= ResponseBuilder.STAGE_EXECUTE_QUERY</span>
-<span class="nc bnc" id="L257" title="All 2 branches missed.">        &amp;&amp; rb.stage &lt; ResponseBuilder.STAGE_GET_FIELDS) {</span>
+<span class="nc bnc" id="L255" title="All 6 branches missed.">    if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
+        &amp;&amp; rb.stage &gt;= ResponseBuilder.STAGE_EXECUTE_QUERY
+        &amp;&amp; rb.stage &lt; ResponseBuilder.STAGE_GET_FIELDS) {
 <span class="nc bnc" id="L258" title="All 2 branches missed.">      for (ShardRequest sreq : rb.finished) {</span>
 <span class="nc bnc" id="L259" title="All 2 branches missed.">        if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
-<span class="nc" id="L260">            &amp;&amp; sreq.params.getBool(PARAM_MTAS_PAGE, false)) {</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            &amp;&amp; sreq.params.getBool(PARAM_MTAS_PAGE, false)) {</span>
           // nothing to do
         }
-      }
+<span class="nc" id="L263">      }</span>
     }
 <span class="nc" id="L265">  }</span>
 

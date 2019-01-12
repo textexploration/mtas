@@ -18,7 +18,7 @@ public class MtasIgnoreItem {
 <span class="fc" id="L18">  private static final Log log = LogFactory.getLog(MtasIgnoreItem.class);</span>
 
   /** The Constant DEFAULT_MAXIMUM_IGNORE_LENGTH. */
-<span class="fc" id="L21">  public static final int DEFAULT_MAXIMUM_IGNORE_LENGTH = 10;</span>
+  public static final int DEFAULT_MAXIMUM_IGNORE_LENGTH = 10;
 
   /** The ignore spans. */
   Spans ignoreSpans;
@@ -76,7 +76,7 @@ public class MtasIgnoreItem {
 <span class="fc" id="L76">    maxFullEndPosition = new HashMap&lt;&gt;();</span>
 <span class="fc bfc" id="L77" title="All 2 branches covered.">    if (maximumIgnoreLength == null) {</span>
 <span class="fc" id="L78">      this.maximumIgnoreLength = DEFAULT_MAXIMUM_IGNORE_LENGTH;</span>
-<span class="fc" id="L79">    } else {</span>
+    } else {
 <span class="fc" id="L80">      this.maximumIgnoreLength = maximumIgnoreLength;</span>
     }
 <span class="fc" id="L82">  }</span>
@@ -119,7 +119,7 @@ public class MtasIgnoreItem {
 <span class="pc bpc" id="L119" title="1 of 4 branches missed.">    if (ignoreSpans != null &amp;&amp; docId == currentDocId) {</span>
 <span class="pc bpc" id="L120" title="1 of 2 branches missed.">      if (position &lt; minimumPosition) {</span>
 <span class="nc" id="L121">        throw new IOException(</span>
-<span class="nc" id="L122">            &quot;Unexpected position, should be &gt;= &quot; + minimumPosition + &quot;!&quot;);</span>
+            &quot;Unexpected position, should be &gt;= &quot; + minimumPosition + &quot;!&quot;);
       } else {
 <span class="fc" id="L124">        computeFullStartPositionMinimum(position);</span>
 <span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (minFullStartPosition.containsKey(position)) {</span>
@@ -145,7 +145,7 @@ public class MtasIgnoreItem {
 <span class="nc bnc" id="L145" title="All 4 branches missed.">    if (ignoreSpans != null &amp;&amp; docId == currentDocId) {</span>
 <span class="nc bnc" id="L146" title="All 2 branches missed.">      if (position &lt; minimumPosition) {</span>
 <span class="nc" id="L147">        throw new IOException(</span>
-<span class="nc" id="L148">            &quot;Unexpected position, should be &gt;= &quot; + minimumPosition + &quot;!&quot;);</span>
+            &quot;Unexpected position, should be &gt;= &quot; + minimumPosition + &quot;!&quot;);
       }
 <span class="nc" id="L150">      computeFullEndPositionList(position);</span>
 <span class="nc bnc" id="L151" title="All 2 branches missed.">      if (maxFullEndPosition.containsKey(position)) {</span>
@@ -171,7 +171,7 @@ public class MtasIgnoreItem {
 <span class="pc bpc" id="L171" title="1 of 4 branches missed.">    if (ignoreSpans != null &amp;&amp; docId == currentDocId) {</span>
 <span class="pc bpc" id="L172" title="1 of 2 branches missed.">      if (position &lt; minimumPosition) {</span>
 <span class="nc" id="L173">        throw new IOException(</span>
-<span class="nc" id="L174">            &quot;Unexpected startPosition, should be &gt;= &quot; + minimumPosition + &quot;!&quot;);</span>
+            &quot;Unexpected startPosition, should be &gt;= &quot; + minimumPosition + &quot;!&quot;);
       } else {
 <span class="fc" id="L176">        computeFullEndPositionList(position);</span>
 <span class="fc" id="L177">        return fullEndPositionList.get(position);</span>
@@ -201,12 +201,12 @@ public class MtasIgnoreItem {
 <span class="nc" id="L201">                minFullStartPosition.get(startPosition));</span>
 <span class="nc bnc" id="L202" title="All 2 branches missed.">          } else if (baseStartPositionList.containsKey(startPosition)) {</span>
 <span class="nc" id="L203">            newList.addAll(baseStartPositionList.get(startPosition));</span>
-<span class="nc" id="L204">          } else {</span>
+          } else {
 <span class="nc bnc" id="L205" title="All 2 branches missed.">            if (startPosition &lt; minimumStartPosition) {</span>
 <span class="nc" id="L206">              minimumStartPosition = startPosition;</span>
             }
           }
-        }
+<span class="nc" id="L209">        }</span>
 <span class="nc" id="L210">        list.clear();</span>
 <span class="nc" id="L211">        list.addAll(newList);</span>
       }
@@ -236,14 +236,14 @@ public class MtasIgnoreItem {
 <span class="nc" id="L236">            checkList.clear();</span>
 <span class="nc" id="L237">            subCheckList.clear();</span>
 <span class="nc" id="L238">            throw new IOException(&quot;too many successive ignores, maximum is &quot;</span>
-<span class="nc" id="L239">                + maximumIgnoreLength);</span>
+                + maximumIgnoreLength);
           } else {
 <span class="fc bfc" id="L241" title="All 2 branches covered.">            for (Integer checkItem : checkList) {</span>
 <span class="pc bpc" id="L242" title="1 of 2 branches missed.">              if (fullEndPositionList.get(checkItem) != null) {</span>
 <span class="nc" id="L243">                list.addAll(fullEndPositionList.get(checkItem));</span>
 <span class="nc" id="L244">                maxEndPosition = Math.max(maxEndPosition,</span>
 <span class="nc" id="L245">                    maxFullEndPosition.get(checkItem));</span>
-<span class="nc" id="L246">              } else {</span>
+              } else {
 <span class="fc" id="L247">                moveTo(checkItem);</span>
 <span class="fc bfc" id="L248" title="All 2 branches covered.">                if (baseEndPositionList.containsKey(checkItem)) {</span>
 <span class="fc" id="L249">                  list.addAll(baseEndPositionList.get(checkItem));</span>
@@ -254,7 +254,7 @@ public class MtasIgnoreItem {
                   // ready for checkItem
                 }
               }
-            }
+<span class="fc" id="L257">            }</span>
 <span class="fc" id="L258">            checkList.clear();</span>
 <span class="fc" id="L259">            checkList.addAll(subCheckList);</span>
 <span class="fc" id="L260">            subCheckList.clear();</span>
@@ -279,36 +279,36 @@ public class MtasIgnoreItem {
 <span class="fc bfc" id="L279" title="All 2 branches covered.">    while (position &gt;= currentPosition) {</span>
       try {
 <span class="fc" id="L281">        currentPosition = ignoreSpans.nextStartPosition();</span>
-<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (currentPosition != Spans.NO_MORE_POSITIONS</span>
-<span class="fc bfc" id="L283" title="All 2 branches covered.">            &amp;&amp; currentPosition &gt;= minimumPosition) {</span>
+<span class="fc bfc" id="L282" title="All 4 branches covered.">        if (currentPosition != Spans.NO_MORE_POSITIONS</span>
+            &amp;&amp; currentPosition &gt;= minimumPosition) {
 <span class="pc bpc" id="L284" title="1 of 2 branches missed.">          if (!baseEndPositionList.containsKey(currentPosition)) {</span>
 <span class="fc" id="L285">            baseEndPositionList.put(currentPosition, new HashSet&lt;Integer&gt;());</span>
 <span class="fc" id="L286">            maxBaseEndPosition.put(currentPosition, currentPosition);</span>
-<span class="fc" id="L287">          } else {</span>
+          } else {
 <span class="nc" id="L288">            maxBaseEndPosition.put(currentPosition,</span>
 <span class="nc" id="L289">                Math.max(maxBaseEndPosition.get(currentPosition),</span>
 <span class="nc" id="L290">                    ignoreSpans.endPosition()));</span>
           }
 <span class="pc bpc" id="L292" title="1 of 2 branches missed.">          if (!baseStartPositionList.containsKey(ignoreSpans.endPosition())) {</span>
 <span class="fc" id="L293">            baseStartPositionList.put(ignoreSpans.endPosition(),</span>
-<span class="fc" id="L294">                new HashSet&lt;Integer&gt;());</span>
+                new HashSet&lt;Integer&gt;());
 <span class="fc" id="L295">            minBaseStartPosition.put(ignoreSpans.endPosition(),</span>
 <span class="fc" id="L296">                ignoreSpans.endPosition());</span>
-<span class="fc" id="L297">          } else {</span>
+          } else {
 <span class="nc" id="L298">            minBaseStartPosition.put(ignoreSpans.endPosition(),</span>
 <span class="nc" id="L299">                Math.min(minBaseStartPosition.get(ignoreSpans.endPosition()),</span>
-<span class="nc" id="L300">                    currentPosition));</span>
+                    currentPosition));
           }
 <span class="fc" id="L302">          baseStartPositionList.get(ignoreSpans.endPosition())</span>
 <span class="fc" id="L303">              .add(currentPosition);</span>
 <span class="fc" id="L304">          baseEndPositionList.get(currentPosition)</span>
 <span class="fc" id="L305">              .add(ignoreSpans.endPosition());</span>
         }
-<span class="pc" id="L307">      } catch (IOException e) {</span>
+<span class="nc" id="L307">      } catch (IOException e) {</span>
 <span class="nc" id="L308">        log.debug(e);</span>
 <span class="nc" id="L309">        currentPosition = Spans.NO_MORE_POSITIONS;</span>
 <span class="nc" id="L310">        break;</span>
-      }
+<span class="fc" id="L311">      }</span>
     }
 <span class="fc" id="L313">  }</span>
 

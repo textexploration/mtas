@@ -77,14 +77,14 @@ public class MtasCQLQParser extends QParser {
 <span class="nc" id="L77">      ignoreQuery = localParams.getParams(MTAS_CQL_QPARSER_IGNORE)[0];</span>
     }
 <span class="pc bpc" id="L79" title="1 of 2 branches missed.">    if ((localParams.getParams(MTAS_CQL_QPARSER_MAXIMUM_IGNORE_LENGTH) != null)</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        &amp;&amp; (localParams</span>
-<span class="nc" id="L81">            .getParams(MTAS_CQL_QPARSER_MAXIMUM_IGNORE_LENGTH).length == 1)) {</span>
+        &amp;&amp; (localParams
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            .getParams(MTAS_CQL_QPARSER_MAXIMUM_IGNORE_LENGTH).length == 1)) {</span>
       try {
 <span class="nc" id="L83">        maximumIgnoreLength = Integer.parseInt(</span>
 <span class="nc" id="L84">            localParams.getParams(MTAS_CQL_QPARSER_MAXIMUM_IGNORE_LENGTH)[0]);</span>
 <span class="nc" id="L85">      } catch (NumberFormatException e) {</span>
 <span class="nc" id="L86">        maximumIgnoreLength = null;</span>
-      }
+<span class="nc" id="L87">      }</span>
     }
 <span class="pc bpc" id="L89" title="1 of 2 branches missed.">    if ((localParams.getParams(MTAS_CQL_QPARSER_PREFIX) != null)</span>
 <span class="nc bnc" id="L90" title="All 2 branches missed.">        &amp;&amp; (localParams.getParams(MTAS_CQL_QPARSER_PREFIX).length == 1)) {</span>
@@ -99,7 +99,7 @@ public class MtasCQLQParser extends QParser {
 <span class="nc bnc" id="L99" title="All 2 branches missed.">            || (localParams.getParams(item).length == 1</span>
 <span class="nc bnc" id="L100" title="All 2 branches missed.">                &amp;&amp; localParams.getParams(item)[0].isEmpty())) {</span>
 <span class="nc" id="L101">          variables.put(item.substring(9), new String[0]);</span>
-<span class="nc" id="L102">        } else {</span>
+        } else {
 <span class="nc" id="L103">          ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</span>
 <span class="nc bnc" id="L104" title="All 2 branches missed.">          for (int i = 0; i &lt; localParams.getParams(item).length; i++) {</span>
 <span class="nc" id="L105">            String[] subList = localParams.getParams(item)[i]</span>
@@ -112,7 +112,7 @@ public class MtasCQLQParser extends QParser {
 <span class="nc" id="L112">              list.toArray(new String[list.size()]));</span>
         }
       }
-    }    
+<span class="fc" id="L115">    }    </span>
 <span class="fc" id="L116">  }</span>
 
   /*
@@ -135,19 +135,19 @@ public class MtasCQLQParser extends QParser {
         try {
 <span class="nc" id="L136">          iq = ignoreParser.parse(field, null, null, null, null);</span>
 <span class="nc" id="L137">        } catch (mtas.parser.cql.TokenMgrError</span>
-<span class="nc" id="L138">            | mtas.parser.cql.ParseException e) {</span>
+            | mtas.parser.cql.ParseException e) {
 <span class="nc" id="L139">          throw new SyntaxError(e);</span>
-        }
+<span class="nc" id="L140">        }</span>
       }
 <span class="fc" id="L142">      Reader queryReader = new BufferedReader(new StringReader(cql));</span>
 <span class="fc" id="L143">      MtasCQLParser queryParser = new MtasCQLParser(queryReader);</span>
       try {
 <span class="fc" id="L145">        q = queryParser.parse(field, defaultPrefix, variables, iq,</span>
-<span class="fc" id="L146">            maximumIgnoreLength);</span>
-<span class="fc" id="L147">      } catch (mtas.parser.cql.TokenMgrError</span>
-<span class="nc" id="L148">          | mtas.parser.cql.ParseException e) {</span>
+            maximumIgnoreLength);
+<span class="nc" id="L147">      } catch (mtas.parser.cql.TokenMgrError</span>
+          | mtas.parser.cql.ParseException e) {
 <span class="nc" id="L149">        throw new SyntaxError(e);</span>
-      }
+<span class="fc" id="L150">      }</span>
 <span class="fc" id="L151">      return q;</span>
     }
   }

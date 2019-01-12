@@ -63,9 +63,9 @@ abstract class MtasDataFull&lt;T1 extends Number &amp; Comparable&lt;T1&gt;, T2 
       MtasDataOperations&lt;T1, T2&gt; operations, String segmentRegistration,
       String boundary) throws IOException {
 <span class="fc" id="L65">    super(collectorType, dataType, CodecUtil.STATS_FULL, statsItems, sortType,</span>
-<span class="fc" id="L66">        sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
-<span class="fc" id="L67">        subStatsTypes, subStatsItems, subSortTypes, subSortDirections, subStart,</span>
-<span class="fc" id="L68">        subNumber, segmentRegistration, boundary);</span>
+        sortDirection, start, number, subCollectorTypes, subDataTypes,
+        subStatsTypes, subStatsItems, subSortTypes, subSortDirections, subStart,
+        subNumber, segmentRegistration, boundary);
 <span class="fc" id="L69">    this.operations = operations;</span>
 <span class="fc" id="L70">  }</span>
 
@@ -113,7 +113,7 @@ abstract class MtasDataFull&lt;T1 extends Number &amp; Comparable&lt;T1&gt;, T2 
 <span class="nc bnc" id="L113" title="All 2 branches missed.">    if (newErrorList[newPosition].containsKey(error)) {</span>
 <span class="nc" id="L114">      newErrorList[newPosition].put(error,</span>
 <span class="nc" id="L115">          newErrorList[newPosition].get(error) + number);</span>
-<span class="nc" id="L116">    } else {</span>
+    } else {
 <span class="nc" id="L117">      newErrorList[newPosition].put(error, number);</span>
     }
 <span class="nc" id="L119">  }</span>
@@ -233,9 +233,9 @@ abstract class MtasDataFull&lt;T1 extends Number &amp; Comparable&lt;T1&gt;, T2 
 <span class="nc" id="L233">        T1[] tmpList = operations</span>
 <span class="nc" id="L234">            .createVector1(newFullValueList[newPosition].length + number);</span>
 <span class="nc" id="L235">        System.arraycopy(newFullValueList[newPosition], 0, tmpList, 0,</span>
-<span class="nc" id="L236">            newFullValueList[newPosition].length);</span>
+            newFullValueList[newPosition].length);
 <span class="nc" id="L237">        System.arraycopy(values, 0, tmpList,</span>
-<span class="nc" id="L238">            newFullValueList[newPosition].length, number);</span>
+            newFullValueList[newPosition].length, number);
 <span class="nc" id="L239">        newFullValueList[newPosition] = tmpList;</span>
 <span class="nc" id="L240">      } else {</span>
 <span class="pc bpc" id="L241" title="1 of 2 branches missed.">        if (number &lt; values.length) {</span>
@@ -263,10 +263,10 @@ abstract class MtasDataFull&lt;T1 extends Number &amp; Comparable&lt;T1&gt;, T2 
 <span class="nc bnc" id="L263" title="All 2 branches missed.">      for (int j = 0; j &lt; mapping[i].length; j++) {</span>
 <span class="nc bnc" id="L264" title="All 2 branches missed.">        if (j == 0) {</span>
 <span class="nc" id="L265">          setValue(i, originalFullValueList[mapping[i][j]],</span>
-<span class="nc" id="L266">              originalFullValueList[mapping[i][j]].length, false);</span>
-<span class="nc" id="L267">        } else {</span>
+              originalFullValueList[mapping[i][j]].length, false);
+        } else {
 <span class="nc" id="L268">          setValue(i, originalFullValueList[mapping[i][j]],</span>
-<span class="nc" id="L269">              originalFullValueList[mapping[i][j]].length, true);</span>
+              originalFullValueList[mapping[i][j]].length, true);
         }
       }
     }
@@ -286,8 +286,8 @@ abstract class MtasDataFull&lt;T1 extends Number &amp; Comparable&lt;T1&gt;, T2 
 <span class="nc" id="L286">    closeNewList();</span>
 <span class="nc bnc" id="L287" title="All 2 branches missed.">    if (!collectorType.equals(newDataCollector.getCollectorType())</span>
 <span class="nc bnc" id="L288" title="All 2 branches missed.">        || !dataType.equals(newDataCollector.getDataType())</span>
-<span class="nc bnc" id="L289" title="All 2 branches missed.">        || !statsType.equals(newDataCollector.getStatsType())</span>
-<span class="nc bnc" id="L290" title="All 2 branches missed.">        || !(newDataCollector instanceof MtasDataFull)) {</span>
+<span class="nc bnc" id="L289" title="All 4 branches missed.">        || !statsType.equals(newDataCollector.getStatsType())</span>
+        || !(newDataCollector instanceof MtasDataFull)) {
 <span class="nc" id="L291">      throw new IOException(&quot;cannot merge different dataCollectors&quot;);</span>
     } else {
 <span class="nc" id="L293">      segmentRegistration = null;</span>
@@ -303,16 +303,16 @@ abstract class MtasDataFull&lt;T1 extends Number &amp; Comparable&lt;T1&gt;, T2 
 <span class="nc bnc" id="L303" title="All 2 branches missed.">          if (newMtasDataFull.fullValueList[i].length &gt; 0) {</span>
 <span class="nc" id="L304">            MtasDataCollector&lt;?, ?&gt;[] subCollectors = new MtasDataCollector&lt;?, ?&gt;[1];</span>
 <span class="nc" id="L305">            subCollectors[0] = add(newMtasDataFull.keyList[i],</span>
-<span class="nc" id="L306">                increaseSourceNumber);</span>
+                increaseSourceNumber);
 <span class="nc" id="L307">            setError(newCurrentPosition, newMtasDataFull.errorNumber[i],</span>
-<span class="nc" id="L308">                newMtasDataFull.errorList[i], newCurrentExisting);</span>
+                newMtasDataFull.errorList[i], newCurrentExisting);
 <span class="nc" id="L309">            setValue(newCurrentPosition, newMtasDataFull.fullValueList[i],</span>
-<span class="nc" id="L310">                newMtasDataFull.fullValueList[i].length, newCurrentExisting);</span>
+                newMtasDataFull.fullValueList[i].length, newCurrentExisting);
 <span class="nc bnc" id="L311" title="All 4 branches missed.">            if (hasSub() &amp;&amp; newMtasDataFull.hasSub()) {</span>
               // single key implies exactly one subCollector if hasSub
 <span class="nc" id="L313">              subCollectors[0].merge(</span>
-<span class="nc" id="L314">                  newMtasDataFull.subCollectorListNextLevel[i], map,</span>
-<span class="nc" id="L315">                  increaseSourceNumber);</span>
+                  newMtasDataFull.subCollectorListNextLevel[i], map,
+                  increaseSourceNumber);
             }
           }
         }
@@ -323,15 +323,15 @@ abstract class MtasDataFull&lt;T1 extends Number &amp; Comparable&lt;T1&gt;, T2 
 <span class="nc bnc" id="L323" title="All 2 branches missed.">        if (newMtasDataFull.getSize() &gt; 0) {</span>
 <span class="nc" id="L324">          MtasDataCollector&lt;?, ?&gt; subCollector = add(increaseSourceNumber);</span>
 <span class="nc" id="L325">          setError(newCurrentPosition, newMtasDataFull.errorNumber[0],</span>
-<span class="nc" id="L326">              newMtasDataFull.errorList[0], newCurrentExisting);</span>
+              newMtasDataFull.errorList[0], newCurrentExisting);
 <span class="nc" id="L327">          setValue(newCurrentPosition, newMtasDataFull.fullValueList[0],</span>
-<span class="nc" id="L328">              newMtasDataFull.fullValueList[0].length, newCurrentExisting);</span>
+              newMtasDataFull.fullValueList[0].length, newCurrentExisting);
 <span class="nc bnc" id="L329" title="All 4 branches missed.">          if (hasSub() &amp;&amp; newMtasDataFull.hasSub()) {</span>
 <span class="nc" id="L330">            subCollector.merge(newMtasDataFull.subCollectorNextLevel, map,</span>
-<span class="nc" id="L331">                increaseSourceNumber);</span>
+                increaseSourceNumber);
           }
-        }
-<span class="nc" id="L334">      } else {</span>
+<span class="nc" id="L333">        }</span>
+      } else {
 <span class="nc" id="L335">        throw new IOException(&quot;cannot merge &quot; + collectorType);</span>
       }
 <span class="nc" id="L337">      closeNewList();</span>

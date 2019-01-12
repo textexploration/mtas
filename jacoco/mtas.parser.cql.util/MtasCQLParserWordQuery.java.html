@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import mtas.analysis.token.MtasToken;
@@ -51,10 +52,10 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
    */
   public MtasCQLParserWordQuery(String field, String prefix,
       Map&lt;String, String[]&gt; variables) {
-<span class="nc" id="L54">    super(1, 1);</span>
-<span class="nc" id="L55">    term = new Term(field, prefix + MtasToken.DELIMITER);</span>
-<span class="nc" id="L56">    query = new MtasSpanPrefixQuery(term, true);</span>
-<span class="nc" id="L57">  }</span>
+<span class="nc" id="L55">    super(1, 1);</span>
+<span class="nc" id="L56">    term = new Term(field, prefix + MtasToken.DELIMITER);</span>
+<span class="nc" id="L57">    query = new MtasSpanPrefixQuery(term, true);</span>
+<span class="nc" id="L58">  }</span>
 
   /**
    * Instantiates a new mtas CQL parser word query.
@@ -69,8 +70,8 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
   public MtasCQLParserWordQuery(String field, String prefix, String value,
       Map&lt;String, String[]&gt; variables, Set&lt;String&gt; usedVariables)
       throws ParseException {
-<span class="fc" id="L72">    this(field, prefix, value, MTAS_CQL_REGEXP_QUERY, variables, usedVariables);</span>
-<span class="fc" id="L73">  }</span>
+<span class="fc" id="L73">    this(field, prefix, value, MTAS_CQL_REGEXP_QUERY, variables, usedVariables);</span>
+<span class="fc" id="L74">  }</span>
 
   /**
    * Instantiates a new mtas CQL parser word query.
@@ -86,50 +87,50 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
   public MtasCQLParserWordQuery(String field, String prefix, String value,
       String type, Map&lt;String, String[]&gt; variables, Set&lt;String&gt; usedVariables)
       throws ParseException {
-<span class="fc" id="L89">    super(1, 1);</span>
-<span class="fc" id="L90">    String termBase = prefix + MtasToken.DELIMITER + value;</span>
-<span class="fc bfc" id="L91" title="All 2 branches covered.">    if (type.equals(MTAS_CQL_REGEXP_QUERY)) {</span>
-<span class="fc" id="L92">      term = new Term(field, termBase + &quot;\u0000*&quot;);</span>
-<span class="fc" id="L93">      query = new MtasSpanRegexpQuery(term, true);</span>
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">    } else if (type.equals(MTAS_CQL_WILDCARD_QUERY)) {</span>
-<span class="nc" id="L95">      term = new Term(field, termBase);</span>
-<span class="nc" id="L96">      query = new MtasSpanWildcardQuery(term, true);</span>
-<span class="pc bpc" id="L97" title="1 of 2 branches missed.">    } else if (type.equals(MTAS_CQL_TERM_QUERY)) {</span>
-<span class="nc" id="L98">      term = new Term(field,</span>
-<span class="nc" id="L99">          &quot;\&quot;&quot; + termBase.replace(&quot;\&quot;&quot;, &quot;\&quot;\\\&quot;\&quot;&quot;) + &quot;\&quot;\u0000*&quot;);</span>
-<span class="nc" id="L100">      query = new MtasSpanRegexpQuery(term, true);</span>
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    } else if (type.equals(MTAS_CQL_VARIABLE_QUERY)) {</span>
-<span class="pc bpc" id="L102" title="3 of 6 branches missed.">      if (value != null &amp;&amp; variables != null &amp;&amp; variables.containsKey(value)</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">          &amp;&amp; variables.get(value) != null) {</span>
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (usedVariables.contains(value)) {</span>
-<span class="nc" id="L105">          throw new ParseException(</span>
-<span class="nc" id="L106">              &quot;variable $&quot; + value + &quot; should be used exactly one time&quot;);</span>
+<span class="fc" id="L90">    super(1, 1);</span>
+<span class="fc" id="L91">    String termBase = prefix + MtasToken.DELIMITER + value;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">    if (type.equals(MTAS_CQL_REGEXP_QUERY)) {</span>
+<span class="fc" id="L93">      term = new Term(field, termBase + &quot;\u0000*&quot;);</span>
+<span class="fc" id="L94">      query = new MtasSpanRegexpQuery(term, true);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    } else if (type.equals(MTAS_CQL_WILDCARD_QUERY)) {</span>
+<span class="nc" id="L96">      term = new Term(field, termBase);</span>
+<span class="nc" id="L97">      query = new MtasSpanWildcardQuery(term, true);</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">    } else if (type.equals(MTAS_CQL_TERM_QUERY)) {</span>
+<span class="nc" id="L99">      term = new Term(field,</span>
+<span class="nc" id="L100">          &quot;\&quot;&quot; + termBase.replace(&quot;\&quot;&quot;, &quot;\&quot;\\\&quot;\&quot;&quot;) + &quot;\&quot;\u0000*&quot;);</span>
+<span class="nc" id="L101">      query = new MtasSpanRegexpQuery(term, true);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">    } else if (type.equals(MTAS_CQL_VARIABLE_QUERY)) {</span>
+<span class="pc bpc" id="L103" title="3 of 6 branches missed.">      if (value != null &amp;&amp; variables != null &amp;&amp; variables.containsKey(value)</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">          &amp;&amp; variables.get(value) != null) {</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (usedVariables.contains(value)) {</span>
+<span class="nc" id="L106">          throw new ParseException(</span>
+              &quot;variable $&quot; + value + &quot; should be used exactly one time&quot;);
         } else {
-<span class="fc" id="L108">          usedVariables.add(value);</span>
+<span class="fc" id="L109">          usedVariables.add(value);</span>
         }
-<span class="fc" id="L110">        String[] list = variables.get(value);</span>
-<span class="fc" id="L111">        MtasSpanQuery[] queries = new MtasSpanQuery[list.length];</span>
-<span class="fc" id="L112">        term = new Term(field, prefix + MtasToken.DELIMITER);</span>
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        for (int i = 0; i &lt; list.length; i++) {</span>
-<span class="fc" id="L114">          termBase = prefix + MtasToken.DELIMITER + list[i];</span>
-<span class="fc" id="L115">          term = new Term(field, &quot;\&quot;&quot; + termBase + &quot;\&quot;\u0000*&quot;);</span>
-<span class="fc" id="L116">          queries[i] = new MtasSpanRegexpQuery(term, true);</span>
+<span class="fc" id="L111">        String[] list = variables.get(value);</span>
+<span class="fc" id="L112">        MtasSpanQuery[] queries = new MtasSpanQuery[list.length];</span>
+<span class="fc" id="L113">        term = new Term(field, prefix + MtasToken.DELIMITER);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        for (int i = 0; i &lt; list.length; i++) {</span>
+<span class="fc" id="L115">          termBase = prefix + MtasToken.DELIMITER + list[i];</span>
+<span class="fc" id="L116">          term = new Term(field, &quot;\&quot;&quot; + termBase + &quot;\&quot;\u0000*&quot;);</span>
+<span class="fc" id="L117">          queries[i] = new MtasSpanRegexpQuery(term, true);</span>
         }
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (queries.length == 0) {</span>
-<span class="nc" id="L119">          query = new MtasSpanMatchNoneQuery(field);</span>
-<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        } else if (queries.length &gt; 1) {</span>
-<span class="fc" id="L121">          query = new MtasSpanOrQuery(queries);</span>
-<span class="fc" id="L122">        } else {</span>
-<span class="nc" id="L123">          query = queries[0];</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (queries.length == 0) {</span>
+<span class="nc" id="L120">          query = new MtasSpanMatchNoneQuery(field);</span>
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        } else if (queries.length &gt; 1) {</span>
+<span class="fc" id="L122">          query = new MtasSpanOrQuery(queries);</span>
+        } else {
+<span class="nc" id="L124">          query = queries[0];</span>
         }
-<span class="nc" id="L125">      } else {</span>
-<span class="nc" id="L126">        throw new ParseException(&quot;variable $&quot; + value + &quot; not defined&quot;);</span>
+<span class="fc" id="L126">      } else {</span>
+<span class="nc" id="L127">        throw new ParseException(&quot;variable $&quot; + value + &quot; not defined&quot;);</span>
       }
     } else {
-<span class="nc" id="L129">      term = new Term(field, prefix + MtasToken.DELIMITER + value);</span>
-<span class="nc" id="L130">      query = new MtasSpanTermQuery(term, true);</span>
+<span class="nc" id="L130">      term = new Term(field, prefix + MtasToken.DELIMITER + value);</span>
+<span class="nc" id="L131">      query = new MtasSpanTermQuery(term, true);</span>
     }
-<span class="fc" id="L132">  }</span>
+<span class="fc" id="L133">  }</span>
 
   /*
    * (non-Javadoc)
@@ -138,7 +139,7 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public String getField() {
-<span class="fc" id="L141">    return term.field();</span>
+<span class="fc" id="L142">    return term.field();</span>
   }
 
   /*
@@ -149,7 +150,7 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanQuery rewrite(IndexReader reader) throws IOException {
-<span class="fc" id="L152">    return query.rewrite(reader);</span>
+<span class="fc" id="L153">    return query.rewrite(reader);</span>
   }
 
   /*
@@ -162,7 +163,7 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
   @Override
   public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
       throws IOException {
-<span class="nc" id="L165">    return query.createWeight(searcher, needsScores, boost);</span>
+<span class="nc" id="L166">    return query.createWeight(searcher, needsScores, boost);</span>
   }
 
   /*
@@ -172,7 +173,7 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public String toString(String field) {
-<span class="nc" id="L175">    return query.toString(term.field());</span>
+<span class="nc" id="L176">    return query.toString(term.field());</span>
   }
 
   /*
@@ -182,14 +183,14 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-<span class="pc bpc" id="L185" title="1 of 2 branches missed.">    if (this == obj)</span>
-<span class="nc" id="L186">      return true;</span>
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">    if (obj == null)</span>
-<span class="nc" id="L188">      return false;</span>
-<span class="fc bfc" id="L189" title="All 2 branches covered.">    if (getClass() != obj.getClass())</span>
-<span class="fc" id="L190">      return false;</span>
-<span class="fc" id="L191">    final MtasCQLParserWordQuery that = (MtasCQLParserWordQuery) obj;</span>
-<span class="fc" id="L192">    return query.equals(that.query);</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">    if (this == obj)</span>
+<span class="nc" id="L187">      return true;</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">    if (obj == null)</span>
+<span class="nc" id="L189">      return false;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">    if (getClass() != obj.getClass())</span>
+<span class="fc" id="L191">      return false;</span>
+<span class="fc" id="L192">    final MtasCQLParserWordQuery that = (MtasCQLParserWordQuery) obj;</span>
+<span class="fc" id="L193">    return query.equals(that.query);</span>
   }
 
   /*
@@ -199,10 +200,7 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-<span class="fc" id="L202">    int h = this.getClass().getSimpleName().hashCode();</span>
-<span class="fc" id="L203">    h = (h * 5) ^ term.hashCode();</span>
-<span class="fc" id="L204">    h = (h * 7) ^ query.hashCode();</span>
-<span class="fc" id="L205">    return h;</span>
+<span class="fc" id="L203">    return Objects.hash(this.getClass().getSimpleName(), term, query);   </span>
   }
 
   /*
@@ -212,13 +210,13 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public void disableTwoPhaseIterator() {
-<span class="nc" id="L215">    super.disableTwoPhaseIterator();</span>
-<span class="nc" id="L216">    query.disableTwoPhaseIterator();</span>
-<span class="nc" id="L217">  }</span>
+<span class="nc" id="L213">    super.disableTwoPhaseIterator();</span>
+<span class="nc" id="L214">    query.disableTwoPhaseIterator();</span>
+<span class="nc" id="L215">  }</span>
 
   @Override
   public boolean isMatchAllPositionsQuery() {
-<span class="fc" id="L221">    return false;</span>
+<span class="fc" id="L219">    return false;</span>
   }
 
 }

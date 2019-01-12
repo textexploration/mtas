@@ -141,7 +141,7 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
   
 
   /** The Constant DEFAULT_DIST_ERR_PCT. */
-<span class="fc" id="L144">  public static final double DEFAULT_DIST_ERR_PCT = 0.15;</span>
+  public static final double DEFAULT_DIST_ERR_PCT = 0.15;
 
  
   /**
@@ -195,14 +195,14 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="fc" id="L195">            .get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY_FIELD, null);</span>
         
 <span class="fc" id="L197">        minima[tmpCounter] = rb.req.getParams().get(PARAM_MTAS_HEATMAP + &quot;.&quot;</span>
-<span class="fc" id="L198">            + id + &quot;.&quot; + NAME_MTAS_HEATMAP_MINIMUM, null);</span>
+            + id + &quot;.&quot; + NAME_MTAS_HEATMAP_MINIMUM, null);
 <span class="fc" id="L199">        maxima[tmpCounter] = rb.req.getParams().get(PARAM_MTAS_HEATMAP + &quot;.&quot;</span>
-<span class="fc" id="L200">            + id + &quot;.&quot; + NAME_MTAS_HEATMAP_MAXIMUM, null);</span>
+            + id + &quot;.&quot; + NAME_MTAS_HEATMAP_MAXIMUM, null);
 <span class="fc" id="L201">        types[tmpCounter] = rb.req.getParams().get(PARAM_MTAS_HEATMAP + &quot;.&quot;</span>
-<span class="fc" id="L202">            + id + &quot;.&quot; + NAME_MTAS_HEATMAP_TYPE, null);</span>
+            + id + &quot;.&quot; + NAME_MTAS_HEATMAP_TYPE, null);
 <span class="fc" id="L203">        Set&lt;String&gt; functionIds = MtasSolrResultUtil</span>
 <span class="fc" id="L204">            .getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_HEATMAP</span>
-<span class="fc" id="L205">                + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_FUNCTION);</span>
+                + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_FUNCTION);
 <span class="fc" id="L206">        functionExpressions[tmpCounter] = new String[functionIds.size()];</span>
 <span class="fc" id="L207">        functionKeys[tmpCounter] = new String[functionIds.size()];</span>
 <span class="fc" id="L208">        functionTypes[tmpCounter] = new String[functionIds.size()];</span>
@@ -210,25 +210,25 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="fc bfc" id="L210" title="All 2 branches covered.">        for (String functionId : functionIds) {</span>
 <span class="fc" id="L211">          functionKeys[tmpCounter][tmpSubCounter] = rb.req.getParams()</span>
 <span class="fc" id="L212">              .get(</span>
-<span class="fc" id="L213">                  PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot;</span>
-<span class="fc" id="L214">                      + NAME_MTAS_HEATMAP_FUNCTION + &quot;.&quot; + functionId + &quot;.&quot;</span>
-<span class="fc" id="L215">                      + SUBNAME_MTAS_HEATMAP_FUNCTION_KEY,</span>
+                  PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot;
+                      + NAME_MTAS_HEATMAP_FUNCTION + &quot;.&quot; + functionId + &quot;.&quot;
+                      + SUBNAME_MTAS_HEATMAP_FUNCTION_KEY,
 <span class="fc" id="L216">                  String.valueOf(tmpSubCounter))</span>
 <span class="fc" id="L217">              .trim();</span>
 <span class="fc" id="L218">          functionExpressions[tmpCounter][tmpSubCounter] = rb.req.getParams()</span>
 <span class="fc" id="L219">              .get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot;</span>
-<span class="fc" id="L220">                  + NAME_MTAS_HEATMAP_FUNCTION + &quot;.&quot; + functionId + &quot;.&quot;</span>
-<span class="fc" id="L221">                  + SUBNAME_MTAS_HEATMAP_FUNCTION_EXPRESSION, null);</span>
+                  + NAME_MTAS_HEATMAP_FUNCTION + &quot;.&quot; + functionId + &quot;.&quot;
+                  + SUBNAME_MTAS_HEATMAP_FUNCTION_EXPRESSION, null);
 <span class="fc" id="L222">          functionTypes[tmpCounter][tmpSubCounter] = rb.req.getParams()</span>
 <span class="fc" id="L223">              .get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot;</span>
-<span class="fc" id="L224">                  + NAME_MTAS_HEATMAP_FUNCTION + &quot;.&quot; + functionId + &quot;.&quot;</span>
-<span class="fc" id="L225">                  + SUBNAME_MTAS_HEATMAP_FUNCTION_TYPE, null);</span>
+                  + NAME_MTAS_HEATMAP_FUNCTION + &quot;.&quot; + functionId + &quot;.&quot;
+                  + SUBNAME_MTAS_HEATMAP_FUNCTION_TYPE, null);
 <span class="fc" id="L226">          tmpSubCounter++;</span>
-        }
+<span class="fc" id="L227">        }</span>
         
 <span class="fc" id="L229">        Set&lt;String&gt; qIds = MtasSolrResultUtil.getIdsFromParameters(</span>
 <span class="fc" id="L230">            rb.req.getParams(),</span>
-<span class="fc" id="L231">            PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY);</span>
+            PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY);
 <span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (!qIds.isEmpty()) {</span>
 <span class="fc" id="L233">          int tmpQCounter = 0;</span>
 <span class="fc" id="L234">          queryTypes[tmpCounter] = new String[qIds.size()];</span>
@@ -240,49 +240,49 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="fc bfc" id="L240" title="All 2 branches covered.">          for (String qId : qIds) {</span>
 <span class="fc" id="L241">            queryTypes[tmpCounter][tmpQCounter] = rb.req.getParams()</span>
 <span class="fc" id="L242">                .get(</span>
-<span class="fc" id="L243">                    PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY</span>
-<span class="fc" id="L244">                        + &quot;.&quot; + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_TYPE,</span>
-<span class="fc" id="L245">                    null);</span>
+                    PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY
+                        + &quot;.&quot; + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_TYPE,
+                    null);
 <span class="fc" id="L246">            queryValues[tmpCounter][tmpQCounter] = rb.req.getParams()</span>
 <span class="fc" id="L247">                .get(</span>
-<span class="fc" id="L248">                    PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY</span>
-<span class="fc" id="L249">                        + &quot;.&quot; + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_VALUE,</span>
-<span class="fc" id="L250">                    null);</span>
+                    PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY
+                        + &quot;.&quot; + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_VALUE,
+                    null);
 <span class="fc" id="L251">            queryPrefixes[tmpCounter][tmpQCounter] = rb.req.getParams()</span>
 <span class="fc" id="L252">                .get(</span>
-<span class="fc" id="L253">                    PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY</span>
-<span class="fc" id="L254">                        + &quot;.&quot; + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_PREFIX,</span>
-<span class="fc" id="L255">                    null);</span>
+                    PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY
+                        + &quot;.&quot; + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_PREFIX,
+                    null);
 <span class="fc" id="L256">            queryIgnores[tmpCounter][tmpQCounter] = rb.req.getParams()</span>
 <span class="fc" id="L257">                .get(</span>
-<span class="fc" id="L258">                    PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY</span>
-<span class="fc" id="L259">                        + &quot;.&quot; + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_IGNORE,</span>
-<span class="fc" id="L260">                    null);</span>
+                    PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY
+                        + &quot;.&quot; + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_IGNORE,
+                    null);
 <span class="fc" id="L261">            queryMaximumIgnoreLengths[tmpCounter][tmpQCounter] = rb.req</span>
 <span class="fc" id="L262">                .getParams()</span>
 <span class="fc" id="L263">                .get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY</span>
-<span class="fc" id="L264">                    + &quot;.&quot; + qId + &quot;.&quot;</span>
-<span class="fc" id="L265">                    + SUBNAME_MTAS_HEATMAP_QUERY_MAXIMUM_IGNORE_LENGTH, null);</span>
+                    + &quot;.&quot; + qId + &quot;.&quot;
+                    + SUBNAME_MTAS_HEATMAP_QUERY_MAXIMUM_IGNORE_LENGTH, null);
 <span class="fc" id="L266">            Set&lt;String&gt; vIds = MtasSolrResultUtil.getIdsFromParameters(</span>
 <span class="fc" id="L267">                rb.req.getParams(),</span>
-<span class="fc" id="L268">                PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY + &quot;.&quot;</span>
-<span class="fc" id="L269">                    + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE);</span>
+                PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY + &quot;.&quot;
+                    + qId + &quot;.&quot; + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE);
 <span class="fc" id="L270">            queryVariables[tmpCounter][tmpQCounter] = new HashMap&lt;&gt;();</span>
 <span class="pc bpc" id="L271" title="1 of 2 branches missed.">            if (!vIds.isEmpty()) {</span>
 <span class="nc" id="L272">              HashMap&lt;String, ArrayList&lt;String&gt;&gt; tmpVariables = new HashMap&lt;&gt;();</span>
 <span class="nc bnc" id="L273" title="All 2 branches missed.">              for (String vId : vIds) {</span>
 <span class="nc" id="L274">                String name = rb.req.getParams().get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id</span>
-<span class="nc" id="L275">                    + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY + &quot;.&quot; + qId + &quot;.&quot;</span>
-<span class="nc" id="L276">                    + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE + &quot;.&quot; + vId + &quot;.&quot;</span>
-<span class="nc" id="L277">                    + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE_NAME, null);</span>
+                    + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY + &quot;.&quot; + qId + &quot;.&quot;
+                    + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE + &quot;.&quot; + vId + &quot;.&quot;
+                    + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE_NAME, null);
 <span class="nc bnc" id="L278" title="All 2 branches missed.">                if (name != null) {</span>
 <span class="nc bnc" id="L279" title="All 2 branches missed.">                  if (!tmpVariables.containsKey(name)) {</span>
 <span class="nc" id="L280">                    tmpVariables.put(name, new ArrayList&lt;String&gt;());</span>
                   }
 <span class="nc" id="L282">                  String value = rb.req.getParams().get(PARAM_MTAS_HEATMAP + &quot;.&quot;</span>
-<span class="nc" id="L283">                      + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY + &quot;.&quot; + qId + &quot;.&quot;</span>
-<span class="nc" id="L284">                      + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE + &quot;.&quot; + vId + &quot;.&quot;</span>
-<span class="nc" id="L285">                      + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE_VALUE, null);</span>
+                      + id + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY + &quot;.&quot; + qId + &quot;.&quot;
+                      + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE + &quot;.&quot; + vId + &quot;.&quot;
+                      + SUBNAME_MTAS_HEATMAP_QUERY_VARIABLE_VALUE, null);
 <span class="nc bnc" id="L286" title="All 2 branches missed.">                  if (value != null) {</span>
 <span class="nc" id="L287">                    ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</span>
 <span class="nc" id="L288">                    String[] subList = value.split(&quot;(?&lt;!\\\\),&quot;);</span>
@@ -293,19 +293,19 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="nc" id="L293">                    tmpVariables.get(name).addAll(list);</span>
                   }
                 }
-              }
+<span class="nc" id="L296">              }</span>
 <span class="nc bnc" id="L297" title="All 2 branches missed.">              for (Entry&lt;String, ArrayList&lt;String&gt;&gt; entry : tmpVariables</span>
 <span class="nc" id="L298">                  .entrySet()) {</span>
 <span class="nc" id="L299">                queryVariables[tmpCounter][tmpQCounter].put(entry.getKey(),</span>
 <span class="nc" id="L300">                    entry.getValue()</span>
 <span class="nc" id="L301">                        .toArray(new String[entry.getValue().size()]));</span>
-              }
+<span class="nc" id="L302">              }</span>
             }
 <span class="fc" id="L304">            tmpQCounter++;</span>
-          }
+<span class="fc" id="L305">          }</span>
 <span class="fc" id="L306">        } else {</span>
 <span class="nc" id="L307">          throw new IOException(</span>
-<span class="nc" id="L308">              &quot;no &quot; + NAME_MTAS_HEATMAP_QUERY + &quot; for mtas heatmap &quot; + id);</span>
+              &quot;no &quot; + NAME_MTAS_HEATMAP_QUERY + &quot; for mtas heatmap &quot; + id);
         }
 <span class="fc" id="L310">        geoms[tmpCounter] = rb.req.getParams().get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_GEOM, null);</span>
 <span class="fc" id="L311">        gridLevels[tmpCounter] = rb.req.getParams()</span>
@@ -313,10 +313,10 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="fc" id="L313">        distErrPcts[tmpCounter] = rb.req.getParams()</span>
 <span class="fc" id="L314">            .get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_DIST_ERR_PCT, null);</span>
 <span class="fc" id="L315">        distErrs[tmpCounter] = rb.req.getParams().get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_DIST_ERR,</span>
-<span class="fc" id="L316">            null);</span>
+            null);
 <span class="fc" id="L317">        maxCells[tmpCounter] = rb.req.getParams().get(PARAM_MTAS_HEATMAP + &quot;.&quot; + id + &quot;.&quot; + NAME_MTAS_HEATMAP_MAX_CELLS,</span>
-<span class="fc" id="L318">            null);</span>
-      }
+            null);
+<span class="fc" id="L319">      }</span>
 <span class="fc" id="L320">      String uniqueKeyField = rb.req.getSchema().getUniqueKeyField().getName();</span>
 <span class="fc" id="L321">      mtasFields.doHeatmap = true;</span>
 <span class="fc" id="L322">      rb.setNeedDocSet(true);</span>
@@ -349,12 +349,12 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="pc bpc" id="L349" title="1 of 2 branches missed.">          Integer maximumIgnoreLength = (queryMaximumIgnoreLengths[i][j] == null)</span>
 <span class="pc" id="L350">              ? null : Integer.parseInt(queryMaximumIgnoreLengths[i][j]);</span>
 <span class="fc" id="L351">          MtasSpanQuery q = MtasSolrResultUtil.constructQuery(queryValues[i][j],</span>
-<span class="fc" id="L352">              queryTypes[i][j], queryPrefixes[i][j], queryVariables[i][j],</span>
-<span class="fc" id="L353">              queryFields[i], queryIgnores[i][j], maximumIgnoreLength);</span>
+              queryTypes[i][j], queryPrefixes[i][j], queryVariables[i][j],
+              queryFields[i], queryIgnores[i][j], maximumIgnoreLength);
           // minimize number of queries
 <span class="pc bpc" id="L355" title="1 of 2 branches missed.">          if (cf.spanQueryList.contains(q)) {</span>
 <span class="nc" id="L356">            q = cf.spanQueryList.get(cf.spanQueryList.indexOf(q));</span>
-<span class="nc" id="L357">          } else {</span>
+          } else {
 <span class="fc" id="L358">            cf.spanQueryList.add(q);</span>
           }
 <span class="fc" id="L360">          ql[j] = q;</span>
@@ -362,9 +362,9 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="pc bpc" id="L362" title="2 of 4 branches missed.">        Double minimum = (minima[i] == null) || (minima[i].isEmpty()) ? null</span>
 <span class="fc" id="L363">            : Double.parseDouble(minima[i]);</span>
 <span class="pc bpc" id="L364" title="3 of 4 branches missed.">        Double maximum = (maxima[i] == null) || (maxima[i].isEmpty()) ? null</span>
-<span class="nc" id="L365">            : Double.parseDouble(maxima[i]);</span>
+<span class="pc" id="L365">            : Double.parseDouble(maxima[i]);</span>
 <span class="pc bpc" id="L366" title="3 of 4 branches missed.">        String type = (types[i] == null) || (types[i].isEmpty()) ? null</span>
-<span class="nc" id="L367">            : types[i].trim();</span>
+<span class="pc" id="L367">            : types[i].trim();</span>
 <span class="fc" id="L368">        String[] functionKey = functionKeys[i];</span>
 <span class="fc" id="L369">        String[] functionExpression = functionExpressions[i];</span>
 <span class="fc" id="L370">        String[] functionType = functionTypes[i];</span>
@@ -393,7 +393,7 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="fc" id="L393">        } else {</span>
           // FYI we support the term query one too but few people use that one
 <span class="nc" id="L395">          throw new SolrException(SolrException.ErrorCode.BAD_REQUEST, &quot;heatmap field needs to be of type &quot;</span>
-<span class="nc" id="L396">              + SpatialRecursivePrefixTreeFieldType.class + &quot; or &quot; + RptWithGeometrySpatialField.class);</span>
+              + SpatialRecursivePrefixTreeFieldType.class + &quot; or &quot; + RptWithGeometrySpatialField.class);
         }
         // get context
 <span class="fc" id="L399">        final SpatialContext ctx = strategy.getSpatialContext();</span>
@@ -404,14 +404,14 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="pc bpc" id="L404" title="1 of 2 branches missed.">        if (gridLevel != null) {</span>
 <span class="pc bpc" id="L405" title="2 of 4 branches missed.">          if (gridLevel &lt;= 0 || gridLevel &gt; maxGridLevel) {</span>
 <span class="nc" id="L406">            throw new SolrException(SolrException.ErrorCode.BAD_REQUEST,</span>
-<span class="nc" id="L407">                NAME_MTAS_HEATMAP_GRID_LEVEL + &quot; should be &gt; 0 and &lt;= &quot; + maxGridLevel);</span>
+                NAME_MTAS_HEATMAP_GRID_LEVEL + &quot; should be &gt; 0 and &lt;= &quot; + maxGridLevel);
           }
         } else {
           // SpatialArgs has utility methods to resolve a 'distErr' from optionally set
           // distErr &amp; distErrPct. Arguably that
           // should be refactored to feel less weird than using it like this.
-<span class="nc" id="L413">          SpatialArgs spatialArgs = new SpatialArgs(SpatialOperation.Intersects/* ignored */,</span>
-<span class="nc bnc" id="L414" title="All 2 branches missed.">              boundsShape == null ? ctx.getWorldBounds() : boundsShape);</span>
+<span class="nc bnc" id="L413" title="All 2 branches missed.">          SpatialArgs spatialArgs = new SpatialArgs(SpatialOperation.Intersects/* ignored */,</span>
+<span class="nc" id="L414">              boundsShape == null ? ctx.getWorldBounds() : boundsShape);</span>
 <span class="nc bnc" id="L415" title="All 2 branches missed.">          if (distErr != null) {</span>
             // convert distErr units based on configured units
 <span class="nc" id="L417">            spatialArgs.setDistErr(distErr * distanceUnits.multiplierFromThisUnitToDegrees());</span>
@@ -420,9 +420,9 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="nc" id="L420">          distErr = spatialArgs.resolveDistErr(ctx, DEFAULT_DIST_ERR_PCT);</span>
 <span class="nc bnc" id="L421" title="All 2 branches missed.">          if (distErr &lt;= 0) {</span>
 <span class="nc" id="L422">            throw new SolrException(SolrException.ErrorCode.BAD_REQUEST,</span>
-<span class="nc" id="L423">                NAME_MTAS_HEATMAP_DIST_ERR_PCT + &quot; or &quot; + NAME_MTAS_HEATMAP_DIST_ERR</span>
-<span class="nc" id="L424">                    + &quot; should be &gt; 0 or instead provide &quot; + NAME_MTAS_HEATMAP_GRID_LEVEL + &quot;=&quot; + maxGridLevel</span>
-<span class="nc" id="L425">                    + &quot; if you insist on maximum detail&quot;);</span>
+                NAME_MTAS_HEATMAP_DIST_ERR_PCT + &quot; or &quot; + NAME_MTAS_HEATMAP_DIST_ERR
+                    + &quot; should be &gt; 0 or instead provide &quot; + NAME_MTAS_HEATMAP_GRID_LEVEL + &quot;=&quot; + maxGridLevel
+                    + &quot; if you insist on maximum detail&quot;);
           }
           // The SPT (grid) can lookup a grid level satisfying an error distance
           // constraint
@@ -431,11 +431,11 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
         // add component
         try {
 <span class="fc" id="L433">          mtasFields.list.get(queryFields[i]).heatmapList.add(new ComponentHeatmap(key, ql, minimum, maximum, type,</span>
-<span class="fc" id="L434">            functionKey, functionExpression, functionType,</span>
-<span class="fc" id="L435">            strategy, boundsShape, gridLevel, maxCellsValue));</span>
-<span class="pc" id="L436">        } catch (ParseException e) {</span>
+            functionKey, functionExpression, functionType,
+            strategy, boundsShape, gridLevel, maxCellsValue));
+<span class="nc" id="L436">        } catch (ParseException e) {</span>
 <span class="nc" id="L437">          throw new IOException(e.getMessage());</span>
-        }  
+<span class="fc" id="L438">        }  </span>
       }
     }
 <span class="fc" id="L441">  }</span>
@@ -453,20 +453,20 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="fc bfc" id="L453" title="All 2 branches covered.">    for (SubComponentFunction function : heatmap.hm.functions) {</span>
 <span class="fc" id="L454">      function.dataCollector.close();</span>
 <span class="fc" id="L455">      functionResults.put(function.key, new MtasSolrMtasResult(function.dataCollector,</span>
-<span class="fc" id="L456">                      function.dataType,</span>
-<span class="fc" id="L457">                      function.statsType,</span>
-<span class="fc" id="L458">                      function.statsItems, null, null));</span>
-    } 
+                      function.dataType,
+                      function.statsType,
+                      function.statsItems, null, null));
+<span class="fc" id="L459">    } </span>
 <span class="fc" id="L460">    functionData.put(heatmap.hm.dataCollector, functionResults);</span>
 <span class="fc" id="L461">    MtasSolrMtasHeatmapResult data = new MtasSolrMtasHeatmapResult(heatmap, new MtasSolrMtasResult(</span>
-<span class="fc" id="L462">        heatmap.hm.dataCollector,</span>
-<span class="fc" id="L463">        heatmap.dataType,</span>
-<span class="fc" id="L464">        heatmap.statsType,</span>
-<span class="fc" id="L465">        heatmap.statsItems,</span>
-<span class="fc" id="L466">        null, functionData));</span>
+        heatmap.hm.dataCollector,
+        heatmap.dataType,
+        heatmap.statsType,
+        heatmap.statsItems,
+        null, functionData));
 <span class="fc bfc" id="L467" title="All 2 branches covered.">    if (encode) {</span>
 <span class="fc" id="L468">      mtasHeatmapResponse.add(&quot;_encoded_&quot;, MtasSolrResultUtil.encode(data));</span>
-<span class="fc" id="L469">      } else {</span>
+      } else {
 <span class="fc" id="L470">      mtasHeatmapResponse.add(&quot;heatmap&quot;, data);</span>
 <span class="fc" id="L471">      MtasSolrResultUtil.rewrite(mtasHeatmapResponse, searchComponent);</span>
     }
@@ -486,31 +486,31 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="nc" id="L486">        sreq.params.remove(PARAM_MTAS_HEATMAP);</span>
 <span class="nc bnc" id="L487" title="All 2 branches missed.">        for (String key : keys) {</span>
 <span class="nc" id="L488">          sreq.params.remove(</span>
-<span class="nc" id="L489">              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY_FIELD);</span>
+              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_QUERY_FIELD);
 <span class="nc" id="L490">          sreq.params.remove(</span>
-<span class="nc" id="L491">              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_HEATMAP_FIELD);</span>
+              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_HEATMAP_FIELD);
 <span class="nc" id="L492">          sreq.params.remove(</span>
-<span class="nc" id="L493">              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_GRID_LEVEL);</span>
+              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_GRID_LEVEL);
 <span class="nc" id="L494">          sreq.params.remove(</span>
-<span class="nc" id="L495">              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_GEOM);</span>
+              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_GEOM);
 <span class="nc" id="L496">          sreq.params.remove(</span>
-<span class="nc" id="L497">              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_KEY); </span>
+              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_KEY); 
 <span class="nc" id="L498">          sreq.params.remove(</span>
-<span class="nc" id="L499">              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_MAX_CELLS);          </span>
+              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_MAX_CELLS);          
 <span class="nc" id="L500">          sreq.params.remove(</span>
-<span class="nc" id="L501">              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_DIST_ERR);</span>
+              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_DIST_ERR);
 <span class="nc" id="L502">          sreq.params.remove(</span>
-<span class="nc" id="L503">              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_DIST_ERR_PCT);</span>
-        }
+              PARAM_MTAS_HEATMAP + &quot;.&quot; + key + &quot;.&quot; + NAME_MTAS_HEATMAP_DIST_ERR_PCT);
+<span class="nc" id="L504">        }</span>
       }
     }
 <span class="nc" id="L507">  }</span>
 
   @Override
   public void finishStage(ResponseBuilder rb) {
-<span class="nc bnc" id="L511" title="All 2 branches missed.">    if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
-<span class="nc bnc" id="L512" title="All 2 branches missed.">        &amp;&amp; rb.stage &gt;= ResponseBuilder.STAGE_EXECUTE_QUERY</span>
-<span class="nc bnc" id="L513" title="All 2 branches missed.">        &amp;&amp; rb.stage &lt; ResponseBuilder.STAGE_GET_FIELDS) {</span>
+<span class="nc bnc" id="L511" title="All 6 branches missed.">    if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
+        &amp;&amp; rb.stage &gt;= ResponseBuilder.STAGE_EXECUTE_QUERY
+        &amp;&amp; rb.stage &lt; ResponseBuilder.STAGE_GET_FIELDS) {
 <span class="nc bnc" id="L514" title="All 2 branches missed.">      for (ShardRequest sreq : rb.finished) {</span>
 <span class="nc bnc" id="L515" title="All 2 branches missed.">        if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)</span>
 <span class="nc bnc" id="L516" title="All 2 branches missed.">            &amp;&amp; sreq.params.getBool(PARAM_MTAS_HEATMAP, false)) {</span>
@@ -526,10 +526,10 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="nc" id="L526">            } catch (ClassCastException e) {</span>
 <span class="nc" id="L527">              log.debug(e);</span>
               // shouldn't happen
-            }
-          }
+<span class="nc" id="L529">            }</span>
+<span class="nc" id="L530">          }</span>
         }
-      }
+<span class="nc" id="L532">      }</span>
     }
 <span class="nc" id="L534">  }</span>
 
@@ -539,10 +539,10 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="fc" id="L539">    NamedList&lt;Object&gt; mtasResponse = null;</span>
     try {
 <span class="fc" id="L541">      mtasResponse = (NamedList&lt;Object&gt;) rb.rsp.getValues().get(&quot;mtas&quot;);</span>
-<span class="pc" id="L542">    } catch (ClassCastException e) {</span>
+<span class="nc" id="L542">    } catch (ClassCastException e) {</span>
 <span class="nc" id="L543">      log.debug(e);</span>
 <span class="nc" id="L544">      mtasResponse = null;</span>
-    }
+<span class="fc" id="L545">    }</span>
 <span class="pc bpc" id="L546" title="1 of 2 branches missed.">    if (mtasResponse != null) {</span>
       ArrayList&lt;Object&gt; mtasResponseHeatmap;
       try {
@@ -550,10 +550,10 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent&lt;ComponentH
 <span class="pc bpc" id="L550" title="1 of 2 branches missed.">        if (mtasResponseHeatmap != null) {</span>
 <span class="fc" id="L551">          MtasSolrResultUtil.rewrite(mtasResponseHeatmap, searchComponent);</span>
         }
-<span class="pc" id="L553">      } catch (ClassCastException e) {</span>
+<span class="nc" id="L553">      } catch (ClassCastException e) {</span>
 <span class="nc" id="L554">        log.debug(e);</span>
 <span class="nc" id="L555">        mtasResponse.remove(NAME);</span>
-      }
+<span class="fc" id="L556">      }</span>
     }
 <span class="fc" id="L558">  }</span>
 

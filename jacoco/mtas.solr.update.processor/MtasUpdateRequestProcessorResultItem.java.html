@@ -40,24 +40,24 @@ public class MtasUpdateRequestProcessorResultItem implements Serializable {
    * @param payload the payload
    * @param flags the flags
    */
-<span class="fc" id="L43">  public MtasUpdateRequestProcessorResultItem(String term, Integer offsetStart,</span>
-      Integer offsetEnd, Integer posIncr, BytesRef payload, Integer flags) {
+  public MtasUpdateRequestProcessorResultItem(String term, Integer offsetStart,
+<span class="fc" id="L44">      Integer offsetEnd, Integer posIncr, BytesRef payload, Integer flags) {</span>
 <span class="fc" id="L45">    tokenTerm = term;</span>
 <span class="pc bpc" id="L46" title="2 of 4 branches missed.">    if (offsetStart != null &amp;&amp; offsetEnd != null) {</span>
 <span class="fc" id="L47">      tokenOffsetStart = offsetStart;</span>
 <span class="fc" id="L48">      tokenOffsetEnd = offsetEnd;</span>
-<span class="fc" id="L49">    } else {</span>
+    } else {
 <span class="nc" id="L50">      tokenOffsetStart = null;</span>
 <span class="nc" id="L51">      tokenOffsetEnd = null;</span>
     }
 <span class="pc bpc" id="L53" title="1 of 4 branches missed.">    if (posIncr != null &amp;&amp; posIncr != 1) {</span>
 <span class="fc" id="L54">      tokenPosIncr = posIncr;</span>
-<span class="fc" id="L55">    } else {</span>
+    } else {
 <span class="fc" id="L56">      tokenPosIncr = null;</span>
     }
 <span class="pc bpc" id="L58" title="1 of 2 branches missed.">    if (payload != null) {</span>
 <span class="fc" id="L59">      tokenPayload = payload.bytes;</span>
-<span class="fc" id="L60">    } else {</span>
+    } else {
 <span class="nc" id="L61">      tokenPayload = null;</span>
     }
 <span class="fc" id="L63">    tokenFlags = flags;</span>

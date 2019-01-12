@@ -226,9 +226,9 @@ public class MtasCQLParserWordCondition {
   public void swapType() {
 <span class="pc bpc" id="L227" title="1 of 2 branches missed.">    if (type.equals(TYPE_AND)) {</span>
 <span class="fc" id="L228">      type = TYPE_OR;</span>
-<span class="pc bnc" id="L229" title="All 2 branches missed.">    } else if (type.equals(TYPE_OR)) {</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">    } else if (type.equals(TYPE_OR)) {</span>
 <span class="nc" id="L230">      type = TYPE_AND;</span>
-<span class="nc" id="L231">    } else {</span>
+    } else {
 <span class="nc" id="L232">      throw new Error(&quot;unknown type&quot;);</span>
     }
 <span class="fc" id="L234">    swapNot();</span>
@@ -237,7 +237,7 @@ public class MtasCQLParserWordCondition {
 <span class="fc" id="L237">    negativeQueryList = queryList;</span>
 <span class="pc bpc" id="L238" title="1 of 2 branches missed.">    for (MtasCQLParserWordCondition c : conditionList) {</span>
 <span class="nc" id="L239">      c.swapNot();</span>
-    }
+<span class="nc" id="L240">    }</span>
 <span class="fc" id="L241">    simplified = false;</span>
 <span class="fc" id="L242">  }</span>
 
@@ -281,7 +281,7 @@ public class MtasCQLParserWordCondition {
 <span class="fc" id="L281">                  .toArray(new MtasSpanQuery[c.positiveQueryList.size()]));</span>
 <span class="pc bpc" id="L282" title="1 of 2 branches missed.">              if (c.not()) {</span>
 <span class="nc" id="L283">                negativeQueryList.add(q);</span>
-<span class="nc" id="L284">              } else {</span>
+              } else {
 <span class="fc" id="L285">                positiveQueryList.add(q);</span>
               }
               // A &amp; B &amp; ( C | D )
@@ -290,18 +290,18 @@ public class MtasCQLParserWordCondition {
 <span class="fc" id="L290">                  .toArray(new MtasSpanQuery[c.positiveQueryList.size()]));</span>
 <span class="pc bpc" id="L291" title="1 of 2 branches missed.">              if (c.not()) {</span>
 <span class="nc" id="L292">                negativeQueryList.add(q);</span>
-<span class="nc" id="L293">              } else {</span>
+              } else {
 <span class="fc" id="L294">                positiveQueryList.add(q);</span>
               }
-            }
-<span class="pc bnc" id="L297" title="All 2 branches missed.">          } else if (c.isSimpleNegative()) {</span>
+<span class="fc" id="L296">            }</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">          } else if (c.isSimpleNegative()) {</span>
             // A | B | ( !C | !D )
 <span class="nc bnc" id="L299" title="All 2 branches missed.">            if (c.type().equals(TYPE_OR)) {</span>
 <span class="nc" id="L300">              MtasSpanQuery q = new MtasSpanAndQuery(c.negativeQueryList</span>
 <span class="nc" id="L301">                  .toArray(new MtasSpanQuery[c.negativeQueryList.size()]));</span>
 <span class="nc bnc" id="L302" title="All 2 branches missed.">              if (c.not()) {</span>
 <span class="nc" id="L303">                positiveQueryList.add(q);</span>
-<span class="nc" id="L304">              } else {</span>
+              } else {
 <span class="nc" id="L305">                negativeQueryList.add(q);</span>
               }
               // A | B | ( !C &amp; !D )
@@ -310,11 +310,11 @@ public class MtasCQLParserWordCondition {
 <span class="nc" id="L310">                  .toArray(new MtasSpanQuery[c.negativeQueryList.size()]));</span>
 <span class="nc bnc" id="L311" title="All 2 branches missed.">              if (c.not()) {</span>
 <span class="nc" id="L312">                positiveQueryList.add(q);</span>
-<span class="nc" id="L313">              } else {</span>
+              } else {
 <span class="nc" id="L314">                negativeQueryList.add(q);</span>
               }
-            }
-<span class="nc" id="L317">          } else {</span>
+<span class="nc" id="L316">            }</span>
+          } else {
             // swap if necessary
 <span class="nc bnc" id="L319" title="All 4 branches missed.">            if (this.isSimplePositive() &amp;&amp; c.not()) {</span>
 <span class="nc" id="L320">              c.swapType();</span>
@@ -324,36 +324,36 @@ public class MtasCQLParserWordCondition {
             // A | B | ( C &amp; !D )
 <span class="nc bnc" id="L325" title="All 2 branches missed.">            if (c.type().equals(TYPE_AND)) {</span>
 <span class="nc" id="L326">              MtasSpanQuery positiveQuery = new MtasSpanAndQuery(</span>
-<span class="nc" id="L327">                  c.positiveQueryList</span>
+                  c.positiveQueryList
 <span class="nc" id="L328">                      .toArray(new MtasSpanQuery[c.positiveQueryList.size()]));</span>
 <span class="nc" id="L329">              MtasSpanQuery negativeQuery = new MtasSpanAndQuery(</span>
-<span class="nc" id="L330">                  c.negativeQueryList</span>
+                  c.negativeQueryList
 <span class="nc" id="L331">                      .toArray(new MtasSpanQuery[c.negativeQueryList.size()]));</span>
 <span class="nc" id="L332">              MtasSpanQuery q = new MtasSpanNotQuery(positiveQuery,</span>
-<span class="nc" id="L333">                  negativeQuery);</span>
+                  negativeQuery);
 <span class="nc bnc" id="L334" title="All 2 branches missed.">              if (c.not()) {</span>
 <span class="nc" id="L335">                negativeQueryList.add(q);</span>
-<span class="nc" id="L336">              } else {</span>
+              } else {
 <span class="nc" id="L337">                positiveQueryList.add(q);</span>
               }
               // A &amp; B &amp; ( C | !D )
 <span class="nc" id="L340">            } else {</span>
 <span class="nc" id="L341">              MtasSpanQuery positiveQuery = new MtasSpanOrQuery(</span>
-<span class="nc" id="L342">                  c.positiveQueryList</span>
+                  c.positiveQueryList
 <span class="nc" id="L343">                      .toArray(new MtasSpanQuery[c.positiveQueryList.size()]));</span>
 <span class="nc" id="L344">              MtasSpanQuery negativeQuery = new MtasSpanOrQuery(</span>
-<span class="nc" id="L345">                  c.negativeQueryList</span>
+                  c.negativeQueryList
 <span class="nc" id="L346">                      .toArray(new MtasSpanQuery[c.negativeQueryList.size()]));</span>
 <span class="nc" id="L347">              MtasSpanQuery q = new MtasSpanNotQuery(positiveQuery,</span>
-<span class="nc" id="L348">                  negativeQuery);</span>
+                  negativeQuery);
 <span class="nc bnc" id="L349" title="All 2 branches missed.">              if (c.not()) {</span>
 <span class="nc" id="L350">                negativeQueryList.add(q);</span>
-<span class="nc" id="L351">              } else {</span>
+              } else {
 <span class="nc" id="L352">                positiveQueryList.add(q);</span>
               }
             }
           }
-        }
+<span class="fc" id="L356">        }</span>
 <span class="fc" id="L357">        conditionList.clear();</span>
       }
 <span class="fc bfc" id="L359" title="All 2 branches covered.">      if (isSimpleNegative()) {</span>
@@ -385,26 +385,26 @@ public class MtasCQLParserWordCondition {
 <span class="nc bnc" id="L385" title="All 2 branches missed.">    if (isEmpty()) {</span>
 <span class="nc" id="L386">      text.append(firstIndent + &quot;Type: any word&quot;);</span>
 <span class="nc bnc" id="L387" title="All 2 branches missed.">      text.append(not ? &quot; (not)\n&quot; : &quot;\n&quot;);</span>
-<span class="nc" id="L388">    } else {</span>
+    } else {
 <span class="nc" id="L389">      text.append(firstIndent + &quot;Type: &quot; + type);</span>
 <span class="nc bnc" id="L390" title="All 2 branches missed.">      text.append(not ? &quot; (not)\n&quot; : &quot;\n&quot;);</span>
 <span class="nc bnc" id="L391" title="All 2 branches missed.">      if (positiveQueryList.size() &gt; 0) {</span>
 <span class="nc bnc" id="L392" title="All 2 branches missed.">        for (MtasSpanQuery q : positiveQueryList) {</span>
 <span class="nc" id="L393">          text.append(</span>
 <span class="nc" id="L394">              indent + &quot;List Positive Subqueries: &quot; + q.toString(field) + &quot;\n&quot;);</span>
-        }
+<span class="nc" id="L395">        }</span>
       }
 <span class="nc bnc" id="L397" title="All 2 branches missed.">      if (negativeQueryList.size() &gt; 0) {</span>
 <span class="nc bnc" id="L398" title="All 2 branches missed.">        for (MtasSpanQuery q : negativeQueryList) {</span>
 <span class="nc" id="L399">          text.append(</span>
 <span class="nc" id="L400">              indent + &quot;List Negative Queries: &quot; + q.toString(field) + &quot;\n&quot;);</span>
-        }
+<span class="nc" id="L401">        }</span>
       }
 <span class="nc bnc" id="L403" title="All 2 branches missed.">      if (conditionList.size() &gt; 0) {</span>
 <span class="nc" id="L404">        text.append(indent + &quot;List Conditions\n&quot;);</span>
 <span class="nc bnc" id="L405" title="All 2 branches missed.">        for (MtasCQLParserWordCondition c : conditionList) {</span>
 <span class="nc" id="L406">          text.append(c.toString(indent + &quot;- &quot;, indent + &quot;  &quot;) + &quot;\n&quot;);</span>
-        }
+<span class="nc" id="L407">        }</span>
       }
     }
 <span class="nc" id="L410">    return text.toString();</span>

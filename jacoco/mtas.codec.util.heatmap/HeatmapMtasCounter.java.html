@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HeatmapMtasCounter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.codec.util.heatmap</a> &gt; <span class="el_source">HeatmapMtasCounter.java</span></div><h1>HeatmapMtasCounter.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package mtas.codec.util.heatmap;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HeatmapMtasCounter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.codec.util.heatmap</a> &gt; <span class="el_source">HeatmapMtasCounter.java</span></div><h1>HeatmapMtasCounter.java</h1><pre class="source lang-java linenums">package mtas.codec.util.heatmap;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -94,8 +94,8 @@ import mtas.codec.util.collector.MtasDataCollector;
      * @throws IOException
      *           Signals that an I/O exception has occurred.
      */
-<span class="fc" id="L97">    public Heatmap(int columns, int rows, Rectangle region, double cellWidth, double cellHeight, int gridLevel)</span>
-        throws IOException {
+    public Heatmap(int columns, int rows, Rectangle region, double cellWidth, double cellHeight, int gridLevel)
+<span class="fc" id="L98">        throws IOException {</span>
 <span class="fc" id="L99">      this.columns = columns;</span>
 <span class="fc" id="L100">      this.rows = rows;</span>
 <span class="fc" id="L101">      this.region = region;</span>
@@ -130,7 +130,7 @@ import mtas.codec.util.collector.MtasDataCollector;
 <span class="pc bpc" id="L130" title="1 of 2 branches missed.">      if (functions != null) {</span>
 <span class="fc bfc" id="L131" title="All 2 branches covered.">        for (SubComponentFunction function : functions) {</span>
 <span class="fc" id="L132">          list.addAll(function.parserFunction.needArgument());</span>
-        }
+<span class="fc" id="L133">        }</span>
       }
 <span class="fc" id="L135">      return list;</span>
     }
@@ -146,7 +146,7 @@ import mtas.codec.util.collector.MtasDataCollector;
 <span class="pc bpc" id="L146" title="1 of 2 branches missed.">          if (function.parserFunction.needPositions()) {</span>
 <span class="nc" id="L147">            return true;</span>
           }
-        }
+<span class="fc" id="L149">        }</span>
       }
 <span class="fc" id="L151">      return false;</span>
     }
@@ -219,7 +219,7 @@ import mtas.codec.util.collector.MtasDataCollector;
               int column;
 <span class="pc bpc" id="L220" title="1 of 2 branches missed.">              if (rect.getMinX() &gt;= heatMinX) {</span>
 <span class="fc" id="L221">                column = (int) Math.round((rect.getMinX() - heatMinX) / cellWidth);</span>
-<span class="fc" id="L222">              } else { // due to dateline wrap</span>
+              } else { // due to dateline wrap
 <span class="nc" id="L223">                column = (int) Math.round((rect.getMinX() + 360 - heatMinX) / cellWidth);</span>
               }
 <span class="fc" id="L225">              int row = (int) Math.round((rect.getMinY() - heatMinY) / cellHeight);</span>
@@ -238,26 +238,26 @@ import mtas.codec.util.collector.MtasDataCollector;
 <span class="pc bpc" id="L238" title="1 of 2 branches missed.">                  if (f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {</span>
 <span class="fc" id="L239">                    heatmap.hm.functions.get(i).dataCollector.add(key, cellValues.functionValuesLong(i),</span>
 <span class="fc" id="L240">                        cellValues.functionValuesLongLength(i));</span>
-<span class="pc bnc" id="L241" title="All 2 branches missed.">                  } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">                  } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L242">                    heatmap.hm.functions.get(i).dataCollector.add(key, cellValues.functionValuesDouble(i),</span>
 <span class="nc" id="L243">                        cellValues.functionValuesDoubleLength(i));</span>
-<span class="nc" id="L244">                  } else {</span>
+                  } else {
                     // should not happen
 <span class="nc" id="L246">                    throw new IOException(&quot;unexpected dataType &quot; + f.dataType);</span>
                   }
 <span class="pc bpc" id="L248" title="1 of 2 branches missed.">                  if (!cellValues.functionValuesError(i).isEmpty()) {</span>
 <span class="nc bnc" id="L249" title="All 2 branches missed.">                    for (Entry&lt;String, Integer&gt; entry : cellValues.functionValuesError(i).entrySet()) {</span>
 <span class="nc" id="L250">                      heatmap.hm.functions.get(i).dataCollector.error(key, entry.getKey(), entry.getValue());</span>
-                    }
+<span class="nc" id="L251">                    }</span>
                   }
                 }
-<span class="pc" id="L254">              } catch (IOException e) {</span>
+<span class="nc" id="L254">              } catch (IOException e) {</span>
                 // should not happen
 <span class="nc" id="L256">                e.printStackTrace();</span>
-              }
-<span class="nc bnc" id="L258" title="All 2 branches missed.">            } else if (rect.relate(heatmap.hm.region) == SpatialRelation.CONTAINS) {// containing ancestor</span>
+<span class="fc" id="L257">              }</span>
+<span class="pc bnc" id="L258" title="All 2 branches missed.">            } else if (rect.relate(heatmap.hm.region) == SpatialRelation.CONTAINS) {// containing ancestor</span>
 <span class="nc" id="L259">              allCellsAncestorsValues.merge(cellValues);</span>
-<span class="nc" id="L260">            } else { // ancestor</span>
+            } else { // ancestor
               // note: not particularly efficient (possible put twice, and Integer wrapper);
               // oh well
 <span class="nc" id="L263">              CellValues existingValues = (CellValues) ancestorsValues.put(rect, cellValues);</span>
@@ -286,14 +286,14 @@ import mtas.codec.util.collector.MtasDataCollector;
 <span class="nc bnc" id="L286" title="All 2 branches missed.">            } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L287">              heatmap.hm.functions.get(i).dataCollector.add(key, allCellsAncestorsValues.functionValuesDouble(i),</span>
 <span class="nc" id="L288">                  allCellsAncestorsValues.functionValuesDoubleLength(i));</span>
-<span class="nc" id="L289">            } else {</span>
+            } else {
               // should not happen
 <span class="nc" id="L291">              throw new IOException(&quot;unexpected dataType &quot; + f.dataType);</span>
             }
           }
 <span class="nc" id="L294">        } catch (IOException e) {</span>
 <span class="nc" id="L295">          e.printStackTrace();</span>
-        }
+<span class="nc" id="L296">        }</span>
       }
     }
 <span class="fc" id="L299">    int[] pair = new int[2];// output of intersectInterval</span>
@@ -333,7 +333,7 @@ import mtas.codec.util.collector.MtasDataCollector;
 <span class="nc" id="L333">          incrementRange(heatmap.hm, startCol, endCol, startRow, endRow, ancestorValuesEntry);</span>
         }
       }
-    }
+<span class="nc" id="L336">    }</span>
 <span class="fc" id="L337">  }</span>
 
   /**
@@ -371,7 +371,7 @@ import mtas.codec.util.collector.MtasDataCollector;
 <span class="pc bpc" id="L371" title="3 of 6 branches missed.">    assert rows &gt; 0 &amp;&amp; columns &gt; 0;</span>
 <span class="pc bpc" id="L372" title="3 of 6 branches missed.">    if (columns &gt; MAX_ROWS_OR_COLUMNS || rows &gt; MAX_ROWS_OR_COLUMNS || columns * rows &gt; heatmap.maxCells) {</span>
 <span class="nc" id="L373">      throw new IllegalArgumentException(</span>
-<span class="nc" id="L374">          &quot;Too many cells (&quot; + columns + &quot; x &quot; + rows + &quot;) for level &quot; + heatmap.gridLevel + &quot; shape &quot; + inputRect);</span>
+          &quot;Too many cells (&quot; + columns + &quot; x &quot; + rows + &quot;) for level &quot; + heatmap.gridLevel + &quot; shape &quot; + inputRect);
     }
 
     // Create resulting heatmap bounding rectangle &amp; Heatmap object.
@@ -419,12 +419,12 @@ import mtas.codec.util.collector.MtasDataCollector;
     // precondition: we know there's an intersection
 <span class="nc bnc" id="L420" title="All 2 branches missed.">    if (heatMin &gt;= cellMin) {</span>
 <span class="nc" id="L421">      out[0] = 0;</span>
-<span class="nc" id="L422">    } else {</span>
+    } else {
 <span class="nc" id="L423">      out[0] = (int) Math.round((cellMin - heatMin) / heatCellLen);</span>
     }
 <span class="nc bnc" id="L425" title="All 2 branches missed.">    if (heatMax &lt;= cellMax) {</span>
 <span class="nc" id="L426">      out[1] = numCells - 1;</span>
-<span class="nc" id="L427">    } else {</span>
+    } else {
 <span class="nc" id="L428">      out[1] = (int) Math.round((cellMax - heatMin) / heatCellLen) - 1;</span>
     }
 <span class="nc" id="L430">  }</span>
@@ -478,14 +478,14 @@ import mtas.codec.util.collector.MtasDataCollector;
 <span class="nc bnc" id="L478" title="All 2 branches missed.">            } else if (f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {</span>
 <span class="nc" id="L479">              heatmap.functions.get(i).dataCollector.add(key, cellValues.functionValuesDouble(i),</span>
 <span class="nc" id="L480">                  cellValues.functionValuesDoubleLength(i));</span>
-<span class="nc" id="L481">            } else {</span>
+            } else {
               // should not happen
 <span class="nc" id="L483">              throw new IOException(&quot;unexpected dataType &quot; + f.dataType);</span>
             }
           }
 <span class="nc" id="L486">        } catch (IOException e) {</span>
 <span class="nc" id="L487">          e.printStackTrace();</span>
-        }
+<span class="nc" id="L488">        }</span>
       }
     }
 <span class="nc" id="L491">  }</span>

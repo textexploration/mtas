@@ -85,8 +85,8 @@ public class MtasFetchData {
 <span class="nc bnc" id="L85" title="All 2 branches missed.">              &amp;&amp; connection.getHeaderField(&quot;Content-Encoding&quot;).equals(&quot;gzip&quot;)) {</span>
 <span class="nc" id="L86">            in = new BufferedReader(new InputStreamReader(</span>
 <span class="nc" id="L87">                new GZIPInputStream(connection.getInputStream()),</span>
-<span class="nc" id="L88">                StandardCharsets.UTF_8));</span>
-<span class="nc" id="L89">          } else {</span>
+                StandardCharsets.UTF_8));
+          } else {
 <span class="nc" id="L90">            in = new BufferedReader(new InputStreamReader(</span>
 <span class="nc" id="L91">                connection.getInputStream(), StandardCharsets.UTF_8));</span>
           }
@@ -129,7 +129,7 @@ public class MtasFetchData {
 <span class="nc" id="L129">          log.debug(e1);</span>
           try {
 <span class="nc" id="L131">            String text = new String(Files.readAllBytes(Paths.get(file)),</span>
-<span class="nc" id="L132">                StandardCharsets.UTF_8);</span>
+                StandardCharsets.UTF_8);
 <span class="nc" id="L133">            return new StringReader(text);</span>
 <span class="nc" id="L134">          } catch (IOException e2) {</span>
 <span class="nc" id="L135">            log.debug(e2);</span>

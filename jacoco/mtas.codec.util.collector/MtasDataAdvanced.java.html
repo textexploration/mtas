@@ -93,9 +93,9 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
       MtasDataOperations&lt;T1, T2&gt; operations, String segmentRegistration,
       String boundary) throws IOException {
 <span class="fc" id="L95">    super(collectorType, dataType, CodecUtil.STATS_ADVANCED, statsItems,</span>
-<span class="fc" id="L96">        sortType, sortDirection, start, number, subCollectorTypes, subDataTypes,</span>
-<span class="fc" id="L97">        subStatsTypes, subStatsItems, subSortTypes, subSortDirections, subStart,</span>
-<span class="fc" id="L98">        subNumber, segmentRegistration, boundary);</span>
+        sortType, sortDirection, start, number, subCollectorTypes, subDataTypes,
+        subStatsTypes, subStatsItems, subSortTypes, subSortDirections, subStart,
+        subNumber, segmentRegistration, boundary);
 <span class="fc" id="L99">    this.operations = operations;</span>
 <span class="fc" id="L100">  }</span>
 
@@ -148,7 +148,7 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
 <span class="nc bnc" id="L148" title="All 2 branches missed.">    if (newErrorList[newPosition].containsKey(error)) {</span>
 <span class="nc" id="L149">      newErrorList[newPosition].put(error,</span>
 <span class="nc" id="L150">          newErrorList[newPosition].get(error) + number);</span>
-<span class="nc" id="L151">    } else {</span>
+    } else {
 <span class="nc" id="L152">      newErrorList[newPosition].put(error, number);</span>
     }
 <span class="nc" id="L154">  }</span>
@@ -180,17 +180,17 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
 <span class="fc" id="L180">    newAdvancedValueNList = new long[newSize];</span>
 <span class="fc" id="L181">    newPosition = tmpNewPosition;</span>
 <span class="fc" id="L182">    System.arraycopy(tmpNewAdvancedValueSumList, 0, newAdvancedValueSumList, 0,</span>
-<span class="fc" id="L183">        tmpOldSize);</span>
+        tmpOldSize);
 <span class="fc" id="L184">    System.arraycopy(tmpNewAdvancedValueSumOfLogsList, 0,</span>
-<span class="fc" id="L185">        newAdvancedValueSumOfLogsList, 0, tmpOldSize);</span>
+        newAdvancedValueSumOfLogsList, 0, tmpOldSize);
 <span class="fc" id="L186">    System.arraycopy(tmpNewAdvancedValueSumOfSquaresList, 0,</span>
-<span class="fc" id="L187">        newAdvancedValueSumOfSquaresList, 0, tmpOldSize);</span>
+        newAdvancedValueSumOfSquaresList, 0, tmpOldSize);
 <span class="fc" id="L188">    System.arraycopy(tmpNewAdvancedValueMinList, 0, newAdvancedValueMinList, 0,</span>
-<span class="fc" id="L189">        tmpOldSize);</span>
+        tmpOldSize);
 <span class="fc" id="L190">    System.arraycopy(tmpNewAdvancedValueMaxList, 0, newAdvancedValueMaxList, 0,</span>
-<span class="fc" id="L191">        tmpOldSize);</span>
+        tmpOldSize);
 <span class="fc" id="L192">    System.arraycopy(tmpNewAdvancedValueNList, 0, newAdvancedValueNList, 0,</span>
-<span class="fc" id="L193">        tmpOldSize);</span>
+        tmpOldSize);
 <span class="fc" id="L194">  }</span>
 
   /*
@@ -334,7 +334,7 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
 <span class="fc bfc" id="L334" title="All 2 branches covered.">        valueMax = (i == 0) ? values[i] : operations.max11(valueMax, values[i]);</span>
       }
 <span class="fc" id="L336">      setValue(newPosition, valueSum, valueSumOfLogs, valueSumOfSquares,</span>
-<span class="fc" id="L337">          valueMin, valueMax, number, currentExisting);</span>
+          valueMin, valueMax, number, currentExisting);
     }
 <span class="fc" id="L339">  }</span>
 
@@ -360,13 +360,13 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
 <span class="fc" id="L360">        newAdvancedValueSumOfLogsList[newPosition] = operations</span>
 <span class="fc" id="L361">            .add22(newAdvancedValueSumOfLogsList[newPosition], valueSumOfLogs);</span>
 <span class="fc" id="L362">        newAdvancedValueSumOfSquaresList[newPosition] = operations.add11(</span>
-<span class="fc" id="L363">            newAdvancedValueSumOfSquaresList[newPosition], valueSumOfSquares);</span>
+            newAdvancedValueSumOfSquaresList[newPosition], valueSumOfSquares);
 <span class="fc" id="L364">        newAdvancedValueMinList[newPosition] = operations</span>
 <span class="fc" id="L365">            .min11(newAdvancedValueMinList[newPosition], valueMin);</span>
 <span class="fc" id="L366">        newAdvancedValueMaxList[newPosition] = operations</span>
 <span class="fc" id="L367">            .max11(newAdvancedValueMaxList[newPosition], valueMax);</span>
 <span class="fc" id="L368">        newAdvancedValueNList[newPosition] += valueN;</span>
-<span class="fc" id="L369">      } else {</span>
+      } else {
 <span class="fc" id="L370">        newAdvancedValueSumList[newPosition] = valueSum;</span>
 <span class="fc" id="L371">        newAdvancedValueSumOfLogsList[newPosition] = valueSumOfLogs;</span>
 <span class="fc" id="L372">        newAdvancedValueSumOfSquaresList[newPosition] = valueSumOfSquares;</span>
@@ -403,18 +403,18 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
 <span class="nc bnc" id="L403" title="All 2 branches missed.">      for (int j = 0; j &lt; mapping[i].length; j++) {</span>
 <span class="nc bnc" id="L404" title="All 2 branches missed.">        if (j == 0) {</span>
 <span class="nc" id="L405">          setValue(i, originalAdvancedValueSumList[mapping[i][j]],</span>
-<span class="nc" id="L406">              originalAdvancedValueSumOfLogsList[mapping[i][j]],</span>
-<span class="nc" id="L407">              originalAdvancedValueSumOfSquaresList[mapping[i][j]],</span>
-<span class="nc" id="L408">              originalAdvancedValueMinList[mapping[i][j]],</span>
-<span class="nc" id="L409">              originalAdvancedValueMaxList[mapping[i][j]],</span>
-<span class="nc" id="L410">              originalAdvancedValueNList[mapping[i][j]], false);</span>
-<span class="nc" id="L411">        } else {</span>
+              originalAdvancedValueSumOfLogsList[mapping[i][j]],
+              originalAdvancedValueSumOfSquaresList[mapping[i][j]],
+              originalAdvancedValueMinList[mapping[i][j]],
+              originalAdvancedValueMaxList[mapping[i][j]],
+              originalAdvancedValueNList[mapping[i][j]], false);
+        } else {
 <span class="nc" id="L412">          setValue(i, originalAdvancedValueSumList[mapping[i][j]],</span>
-<span class="nc" id="L413">              originalAdvancedValueSumOfLogsList[mapping[i][j]],</span>
-<span class="nc" id="L414">              originalAdvancedValueSumOfSquaresList[mapping[i][j]],</span>
-<span class="nc" id="L415">              originalAdvancedValueMinList[mapping[i][j]],</span>
-<span class="nc" id="L416">              originalAdvancedValueMaxList[mapping[i][j]],</span>
-<span class="nc" id="L417">              originalAdvancedValueNList[mapping[i][j]], true);</span>
+              originalAdvancedValueSumOfLogsList[mapping[i][j]],
+              originalAdvancedValueSumOfSquaresList[mapping[i][j]],
+              originalAdvancedValueMinList[mapping[i][j]],
+              originalAdvancedValueMaxList[mapping[i][j]],
+              originalAdvancedValueNList[mapping[i][j]], true);
         }
       }
     }
@@ -439,8 +439,8 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
 <span class="fc" id="L439">    closeNewList();</span>
 <span class="pc bpc" id="L440" title="1 of 2 branches missed.">    if (!collectorType.equals(newDataCollector.getCollectorType())</span>
 <span class="pc bpc" id="L441" title="1 of 2 branches missed.">        || !dataType.equals(newDataCollector.getDataType())</span>
-<span class="pc bpc" id="L442" title="1 of 2 branches missed.">        || !statsType.equals(newDataCollector.getStatsType())</span>
-<span class="pc bpc" id="L443" title="1 of 2 branches missed.">        || !(newDataCollector instanceof MtasDataAdvanced)) {</span>
+<span class="pc bpc" id="L442" title="2 of 4 branches missed.">        || !statsType.equals(newDataCollector.getStatsType())</span>
+        || !(newDataCollector instanceof MtasDataAdvanced)) {
 <span class="nc" id="L444">      throw new IOException(&quot;cannot merge different dataCollectors&quot;);</span>
     } else {
 <span class="fc" id="L446">      segmentRegistration = null;</span>
@@ -455,20 +455,20 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
 <span class="fc bfc" id="L455" title="All 2 branches covered.">        for (int i = 0; i &lt; newMtasDataAdvanced.getSize(); i++) {</span>
 <span class="fc" id="L456">          MtasDataCollector&lt;?, ?&gt;[] subCollectors = new MtasDataCollector[1];</span>
 <span class="fc" id="L457">          subCollectors[0] = add(newMtasDataAdvanced.keyList[i],</span>
-<span class="fc" id="L458">              increaseSourceNumber);</span>
+              increaseSourceNumber);
 <span class="fc" id="L459">          setError(newCurrentPosition, newMtasDataAdvanced.errorNumber[i],</span>
-<span class="fc" id="L460">              newMtasDataAdvanced.errorList[i], newCurrentExisting);</span>
+              newMtasDataAdvanced.errorList[i], newCurrentExisting);
 <span class="fc" id="L461">          setValue(newCurrentPosition,</span>
-<span class="fc" id="L462">              newMtasDataAdvanced.advancedValueSumList[i],</span>
-<span class="fc" id="L463">              newMtasDataAdvanced.advancedValueSumOfLogsList[i],</span>
-<span class="fc" id="L464">              newMtasDataAdvanced.advancedValueSumOfSquaresList[i],</span>
-<span class="fc" id="L465">              newMtasDataAdvanced.advancedValueMinList[i],</span>
-<span class="fc" id="L466">              newMtasDataAdvanced.advancedValueMaxList[i],</span>
-<span class="fc" id="L467">              newMtasDataAdvanced.advancedValueNList[i], newCurrentExisting);</span>
+              newMtasDataAdvanced.advancedValueSumList[i],
+              newMtasDataAdvanced.advancedValueSumOfLogsList[i],
+              newMtasDataAdvanced.advancedValueSumOfSquaresList[i],
+              newMtasDataAdvanced.advancedValueMinList[i],
+              newMtasDataAdvanced.advancedValueMaxList[i],
+              newMtasDataAdvanced.advancedValueNList[i], newCurrentExisting);
 <span class="pc bpc" id="L468" title="3 of 4 branches missed.">          if (hasSub() &amp;&amp; newMtasDataAdvanced.hasSub()) {</span>
 <span class="nc" id="L469">            subCollectors[0].merge(</span>
-<span class="nc" id="L470">                newMtasDataAdvanced.subCollectorListNextLevel[i], map,</span>
-<span class="nc" id="L471">                increaseSourceNumber);</span>
+                newMtasDataAdvanced.subCollectorListNextLevel[i], map,
+                increaseSourceNumber);
           }
         }
 <span class="fc" id="L474">        closeNewList();</span>
@@ -479,21 +479,21 @@ abstract class MtasDataAdvanced&lt;T1 extends Number &amp; Comparable&lt;T1&gt;,
 <span class="fc bfc" id="L479" title="All 2 branches covered.">        if (newMtasDataAdvanced.getSize() &gt; 0) {</span>
 <span class="fc" id="L480">          MtasDataCollector&lt;?, ?&gt; subCollector = add(increaseSourceNumber);</span>
 <span class="fc" id="L481">          setError(newCurrentPosition, newMtasDataAdvanced.errorNumber[0],</span>
-<span class="fc" id="L482">              newMtasDataAdvanced.errorList[0], newCurrentExisting);</span>
+              newMtasDataAdvanced.errorList[0], newCurrentExisting);
 <span class="fc" id="L483">          setValue(newCurrentPosition,</span>
-<span class="fc" id="L484">              newMtasDataAdvanced.advancedValueSumList[0],</span>
-<span class="fc" id="L485">              newMtasDataAdvanced.advancedValueSumOfLogsList[0],</span>
-<span class="fc" id="L486">              newMtasDataAdvanced.advancedValueSumOfSquaresList[0],</span>
-<span class="fc" id="L487">              newMtasDataAdvanced.advancedValueMinList[0],</span>
-<span class="fc" id="L488">              newMtasDataAdvanced.advancedValueMaxList[0],</span>
-<span class="fc" id="L489">              newMtasDataAdvanced.advancedValueNList[0], newCurrentExisting);</span>
+              newMtasDataAdvanced.advancedValueSumList[0],
+              newMtasDataAdvanced.advancedValueSumOfLogsList[0],
+              newMtasDataAdvanced.advancedValueSumOfSquaresList[0],
+              newMtasDataAdvanced.advancedValueMinList[0],
+              newMtasDataAdvanced.advancedValueMaxList[0],
+              newMtasDataAdvanced.advancedValueNList[0], newCurrentExisting);
 <span class="pc bpc" id="L490" title="3 of 4 branches missed.">          if (hasSub() &amp;&amp; newMtasDataAdvanced.hasSub()) {</span>
 <span class="nc" id="L491">            subCollector.merge(newMtasDataAdvanced.subCollectorNextLevel, map,</span>
-<span class="nc" id="L492">                increaseSourceNumber);</span>
+                increaseSourceNumber);
           }
         }
 <span class="fc" id="L495">        closeNewList();</span>
-<span class="fc" id="L496">      } else {</span>
+      } else {
 <span class="nc" id="L497">        throw new IOException(&quot;cannot merge &quot; + collectorType);</span>
       }
     }

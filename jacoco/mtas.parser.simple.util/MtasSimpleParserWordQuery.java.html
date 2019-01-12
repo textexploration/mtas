@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasSimpleParserWordQuery.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.parser.simple.util</a> &gt; <span class="el_source">MtasSimpleParserWordQuery.java</span></div><h1>MtasSimpleParserWordQuery.java</h1><pre class="source lang-java linenums">package mtas.parser.simple.util;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,29 +26,49 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
 
   /** The term. */
   Term term;
-  
-<span class="nc" id="L29">  final Pattern patternWord = Pattern.compile(&quot;^([^:]+):(.*)$&quot;);</span>
 
+  /** The pattern word. */
+<span class="nc" id="L31">  final Pattern patternWord = Pattern.compile(&quot;^([^:]+):(.*)$&quot;);</span>
+
+  /**
+   * Instantiates a new mtas simple parser word query.
+   *
+   * @param field
+   *          the field
+   * @param prefix
+   *          the prefix
+   */
   public MtasSimpleParserWordQuery(String field, String prefix) {
-<span class="nc" id="L32">    super(1, 1);</span>
-<span class="nc" id="L33">    term = new Term(field, prefix + MtasToken.DELIMITER);</span>
-<span class="nc" id="L34">    query = new MtasSpanPrefixQuery(term, true);</span>
-<span class="nc" id="L35">  }</span>
+<span class="nc" id="L42">    super(1, 1);</span>
+<span class="nc" id="L43">    term = new Term(field, prefix + MtasToken.DELIMITER);</span>
+<span class="nc" id="L44">    query = new MtasSpanPrefixQuery(term, true);</span>
+<span class="nc" id="L45">  }</span>
 
-  public MtasSimpleParserWordQuery(String field, String prefix, String value)
-      throws ParseException {
-<span class="nc" id="L39">    super(1, 1);</span>
-<span class="nc" id="L40">    Matcher m = patternWord.matcher(value);</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">    if (m.find()) {</span>
-<span class="nc" id="L42">      String termBase = m.group(1) + MtasToken.DELIMITER + m.group(2);</span>
-<span class="nc" id="L43">      term = new Term(field, termBase + &quot;\u0000*&quot;);</span>
-<span class="nc" id="L44">      query = new MtasSpanRegexpQuery(term, true);</span>
-<span class="nc" id="L45">    } else {</span>
-<span class="nc" id="L46">      String termBase = prefix + MtasToken.DELIMITER + value;</span>
-<span class="nc" id="L47">      term = new Term(field, termBase + &quot;\u0000*&quot;);</span>
-<span class="nc" id="L48">      query = new MtasSpanRegexpQuery(term, true);</span>
-    }  
-<span class="nc" id="L50">  }</span>
+  /**
+   * Instantiates a new mtas simple parser word query.
+   *
+   * @param field
+   *          the field
+   * @param prefix
+   *          the prefix
+   * @param value
+   *          the value
+   * @throws ParseException
+   *           the parse exception
+   */
+  public MtasSimpleParserWordQuery(String field, String prefix, String value) throws ParseException {
+<span class="nc" id="L60">    super(1, 1);</span>
+<span class="nc" id="L61">    Matcher m = patternWord.matcher(value);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">    if (m.find()) {</span>
+<span class="nc" id="L63">      String termBase = m.group(1) + MtasToken.DELIMITER + m.group(2);</span>
+<span class="nc" id="L64">      term = new Term(field, termBase + &quot;\u0000*&quot;);</span>
+<span class="nc" id="L65">      query = new MtasSpanRegexpQuery(term, true);</span>
+<span class="nc" id="L66">    } else {</span>
+<span class="nc" id="L67">      String termBase = prefix + MtasToken.DELIMITER + value;</span>
+<span class="nc" id="L68">      term = new Term(field, termBase + &quot;\u0000*&quot;);</span>
+<span class="nc" id="L69">      query = new MtasSpanRegexpQuery(term, true);</span>
+    }
+<span class="nc" id="L71">  }</span>
 
   /*
    * (non-Javadoc)
@@ -56,7 +77,7 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public String getField() {
-<span class="nc" id="L59">    return term.field();</span>
+<span class="nc" id="L80">    return term.field();</span>
   }
 
   /*
@@ -67,20 +88,18 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanQuery rewrite(IndexReader reader) throws IOException {
-<span class="nc" id="L70">    return query.rewrite(reader);</span>
+<span class="nc" id="L91">    return query.rewrite(reader);</span>
   }
 
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * org.apache.lucene.search.spans.SpanQuery#createWeight(org.apache.lucene.
+   * @see org.apache.lucene.search.spans.SpanQuery#createWeight(org.apache.lucene.
    * search.IndexSearcher, boolean)
    */
   @Override
-  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
-      throws IOException {
-<span class="nc" id="L83">    return query.createWeight(searcher, needsScores, boost);</span>
+  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost) throws IOException {
+<span class="nc" id="L102">    return query.createWeight(searcher, needsScores, boost);</span>
   }
 
   /*
@@ -90,7 +109,7 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public String toString(String field) {
-<span class="nc" id="L93">    return query.toString(term.field());</span>
+<span class="nc" id="L112">    return query.toString(term.field());</span>
   }
 
   /*
@@ -100,14 +119,14 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-<span class="nc bnc" id="L103" title="All 2 branches missed.">    if (this == obj)</span>
-<span class="nc" id="L104">      return true;</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">    if (obj == null)</span>
-<span class="nc" id="L106">      return false;</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">    if (getClass() != obj.getClass())</span>
-<span class="nc" id="L108">      return false;</span>
-<span class="nc" id="L109">    final MtasSimpleParserWordQuery that = (MtasSimpleParserWordQuery) obj;</span>
-<span class="nc" id="L110">    return query.equals(that.query);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">    if (this == obj)</span>
+<span class="nc" id="L123">      return true;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">    if (obj == null)</span>
+<span class="nc" id="L125">      return false;</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">    if (getClass() != obj.getClass())</span>
+<span class="nc" id="L127">      return false;</span>
+<span class="nc" id="L128">    final MtasSimpleParserWordQuery that = (MtasSimpleParserWordQuery) obj;</span>
+<span class="nc" id="L129">    return query.equals(that.query);</span>
   }
 
   /*
@@ -117,10 +136,7 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public int hashCode() {
-<span class="nc" id="L120">    int h = this.getClass().getSimpleName().hashCode();</span>
-<span class="nc" id="L121">    h = (h * 5) ^ term.hashCode();</span>
-<span class="nc" id="L122">    h = (h * 7) ^ query.hashCode();</span>
-<span class="nc" id="L123">    return h;</span>
+<span class="nc" id="L139">    return Objects.hash(this.getClass().getSimpleName(), term, query);   </span>
   }
 
   /*
@@ -130,16 +146,18 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public void disableTwoPhaseIterator() {
-<span class="nc" id="L133">    super.disableTwoPhaseIterator();</span>
-<span class="nc" id="L134">    query.disableTwoPhaseIterator();</span>
-<span class="nc" id="L135">  }</span>
+<span class="nc" id="L149">    super.disableTwoPhaseIterator();</span>
+<span class="nc" id="L150">    query.disableTwoPhaseIterator();</span>
+<span class="nc" id="L151">  }</span>
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see mtas.search.spans.util.MtasSpanQuery#isMatchAllPositionsQuery()
    */
   @Override
   public boolean isMatchAllPositionsQuery() {
-<span class="nc" id="L142">    return false;</span>
+<span class="nc" id="L160">    return false;</span>
   }
 
 }

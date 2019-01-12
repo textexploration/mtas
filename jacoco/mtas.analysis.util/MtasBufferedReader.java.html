@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasBufferedReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.analysis.util</a> &gt; <span class="el_source">MtasBufferedReader.java</span></div><h1>MtasBufferedReader.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package mtas.analysis.util;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MtasBufferedReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MTAS</a> &gt; <a href="index.source.html" class="el_package">mtas.analysis.util</a> &gt; <span class="el_source">MtasBufferedReader.java</span></div><h1>MtasBufferedReader.java</h1><pre class="source lang-java linenums">package mtas.analysis.util;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -114,7 +114,7 @@ public class MtasBufferedReader extends Reader {
         }
 <span class="nc" id="L115">        return cb[nextChar++];</span>
       }
-    }
+<span class="nc" id="L117">    }</span>
   }
 
   /**
@@ -166,8 +166,8 @@ public class MtasBufferedReader extends Reader {
   public int read(char cbuf[], int off, int len) throws IOException {
 <span class="nc" id="L167">    synchronized (lock) {</span>
 <span class="nc" id="L168">      ensureOpen();</span>
-<span class="nc bnc" id="L169" title="All 6 branches missed.">      if ((off &lt; 0) || (off &gt; cbuf.length) || (len &lt; 0)</span>
-<span class="nc bnc" id="L170" title="All 4 branches missed.">          || ((off + len) &gt; cbuf.length) || ((off + len) &lt; 0)) {</span>
+<span class="nc bnc" id="L169" title="All 10 branches missed.">      if ((off &lt; 0) || (off &gt; cbuf.length) || (len &lt; 0)</span>
+          || ((off + len) &gt; cbuf.length) || ((off + len) &lt; 0)) {
 <span class="nc" id="L171">        throw new IndexOutOfBoundsException();</span>
 <span class="nc bnc" id="L172" title="All 2 branches missed.">      } else if (len == 0) {</span>
 <span class="nc" id="L173">        return 0;</span>
@@ -181,9 +181,9 @@ public class MtasBufferedReader extends Reader {
 <span class="nc bnc" id="L181" title="All 2 branches missed.">        if (n1 &lt;= 0)</span>
 <span class="nc" id="L182">          break;</span>
 <span class="nc" id="L183">        n += n1;</span>
-      }
+<span class="nc" id="L184">      }</span>
 <span class="nc" id="L185">      return n;</span>
-    }
+<span class="nc" id="L186">    }</span>
   }
 
   /**
@@ -201,7 +201,7 @@ public class MtasBufferedReader extends Reader {
 <span class="nc" id="L201">      ensureOpen();</span>
 <span class="nc bnc" id="L202" title="All 4 branches missed.">      boolean omitLF = ignoreLF || skipLF;</span>
 
-<span class="nc" id="L204">      for (;;) {</span>
+      for (;;) {
 
 <span class="nc bnc" id="L206" title="All 2 branches missed.">        if (nextChar &gt;= nChars)</span>
 <span class="nc" id="L207">          fill();</span>
@@ -236,7 +236,7 @@ public class MtasBufferedReader extends Reader {
           String str;
 <span class="nc bnc" id="L237" title="All 2 branches missed.">          if (s == null) {</span>
 <span class="nc" id="L238">            str = new String(cb, startChar, i - startChar);</span>
-<span class="nc" id="L239">          } else {</span>
+          } else {
 <span class="nc" id="L240">            s.append(cb, startChar, i - startChar);</span>
 <span class="nc" id="L241">            str = s.toString();</span>
           }
@@ -250,8 +250,8 @@ public class MtasBufferedReader extends Reader {
 <span class="nc bnc" id="L250" title="All 2 branches missed.">        if (s == null)</span>
 <span class="nc" id="L251">          s = new StringBuffer(defaultExpectedLineLength);</span>
 <span class="nc" id="L252">        s.append(cb, startChar, i - startChar);</span>
-      }
-    }
+<span class="nc" id="L253">      }</span>
+<span class="nc" id="L254">    }</span>
   }
 
   /**
@@ -299,7 +299,7 @@ public class MtasBufferedReader extends Reader {
       }
     };
 <span class="nc" id="L301">    return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iter,</span>
-<span class="nc" id="L302">        Spliterator.ORDERED | Spliterator.NONNULL), false);</span>
+        Spliterator.ORDERED | Spliterator.NONNULL), false);
   }
 
   /**
@@ -344,9 +344,9 @@ public class MtasBufferedReader extends Reader {
 <span class="nc" id="L344">          r -= d;</span>
 <span class="nc" id="L345">          nextChar = nChars;</span>
         }
-      }
+<span class="nc" id="L347">      }</span>
 <span class="nc" id="L348">      return n - r;</span>
-    }
+<span class="nc" id="L349">    }</span>
   }
 
   /*
@@ -378,7 +378,7 @@ public class MtasBufferedReader extends Reader {
         }
       }
 <span class="nc bnc" id="L380" title="All 4 branches missed.">      return (nextChar &lt; nChars) || in.ready();</span>
-    }
+<span class="nc" id="L381">    }</span>
   }
 
   /*
@@ -392,7 +392,7 @@ public class MtasBufferedReader extends Reader {
 <span class="nc" id="L392">      ensureOpen();</span>
 <span class="nc" id="L393">      nextChar = -1;</span>
 <span class="nc" id="L394">      previousBufferSize = 0;</span>
-    }
+<span class="nc" id="L395">    }</span>
 <span class="nc" id="L396">  }</span>
 
   /*
@@ -407,11 +407,11 @@ public class MtasBufferedReader extends Reader {
 <span class="nc" id="L407">        return;</span>
       try {
 <span class="nc" id="L409">        in.close();</span>
-<span class="nc" id="L410">      } finally {</span>
+      } finally {
 <span class="nc" id="L411">        in = null;</span>
 <span class="nc" id="L412">        cb = null;</span>
 <span class="nc" id="L413">      }</span>
-    }
+<span class="nc" id="L414">    }</span>
 <span class="nc" id="L415">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

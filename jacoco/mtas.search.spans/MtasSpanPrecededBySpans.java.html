@@ -236,7 +236,7 @@ public class MtasSpanPrecededBySpans extends MtasSpans {
   public int nextDoc() throws IOException {
 <span class="fc" id="L237">    reset();</span>
 <span class="pc bpc" id="L238" title="1 of 2 branches missed.">    while (!goToNextDoc())</span>
-      ;
+<span class="nc" id="L239">      ;</span>
 <span class="fc" id="L240">    return docId;</span>
   }
 
@@ -257,7 +257,7 @@ public class MtasSpanPrecededBySpans extends MtasSpans {
 <span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (spans1DocId &lt; spans2DocId) {</span>
 <span class="nc" id="L258">          spans1DocId = spans1.spans.advance(spans2DocId);</span>
 <span class="nc" id="L259">          docId = spans1DocId;</span>
-<span class="nc" id="L260">        } else {</span>
+        } else {
 <span class="fc" id="L261">          spans2DocId = spans2.spans.advance(spans1DocId);</span>
 <span class="fc" id="L262">          docId = spans2DocId;</span>
         }
@@ -279,8 +279,8 @@ public class MtasSpanPrecededBySpans extends MtasSpans {
    */
   private boolean goToNextStartPosition() throws IOException {
     int nextSpans1StartPosition;
-<span class="fc bfc" id="L282" title="All 2 branches covered.">    while ((nextSpans1StartPosition = spans1.spans</span>
-<span class="fc" id="L283">        .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
+<span class="fc" id="L282">    while ((nextSpans1StartPosition = spans1.spans</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">        .nextStartPosition()) != NO_MORE_POSITIONS) {</span>
 <span class="fc bfc" id="L284" title="All 2 branches covered.">      if (nextSpans1StartPosition == lastSpans2EndPosition) {</span>
 <span class="fc" id="L285">        return true;</span>
       } else {
@@ -307,7 +307,7 @@ public class MtasSpanPrecededBySpans extends MtasSpans {
 <span class="fc bfc" id="L307" title="All 2 branches covered.">            if (lastSpans2EndPosition &gt;= nextSpans1StartPosition) {</span>
 <span class="fc" id="L308">              previousSpans2EndPositions.add(lastSpans2EndPosition);</span>
 <span class="fc" id="L309">              maximumSpans2EndPosition = Math.max(maximumSpans2EndPosition,</span>
-<span class="fc" id="L310">                  lastSpans2EndPosition);</span>
+                  lastSpans2EndPosition);
             }
 <span class="fc bfc" id="L312" title="All 2 branches covered.">            if (nextSpans1StartPosition == lastSpans2EndPosition) {</span>
 <span class="fc" id="L313">              return true;</span>

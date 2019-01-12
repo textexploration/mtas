@@ -49,7 +49,7 @@ abstract class MtasDataItemBasic&lt;T1 extends Number &amp; Comparable&lt;T1&gt;
       String sortDirection, int errorNumber, Map&lt;String, Integer&gt; errorList,
       MtasDataOperations&lt;T1, T2&gt; operations, int sourceNumber) {
 <span class="fc" id="L51">    super(sub, statsItems, sortType, sortDirection, errorNumber, errorList,</span>
-<span class="fc" id="L52">        sourceNumber);</span>
+        sourceNumber);
 <span class="fc" id="L53">    this.valueSum = valueSum;</span>
 <span class="fc" id="L54">    this.valueN = valueN;</span>
 <span class="fc" id="L55">    this.operations = operations;</span>
@@ -88,15 +88,15 @@ abstract class MtasDataItemBasic&lt;T1 extends Number &amp; Comparable&lt;T1&gt;
 <span class="fc" id="L88">        response.put(statsItem, valueN);</span>
 <span class="pc bpc" id="L89" title="1 of 2 branches missed.">      } else if (statsItem.equals(CodecUtil.STATS_TYPE_MEAN)) {</span>
 <span class="fc" id="L90">        response.put(statsItem, getValue(statsItem));</span>
-<span class="fc" id="L91">      } else {</span>
+      } else {
 <span class="nc" id="L92">        response.put(statsItem, null);</span>
       }
-    }
+<span class="fc" id="L94">    }</span>
 <span class="pc bpc" id="L95" title="1 of 2 branches missed.">    if (errorNumber &gt; 0) {</span>
 <span class="nc" id="L96">      Map&lt;String, Object&gt; errorResponse = new HashMap&lt;String, Object&gt;();</span>
 <span class="nc bnc" id="L97" title="All 2 branches missed.">      for (Entry&lt;String, Integer&gt; entry : getErrorList().entrySet()) {</span>
 <span class="nc" id="L98">        errorResponse.put(entry.getKey(), entry.getValue());</span>
-      }
+<span class="nc" id="L99">      }</span>
 <span class="nc" id="L100">      response.put(&quot;errorNumber&quot;, errorNumber);</span>
 <span class="nc" id="L101">      response.put(&quot;errorList&quot;, errorResponse);</span>
     }
@@ -127,7 +127,7 @@ abstract class MtasDataItemBasic&lt;T1 extends Number &amp; Comparable&lt;T1&gt;
    * @see mtas.codec.util.collector.MtasDataItem#getCompareValueType()
    */
   public final int getCompareValueType() throws IOException {
-<span class="pc bpc" id="L130" title="7 of 10 branches missed.">    switch (sortType) {</span>
+<span class="pc bpc" id="L130" title="9 of 14 branches missed.">    switch (sortType) {</span>
     case CodecUtil.STATS_TYPE_N:
 <span class="nc" id="L132">      return 0;</span>
     case CodecUtil.STATS_TYPE_SUM:
@@ -145,7 +145,7 @@ abstract class MtasDataItemBasic&lt;T1 extends Number &amp; Comparable&lt;T1&gt;
    * @see mtas.codec.util.collector.MtasDataItem#getCompareValue0()
    */
   public final MtasDataItemNumberComparator&lt;Long&gt; getCompareValue0() {
-<span class="nc bnc" id="L148" title="All 4 branches missed.">    switch (sortType) {</span>
+<span class="nc bnc" id="L148" title="All 6 branches missed.">    switch (sortType) {</span>
     case CodecUtil.STATS_TYPE_N:
 <span class="nc" id="L150">      return new MtasDataItemNumberComparator&lt;Long&gt;(valueN, sortDirection);</span>
     default:

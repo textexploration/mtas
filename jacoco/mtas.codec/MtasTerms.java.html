@@ -33,8 +33,8 @@ public class MtasTerms extends Terms {
    * @param indexInputOffsetList the index input offset list
    * @param version the version
    */
-<span class="fc" id="L36">  public MtasTerms(Terms terms, HashMap&lt;String, IndexInput&gt; indexInputList,</span>
-      HashMap&lt;String, Long&gt; indexInputOffsetList, int version) {
+  public MtasTerms(Terms terms, HashMap&lt;String, IndexInput&gt; indexInputList,
+<span class="fc" id="L37">      HashMap&lt;String, Long&gt; indexInputOffsetList, int version) {</span>
 <span class="fc" id="L38">    delegateTerms = terms;</span>
 <span class="fc" id="L39">    this.indexInputList = indexInputList;</span>
 <span class="fc" id="L40">    this.indexInputOffsetList = indexInputOffsetList;</span>
@@ -185,7 +185,7 @@ public class MtasTerms extends Terms {
 <span class="fc" id="L185">    HashMap&lt;String, IndexInput&gt; clonedIndexInputList = new HashMap&lt;String, IndexInput&gt;();</span>
 <span class="fc bfc" id="L186" title="All 2 branches covered.">    for (Entry&lt;String, IndexInput&gt; entry : indexInputList.entrySet()) {</span>
 <span class="fc" id="L187">      clonedIndexInputList.put(entry.getKey(), entry.getValue().clone());</span>
-    }
+<span class="fc" id="L188">    }</span>
 <span class="fc" id="L189">    return clonedIndexInputList;</span>
   }
 

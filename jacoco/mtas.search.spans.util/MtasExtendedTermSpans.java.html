@@ -69,7 +69,7 @@ public class MtasExtendedTermSpans extends TermSpans {
         try {
 <span class="fc" id="L70">          processEncodedPayload();</span>
 <span class="fc bfc" id="L71" title="All 2 branches covered.">          return (status != NO_MORE_POSITIONS) ? (mtasPosition.getEnd() + 1)</span>
-<span class="fc" id="L72">              : NO_MORE_POSITIONS;</span>
+              : NO_MORE_POSITIONS;
 <span class="nc" id="L73">        } catch (IOException e) {</span>
 <span class="nc" id="L74">          log.debug(e);</span>
 <span class="nc" id="L75">          return NO_MORE_POSITIONS;</span>
@@ -101,7 +101,7 @@ public class MtasExtendedTermSpans extends TermSpans {
 <span class="nc" id="L101">      } catch (IOException e) {</span>
 <span class="nc" id="L102">        log.debug(e);</span>
         // do nothing
-      }
+<span class="nc" id="L104">      }</span>
 <span class="nc" id="L105">      int start = super.startPosition();</span>
 <span class="nc" id="L106">      int end = super.endPosition();</span>
 <span class="nc" id="L107">      list = new int[end - start];</span>

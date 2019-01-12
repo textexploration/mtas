@@ -64,41 +64,41 @@ import mtas.analysis.token.MtasPosition;
 <span class="fc bfc" id="L64" title="All 2 branches covered.">    if (byteStream.readBit() == 1) {</span>
 <span class="pc bpc" id="L65" title="1 of 2 branches missed.">      if (byteStream.readBit() == 1) {</span>
 <span class="nc" id="L66">        mtasPositionType = null;</span>
-<span class="nc" id="L67">      } else {</span>
+      } else {
 <span class="fc" id="L68">        mtasPositionType = MtasPosition.POSITION_RANGE;</span>
       }
-<span class="fc" id="L70">    } else {</span>
+    } else {
 <span class="fc bfc" id="L71" title="All 2 branches covered.">      if (byteStream.readBit() == 1) {</span>
 <span class="fc" id="L72">        mtasPositionType = MtasPosition.POSITION_SET;</span>
-<span class="fc" id="L73">      } else {</span>
+      } else {
 <span class="fc" id="L74">        mtasPositionType = MtasPosition.POSITION_SINGLE;</span>
       }
     }
     // analyze initial bits - offset
 <span class="pc bpc" id="L78" title="1 of 2 branches missed.">    if (byteStream.readBit() == 1) {</span>
 <span class="nc" id="L79">      getOffset = true;</span>
-<span class="nc" id="L80">    } else {</span>
+    } else {
 <span class="fc" id="L81">      getOffset = false;</span>
     }
     // analyze initial bits - realOffset
 <span class="pc bpc" id="L84" title="1 of 2 branches missed.">    if (byteStream.readBit() == 1) {</span>
 <span class="nc" id="L85">      getRealOffset = true;</span>
-<span class="nc" id="L86">    } else {</span>
+    } else {
 <span class="fc" id="L87">      getRealOffset = false;</span>
     }
     // analyze initial bits - parent
 <span class="fc bfc" id="L90" title="All 2 branches covered.">    if (byteStream.readBit() == 1) {</span>
 <span class="fc" id="L91">      mtasParent = true;</span>
-<span class="fc" id="L92">    } else {</span>
+    } else {
 <span class="fc" id="L93">      mtasParent = false;</span>
     }
     // analyse initial bits - payload
 <span class="pc bpc" id="L96" title="1 of 2 branches missed.">    if (byteStream.readBit() == 1) {</span>
 <span class="nc" id="L97">      mtasPayload = true;</span>
-<span class="nc" id="L98">    } else {</span>
+    } else {
 <span class="fc" id="L99">      mtasPayload = false;</span>
     }
-<span class="fc" id="L101">    if (byteStream.readBit() == 0) {</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    if (byteStream.readBit() == 0) {</span>
       // string
     } else {
       // other
@@ -140,7 +140,7 @@ import mtas.analysis.token.MtasPosition;
 <span class="nc" id="L140">      mtasOffset = new MtasOffset(offsetStart, offsetEnd);</span>
 <span class="nc bnc" id="L141" title="All 2 branches missed.">      if (getRealOffset) {</span>
 <span class="nc" id="L142">        int realOffsetStart = byteStream.readEliasGammaCodingInteger()</span>
-<span class="nc" id="L143">            + offsetStart;</span>
+            + offsetStart;
 <span class="nc" id="L144">        int realOffsetEnd = realOffsetStart</span>
 <span class="nc" id="L145">            + byteStream.readEliasGammaCodingPositiveInteger() - 1;</span>
 <span class="nc" id="L146">        mtasRealOffset = new MtasOffset(realOffsetStart, realOffsetEnd);</span>
