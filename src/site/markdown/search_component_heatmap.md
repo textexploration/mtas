@@ -52,7 +52,8 @@ One geospatial field has to be defined, and like for the Solr facet.heatmap seve
 Optionally, the type of statistics and minimum/maximum number of occurrences can be defined.
 
 | Parameter                                       | Value        | Info                           | Obligatory  |
-|-------------------------------------------------|--------------|--------------------------------|-| mtas.heatmap.\<identifier\>.type        | \<string\>   | required [type of statistics](search_stats.html) | no          |
+|-------------------------------------------------|--------------|--------------------------------|----|
+|mtas.heatmap.\<identifier\>.type      | \<string\>   | required [type of statistics](search_stats.html) | no  |
 | mtas.heatmap.\<identifier\>.minimum     | \<double\>   | minimum number of occurrences span  | no          |
 | mtas.heatmap.\<identifier\>.maximum     | \<double\>   | maximum number of occurrences span  | no          |
 
@@ -73,9 +74,9 @@ The key is added to the response and may be used to distinguish between multiple
 ---
 
 ## Examples
-1. [Basic](#basic) : basic facet on occurring part of speech
-2. [Variable](#variable) : facets on occurring part of speech with variable
-3. [Function](#function) : facet on occurring part of speech with function
+1. [Basic](#basic) : TODO
+2. [Variable](#variable) : TODO
+3. [Function](#function) : TODO
 
 ---
 
