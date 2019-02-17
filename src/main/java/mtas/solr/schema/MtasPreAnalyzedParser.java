@@ -39,7 +39,6 @@ public class MtasPreAnalyzedParser implements PreAnalyzedParser {
   public ParseResult parse(Reader reader, AttributeSource parent)
       throws IOException {
     ParseResult res = new ParseResult();
-
     // get MtasUpdateRequestProcessorResult
     StringBuilder sb = new StringBuilder();
     char[] buf = new char[128];
@@ -48,7 +47,7 @@ public class MtasPreAnalyzedParser implements PreAnalyzedParser {
       sb.append(buf, 0, cnt);
     }
     Iterator<MtasUpdateRequestProcessorResultItem> iterator;
-
+    
     try (
         MtasUpdateRequestProcessorResultReader result = new MtasUpdateRequestProcessorResultReader(
             sb.toString());) {

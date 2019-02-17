@@ -22,6 +22,7 @@ import org.apache.lucene.analysis.util.ResourceLoader;
 import org.apache.lucene.util.BytesRef;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.SolrInputField;
+import org.apache.solr.common.util.ByteArrayUtf8CharSequence;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.core.SolrResourceLoader;
@@ -298,11 +299,17 @@ class MtasUpdateRequestProcessor extends UpdateRequestProcessor {
         MtasTokenizerFactory tokenizerFactory = config.fieldTypeTokenizerFactory
             .get(config.fieldMapping.get(field));
         MtasUpdateRequestProcessorSizeReader sizeReader;
-        if (originalValue != null
-            && originalValue.getValue() instanceof String) {
+        String storedValue = null;
+        if (originalValue != null) {
+          if(originalValue.getValue() instanceof String) {
+            storedValue = (String) originalValue.getValue();
+          } else if(originalValue.getValue() instanceof ByteArrayUtf8CharSequence) {
+            storedValue = ((ByteArrayUtf8CharSequence) originalValue.getValue()).toString();
+          }
+        }
+        if (storedValue != null) {
           MtasUpdateRequestProcessorResultWriter result = null;
           try {
-            String storedValue = (String) originalValue.getValue();
             // create reader
             Reader reader = new StringReader(storedValue);
             // configuration
