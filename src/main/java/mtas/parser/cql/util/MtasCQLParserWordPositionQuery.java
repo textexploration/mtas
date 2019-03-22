@@ -9,6 +9,7 @@ import mtas.search.spans.util.MtasSpanQuery;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 
 /**
@@ -76,9 +77,9 @@ public class MtasCQLParserWordPositionQuery extends MtasSpanQuery {
    * search.IndexSearcher, boolean)
    */
   @Override
-  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
+  public SpanWeight createWeight(IndexSearcher searcher, ScoreMode scoreMode, float boost)
       throws IOException {
-    return query.createWeight(searcher, needsScores, boost);
+    return query.createWeight(searcher, scoreMode, boost);
   }
 
   /*

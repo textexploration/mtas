@@ -11,6 +11,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanMultiTermQueryWrapper;
 import org.apache.lucene.search.spans.SpanOrQuery;
 import org.apache.lucene.search.spans.SpanQuery;
@@ -132,10 +133,10 @@ public class MtasSpanPrefixQuery extends MtasSpanQuery {
    * search.IndexSearcher, boolean)
    */
   @Override
-  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
+  public SpanWeight createWeight(IndexSearcher searcher, ScoreMode scoreMode, float boost)
       throws IOException {
     return ((SpanQuery) searcher.rewrite(query)).createWeight(searcher,
-        needsScores, boost);
+        scoreMode, boost);
   }
 
   /*

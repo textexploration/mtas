@@ -19,9 +19,11 @@ import org.apache.lucene.index.IndexReaderContext;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.LeafSimScorer;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.similarities.Similarity.SimScorer;
 
 /**
@@ -64,7 +66,7 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanWeight createWeight(IndexSearcher searcher,
-      boolean needsScores, float boost) throws IOException {
+      ScoreMode scoreMode, float boost) throws IOException {
     // keep things simple
     return new SpanAllWeight(searcher, null, boost);
   }
@@ -91,7 +93,7 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public SpanAllWeight(IndexSearcher searcher,
-        Map<Term, TermContext> termContexts, float boost) throws IOException {
+        Map<Term, TermStates> termContexts, float boost) throws IOException {
       super(MtasSpanMatchAllQuery.this, searcher, termContexts, boost);
       this.searcher = searcher;
     }
@@ -104,12 +106,12 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
      * Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
+    public void extractTermStates(Map<Term, TermStates> contexts) {
       Term term = new Term(field);
       if (!contexts.containsKey(term)) {
         IndexReaderContext topContext = searcher.getTopReaderContext();
         try {
-          contexts.put(term, TermContext.build(topContext, term));
+          contexts.put(term, TermStates.build(topContext, term, true));
         } catch (IOException e) {
           log.debug(e);
           // fail
@@ -182,8 +184,8 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
      * index.LeafReaderContext)
      */
     @Override
-    public SimScorer getSimScorer(LeafReaderContext context) {
-      return new MtasSimScorer();
+    public LeafSimScorer getSimScorer(LeafReaderContext context) throws IOException {      
+      return new LeafSimScorer(new MtasSimScorer(), context.reader(), field, true);
     }
 
 //    @Override

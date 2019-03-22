@@ -21,6 +21,7 @@ import mtas.codec.util.CodecComponent.ComponentCollection;
 import org.apache.lucene.index.FieldInfo;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 
 /**
@@ -254,7 +255,7 @@ public class CodecUtil {
         final float boost = 0;
         for (MtasSpanQuery sq : fieldStats.spanQueryList) {
           spansQueryWeight.put(sq, ((MtasSpanQuery) sq.rewrite(reader))
-              .createWeight(searcher, false, boost));
+              .createWeight(searcher, ScoreMode.COMPLETE_NO_SCORES, boost));
         }
       }
       // collect

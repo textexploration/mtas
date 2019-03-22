@@ -11,9 +11,10 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 import org.apache.lucene.search.spans.Spans;
 
@@ -80,13 +81,13 @@ public class MtasExpandSpanQuery extends MtasSpanQuery {
    * IndexSearcher, boolean)
    */
   @Override
-  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
+  public SpanWeight createWeight(IndexSearcher searcher, ScoreMode scoreMode, float boost)
       throws IOException {
-    SpanWeight subWeight = query.createWeight(searcher, needsScores, boost);
+    SpanWeight subWeight = query.createWeight(searcher, scoreMode, boost);
     if (maximumLeft == 0 && maximumRight == 0) {
       return subWeight;
     } else {
-      return new MtasExpandWeight(subWeight, searcher, needsScores, boost);
+      return new MtasExpandWeight(subWeight, searcher, scoreMode, boost);
     }
   }
 
@@ -210,9 +211,9 @@ public class MtasExpandSpanQuery extends MtasSpanQuery {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public MtasExpandWeight(SpanWeight subWeight, IndexSearcher searcher,
-        boolean needsScores, float boost) throws IOException {
+        ScoreMode scoreMode, float boost) throws IOException {
       super(MtasExpandSpanQuery.this, searcher,
-          needsScores ? getTermContexts(subWeight) : null, boost);
+          scoreMode.needsScores() ? getTermStates(subWeight) : null, boost);
       this.subWeight = subWeight;
     }
 
@@ -224,8 +225,8 @@ public class MtasExpandSpanQuery extends MtasSpanQuery {
      * Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
-      subWeight.extractTermContexts(contexts);
+    public void extractTermStates(Map<Term, TermStates> contexts) {
+      subWeight.extractTermStates(contexts);
     }
 
     /*

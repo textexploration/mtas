@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanWeight;
@@ -28,7 +28,7 @@ public abstract class MtasSpanWeight extends SpanWeight {
    *           Signals that an I/O exception has occurred.
    */
   public MtasSpanWeight(SpanQuery query, IndexSearcher searcher,
-      Map<Term, TermContext> termContexts, float boost) throws IOException {
+      Map<Term, TermStates> termContexts, float boost) throws IOException {
     super(query, searcher, termContexts, boost);
   }
 

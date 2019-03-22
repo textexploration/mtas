@@ -16,9 +16,11 @@ import org.apache.lucene.codecs.FieldsProducer;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.LeafSimScorer;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.similarities.Similarity.SimScorer;
 
 /**
@@ -78,7 +80,7 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanWeight createWeight(IndexSearcher searcher,
-      boolean needsScores, float boost) throws IOException {
+      ScoreMode scoreMode, float boost) throws IOException {
     return new SpanAllWeight(searcher, null, boost);
   }
 
@@ -101,7 +103,7 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public SpanAllWeight(IndexSearcher searcher,
-        Map<Term, TermContext> termContexts, float boost) throws IOException {
+        Map<Term, TermStates> termContexts, float boost) throws IOException {
       super(MtasSpanPositionQuery.this, searcher, termContexts, boost);
     }
 
@@ -113,7 +115,7 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
      * Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
+    public void extractTermStates(Map<Term, TermStates> contexts) {
       // don't do anything
     }
 
@@ -182,8 +184,8 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
      * index.LeafReaderContext)
      */
     @Override
-    public SimScorer getSimScorer(LeafReaderContext context) {
-      return new MtasSimScorer();
+    public LeafSimScorer getSimScorer(LeafReaderContext context) throws IOException {
+      return new LeafSimScorer(new MtasSimScorer(), context.reader(), field, true);
     }
 
 //    @Override

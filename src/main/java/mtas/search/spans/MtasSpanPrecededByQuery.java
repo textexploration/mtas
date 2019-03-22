@@ -10,9 +10,10 @@ import java.util.Set;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 import org.apache.lucene.search.spans.Spans;
 
@@ -75,21 +76,21 @@ public class MtasSpanPrecededByQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanWeight createWeight(IndexSearcher searcher,
-      boolean needsScores, float boost) throws IOException {
+      ScoreMode scoreMode, float boost) throws IOException {
     if (q1 == null || q2 == null) {
       return null;
     } else {
       MtasSpanPrecededByQueryWeight w1 = new MtasSpanPrecededByQueryWeight(
-          q1.createWeight(searcher, needsScores, boost));
+          q1.createWeight(searcher, scoreMode, boost));
       MtasSpanPrecededByQueryWeight w2 = new MtasSpanPrecededByQueryWeight(
-          q2.createWeight(searcher, needsScores, boost));
+          q2.createWeight(searcher, scoreMode, boost));
       // subWeights
       List<MtasSpanPrecededByQueryWeight> subWeights = new ArrayList<>();
       subWeights.add(w1);
       subWeights.add(w2);
       // return
       return new SpanPrecededByWeight(w1, w2, searcher,
-          needsScores ? getTermContexts(subWeights) : null, boost);
+          scoreMode.needsScores() ? getTermStates(subWeights) : null, boost);
     }
   }
 
@@ -99,13 +100,13 @@ public class MtasSpanPrecededByQuery extends MtasSpanQuery {
    * @param items the items
    * @return the term contexts
    */
-  protected Map<Term, TermContext> getTermContexts(
+  protected Map<Term, TermStates> getTermStates(
       List<MtasSpanPrecededByQueryWeight> items) {
     List<SpanWeight> weights = new ArrayList<>();
     for (MtasSpanPrecededByQueryWeight item : items) {
       weights.add(item.spanWeight);
     }
-    return getTermContexts(weights);
+    return getTermStates(weights);
   }
 
   /*
@@ -213,7 +214,7 @@ public class MtasSpanPrecededByQuery extends MtasSpanQuery {
      */
     public SpanPrecededByWeight(MtasSpanPrecededByQueryWeight w1,
         MtasSpanPrecededByQueryWeight w2, IndexSearcher searcher,
-        Map<Term, TermContext> terms, float boost) throws IOException {
+        Map<Term, TermStates> terms, float boost) throws IOException {
       super(MtasSpanPrecededByQuery.this, searcher, terms, boost);
       this.w1 = w1;
       this.w2 = w2;
@@ -227,9 +228,9 @@ public class MtasSpanPrecededByQuery extends MtasSpanQuery {
      * Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
-      w1.spanWeight.extractTermContexts(contexts);
-      w2.spanWeight.extractTermContexts(contexts);
+    public void extractTermStates(Map<Term, TermStates> contexts) {
+      w1.spanWeight.extractTermStates(contexts);
+      w2.spanWeight.extractTermStates(contexts);
     }
 
     /*

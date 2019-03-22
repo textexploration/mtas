@@ -85,6 +85,7 @@ import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 import org.apache.lucene.search.spans.Spans;
 import org.apache.lucene.util.Bits;
@@ -1032,7 +1033,7 @@ public class CodecCollector {
       MtasSpanQuery queryHit = createQueryFromGroupHit(prefixes, field, hit);
       if (queryHit != null) {
         MtasSpanQuery queryHitRewritten = queryHit.rewrite(reader);
-        SpanWeight weight = queryHitRewritten.createWeight(searcher, false, boost);
+        SpanWeight weight = queryHitRewritten.createWeight(searcher, ScoreMode.COMPLETE_NO_SCORES, boost);
         Spans spans = weight.getSpans(lrc, SpanWeight.Postings.POSITIONS);
         if (spans != null) {
           list.put(hit, spans);

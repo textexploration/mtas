@@ -8,9 +8,10 @@ import java.util.Set;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 import org.apache.lucene.search.spans.Spans;
 
@@ -261,15 +262,15 @@ public class MtasSpanRecurrenceQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanWeight createWeight(IndexSearcher searcher,
-      boolean needsScores, float boost) throws IOException {
-    SpanWeight subWeight = query.createWeight(searcher, false, boost);
+      ScoreMode scoreMode, float boost) throws IOException {
+    SpanWeight subWeight = query.createWeight(searcher, ScoreMode.COMPLETE_NO_SCORES, boost);
     SpanWeight ignoreWeight = null;
     if (ignoreQuery != null) {
-      ignoreWeight = ignoreQuery.createWeight(searcher, false, boost);
+      ignoreWeight = ignoreQuery.createWeight(searcher, ScoreMode.COMPLETE_NO_SCORES, boost);
     }
     return new SpanRecurrenceWeight(subWeight, ignoreWeight,
         maximumIgnoreLength, searcher,
-        needsScores ? getTermContexts(subWeight) : null, boost);
+        scoreMode.needsScores() ? getTermStates(subWeight) : null, boost);
   }
 
   /*
@@ -312,7 +313,7 @@ public class MtasSpanRecurrenceQuery extends MtasSpanQuery {
      */
     public SpanRecurrenceWeight(SpanWeight subWeight, SpanWeight ignoreWeight,
         Integer maximumIgnoreLength, IndexSearcher searcher,
-        Map<Term, TermContext> terms, float boost) throws IOException {
+        Map<Term, TermStates> terms, float boost) throws IOException {
       super(MtasSpanRecurrenceQuery.this, searcher, terms, boost);
       this.subWeight = subWeight;
       this.ignoreWeight = ignoreWeight;
@@ -327,8 +328,8 @@ public class MtasSpanRecurrenceQuery extends MtasSpanQuery {
      * Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
-      subWeight.extractTermContexts(contexts);
+    public void extractTermStates(Map<Term, TermStates> contexts) {
+      subWeight.extractTermStates(contexts);
     }
 
     /*

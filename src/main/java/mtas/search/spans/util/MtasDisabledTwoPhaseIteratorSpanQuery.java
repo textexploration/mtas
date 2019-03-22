@@ -8,8 +8,9 @@ import java.util.Set;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 import mtas.search.spans.MtasSpanMatchNoneQuery;
 
@@ -40,10 +41,10 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanWeight createWeight(IndexSearcher searcher,
-      boolean needsScores, float boost) throws IOException {
-    SpanWeight subWeight = subQuery.createWeight(searcher, needsScores, boost);
+      ScoreMode scoreMode, float boost) throws IOException {
+    SpanWeight subWeight = subQuery.createWeight(searcher, scoreMode, boost);
     return new MtasDisabledTwoPhaseIteratorWeight(subWeight, searcher,
-        needsScores, boost);
+        scoreMode, boost);
   }
 
   /*
@@ -147,9 +148,9 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public MtasDisabledTwoPhaseIteratorWeight(SpanWeight subWeight,
-        IndexSearcher searcher, boolean needsScores, float boost) throws IOException {
+        IndexSearcher searcher, ScoreMode scoreMode, float boost) throws IOException {
       super(subQuery, searcher,
-          needsScores ? getTermContexts(subWeight) : null, boost);
+          scoreMode.needsScores() ? getTermStates(subWeight) : null, boost);
       this.subWeight = subWeight;
     }
 
@@ -161,8 +162,8 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
      * Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
-      subWeight.extractTermContexts(contexts);
+    public void extractTermStates(Map<Term, TermStates> contexts) {
+      subWeight.extractTermStates(contexts);
     }
 
     /*

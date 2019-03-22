@@ -10,6 +10,7 @@ publications
 target/
 solr-*/
 jetty-*/
+alpn/
 /data/
 examples/
 demo/

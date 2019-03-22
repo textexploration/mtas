@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.codecs.CodecUtil;
 import org.apache.lucene.codecs.FieldsConsumer;
 import org.apache.lucene.codecs.FieldsProducer;
+import org.apache.lucene.codecs.NormsProducer;
 import org.apache.lucene.index.FieldInfo;
 import org.apache.lucene.index.FieldInfos;
 import org.apache.lucene.index.Fields;
@@ -671,7 +672,7 @@ public class MtasFieldsConsumer extends FieldsConsumer {
    * MergeState)
    */
   @Override
-  public void merge(MergeState mergeState) throws IOException {
+  public void merge(MergeState mergeState, NormsProducer norms) throws IOException {
     final List<Fields> fields = new ArrayList<>();
     final List<ReaderSlice> slices = new ArrayList<>();
 
@@ -690,7 +691,7 @@ public class MtasFieldsConsumer extends FieldsConsumer {
     Fields mergedFields = new MappedMultiFields(mergeState,
         new MultiFields(fields.toArray(Fields.EMPTY_ARRAY),
             slices.toArray(ReaderSlice.EMPTY_ARRAY)));
-    write(mergedFields);
+    write(mergedFields, norms);
   }
 
   /*
@@ -700,8 +701,8 @@ public class MtasFieldsConsumer extends FieldsConsumer {
    * Fields )
    */
   @Override
-  public void write(Fields fields) throws IOException {
-    delegateFieldsConsumer.write(fields);
+  public void write(Fields fields, NormsProducer norms) throws IOException {
+    delegateFieldsConsumer.write(fields, norms);
     write(state.fieldInfos, fields);
   }
 

@@ -8,8 +8,9 @@ import java.util.Set;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanWeight;
 import mtas.search.spans.util.MtasSpanQuery;
@@ -91,9 +92,9 @@ public class MtasSpanEndQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanWeight createWeight(IndexSearcher searcher,
-      boolean needsScores, float boost) throws IOException {
+      ScoreMode scoreMode, float boost) throws IOException {
     SpanWeight spanWeight = ((SpanQuery) searcher.rewrite(clause))
-        .createWeight(searcher, needsScores, boost);
+        .createWeight(searcher, scoreMode, boost);
     return new SpanTermWeight(spanWeight, searcher, boost);
   }
 
@@ -126,8 +127,8 @@ public class MtasSpanEndQuery extends MtasSpanQuery {
      * Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
-      spanWeight.extractTermContexts(contexts);
+    public void extractTermStates(Map<Term, TermStates> contexts) {
+      spanWeight.extractTermStates(contexts);
     }
 
     /*

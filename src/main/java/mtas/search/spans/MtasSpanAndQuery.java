@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanNearQuery;
 import org.apache.lucene.search.spans.SpanWeight;
 
@@ -78,11 +79,11 @@ public class MtasSpanAndQuery extends MtasSpanQuery {
    * search.IndexSearcher, boolean)
    */
   @Override
-  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
+  public SpanWeight createWeight(IndexSearcher searcher, ScoreMode scoreMode, float boost)
       throws IOException {
-    return baseQuery.createWeight(searcher, needsScores, boost);
+    return baseQuery.createWeight(searcher, scoreMode, boost);
   }
-
+  
   /*
    * (non-Javadoc)
    * 

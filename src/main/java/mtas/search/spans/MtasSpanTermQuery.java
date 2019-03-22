@@ -7,6 +7,7 @@ import mtas.search.spans.util.MtasExtendedSpanTermQuery;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanTermQuery;
 import org.apache.lucene.search.spans.SpanWeight;
 
@@ -56,9 +57,9 @@ public class MtasSpanTermQuery extends MtasSpanQuery {
    * .search.IndexSearcher, boolean)
    */
   @Override
-  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
+  public SpanWeight createWeight(IndexSearcher searcher, ScoreMode scoreMode, float boost)
       throws IOException {
-    return baseQuery.createWeight(searcher, needsScores, boost);
+    return baseQuery.createWeight(searcher, scoreMode, boost);
   }
 
   /*

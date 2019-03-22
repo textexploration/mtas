@@ -41,6 +41,7 @@ import org.apache.lucene.index.SegmentReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 import org.apache.lucene.search.spans.Spans;
 import org.apache.lucene.store.Directory;
@@ -1396,7 +1397,7 @@ public class MtasSearchTestConsistency {
         .listIterator();
     IndexSearcher searcher = new IndexSearcher(indexReader);
     final float boost = 0;
-    SpanWeight spanweight = q.rewrite(indexReader).createWeight(searcher, false,
+    SpanWeight spanweight = q.rewrite(indexReader).createWeight(searcher, ScoreMode.COMPLETE_NO_SCORES,
         boost);
 
     while (iterator.hasNext()) {

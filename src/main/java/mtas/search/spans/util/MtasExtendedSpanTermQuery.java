@@ -14,11 +14,12 @@ import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.PostingsEnum;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
 import org.apache.lucene.index.TermState;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.FilterSpans;
 import org.apache.lucene.search.spans.SpanTermQuery;
 import org.apache.lucene.search.spans.SpanWeight;
@@ -90,17 +91,17 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
    * .search.IndexSearcher, boolean)
    */
   @Override
-  public SpanWeight createWeight(IndexSearcher searcher, boolean needsScores, float boost)
+  public SpanWeight createWeight(IndexSearcher searcher, ScoreMode scoreMode, float boost)
       throws IOException {
-    final TermContext context;
+    final TermStates context;
     final IndexReaderContext topContext = searcher.getTopReaderContext();
-    if (termContext == null) {
-      context = TermContext.build(topContext, localTerm);
+    if (termStates == null) {
+      context = TermStates.build(topContext, localTerm, true);
     } else {
-      context = termContext;
+      context = termStates;
     }
     return new SpanTermWeight(context, searcher,
-        needsScores ? Collections.singletonMap(localTerm, context) : null, boost);
+        scoreMode.needsScores() ? Collections.singletonMap(localTerm, context) : null, boost);
   }
 
   /**
@@ -111,8 +112,8 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
     /** The Constant METHOD_GET_DELEGATE. */
     private static final String METHOD_GET_DELEGATE = "getDelegate";
 
-    /** The term context. */
-    final TermContext termContext;
+    /** The term states. */
+    final TermStates termStates;
 
     /**
      * Instantiates a new span term weight.
@@ -122,11 +123,11 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
      * @param terms the terms
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public SpanTermWeight(TermContext termContext, IndexSearcher searcher,
-        Map<Term, TermContext> terms, float boost) throws IOException {
+    public SpanTermWeight(TermStates termStates, IndexSearcher searcher,
+        Map<Term, TermStates> terms, float boost) throws IOException {
       super(MtasExtendedSpanTermQuery.this, searcher, terms, boost);
-      this.termContext = termContext;
-      assert termContext != null : "TermContext must not be null";
+      this.termStates = termStates;
+      assert termStates != null : "TermStates must not be null";
     }
 
     /*
@@ -147,8 +148,8 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
      * .Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
-      contexts.put(localTerm, termContext);
+    public void extractTermStates(Map<Term, TermStates> contexts) {
+      contexts.put(localTerm, termStates);
     }
 
     /*
@@ -162,7 +163,7 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
     @Override
     public Spans getSpans(final LeafReaderContext context,
         Postings requiredPostings) throws IOException {
-      final TermState state = termContext.get(context.ord);
+      final TermState state = termStates.get(context);
       if (state == null) { // term is not present in that reader
         assert context.reader().docFreq(
             localTerm) == 0 : "no termstate found but term exists in reader term="

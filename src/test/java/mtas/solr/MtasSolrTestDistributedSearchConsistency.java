@@ -960,7 +960,8 @@ public class MtasSolrTestDistributedSearchConsistency {
     Path dataPath = Paths.get("src" + File.separator + "test" + File.separator
         + "resources" + File.separator + "data");
     String solrxml = MiniSolrCloudCluster.DEFAULT_CLOUD_SOLR_XML;
-    JettyConfig jettyConfig = JettyConfig.builder().setContext("/solr").build();
+    JettyConfig jettyConfig = JettyConfig.builder().setContext("/solr").useOnlyHttp1(true).build();
+    //JettyConfig jettyConfig = JettyConfig.builder().setContext("/solr").useOnlyHttp1(false).build();
     File cloudBase = Files.createTempDir();
     cloudBaseDir = cloudBase.toPath();
     // create subdirectories

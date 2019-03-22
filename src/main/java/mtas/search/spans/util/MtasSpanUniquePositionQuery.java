@@ -8,8 +8,9 @@ import java.util.Set;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermContext;
+import org.apache.lucene.index.TermStates;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanWeight;
 import org.apache.lucene.search.spans.Spans;
 
@@ -120,10 +121,10 @@ public class MtasSpanUniquePositionQuery extends MtasSpanQuery {
    */
   @Override
   public MtasSpanWeight createWeight(IndexSearcher searcher,
-      boolean needsScores, float boost) throws IOException {
-    SpanWeight subWeight = clause.createWeight(searcher, false, boost);
+      ScoreMode scoreMode, float boost) throws IOException {
+    SpanWeight subWeight = clause.createWeight(searcher, ScoreMode.COMPLETE_NO_SCORES, boost);
     return new SpanUniquePositionWeight(subWeight, searcher,
-        needsScores ? getTermContexts(subWeight) : null, boost);
+        scoreMode.needsScores() ? getTermStates(subWeight) : null, boost);
   }
 
   /*
@@ -159,7 +160,7 @@ public class MtasSpanUniquePositionQuery extends MtasSpanQuery {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public SpanUniquePositionWeight(SpanWeight subWeight,
-        IndexSearcher searcher, Map<Term, TermContext> terms, float boost)
+        IndexSearcher searcher, Map<Term, TermStates> terms, float boost)
         throws IOException {
       super(MtasSpanUniquePositionQuery.this, searcher, terms, boost);
       this.subWeight = subWeight;
@@ -173,8 +174,8 @@ public class MtasSpanUniquePositionQuery extends MtasSpanQuery {
      * Map)
      */
     @Override
-    public void extractTermContexts(Map<Term, TermContext> contexts) {
-      subWeight.extractTermContexts(contexts);
+    public void extractTermStates(Map<Term, TermStates> contexts) {
+      subWeight.extractTermStates(contexts);
     }
 
     /*
