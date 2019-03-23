@@ -53,6 +53,8 @@ public class MtasSimpleParserTest {
    *
    * @param field the field
    * @param defaultPrefix the default prefix
+   * @param simple1 the first simple expression
+   * @param simple2 the second simple expression
    */
   private void testSimpleEquivalent(String field, String defaultPrefix,
       String simple1, String simple2) {
