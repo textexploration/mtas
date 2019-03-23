@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.embedded.JettyConfig;
+import org.apache.solr.client.solrj.embedded.SSLConfig;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -31,6 +32,8 @@ import org.apache.solr.common.params.CollectionParams;
 import org.apache.solr.common.params.CoreAdminParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
+import org.apache.solr.util.SSLTestConfig;
+
 import com.google.common.io.Files;
 
 /**
@@ -56,7 +59,7 @@ public class MtasSolrTestDistributedSearchConsistency {
 
   /** The Constant COLLECTION_DISTRIBUTED. */
   private static final String COLLECTION_DISTRIBUTED = "collection5";
-
+  
   /** The cloud cluster. */
   private static MiniSolrCloudCluster cloudCluster;
 
@@ -74,7 +77,8 @@ public class MtasSolrTestDistributedSearchConsistency {
     solrDocuments = MtasSolrBase.createDocuments(false);
     createCloud();
   }
-
+  
+  
   /**
    * Shutdown.
    */
@@ -955,6 +959,7 @@ public class MtasSolrTestDistributedSearchConsistency {
 
   /**
    * Creates the cloud.
+   * for now, use only http1
    */
   private static void createCloud() {
     Path dataPath = Paths.get("src" + File.separator + "test" + File.separator
@@ -970,6 +975,7 @@ public class MtasSolrTestDistributedSearchConsistency {
     if (clusterDir.toFile().mkdir() && logDir.toFile().mkdir()) {
       // set log directory
       System.setProperty("solr.log.dir", logDir.toAbsolutePath().toString());
+      System.setProperty("solr.http1", "true");
       try {
         cloudCluster = new MiniSolrCloudCluster(1, clusterDir, solrxml,
             jettyConfig);
