@@ -6,6 +6,9 @@ import org.apache.lucene.search.similarities.Similarity.SimScorer;
  * The Class MtasSimScorer.
  */
 public class MtasSimScorer extends SimScorer {
+  
+  public MtasSimScorer() {
+  }
 
   /*
    * (non-Javadoc)

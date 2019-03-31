@@ -7,8 +7,12 @@ import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermStates;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.LeafSimScorer;
 import org.apache.lucene.search.spans.SpanQuery;
+import org.apache.lucene.search.spans.SpanScorer;
 import org.apache.lucene.search.spans.SpanWeight;
+import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.search.spans.SpanWeight.Postings;
 
 /**
  * The Class MtasSpanWeight.
@@ -39,5 +43,18 @@ public abstract class MtasSpanWeight extends SpanWeight {
   public boolean isCacheable(LeafReaderContext arg0) {
     return false;
   }
-
+  
+  @Override
+  public SpanScorer scorer(LeafReaderContext context) throws IOException {
+    //SpanScorer spanScorer = super.scorer(context);
+    
+    final Spans spans = getSpans(context, Postings.POSITIONS);
+    if (spans == null) {
+      return null;
+    }
+    final LeafSimScorer docScorer = getSimScorer(context);
+    return new MtasSpanScorer(this, spans, docScorer);
+  }
+  
 }
+

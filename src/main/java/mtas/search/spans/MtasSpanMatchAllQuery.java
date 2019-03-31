@@ -3,28 +3,41 @@ package mtas.search.spans;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import mtas.codec.util.CodecInfo;
 import mtas.search.similarities.MtasSimScorer;
 import mtas.search.spans.util.MtasSpanQuery;
+import mtas.search.spans.util.MtasSpanScorer;
 import mtas.search.spans.util.MtasSpanWeight;
 import mtas.search.spans.util.MtasSpans;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.codecs.FieldsProducer;
+import org.apache.lucene.index.FieldInvertState;
 import org.apache.lucene.index.IndexReaderContext;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
+import org.apache.lucene.search.CollectionStatistics;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.LeafSimScorer;
 import org.apache.lucene.search.ScoreMode;
+import org.apache.lucene.search.TermStatistics;
+import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.search.similarities.Similarity.SimScorer;
+import org.apache.lucene.search.spans.SpanQuery;
+import org.apache.lucene.search.spans.SpanScorer;
+import org.apache.lucene.search.spans.SpanTermQuery;
+import org.apache.lucene.search.spans.SpanWeight;
+import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.search.spans.SpanWeight.Postings;
+import org.apache.lucene.util.ArrayUtil;
 
 /**
  * The Class MtasSpanMatchAllQuery.
@@ -97,6 +110,7 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
       super(MtasSpanMatchAllQuery.this, searcher, termContexts, boost);
       this.searcher = searcher;
     }
+    
 
     /*
      * (non-Javadoc)
@@ -176,17 +190,6 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
       // don't do anything
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.lucene.search.spans.SpanWeight#getSimScorer(org.apache.lucene.
-     * index.LeafReaderContext)
-     */
-    @Override
-    public LeafSimScorer getSimScorer(LeafReaderContext context) throws IOException {      
-      return new LeafSimScorer(new MtasSimScorer(), context.reader(), field, true);
-    }
 
 //    @Override
 //    public boolean isCacheable(LeafReaderContext arg0) {

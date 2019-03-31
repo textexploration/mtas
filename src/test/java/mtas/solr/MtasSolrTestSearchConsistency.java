@@ -220,6 +220,37 @@ public class MtasSolrTestSearchConsistency {
   }
 
   /**
+   * Mtas request handler condition match all.
+   *
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  @org.junit.Test
+  public void mtasRequestHandlerSpecialSpanConditions() throws IOException {
+    ModifiableSolrParams params1 = new ModifiableSolrParams();
+    params1.set("q", "{!mtas_cql field=\""+MtasSolrBase.FIELD_MTAS+"\" query=\"[]\"}");
+    params1.set("rows", 10);
+    params1.set("fl", "id,score");
+    ModifiableSolrParams params2 = new ModifiableSolrParams();
+    params2.set("q", "{!mtas_cql field=\""+MtasSolrBase.FIELD_MTAS+"\" query=\"[#0]\"}");
+    params2.set("rows", 10);
+    params2.set("fl", "id,score");
+    SolrRequest<?> request1 = new QueryRequest(params1);
+    SolrRequest<?> request2 = new QueryRequest(params2);
+    NamedList<Object> response1,response2;
+    try {
+      response1 = server.request(request1, "collection1");
+      response2 = server.request(request2, "collection1");
+    } catch (SolrServerException e) {
+      throw new IOException(e);
+    }
+    assertTrue("number of rows for matchall positive",
+        MtasSolrBase.getNumFound(response1)>0);
+    assertEquals("number of rows for matchall and contain something on first position",
+        MtasSolrBase.getNumFound(response1), MtasSolrBase.getNumFound(response2));
+  }
+  
+
+  /**
    * Mtas request handler stats spans and positions.
    *
    * @throws IOException
@@ -261,7 +292,8 @@ public class MtasSolrTestSearchConsistency {
         MtasSolrBase.getFromStats(response, "numberOfPositions", "sum", true));
 
   }
-
+  
+  
   /**
    * Mtas request handler stats tokens.
    *
@@ -827,6 +859,11 @@ public class MtasSolrTestSearchConsistency {
         + " and " + n2, n1 == n2);
   }
 
+  /**
+   * Mtas request handler group 1.
+   *
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   @org.junit.Test
   public void mtasRequestHandlerGroup1() throws IOException {
     ModifiableSolrParams params = new ModifiableSolrParams();
@@ -946,6 +983,11 @@ public class MtasSolrTestSearchConsistency {
         groupSum, statsSum);
   }
 
+  /**
+   * Mtas request handler group 2.
+   *
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   @org.junit.Test
   public void mtasRequestHandlerGroup2() throws IOException {
     Map<String, String> params = new HashMap<>();
@@ -1095,6 +1137,11 @@ public class MtasSolrTestSearchConsistency {
     }
   }
 
+  /**
+   * Mtas request handler heatmap compared with facets.
+   *
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   @org.junit.Test
   public void mtasRequestHandlerHeatmapComparedWithFacets() throws IOException {
     for(int level = 1; level<=3; level++) {
@@ -1145,6 +1192,11 @@ public class MtasSolrTestSearchConsistency {
     }
   }  
   
+  /**
+   * Mtas request handler heatmap compared with stats.
+   *
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   @org.junit.Test
   public void mtasRequestHandlerHeatmapComparedWithStats() throws IOException {
     for(int level = 1; level<=3; level++) {
@@ -1202,6 +1254,11 @@ public class MtasSolrTestSearchConsistency {
     }
   }  
   
+  /**
+   * Mtas request handler heatmap functions.
+   *
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   @org.junit.Test
   public void mtasRequestHandlerHeatmapFunctions() throws IOException {
     for(int level = 1; level<=3; level++) {
@@ -1324,6 +1381,13 @@ public class MtasSolrTestSearchConsistency {
     }
   }
 
+  /**
+   * Creates the group test.
+   *
+   * @param cql the cql
+   * @param grouping the grouping
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   private static void createGroupTest(String cql, Map<String, String> grouping)
       throws IOException {
     ModifiableSolrParams params = new ModifiableSolrParams();
