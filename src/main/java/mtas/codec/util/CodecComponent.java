@@ -30,6 +30,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenString;
@@ -1405,6 +1407,7 @@ public class CodecComponent {
           String[] subBaseSortDirections = Arrays.copyOfRange(baseSortDirections, 1, baseSortDirections.length);
           Integer[] subNumbers = Arrays.copyOfRange(baseNumbers, 1, baseNumbers.length);
           Integer[] subStarts = ArrayUtils.toObject(new int[subNumbers.length]);
+          
           dataCollector = DataCollector.getCollector(this.baseCollectorTypes[0], this.baseDataTypes[0],
               this.baseStatsTypes[0], this.baseStatsItems[0], this.baseSortTypes[0], this.baseSortDirections[0], 0,
               this.baseNumbers[0], subBaseCollectorTypes, subBaseDataTypes, subBaseStatsTypes, subBaseStatsItems,
