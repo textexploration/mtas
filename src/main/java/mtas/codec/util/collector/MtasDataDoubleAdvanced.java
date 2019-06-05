@@ -1,10 +1,10 @@
 package mtas.codec.util.collector;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.SortedSet;
 
-import org.apache.commons.lang.ArrayUtils;
 import mtas.codec.util.CodecUtil;
 
 /**
@@ -116,7 +116,8 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced<Double, Double> {
   public MtasDataCollector<?, ?> add(double[] values, int number)
       throws IOException {
     MtasDataCollector<?, ?> dataCollector = add(false);
-    setValue(newCurrentPosition, ArrayUtils.toObject(values), number,
+    Double[] objectValues = Arrays.stream(values).boxed().toArray(Double[]::new);
+    setValue(newCurrentPosition, objectValues, number,
         newCurrentExisting);
     return dataCollector;
   }
@@ -181,7 +182,8 @@ public class MtasDataDoubleAdvanced extends MtasDataAdvanced<Double, Double> {
       throws IOException {
     if (key != null) {
       MtasDataCollector<?, ?> subCollector = add(key, false);
-      setValue(newCurrentPosition, ArrayUtils.toObject(values), number,
+      Double[] objectValues = Arrays.stream(values).boxed().toArray(Double[]::new);
+      setValue(newCurrentPosition, objectValues, number,
           newCurrentExisting);
       return subCollector;
     } else {

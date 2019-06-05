@@ -1,10 +1,11 @@
 package mtas.codec.util.collector;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang.ArrayUtils;
 import mtas.codec.util.CodecUtil;
 
 /**
@@ -55,8 +56,10 @@ public class MtasDataLongFull extends MtasDataFull<Long, Double> {
    */
   @Override
   protected MtasDataItemLongFull getItem(int i) {
-    if (i >= 0 && i < size) {
-      return new MtasDataItemLongFull(ArrayUtils.toPrimitive(fullValueList[i]),
+    long[] primitiveList;
+    if (i >= 0 && i < size) {            
+      primitiveList = Arrays.stream(fullValueList[i]).mapToLong(Long::longValue).toArray();
+      return new MtasDataItemLongFull(primitiveList,
           hasSub() ? subCollectorListNextLevel[i] : null, getStatsItems(),
           sortType, sortDirection, errorNumber[i], errorList[i],
           sourceNumberList[i]);
@@ -85,7 +88,8 @@ public class MtasDataLongFull extends MtasDataFull<Long, Double> {
   public MtasDataCollector<?, ?> add(long[] values, int number)
       throws IOException {
     MtasDataCollector<?, ?> dataCollector = add(false);
-    setValue(newCurrentPosition, ArrayUtils.toObject(values), number,
+    Long[] objectValues = Arrays.stream(values).boxed().toArray(Long[]::new);
+    setValue(newCurrentPosition, objectValues, number,
         newCurrentExisting);
     return dataCollector;
   }
@@ -142,7 +146,8 @@ public class MtasDataLongFull extends MtasDataFull<Long, Double> {
       throws IOException {
     if (key != null) {
       MtasDataCollector<?, ?> subCollector = add(key, false);
-      setValue(newCurrentPosition, ArrayUtils.toObject(values), number,
+      Long[] objectValues = Arrays.stream(values).boxed().toArray(Long[]::new);
+      setValue(newCurrentPosition, objectValues, number,
           newCurrentExisting);
       return subCollector;
     } else {

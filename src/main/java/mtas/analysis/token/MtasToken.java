@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.payloads.PayloadHelper;
@@ -323,8 +322,7 @@ public abstract class MtasToken {
    * @param list the list
    */
   final public void addPositions(Set<Integer> list) {
-    int[] positions = ArrayUtils
-        .toPrimitive(list.toArray(new Integer[list.size()]));
+    int[] positions = list.stream().mapToInt(Number::intValue).toArray();
     addPositions(positions);
   }
 

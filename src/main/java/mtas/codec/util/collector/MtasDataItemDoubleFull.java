@@ -1,5 +1,6 @@
 package mtas.codec.util.collector;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -7,7 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang.ArrayUtils;
 import mtas.codec.util.CodecUtil;
 
 /**
@@ -36,7 +36,7 @@ public class MtasDataItemDoubleFull extends MtasDataItemFull<Double, Double> {
   public MtasDataItemDoubleFull(double[] value, MtasDataCollector<?, ?> sub,
       Set<String> statsItems, String sortType, String sortDirection,
       int errorNumber, Map<String, Integer> errorList, int sourceNumber) {
-    super(ArrayUtils.toObject(value), sub, statsItems, sortType, sortDirection,
+    super(Arrays.stream(value).boxed().toArray(Double[]::new), sub, statsItems, sortType, sortDirection,
         errorNumber, errorList, new MtasDataDoubleOperations(), sourceNumber);
   }
 

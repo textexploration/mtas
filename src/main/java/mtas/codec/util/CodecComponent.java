@@ -46,7 +46,6 @@ import mtas.parser.function.util.MtasFunctionParserFunction;
 import mtas.parser.function.util.MtasFunctionParserFunctionDefault;
 import mtas.search.spans.util.MtasSpanQuery;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.lucene.spatial.prefix.PrefixTreeStrategy;
 import org.apache.lucene.util.BytesRef;
 import org.locationtech.spatial4j.shape.Shape;
@@ -1406,7 +1405,7 @@ public class CodecComponent {
           String[] subBaseSortTypes = Arrays.copyOfRange(baseSortTypes, 1, baseSortTypes.length);
           String[] subBaseSortDirections = Arrays.copyOfRange(baseSortDirections, 1, baseSortDirections.length);
           Integer[] subNumbers = Arrays.copyOfRange(baseNumbers, 1, baseNumbers.length);
-          Integer[] subStarts = ArrayUtils.toObject(new int[subNumbers.length]);
+          Integer[] subStarts = Arrays.stream(new int[subNumbers.length]).boxed().toArray(Integer[]::new);
           
           dataCollector = DataCollector.getCollector(this.baseCollectorTypes[0], this.baseDataTypes[0],
               this.baseStatsTypes[0], this.baseStatsItems[0], this.baseSortTypes[0], this.baseSortDirections[0], 0,

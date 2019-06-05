@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.ArrayUtils;
 
 /**
  * The Class MtasPosition.
@@ -74,8 +73,7 @@ public class MtasPosition {
       mtasPositionStart = list.first();
     } else {
       mtasPositionType = POSITION_SET;
-      mtasPositionList = ArrayUtils
-          .toPrimitive(list.toArray(new Integer[list.size()]));
+      mtasPositionList = list.stream().mapToInt(Number::intValue).toArray();
       mtasPositionStart = list.first();
       mtasPositionEnd = list.last();
       if (mtasPositionList.length == (1 + mtasPositionEnd
@@ -174,8 +172,7 @@ public class MtasPosition {
         list.add(p);
       }
     }
-    mtasPositionList = ArrayUtils
-        .toPrimitive(list.toArray(new Integer[list.size()]));
+    mtasPositionList = list.stream().mapToInt(Number::intValue).toArray();
     mtasPositionStart = list.first();
     mtasPositionEnd = list.last();
     if (list.size() == 1) {
@@ -207,8 +204,7 @@ public class MtasPosition {
           SortedSet<Integer> list = new TreeSet<>();
           list.add(position);
           list.add(mtasPositionStart);
-          mtasPositionList = ArrayUtils
-              .toPrimitive(list.toArray(new Integer[list.size()]));
+          mtasPositionList = list.stream().mapToInt(Number::intValue).toArray();
           mtasPositionStart = list.first();
           mtasPositionEnd = list.last();
         }
@@ -227,8 +223,7 @@ public class MtasPosition {
         }
         list.add(position);
       }
-      mtasPositionList = ArrayUtils
-          .toPrimitive(list.toArray(new Integer[list.size()]));
+      mtasPositionList = list.stream().mapToInt(Number::intValue).toArray();
       mtasPositionStart = list.first();
       mtasPositionEnd = list.last();
       if (list.size() == (1 + mtasPositionEnd - mtasPositionStart)) {
