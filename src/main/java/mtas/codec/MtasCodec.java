@@ -11,7 +11,6 @@ import org.apache.lucene.codecs.PostingsFormat;
 import org.apache.lucene.codecs.SegmentInfoFormat;
 import org.apache.lucene.codecs.StoredFieldsFormat;
 import org.apache.lucene.codecs.TermVectorsFormat;
-import org.apache.lucene.codecs.lucene80.Lucene80Codec;
 import org.apache.lucene.codecs.perfield.PerFieldPostingsFormat;
 
 /**
@@ -66,7 +65,7 @@ public class MtasCodec extends Codec {
       PostingsFormat defaultPostingsFormat = defaultCodec.postingsFormat();
       if (defaultPostingsFormat instanceof PerFieldPostingsFormat) {
         defaultPostingsFormat = ((PerFieldPostingsFormat) defaultPostingsFormat)
-            .getPostingsFormatForField(null);
+            .getPostingsFormatForField("");
         if ((defaultPostingsFormat == null)
             || (defaultPostingsFormat instanceof PerFieldPostingsFormat)) {
           // fallback option

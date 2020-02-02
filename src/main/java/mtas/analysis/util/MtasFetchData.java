@@ -14,9 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.GZIPInputStream;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.lucene.analysis.util.ResourceLoader;
 
 /**
  * The Class MtasFetchData.
@@ -28,29 +28,39 @@ public class MtasFetchData {
 
   /** The reader. */
   Reader reader;
+  
+  /** The resource loader. */
+  ResourceLoader resourceLoader;
 
   /**
    * Instantiates a new mtas fetch data.
    *
-   * @param input the input
+   * @param input          the input
+   * @param resourceLoader the resource loader
    */
-  public MtasFetchData(Reader input) {
+  public MtasFetchData(Reader input, ResourceLoader resourceLoader) {
     reader = input;
+    this.resourceLoader = resourceLoader;
   }
 
   /**
    * Gets the string.
    *
    * @return the string
-   * @throws MtasParserException the mtas parser exception
+   * @throws MtasParserException
+   *           the mtas parser exception
    */
   private String getString() throws MtasParserException {
-    String text = null;
     BufferedReader bufferedReader = new BufferedReader(reader, 2048);
     try {
-      text = IOUtils.toString(bufferedReader);
+      char[] arr = new char[8 * 1024];
+      StringBuilder buffer = new StringBuilder();
+      int numCharsRead;
+      while ((numCharsRead = bufferedReader.read(arr, 0, arr.length)) != -1) {
+          buffer.append(arr, 0, numCharsRead);
+      }
       bufferedReader.close();
-      return text;
+      return(buffer.toString());
     } catch (IOException e) {
       log.debug(e);
       throw new MtasParserException("couldn't read text");
@@ -60,13 +70,15 @@ public class MtasFetchData {
   /**
    * Gets the url.
    *
-   * @param prefix the prefix
-   * @param postfix the postfix
+   * @param prefix
+   *          the prefix
+   * @param postfix
+   *          the postfix
    * @return the url
-   * @throws MtasParserException the mtas parser exception
+   * @throws MtasParserException
+   *           the mtas parser exception
    */
-  public Reader getUrl(String prefix, String postfix)
-      throws MtasParserException {
+  public Reader getUrl(String prefix, String postfix) throws MtasParserException {
     String url = getString();
     if ((url != null) && !url.equals("")) {
       if (prefix != null) {
@@ -83,12 +95,10 @@ public class MtasFetchData {
           connection.setReadTimeout(10000);
           if (connection.getHeaderField("Content-Encoding") != null
               && connection.getHeaderField("Content-Encoding").equals("gzip")) {
-            in = new BufferedReader(new InputStreamReader(
-                new GZIPInputStream(connection.getInputStream()),
-                StandardCharsets.UTF_8));
+            in = new BufferedReader(
+                new InputStreamReader(new GZIPInputStream(connection.getInputStream()), StandardCharsets.UTF_8));
           } else {
-            in = new BufferedReader(new InputStreamReader(
-                connection.getInputStream(), StandardCharsets.UTF_8));
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
           }
           return in;
         } catch (IOException ex) {
@@ -106,13 +116,15 @@ public class MtasFetchData {
   /**
    * Gets the file.
    *
-   * @param prefix the prefix
-   * @param postfix the postfix
+   * @param prefix
+   *          the prefix
+   * @param postfix
+   *          the postfix
    * @return the file
-   * @throws MtasParserException the mtas parser exception
+   * @throws MtasParserException
+   *           the mtas parser exception
    */
-  public Reader getFile(String prefix, String postfix)
-      throws MtasParserException {
+  public Reader getFile(String prefix, String postfix) throws MtasParserException {
     String file = getString();
     if ((file != null) && !file.equals("")) {
       if (prefix != null) {
@@ -122,22 +134,35 @@ public class MtasFetchData {
         file = file + postfix;
       }
       Path path = (new File(file)).toPath();
-      if(Files.isReadable(path)) {
+      // first, try resourceLoader
+      if (resourceLoader != null) {
+        try {
+          return new InputStreamReader(new GZIPInputStream(resourceLoader.openResource(file)), StandardCharsets.UTF_8);
+        } catch (IOException e1) {
+          log.debug(e1);
+          try {
+            return new InputStreamReader(resourceLoader.openResource(file), StandardCharsets.UTF_8);
+          } catch (IOException e2) {
+            log.debug(e2);
+            // throw new MtasParserException(e2.getMessage());
+          }
+        }
+      }
+      if (Files.isReadable(path)) {
         try {
           return new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8);
         } catch (IOException e1) {
           log.debug(e1);
           try {
-            String text = new String(Files.readAllBytes(Paths.get(file)),
-                StandardCharsets.UTF_8);
+            String text = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
             return new StringReader(text);
           } catch (IOException e2) {
             log.debug(e2);
             throw new MtasParserException(e2.getMessage());
           }
-        } 
+        }
       } else {
-        throw new MtasParserException("file '"+file+"' does not exists or not readable");
+        throw new MtasParserException("file '" + file + "' does not exists or not readable");
       }
     } else {
       throw new MtasParserException("no valid file: " + file);

@@ -397,7 +397,7 @@ public class CodecInfo {
    *          the field
    * @param docId
    *          the doc id
-   * @param prefixes
+   * @param listPrefixes
    *          the prefixes
    * @param positionsHits
    *          the positions hits
@@ -405,7 +405,7 @@ public class CodecInfo {
    *           Signals that an I/O exception has occurred.
    */
   public void collectTermsByPrefixesForListOfHitPositions(String field,
-      int docId, ArrayList<String> prefixes,
+      int docId, List<String> listPrefixes,
       ArrayList<IntervalTreeNodeData<String>> positionsHits)
       throws IOException {
     IndexDoc doc = getDoc(field, docId);
@@ -417,7 +417,7 @@ public class CodecInfo {
         positionsHits);
 
     // find prefixIds
-    Map<String, Integer> prefixIds = getPrefixesIds(field, prefixes);
+    Map<String, Integer> prefixIds = getPrefixesIds(field, listPrefixes);
     // search matching tokens
     if (prefixIds != null) {
       CodecSearchTree.searchMtasTreeWithIntervalTree(prefixIds.values(),

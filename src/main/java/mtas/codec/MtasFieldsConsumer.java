@@ -409,7 +409,7 @@ public class MtasFieldsConsumer extends FieldsConsumer {
 
   /** The delegate postings format name. */
   private String delegatePostingsFormatName;
-
+  
   /**
    * Instantiates a new mtas fields consumer.
    *
@@ -740,7 +740,6 @@ public class MtasFieldsConsumer extends FieldsConsumer {
     SortedMap<Integer, Long> memoryTmpDocChainList = new TreeMap<>();
     // list of objectIds and references to objects
     SortedMap<Integer, Long> memoryIndexDocList = new TreeMap<>();
-
     try {
       // create file tmpDoc
       closeables.add(outTmpDoc = state.directory
@@ -829,7 +828,7 @@ public class MtasFieldsConsumer extends FieldsConsumer {
           Long smallestTermFilepointer = outTerm.getFilePointer();
           Long smallestPrefixFilepointer = outPrefix.getFilePointer();
           int termCounter = 0;
-          // only if freqs, positions and payload available
+          // only if freqs, positions and payload available   
           if (hasFreqs && hasPositions && hasPayloads) {
             // compute flags
             int flags = PostingsEnum.POSITIONS | PostingsEnum.PAYLOADS;
@@ -1345,7 +1344,7 @@ public class MtasFieldsConsumer extends FieldsConsumer {
       // ignore, can happen when merging segment already written by
       // delegateFieldsConsumer
       log.error(e);
-    } finally {
+    } finally {  
       IOUtils.closeWhileHandlingException(closeables);
       try {
         state.directory.deleteFile(mtasTmpDocsFileName);

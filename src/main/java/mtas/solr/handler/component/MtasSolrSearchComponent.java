@@ -14,6 +14,7 @@ import mtas.codec.util.CodecComponent.ComponentFacet;
 import mtas.codec.util.CodecComponent.ComponentFields;
 import mtas.codec.util.CodecComponent.ComponentGroup;
 import mtas.codec.util.CodecComponent.ComponentHeatmap;
+import mtas.codec.util.CodecComponent.ComponentIndex;
 import mtas.codec.util.CodecComponent.ComponentCollection;
 import mtas.codec.util.CodecComponent.ComponentKwic;
 import mtas.codec.util.CodecComponent.ComponentList;
@@ -32,6 +33,7 @@ import mtas.solr.handler.component.util.MtasSolrComponentDocument;
 import mtas.solr.handler.component.util.MtasSolrComponentFacet;
 import mtas.solr.handler.component.util.MtasSolrComponentGroup;
 import mtas.solr.handler.component.util.MtasSolrComponentHeatmap;
+import mtas.solr.handler.component.util.MtasSolrComponentIndex;
 import mtas.solr.handler.MtasRequestHandler;
 import mtas.solr.handler.MtasRequestHandler.ShardInformation;
 import mtas.solr.handler.component.util.MtasSolrComponentCollection;
@@ -151,6 +153,9 @@ public class MtasSolrSearchComponent extends SearchComponent {
 	/** The search page. */
   private MtasSolrComponentPage searchPage;
 
+  /** The search index. */
+  private MtasSolrComponentIndex searchIndex;
+
   /** The search heatmap. */
   private MtasSolrComponentHeatmap searchHeatmap;
 
@@ -191,7 +196,8 @@ public class MtasSolrSearchComponent extends SearchComponent {
 		searchKwic = new MtasSolrComponentKwic(this);
 		searchList = new MtasSolrComponentList(this);
 		searchPage = new MtasSolrComponentPage(this);
-		searchHeatmap = new MtasSolrComponentHeatmap(this);
+		searchIndex = new MtasSolrComponentIndex(this);
+    searchHeatmap = new MtasSolrComponentHeatmap(this);
     searchGroup = new MtasSolrComponentGroup(this);
 		searchTermvector = new MtasSolrComponentTermvector(this);
 		searchPrefix = new MtasSolrComponentPrefix(this);
@@ -304,7 +310,11 @@ public class MtasSolrSearchComponent extends SearchComponent {
         if (rb.req.getParams().getBool(MtasSolrComponentPage.PARAM_MTAS_PAGE, false)) {
           searchPage.prepare(rb, mtasFields);
         }
-        // get settings page
+        // get settings index
+        if (rb.req.getParams().getBool(MtasSolrComponentIndex.PARAM_MTAS_INDEX, false)) {
+          searchIndex.prepare(rb, mtasFields);
+        }
+        // get settings heatmap
         if (rb.req.getParams().getBool(MtasSolrComponentHeatmap.PARAM_MTAS_HEATMAP, false)) {
           searchHeatmap.prepare(rb, mtasFields);
         }
@@ -371,7 +381,7 @@ public class MtasSolrSearchComponent extends SearchComponent {
 						DocSet docSet = rb.getResults().docSet;
 						DocList docList = rb.getResults().docList;
 						if (mtasFields.doStats || mtasFields.doDocument || mtasFields.doKwic || mtasFields.doList 
-						    || mtasFields.doPage || mtasFields.doHeatmap
+						    || mtasFields.doPage || mtasFields.doIndex || mtasFields.doHeatmap
 								|| mtasFields.doGroup || mtasFields.doFacet || mtasFields.doCollection
 								|| mtasFields.doTermVector || mtasFields.doPrefix || mtasFields.doStatus
 								|| mtasFields.doVersion) {
@@ -490,7 +500,17 @@ public class MtasSolrSearchComponent extends SearchComponent {
                 // add to response
                 mtasResponse.add(MtasSolrComponentPage.NAME, mtasPageResponses);
               }
-							if (mtasFields.doHeatmap) {
+							if (mtasFields.doIndex) {
+                ArrayList<NamedList<?>> mtasIndexResponses = new ArrayList<>();
+                for (String field : mtasFields.list.keySet()) {
+                  for (ComponentIndex index : mtasFields.list.get(field).indexList) {
+                    mtasIndexResponses.add(searchIndex.create(index, false));
+                  }
+                }
+                // add to response
+                mtasResponse.add(MtasSolrComponentIndex.NAME, mtasIndexResponses);
+              }
+              if (mtasFields.doHeatmap) {
                 ArrayList<NamedList<?>> mtasHeatmapResponses = new ArrayList<>();
                 for (String field : mtasFields.list.keySet()) {
                   for (ComponentHeatmap heatmap : mtasFields.list.get(field).heatmapList) {
@@ -700,6 +720,9 @@ public class MtasSolrSearchComponent extends SearchComponent {
 				if (sreq.params.getBool(MtasSolrComponentPage.PARAM_MTAS_PAGE, false)) {
           searchPage.modifyRequest(rb, who, sreq);
         }
+				if (sreq.params.getBool(MtasSolrComponentIndex.PARAM_MTAS_INDEX, false)) {
+          searchIndex.modifyRequest(rb, who, sreq);
+        }
 			}
 		} catch (ExitableDirectoryReader.ExitingReaderException e) {
 			solrStatus.setError(e.getMessage());
@@ -791,6 +814,9 @@ public class MtasSolrSearchComponent extends SearchComponent {
 				}
 				if (rb.req.getParams().getBool(MtasSolrComponentPage.PARAM_MTAS_PAGE, false)) {
           searchPage.finishStage(rb);
+        }
+				if (rb.req.getParams().getBool(MtasSolrComponentIndex.PARAM_MTAS_INDEX, false)) {
+          searchIndex.finishStage(rb);
         }
 				mtasSolrResultMerge.merge(rb);
 			}

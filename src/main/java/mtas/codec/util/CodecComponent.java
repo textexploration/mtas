@@ -26,13 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenString;
 import mtas.codec.util.CodecSearchTree.MtasTreeHit;
@@ -45,7 +44,6 @@ import mtas.parser.function.ParseException;
 import mtas.parser.function.util.MtasFunctionParserFunction;
 import mtas.parser.function.util.MtasFunctionParserFunctionDefault;
 import mtas.search.spans.util.MtasSpanQuery;
-import org.apache.commons.io.IOUtils;
 import org.apache.lucene.spatial.prefix.PrefixTreeStrategy;
 import org.apache.lucene.util.BytesRef;
 import org.locationtech.spatial4j.shape.Shape;
@@ -92,6 +90,9 @@ public class CodecComponent {
 
     /** The do page. */
     public boolean doPage;
+
+    /** The do page. */
+    public boolean doIndex;
 
     /** The do heatmap. */
     public boolean doHeatmap;
@@ -140,6 +141,7 @@ public class CodecComponent {
       doKwic = false;
       doList = false;
       doPage = false;
+      doIndex = false;
       doHeatmap = false;
       doGroup = false;
       doStats = false;
@@ -181,6 +183,9 @@ public class CodecComponent {
     /** The page list. */
     public List<ComponentPage> pageList;
 
+    /** The index list. */
+    public List<ComponentIndex> indexList;
+
     /** The heatmap list. */
     public List<ComponentHeatmap> heatmapList;
 
@@ -221,6 +226,7 @@ public class CodecComponent {
       kwicList = new ArrayList<>();
       listList = new ArrayList<>();
       pageList = new ArrayList<>();
+      indexList = new ArrayList<>();
       heatmapList = new ArrayList<>();
       groupList = new ArrayList<>();
       facetList = new ArrayList<>();
@@ -774,6 +780,133 @@ public class CodecComponent {
     }
   }
 
+  /**
+   * The Class ComponentIndex.
+   */
+  public static class ComponentIndex implements BasicComponent {
+    
+    /** The query. */
+    public MtasSpanQuery query;
+
+    /** The key. */
+    public String key;
+
+    /** The unique key. */
+    public Map<Integer, String> uniqueKey;
+    
+    /** The min position. */
+    public Map<Integer, Integer> minPosition;
+
+    /** The max position. */
+    public Map<Integer, Integer> maxPosition;
+
+    /** The block size. */
+    public Integer blockSize;
+
+    /** The block number. */
+    public Integer blockNumber;
+    
+    /** The block number. */
+    public MtasSpanQuery blockQuery;
+    
+    /** The match. */
+    public String match;
+    
+    /** The list prefix. */
+    public List<String> listPrefixes;
+    
+    /** The list number. */
+    public Integer listNumber;
+    
+    /** The list sort. */
+    public String listSort;
+    
+    /** The index items. */
+    public Map<Integer, List<IndexItem>> indexItems;
+    
+    /** The Constant DEFAULT_INDEX_BLOCK_NUMBER. */
+    public static final Integer DEFAULT_INDEX_BLOCK_NUMBER = 10;
+    
+    /** The Constant INDEX_LIST_SORT_INDEX. */
+    public static final String INDEX_LIST_SORT_INDEX = "index";
+    
+    /** The Constant INDEX_LIST_SORT_COUNT. */
+    public static final String INDEX_LIST_SORT_COUNT = "count";
+    
+    /** The Constant INDEX_LIST_SORT_TFIBF. */
+    public static final String INDEX_LIST_SORT_TFIBF = "tfibf";
+
+    
+    /**
+     * Instantiates a new component index.
+     *
+     * @param query the query
+     * @param key the key
+     * @param blockSize the block size
+     * @param blockNumber the block number
+     * @param blockQuery the block query
+     * @param match the match
+     * @param listPrefix the list prefix
+     * @param listNumber the list number
+     * @param listSort the list sort
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public ComponentIndex(MtasSpanQuery query, String key, int blockSize, 
+        int blockNumber, MtasSpanQuery blockQuery,
+        String match, String listPrefix, Integer listNumber, String listSort) throws IOException {
+      uniqueKey = new HashMap<>();
+      minPosition = new HashMap<>();
+      maxPosition = new HashMap<>();
+      this.query = query;
+      this.key = key;
+      //set and check block settings
+      this.blockSize = Math.abs(blockSize);
+      this.blockSize = (this.blockSize>0)?this.blockSize:null;
+      this.blockNumber = Math.abs(blockNumber);
+      this.blockNumber = (this.blockNumber>0)?this.blockNumber:null;
+      this.blockQuery = blockQuery;
+      this.indexItems = new HashMap<>();
+      if(this.blockSize==null && this.blockNumber==null && this.blockQuery==null) {
+        this.blockNumber = DEFAULT_INDEX_BLOCK_NUMBER;
+      } else if (this.blockSize!=null && (this.blockNumber!=null || this.blockQuery!=null)) {
+        throw new IOException("invalid block specification, mixture of blockTypes not allowed");
+      } else if (this.blockNumber!=null && (this.blockSize!=null || this.blockQuery!=null)) {
+        throw new IOException("invalid block specification, mixture of blockTypes not allowed");
+      } else if (this.blockQuery!=null && (this.blockSize!=null || this.blockNumber!=null)) {
+        throw new IOException("invalid block specification, mixture of blockTypes not allowed");
+      }
+      //set and check match
+      this.match = match;
+      if(this.match==null) {
+        this.match = CodecCollector.MATCH_INTERSECT;
+      } else if(!(this.match.equals(CodecCollector.MATCH_INTERSECT) || this.match.equals(CodecCollector.MATCH_START) || this.match.equals(CodecCollector.MATCH_COMPLETE))) {
+        throw new IOException("unknown match specification for index");
+      }
+      //set and check list
+      this.listPrefixes = new ArrayList<>();
+      if ((listPrefix != null) && (!listPrefix.trim().isEmpty())) {
+        List<String> l = Arrays.asList(listPrefix.split(Pattern.quote(",")));
+        for (String ls : l) {
+          if (!ls.trim().isEmpty()) {
+            this.listPrefixes.add(ls.trim());
+          }
+        }
+      }
+      if(!listPrefixes.isEmpty()) {
+        this.listNumber = (listNumber!=null && listNumber>0)?listNumber:null;
+        this.listSort = listSort;
+        if(this.listSort==null) {
+          this.listSort = INDEX_LIST_SORT_INDEX;
+        } else if(!this.listSort.equals(INDEX_LIST_SORT_INDEX) && !this.listSort.equals(INDEX_LIST_SORT_COUNT) && !this.listSort.equals(INDEX_LIST_SORT_TFIBF)) {
+          throw new IOException("unknown list sort specification for index");
+        }
+      } else {
+        this.listNumber = null;
+        this.listSort = null;
+      }
+    }
+  }
+  
   /**
    * The Class ComponentPage.
    */
@@ -2351,9 +2484,20 @@ public class CodecComponent {
       }
       InputStreamReader in = new InputStreamReader((InputStream) is, "UTF8");
       Map<String, Object> params = new HashMap<>();
-      getParamsFromJSON(params, IOUtils.toString(in));
+      getParamsFromJSON(params, toString(in));
       connection.disconnect();
       return params;
+    }
+    
+    private String toString(InputStreamReader in) throws IOException {
+      char[] arr = new char[8 * 1024];
+      StringBuilder buffer = new StringBuilder();
+      int numCharsRead;
+      while ((numCharsRead = in.read(arr, 0, arr.length)) != -1) {
+          buffer.append(arr, 0, numCharsRead);
+      }
+      in.close();
+      return(buffer.toString());
     }
 
     /**
@@ -3685,6 +3829,51 @@ public class CodecComponent {
       parentId = token.getParentId();
     }
 
+  }
+  
+  /**
+   * The Class IndexItem.
+   */
+  public static class IndexItem {
+    
+    /** The start position. */
+    public int startPosition;
+    
+    /** The end position. */
+    public int endPosition;
+    
+    /** The name. */
+    public String name;
+    
+    /** The number. */
+    public int number;
+    
+    /** The list. */
+    public Map<List<Map<String, Set<String>>>,Integer> list;
+    
+    /**
+     * Instantiates a new index item.
+     *
+     * @param startPosition the start position
+     * @param endPosition the end position
+     * @param name the name
+     */
+    public IndexItem(int startPosition , int endPosition,  String name) {
+      this.startPosition = startPosition ;
+      this.endPosition = endPosition ;
+      this.name = name;
+      this.number = 0;
+      this.list = new HashMap<List<Map<String, Set<String>>>,Integer>();
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+      return (name==null?startPosition+"-"+endPosition:name)+":"+number;
+    }
+    
   }
 
   /**

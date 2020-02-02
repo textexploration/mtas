@@ -7,7 +7,7 @@ To perform specific Mtas queries in Solr requests, the following parameter shoul
 | mtas        | true   | yes         |
 
 See [statistics](search_component_stats.html), 
-[kwic](search_component_kwic.html), [list](search_component_list.html), [page](search_component_page.html), [document](search_component_document.html), [termvector](search_component_termvector.html), [facet](search_component_facet.html), [group](search_component_group.html), [heatmap](search_component_heatmap.html), [prefix](search_component_prefix.html) and [collection](search_component_collection.html) for more details and examples.
+[kwic](search_component_kwic.html), [list](search_component_list.html), [page](search_component_page.html), [document](search_component_document.html), [termvector](search_component_termvector.html), [facet](search_component_facet.html), [group](search_component_group.html), [index](search_component_index.html), [heatmap](search_component_heatmap.html), [prefix](search_component_prefix.html) and [collection](search_component_collection.html) for more details and examples.
 
 ---
 

@@ -47,6 +47,7 @@
           </item>
           <item name="Heatmap" href="search_component_heatmap.html"/>
           <item name="Kwic" href="search_component_kwic.html"/>
+          <item name="Index" href="search_component_index.html"/>
           <item name="List" href="search_component_list.html"/>
           <item name="Page" href="search_component_page.html"/>
           <item name="Document" href="search_component_document.html"/>

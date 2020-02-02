@@ -601,6 +601,10 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
           NamedList<Object> mtasListItemResponse = new SimpleOrderedMap<>();
           mtasListItemResponse.add("documentKey",
               list.uniqueKey.get(tokenHit.docId));
+          if(list.fieldValues.containsKey(tokenHit.docId)) {
+            mtasListItemResponse.add("documentFields",
+                list.fieldValues.get(tokenHit.docId));
+          }
           mtasListItemResponse.add("documentHitPosition", tokenHit.docPosition);
           mtasListItemResponse.add("documentHitTotal",
               list.subTotal.get(tokenHit.docId));

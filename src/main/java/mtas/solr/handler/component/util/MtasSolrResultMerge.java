@@ -111,6 +111,11 @@ public class MtasSolrResultMerge {
             mergeArrayList(sreq, mtasResponse, MtasSolrComponentPage.NAME, ShardRequest.PURPOSE_PRIVATE,
                 true);
           }
+          // merge index
+          if (rb.req.getParams().getBool(MtasSolrComponentIndex.PARAM_MTAS_INDEX, false)) {
+            mergeArrayList(sreq, mtasResponse, MtasSolrComponentIndex.NAME, ShardRequest.PURPOSE_PRIVATE,
+                true);
+          }
 				}
 			}
 			if (newResponse && mtasResponse.size() > 0) {

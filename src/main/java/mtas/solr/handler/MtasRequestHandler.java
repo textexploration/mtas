@@ -196,7 +196,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
         if (configuration != null && documentUrl != null) {
           InputStream stream = IOUtils.toInputStream(configuration, StandardCharsets.UTF_8);
           try (MtasTokenizer tokenizer = new MtasTokenizer(stream);) {
-            MtasFetchData fetchData = new MtasFetchData(new StringReader(documentUrl));
+            MtasFetchData fetchData = new MtasFetchData(new StringReader(documentUrl), null);
             rsp.add(ACTION_MAPPING, tokenizer.getList(fetchData.getUrl(null, null)));
             tokenizer.close();
           } catch (IOException | MtasParserException e) {

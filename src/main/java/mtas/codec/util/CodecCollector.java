@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -22,6 +23,8 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenString;
 import mtas.codec.MtasCodecPostingsFormat;
@@ -31,6 +34,7 @@ import mtas.codec.util.CodecComponent.ComponentFacet;
 import mtas.codec.util.CodecComponent.ComponentField;
 import mtas.codec.util.CodecComponent.ComponentGroup;
 import mtas.codec.util.CodecComponent.ComponentHeatmap;
+import mtas.codec.util.CodecComponent.ComponentIndex;
 import mtas.codec.util.CodecComponent.ComponentCollection;
 import mtas.codec.util.CodecComponent.ComponentKwic;
 import mtas.codec.util.CodecComponent.ComponentList;
@@ -40,6 +44,7 @@ import mtas.codec.util.CodecComponent.ComponentSpan;
 import mtas.codec.util.CodecComponent.ComponentTermVector;
 import mtas.codec.util.CodecComponent.ComponentToken;
 import mtas.codec.util.CodecComponent.GroupHit;
+import mtas.codec.util.CodecComponent.IndexItem;
 import mtas.codec.util.CodecComponent.KwicHit;
 import mtas.codec.util.CodecComponent.KwicToken;
 import mtas.codec.util.CodecComponent.ListHit;
@@ -104,6 +109,15 @@ public class CodecCollector {
 
   /** The Constant log. */
   private static final Log log = LogFactory.getLog(CodecCollector.class);
+
+  /** The Constant INDEX_MATCH_INTERSECT. */
+  public static final String MATCH_INTERSECT = "intersect";
+
+  /** The Constant INDEX_MATCH_START. */
+  public static final String MATCH_START = "start";
+
+  /** The Constant INDEX_MATCH_COMPLETE. */
+  public static final String MATCH_COMPLETE = "complete";
 
   /**
    * Instantiates a new codec collector.
@@ -399,6 +413,18 @@ public class CodecCollector {
         for (ComponentKwic ck : fieldInfo.kwicList) {
           if (!spansMatchData.containsKey(ck.query)) {
             spansMatchData.put(ck.query, new HashMap<Integer, List<Match>>());
+          }
+        }
+      }
+      // index
+      if (!fieldInfo.indexList.isEmpty()) {
+        needSpans = true;
+        for (ComponentIndex ci : fieldInfo.indexList) {
+          if (!spansMatchData.containsKey(ci.query)) {
+            spansMatchData.put(ci.query, new HashMap<Integer, List<Match>>());
+          }
+          if (ci.blockQuery != null && !spansMatchData.containsKey(ci.blockQuery)) {
+            spansMatchData.put(ci.blockQuery, new HashMap<Integer, List<Match>>());
           }
         }
       }
@@ -856,14 +882,18 @@ public class CodecCollector {
         createKwic(fieldInfo.kwicList, spansMatchData, docList, field, lrc.docBase, fieldInfo.uniqueKeyField,
             mtasCodecInfo, searcher);
       }
+      if (!fieldInfo.indexList.isEmpty()) {
+        // create indexes
+        createIndexes(fieldInfo.indexList, spansMatchData, docList, fieldInfos.fieldInfo(field), field, lrc.docBase,
+            fieldInfo.uniqueKeyField, mtasCodecInfo, searcher);
+      }
       if (!fieldInfo.facetList.isEmpty()) {
         // create facets
         createFacet(fieldInfo.facetList, positionsData, spansNumberData, facetData, docSet);
       }
       if (!fieldInfo.heatmapList.isEmpty()) {
         // create heatmaps
-        createHeatmaps(fieldInfo.heatmapList, positionsData, spansNumberData,
-            docSet, r, lrc);
+        createHeatmaps(fieldInfo.heatmapList, positionsData, spansNumberData, docSet, r, lrc);
       }
     }
     if (!fieldInfo.termVectorList.isEmpty()) {
@@ -1533,12 +1563,12 @@ public class CodecCollector {
           Map<Integer, Integer> numberData = spansNumberData.get(list.spanQuery);
           List<Match> matchList;
           Integer matchNumber;
-          if (list.output.equals(ComponentList.LIST_OUTPUT_HIT)) {
-            for (int docId : docSet) {
-              if (matchData != null && (matchList = matchData.get(docId)) != null) {
-                if (list.position < (list.start + list.number)) {
-                  boolean getDoc = false;
-                  Match m;
+          for (int docId : docSet) {
+            if (matchData != null && (matchList = matchData.get(docId)) != null) {
+              if (list.position < (list.start + list.number)) {
+                boolean getDoc = false;
+                Match m;
+                if (list.output.equals(ComponentList.LIST_OUTPUT_HIT)) {
                   for (int i = 0; i < matchList.size(); i++) {
                     if ((list.position >= list.start) && (list.position < (list.start + list.number))) {
                       m = matchList.get(i);
@@ -1565,115 +1595,7 @@ public class CodecCollector {
                     }
                     list.position++;
                   }
-                  if (getDoc) {
-                    // get unique id
-                    Document doc = searcher.doc(docId, new HashSet<String>(Arrays.asList(uniqueKeyField)));
-                    IndexableField indxfld = doc.getField(uniqueKeyField);
-                    if (indxfld != null) {
-                      list.uniqueKey.put(docId, indxfld.stringValue());
-                    }
-                    // get additional fields
-                    if (!list.fieldNames.isEmpty()) {
-                      Map<String, Object> docFieldValues;
-                      if (list.fieldValues.containsKey(docId)) {
-                        docFieldValues = list.fieldValues.get(docId);
-                      } else {
-                        docFieldValues = new HashMap<>();
-                        list.fieldValues.put(docId, docFieldValues);
-                      }
-                      IndexableField[] indxflds;
-                      Object fieldValue;
-                      List<Object> fieldValues;
-                      String finalFieldName, indexFieldName;
-                      Pattern patternAlias = Pattern.compile("^([^:]+):([^:]+)$");
-                      Matcher matcherAlias;
-                      for (String fieldName : list.fieldNames) {
-                        if (fieldName.equals("*")) {
-                          finalFieldName = null;
-                          indexFieldName = null;
-                          List<IndexableField> indxfldsList = doc.getFields();
-                          indxflds = (IndexableField[]) indxfldsList.toArray(new IndexableField[indxfldsList.size()]);
-                        } else {
-                          // implement aliases
-                          matcherAlias = patternAlias.matcher(fieldName);
-                          if (matcherAlias.find()) {
-                            finalFieldName = matcherAlias.group(1);
-                            indexFieldName = matcherAlias.group(2);
-                          } else {
-                            finalFieldName = fieldName;
-                            indexFieldName = fieldName;
-                          }
-                          // get values
-                          indxflds = doc.getFields(indexFieldName);
-                        }
-                        // store single or multiple values
-                        if (indxflds.length == 1) {
-                          // handle wildcard
-                          if (indexFieldName == null) {
-                            finalFieldName = indxflds[0].name();
-                          }
-                          if ((fieldValue = indxflds[0].numericValue()) != null) {
-                            docFieldValues.put(finalFieldName, fieldValue);
-                          } else if ((fieldValue = indxflds[0].stringValue()) != null) {
-                            docFieldValues.put(finalFieldName, fieldValue);
-                          }
-                        } else if (indxflds.length > 1) {
-                          fieldValues = new ArrayList<>();
-                          for (int i = 0; i < indxflds.length; i++) {
-                            // handle wildcard
-                            if (indexFieldName == null) {
-                              if (finalFieldName == null) {
-                                finalFieldName = indxflds[0].name();
-                              } else if (!finalFieldName.equals(indxflds[i].name())) {
-                                if (!fieldValues.isEmpty()) {
-                                  if (fieldValues.size() == 1) {
-                                    docFieldValues.put(finalFieldName, fieldValues.get(0));
-                                  } else {
-                                    docFieldValues.put(finalFieldName, fieldValues);
-                                  }
-                                  fieldValues = new ArrayList<>();
-                                }
-                                finalFieldName = indxflds[i].name();
-                              }
-                            }
-                            if ((fieldValue = indxflds[i].numericValue()) != null) {
-                              fieldValues.add(fieldValue);
-                            } else if ((fieldValue = indxflds[i].stringValue()) != null) {
-                              fieldValues.add(fieldValue);
-                            }
-                          }
-                          if (!fieldValues.isEmpty()) {
-                            if (fieldValues.size() == 1) {
-                              docFieldValues.put(finalFieldName, fieldValues.get(0));
-                            } else {
-                              docFieldValues.put(finalFieldName, fieldValues);
-                            }
-                          }
-                        }
-                      }
-                    }
-                    // get other doc info
-                    list.subTotal.put(docId, matchList.size());
-                    IndexDoc mDoc = mtasCodecInfo.getDoc(field, (docId - docBase));
-                    if (mDoc != null) {
-                      list.minPosition.put(docId, mDoc.minPosition);
-                      list.maxPosition.put(docId, mDoc.maxPosition);
-                    }
-                  }
-                } else {
-                  list.position += matchList.size();
-                }
-              } else if (numberData != null && (matchNumber = numberData.get(docId)) != null) {
-                list.position += matchNumber;
-              }
-            }
-            list.total = list.position;
-          } else if (list.output.equals(ComponentList.LIST_OUTPUT_TOKEN)) {
-            for (int docId : docSet) {
-              if (matchData != null && (matchList = matchData.get(docId)) != null) {
-                if (list.position < (list.start + list.number)) {
-                  boolean getDoc = false;
-                  Match m;
+                } else if (list.output.equals(ComponentList.LIST_OUTPUT_TOKEN)) {
                   for (int i = 0; i < matchList.size(); i++) {
                     if ((list.position >= list.start) && (list.position < (list.start + list.number))) {
                       m = matchList.get(i);
@@ -1687,31 +1609,110 @@ public class CodecCollector {
                     }
                     list.position++;
                   }
-                  if (getDoc) {
-                    // get unique id
-                    Document doc = searcher.doc(docId, new HashSet<String>(Arrays.asList(uniqueKeyField)));
-                    IndexableField indxfld = doc.getField(uniqueKeyField);
-                    // get other doc info
-                    if (indxfld != null) {
-                      list.uniqueKey.put(docId, indxfld.stringValue());
+                }
+                if (getDoc) {
+                  // get unique id
+                  Document doc = searcher.doc(docId, new HashSet<String>(Arrays.asList(uniqueKeyField)));
+                  IndexableField indxfld = doc.getField(uniqueKeyField);
+                  if (indxfld != null) {
+                    list.uniqueKey.put(docId, indxfld.stringValue());
+                  }
+                  // get additional fields
+                  if (!list.fieldNames.isEmpty()) {
+                    Map<String, Object> docFieldValues;
+                    if (list.fieldValues.containsKey(docId)) {
+                      docFieldValues = list.fieldValues.get(docId);
+                    } else {
+                      docFieldValues = new HashMap<>();
+                      list.fieldValues.put(docId, docFieldValues);
                     }
-                    list.subTotal.put(docId, matchList.size());
-                    IndexDoc mDoc = mtasCodecInfo.getDoc(field, (docId - docBase));
-                    if (mDoc != null) {
-                      list.minPosition.put(docId, mDoc.minPosition);
-                      list.maxPosition.put(docId, mDoc.maxPosition);
+                    IndexableField[] indxflds;
+                    Object fieldValue;
+                    List<Object> fieldValues;
+                    String finalFieldName, indexFieldName;
+                    Pattern patternAlias = Pattern.compile("^([^:]+):([^:]+)$");
+                    Matcher matcherAlias;
+                    for (String fieldName : list.fieldNames) {
+                      if (fieldName.equals("*")) {
+                        finalFieldName = null;
+                        indexFieldName = null;
+                        List<IndexableField> indxfldsList = doc.getFields();
+                        indxflds = (IndexableField[]) indxfldsList.toArray(new IndexableField[indxfldsList.size()]);
+                      } else {
+                        // implement aliases
+                        matcherAlias = patternAlias.matcher(fieldName);
+                        if (matcherAlias.find()) {
+                          finalFieldName = matcherAlias.group(1);
+                          indexFieldName = matcherAlias.group(2);
+                        } else {
+                          finalFieldName = fieldName;
+                          indexFieldName = fieldName;
+                        }
+                        // get values
+                        indxflds = doc.getFields(indexFieldName);
+                      }
+                      // store single or multiple values
+                      if (indxflds.length == 1) {
+                        // handle wildcard
+                        if (indexFieldName == null) {
+                          finalFieldName = indxflds[0].name();
+                        }
+                        if ((fieldValue = indxflds[0].numericValue()) != null) {
+                          docFieldValues.put(finalFieldName, fieldValue);
+                        } else if ((fieldValue = indxflds[0].stringValue()) != null) {
+                          docFieldValues.put(finalFieldName, fieldValue);
+                        }
+                      } else if (indxflds.length > 1) {
+                        fieldValues = new ArrayList<>();
+                        for (int i = 0; i < indxflds.length; i++) {
+                          // handle wildcard
+                          if (indexFieldName == null) {
+                            if (finalFieldName == null) {
+                              finalFieldName = indxflds[0].name();
+                            } else if (!finalFieldName.equals(indxflds[i].name())) {
+                              if (!fieldValues.isEmpty()) {
+                                if (fieldValues.size() == 1) {
+                                  docFieldValues.put(finalFieldName, fieldValues.get(0));
+                                } else {
+                                  docFieldValues.put(finalFieldName, fieldValues);
+                                }
+                                fieldValues = new ArrayList<>();
+                              }
+                              finalFieldName = indxflds[i].name();
+                            }
+                          }
+                          if ((fieldValue = indxflds[i].numericValue()) != null) {
+                            fieldValues.add(fieldValue);
+                          } else if ((fieldValue = indxflds[i].stringValue()) != null) {
+                            fieldValues.add(fieldValue);
+                          }
+                        }
+                        if (!fieldValues.isEmpty()) {
+                          if (fieldValues.size() == 1) {
+                            docFieldValues.put(finalFieldName, fieldValues.get(0));
+                          } else {
+                            docFieldValues.put(finalFieldName, fieldValues);
+                          }
+                        }
+                      }
                     }
                   }
-                } else {
-                  list.position += matchList.size();
+                  // get other doc info
+                  list.subTotal.put(docId, matchList.size());
+                  IndexDoc mDoc = mtasCodecInfo.getDoc(field, (docId - docBase));
+                  if (mDoc != null) {
+                    list.minPosition.put(docId, mDoc.minPosition);
+                    list.maxPosition.put(docId, mDoc.maxPosition);
+                  }
                 }
-              } else if (numberData != null && (matchNumber = numberData.get(docId)) != null) {
-                list.position += matchNumber;
+              } else {
+                list.position += matchList.size();
               }
+            } else if (numberData != null && (matchNumber = numberData.get(docId)) != null) {
+              list.position += matchNumber;
             }
-            list.total = list.position;
           }
-
+          list.total = list.position;
         } else {
           Map<Integer, Integer> data = spansNumberData.get(list.spanQuery);
           if (data != null) {
@@ -1989,6 +1990,10 @@ public class CodecCollector {
           : Math.max(m.endPosition + group.right.length - 1, end);
     }
     return new IntervalTreeNodeData<>(start, end, m.startPosition, m.endPosition - 1);
+  }
+
+  private static IntervalTreeNodeData<String> createPositionHit(Match m) {
+    return new IntervalTreeNodeData<>(m.startPosition, m.endPosition - 1, m.startPosition, m.endPosition - 1);
   }
 
   /**
@@ -2329,9 +2334,88 @@ public class CodecCollector {
     }
   }
 
-  private static void createHeatmaps(List<ComponentHeatmap> heatmapList, Map<Integer, Integer> positionsData,
-      Map<MtasSpanQuery, Map<Integer, Integer>> spansNumberData, List<Integer> docSetOld, LeafReader r, LeafReaderContext lrc)
+  private static void createIndexes(List<ComponentIndex> indexList,
+      Map<MtasSpanQuery, Map<Integer, List<Match>>> spansMatchData, List<Integer> docList, FieldInfo fieldInfo,
+      String field, int docBase, String uniqueKeyField, CodecInfo mtasCodecInfo, IndexSearcher searcher)
       throws IOException {
+    if (indexList != null) {
+      for (ComponentIndex index : indexList) {
+        Map<Integer, List<Match>> matchData = spansMatchData.get(index.query);
+        Map<Integer, List<Match>> blockMatchData = index.blockQuery != null ? spansMatchData.get(index.blockQuery)
+            : null;
+        List<Match> matchList, blockMatchList;
+        // initialize
+        for (int docId : docList) {
+          // get unique id
+          Document doc = searcher.doc(docId, new HashSet<String>(Arrays.asList(uniqueKeyField)));
+          IndexableField indxfld = doc.getField(uniqueKeyField);
+          // get other doc info
+          if (indxfld != null) {
+            index.uniqueKey.put(docId, indxfld.stringValue());
+          }
+          IndexDoc mDoc = mtasCodecInfo.getDoc(field, (docId - docBase));
+          if (mDoc != null) {
+            IntervalTree intervalTree = new IntervalTree();
+            index.minPosition.put(docId, mDoc.minPosition);
+            index.maxPosition.put(docId, mDoc.maxPosition);
+            List<IndexItem> indexItems = new ArrayList<>();
+            if (index.blockQuery != null) {
+              index.indexItems.put(docId, indexItems);
+              if (blockMatchData != null && (blockMatchList = blockMatchData.get(docId)) != null) {
+                for (Match m : blockMatchList) {
+                  int start = m.startPosition;
+                  int end = m.endPosition - 1;
+                  IndexItem indexItem = new IndexItem(start, end, null);
+                  intervalTree.insertNode(new IntervalTreeItem(indexItem));
+                  indexItems.add(indexItem);
+                }
+              }
+            } else {
+              int blockSize = 0;
+              if (index.blockSize != null && index.blockSize > 0) {
+                blockSize = index.blockSize;
+              } else if (index.blockNumber != null && index.blockNumber > 0) {
+                blockSize = (int) Math.max(1,
+                    Math.ceil(((1.0 + mDoc.maxPosition - mDoc.minPosition) / index.blockNumber)));
+              } else {
+                // should not happen
+                throw new IOException("No blockSize or blockNumber defined");
+              }
+              index.indexItems.put(docId, indexItems);
+              // define intervals
+              for (int startPosition = mDoc.minPosition; startPosition <= mDoc.maxPosition; startPosition += blockSize) {
+                int start = startPosition;
+                int end = Math.min(mDoc.maxPosition, startPosition + blockSize - 1);
+                IndexItem indexItem = new IndexItem(start, end, null);
+                intervalTree.insertNode(new IntervalTreeItem(indexItem));
+                indexItems.add(indexItem);
+              }
+            }
+
+            // update these intervals
+            if (matchData != null && (matchList = matchData.get(docId)) != null) {
+              ArrayList<IntervalTreeNodeData<String>> positionsHits = new ArrayList<>();
+              for (Match m : matchList) {
+                positionsHits.add(createPositionHit(m));
+                intervalTree.updateInterval(m.startPosition, (m.endPosition - 1), index.match);
+              }
+              if (!index.listPrefixes.isEmpty()) {
+                mtasCodecInfo.collectTermsByPrefixesForListOfHitPositions(field, (docId - docBase), index.listPrefixes,
+                    positionsHits);
+                for (IntervalTreeNodeData<String> positionHit : positionsHits) {
+                  intervalTree.updateInterval(positionHit.hitStart, positionHit.hitEnd, index.match, positionHit.list);
+                }
+              }
+            }            
+          }
+        }
+      }
+    }
+  }
+
+  private static void createHeatmaps(List<ComponentHeatmap> heatmapList, Map<Integer, Integer> positionsData,
+      Map<MtasSpanQuery, Map<Integer, Integer>> spansNumberData, List<Integer> docSetOld, LeafReader r,
+      LeafReaderContext lrc) throws IOException {
     Integer[] docSet = docSetOld.toArray(new Integer[docSetOld.size()]);
     if (heatmapList != null) {
       for (ComponentHeatmap heatmap : heatmapList) {
@@ -2347,27 +2431,27 @@ public class CodecCollector {
             int number = 0;
             int docPositions;
             long docValueLong;
-            //double valueDouble;
+            // double valueDouble;
             long[] values = new long[docSet.length];
             int[] docs = new int[docSet.length];
             int[] positions = new int[docSet.length];
             long[][] arguments = new long[docSet.length][];
-            //long[][] functionValuesLong = null;
-            //double[][] functionValuesDouble = null;
-//            if (heatmap.hm.functions != null) {
-//              functionValuesLong = new long[heatmap.hm.functions.size()][];
-//              functionValuesDouble = new double[heatmap.hm.functions.size()][];
-//              for (int i = 0; i < heatmap.hm.functions.size(); i++) {
-//                SubComponentFunction function = heatmap.hm.functions.get(i);
-//                if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-//                  functionValuesLong[i] = new long[docSet.length];
-//                  functionValuesDouble[i] = null;
-//                } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
-//                  functionValuesLong[i] = null;
-//                  functionValuesDouble[i] = new double[docSet.length];
-//                }
-//              }            
-//            }
+            // long[][] functionValuesLong = null;
+            // double[][] functionValuesDouble = null;
+            // if (heatmap.hm.functions != null) {
+            // functionValuesLong = new long[heatmap.hm.functions.size()][];
+            // functionValuesDouble = new double[heatmap.hm.functions.size()][];
+            // for (int i = 0; i < heatmap.hm.functions.size(); i++) {
+            // SubComponentFunction function = heatmap.hm.functions.get(i);
+            // if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
+            // functionValuesLong[i] = new long[docSet.length];
+            // functionValuesDouble[i] = null;
+            // } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
+            // functionValuesLong[i] = null;
+            // functionValuesDouble[i] = new double[docSet.length];
+            // }
+            // }
+            // }
             for (int docId : docSet) {
               if (positionsData == null) {
                 docPositions = 0;
@@ -2378,35 +2462,36 @@ public class CodecCollector {
               if (((heatmap.minimumLong == null) || (docValueLong >= heatmap.minimumLong))
                   && ((heatmap.maximumLong == null) || (docValueLong <= heatmap.maximumLong))) {
                 values[number] = docValueLong;
-                docs[number] = docId-lrc.docBase;
+                docs[number] = docId - lrc.docBase;
                 positions[number] = docPositions;
                 arguments[number] = args.get(docId);
-                
-//                if (heatmap.hm.functions != null) {
-//                  
-//                  for (int i = 0; i < heatmap.hm.functions.size(); i++) {
-//                    SubComponentFunction function = heatmap.hm.functions.get(i);
-//                    try {
-//                      if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-//                        valueLong = function.parserFunction.getValueLong(args.get(docId), positions);
-//                        functionValuesLong[i][number] = valueLong;
-//                      } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
-//                        valueDouble = function.parserFunction.getValueDouble(args.get(docId), positions);
-//                        functionValuesDouble[i][number] = valueDouble;
-//                      }
-//                    } catch (IOException e) {
-//                      log.debug(e);
-//                      //TODO implement for list
-//                      //function.dataCollector.error(e.getMessage());
-//                    }
-//                  }
-//                }
+
+                // if (heatmap.hm.functions != null) {
+                //
+                // for (int i = 0; i < heatmap.hm.functions.size(); i++) {
+                // SubComponentFunction function = heatmap.hm.functions.get(i);
+                // try {
+                // if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
+                // valueLong = function.parserFunction.getValueLong(args.get(docId), positions);
+                // functionValuesLong[i][number] = valueLong;
+                // } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
+                // valueDouble = function.parserFunction.getValueDouble(args.get(docId),
+                // positions);
+                // functionValuesDouble[i][number] = valueDouble;
+                // }
+                // } catch (IOException e) {
+                // log.debug(e);
+                // //TODO implement for list
+                // //function.dataCollector.error(e.getMessage());
+                // }
+                // }
+                // }
                 number++;
               }
             }
             if (number > 0) {
               HeatmapMtasCounter.calcValues(heatmap.strategy, lrc, heatmap, number, docs, values, arguments, positions);
-            }  
+            }
           }
         } else {
           throw new IOException("unexpected dataType " + heatmap.dataType);
@@ -3236,7 +3321,7 @@ public class CodecCollector {
                           } catch (IOException e) {
                             log.debug(e);
                             termVector.subComponentFunction.dataCollector.error(MtasToken.getPostfixFromValue(term),
-                                e.getMessage(),1);
+                                e.getMessage(), 1);
                           }
                           termVector.subComponentFunction.dataCollector.add(key, valueLong, numberBasic.docNumber);
                           if (termVector.functions != null) {
@@ -3750,6 +3835,183 @@ public class CodecCollector {
       args = new long[maxSize];
       positions = new int[maxSize];
       docNumber = 0;
+    }
+  }
+
+  private static class IntervalTreeItem implements Comparable<IntervalTreeItem> {
+
+    private int max;
+    private IntervalTreeItem left;
+    private IntervalTreeItem right;
+    private IndexItem indexItem;
+
+    public IntervalTreeItem(IndexItem indexItem) {
+      this.indexItem = indexItem;
+      max = indexItem.endPosition;
+      left = null;
+      right = null;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getClass().getSimpleName(), max, left, right, indexItem);   
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+      if(o == this) {
+        return true;
+      }
+      if(!(o instanceof IntervalTreeItem)) {
+        return false;
+      }
+      IntervalTreeItem item = (IntervalTreeItem) o;
+      return((indexItem.startPosition == item.indexItem.startPosition) && indexItem.endPosition == item.indexItem.endPosition);
+    }
+    
+    @Override
+    public int compareTo(IntervalTreeItem item) {
+      if (indexItem.startPosition < item.indexItem.startPosition) {
+        return -1;
+      } else if (indexItem.startPosition == item.indexItem.startPosition) {
+        if(indexItem.endPosition <= item.indexItem.endPosition) {
+          return 0;
+        } else {
+          return indexItem.endPosition < item.indexItem.endPosition ? -1 : 1;
+        }  
+      } else {
+        return 1;
+      }
+    }
+
+  }
+
+  private static class IntervalTree {
+
+    private IntervalTreeItem root = null;
+
+    public void insertNode(IntervalTreeItem node) {
+      root = insertNode(node, root);
+    }
+
+    private IntervalTreeItem insertNode(IntervalTreeItem node, IntervalTreeItem subRoot) {
+      if (subRoot == null) {
+        return node;
+      }
+      if (node.indexItem.endPosition > subRoot.max) {
+        subRoot.max = node.indexItem.endPosition;
+      }
+      if (subRoot.compareTo(node) <= 0) {
+
+        if (subRoot.right == null) {
+          subRoot.right = node;
+        } else {
+          insertNode(node, subRoot.right);
+        }
+      } else {
+        if (subRoot.left == null) {
+          subRoot.left = node;
+        } else {
+          insertNode(node, subRoot.left);
+        }
+      }
+      return subRoot;
+    }
+
+    public void updateInterval(int start, int end, String match) {
+      incrementInterval(start, end, root, match);
+    }
+
+    public void updateInterval(int start, int end, String match, List<MtasTreeHit<String>> list) {
+      incrementInterval(start, end, root, match, list);
+    }
+
+    private void incrementInterval(int start, int end, IntervalTreeItem root, String match) {
+      if (root != null) {
+        ArrayList<IntervalTreeItem> checkList = new ArrayList<IntervalTreeItem>();
+        checkList.add(root);
+        int startend = Math.max(start, end);
+        do {
+          IntervalTreeItem checkItem = checkList.remove(checkList.size() - 1);
+          if (match.equals(MATCH_INTERSECT)) {
+            if (!((checkItem.indexItem.startPosition > startend) || (checkItem.indexItem.endPosition < start))) {
+              checkItem.indexItem.number++;
+            }
+          } else if (match.equals(MATCH_COMPLETE)) {
+            if (!((checkItem.indexItem.startPosition > start) || (checkItem.indexItem.endPosition < startend))) {
+              checkItem.indexItem.number++;
+            }
+          } else if (match.equals(MATCH_START)) {
+            if (!((checkItem.indexItem.startPosition > start) || (checkItem.indexItem.endPosition < start))) {
+              checkItem.indexItem.number++;
+            }
+          }
+          if ((checkItem.left != null) && (checkItem.left.max >= start)) {
+            checkList.add(checkItem.left);
+          }
+          if (checkItem.right != null) {
+            checkList.add(checkItem.right);
+          }
+        } while (checkList.size() > 0);
+      }
+    }
+
+    private void incrementInterval(int start, int end, IntervalTreeItem root, String match,
+        List<MtasTreeHit<String>> list) {
+      if (root != null) {
+        ArrayList<IntervalTreeItem> checkList = new ArrayList<IntervalTreeItem>();
+        checkList.add(root);
+        int startend = Math.max(start, end);
+        Integer value;
+        List<Map<String, Set<String>>> entry = new ArrayList<Map<String, Set<String>>>();
+        for (MtasTreeHit<String> item : list) {
+          String prefix = MtasToken.getPrefixFromValue(item.refData);
+          String postfix = MtasToken.getPostfixFromValue(item.refData);
+          for (int position = 0; position < item.endPosition - item.startPosition+1; position++) {
+            while (position >= entry.size()) {
+              entry.add(new HashMap<String, Set<String>>());
+            }
+            if (!entry.get(position).containsKey(prefix)) {
+              entry.get(position).put(prefix, new HashSet<String>(Arrays.asList()) {
+                {
+                  add(postfix);
+                }
+              });
+            } else {
+              entry.get(position).get(prefix).add(postfix);
+            }
+          }
+        }
+        do {
+          IntervalTreeItem checkItem = checkList.remove(checkList.size() - 1);
+          if (match.equals(MATCH_INTERSECT)) {
+            if (!((checkItem.indexItem.startPosition > startend) || (checkItem.indexItem.endPosition < start))) {
+              if ((value = checkItem.indexItem.list.putIfAbsent(entry, 1)) != null) {
+                checkItem.indexItem.list.put(entry, value + 1);
+              }
+            }
+          } else if (match.equals(MATCH_COMPLETE)) {
+            if (!((checkItem.indexItem.startPosition > start) || (checkItem.indexItem.endPosition < startend))) {
+              if ((value = checkItem.indexItem.list.putIfAbsent(entry, 1)) != null) {
+                checkItem.indexItem.list.put(entry, value + 1);
+              }
+            }
+          } else if (match.equals(MATCH_START)) {
+            if (!((checkItem.indexItem.startPosition > start) || (checkItem.indexItem.endPosition < start))) {
+              if ((value = checkItem.indexItem.list.putIfAbsent(entry, 1)) != null) {
+                checkItem.indexItem.list.put(entry, value + 1);
+              }
+            }
+          }
+          if ((checkItem.left != null) && (checkItem.left.max >= start)) {
+            checkList.add(checkItem.left);
+          }
+          if (checkItem.right != null) {
+            checkList.add(checkItem.right);
+          }
+        } while (checkList.size() > 0);
+      }
     }
   }
 

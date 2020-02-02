@@ -23,6 +23,7 @@ List results on multiple spans can be produced within the same request. To disti
 | mtas.list.\<identifier\>.left       | \<double\>   | number of positions left of hit                      | no         |
 | mtas.list.\<identifier\>.right      | \<double\>   | number of positions right of hit                      | no         |
 | mtas.list.\<identifier\>.output       | \<string\>   | "token" or "hit"                      | no         |
+| mtas.list.\<identifier\>.fields       | \<string\>   | comma separated list of fields for which the value(s) have to be included for each item in the output     | no         |
 
 ## Variables
 

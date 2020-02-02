@@ -1,6 +1,6 @@
 #Download
 
-#set($metadata = $xml.read("http://central.maven.org/maven2/org/textexploration/mtas/mtas/maven-metadata.xml"))
+#set($metadata = $xml.read("https://repo1.maven.org/maven2/org/textexploration/mtas/mtas/maven-metadata.xml"))
 
 **Latest release**
 
