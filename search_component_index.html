@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="Date-Revision-yyyymmdd" content="20200203" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>Multi Tier Annotation Search &#x2013; Heatmap</title>
+    <title>Multi Tier Annotation Search &#x2013; Index</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.5.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -47,7 +47,7 @@
         Mtas</a>
                     <span class="divider">/</span>
       </li>
-        <li class="active ">Heatmap</li>
+        <li class="active ">Index</li>
                 
               
                   <li id="publishDate" class="pull-right">Last Published: 2020-02-03</li>
@@ -119,10 +119,12 @@
         Statistics</a>
                   </li>
                     
-      <li class="active">
+      <li>
   
-            <a href="#"><span class="none"></span>Heatmap</a>
-          </li>
+                          <a href="search_component_heatmap.html" title="Heatmap">
+          <span class="none"></span>
+        Heatmap</a>
+            </li>
                     
       <li>
   
@@ -131,12 +133,10 @@
         Kwic</a>
             </li>
                     
-      <li>
+      <li class="active">
   
-                          <a href="search_component_index.html" title="Index">
-          <span class="none"></span>
-        Index</a>
-            </li>
+            <a href="#"><span class="none"></span>Index</a>
+          </li>
                     
       <li>
   
@@ -318,8 +318,8 @@
                 
         <div id="bodyColumn"  class="span10" >
                                   
-            <h1>Heatmap</h1>
-<p>Mtas can compute geographical distribution for Mtas queries. To get these heatmaps, in Solr requests, besides the parameter to enable the <a href="search_component.html">Mtas query component</a>, the following parameter should be provided.</p>
+            <h1>Index</h1>
+<p>Mtas can produce indices for Mtas queries within the listed documents. To get this information, in Solr requests, besides the parameter to enable the <a href="search_component.html">Mtas query component</a>, the following parameter should be provided.</p>
 
 <table border="0" class="table table-striped">
   <thead>
@@ -337,7 +337,7 @@
     
 <tr class="b">
       
-<td>mtas.heatmap </td>
+<td>mtas.index </td>
       
 <td>true </td>
       
@@ -345,7 +345,7 @@
     </tr>
   </tbody>
 </table>
-<p>Multiple heatmaps can be produced within the same request. To distinguish them, a unique identifier has to be provided for each of the required document results.</p>
+<p>Index results on multiple spans can be produced within the same request. To distinguish them, a unique identifier has to be provided for each of the required indices. </p>
 
 <table border="0" class="table table-striped">
   <thead>
@@ -365,7 +365,7 @@
     
 <tr class="b">
       
-<td>mtas.heatmap.&lt;identifier&gt;.key </td>
+<td>mtas.index.&lt;identifier&gt;.key </td>
       
 <td>&lt;string&gt; </td>
       
@@ -373,31 +373,21 @@
       
 <td>no </td>
     </tr>
-  </tbody>
-</table>
-<div class="section">
-<h2><a name="Queries"></a>Queries</h2>
-<p>One or multiple queries on the defined Mtas field have to be defined</p>
-
-<table border="0" class="table table-striped">
-  <thead>
     
 <tr class="a">
       
-<th>Parameter </th>
+<td>mtas.index.&lt;identifier&gt;.field </td>
       
-<th>Value </th>
+<td>&lt;string&gt; </td>
       
-<th>Info </th>
+<td>Mtas field </td>
       
-<th>Obligatory </th>
+<td>yes </td>
     </tr>
-  </thead>
-  <tbody>
     
 <tr class="b">
       
-<td>mtas.heatmap.&lt;identifier&gt;.query.&lt;identifier query&gt;.type </td>
+<td>mtas.index.&lt;identifier&gt;.query.type </td>
       
 <td>&lt;string&gt; </td>
       
@@ -408,7 +398,7 @@
     
 <tr class="a">
       
-<td>mtas.heatmap.&lt;identifier&gt;.query.&lt;identifier query&gt;.value </td>
+<td>mtas.index.&lt;identifier&gt;.query.value </td>
       
 <td>&lt;string&gt; </td>
       
@@ -419,7 +409,7 @@
     
 <tr class="b">
       
-<td>mtas.heatmap.&lt;identifier&gt;.query.&lt;identifier query&gt;.prefix </td>
+<td>mtas.index.&lt;identifier&gt;.query.prefix </td>
       
 <td>&lt;string&gt; </td>
       
@@ -430,7 +420,7 @@
     
 <tr class="a">
       
-<td>mtas.heatmap.&lt;identifier&gt;.query.&lt;identifier query&gt;.ignore </td>
+<td>mtas.index.&lt;identifier&gt;.query.ignore </td>
       
 <td>&lt;string&gt; </td>
       
@@ -441,7 +431,7 @@
     
 <tr class="b">
       
-<td>mtas.heatmap.&lt;identifier&gt;.query.&lt;identifier query&gt;.maximumIgnoreLength </td>
+<td>mtas.index.&lt;identifier&gt;.query.maximumIgnoreLength </td>
       
 <td>&lt;integer&gt; </td>
       
@@ -452,7 +442,7 @@
   </tbody>
 </table>
 <div class="section">
-<h3><a name="Variables"></a>Variables</h3>
+<h2><a name="Variables"></a>Variables</h2>
 <p>The query may contain one or more variables, and the value(s) of these variables have to be defined </p>
 
 <table border="0" class="table table-striped">
@@ -473,7 +463,7 @@
     
 <tr class="b">
       
-<td>mtas.heatmap.&lt;identifier&gt;.query.&lt;identifier query&gt;.variable.&lt;identifier variable&gt;.name </td>
+<td>mtas.index.&lt;identifier&gt;.query.variable.&lt;identifier variable&gt;.name </td>
       
 <td>&lt;string&gt; </td>
       
@@ -484,7 +474,191 @@
     
 <tr class="a">
       
-<td>mtas.heatmap.&lt;identifier&gt;.query.&lt;identifier query&gt;.variable.&lt;identifier variable&gt;.value </td>
+<td>mtas.index.&lt;identifier&gt;.query.variable.&lt;identifier variable&gt;.value </td>
+      
+<td>&lt;string&gt; </td>
+      
+<td>comma separated list of values </td>
+      
+<td>yes </td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="section">
+<h2><a name="Blocks"></a>Blocks</h2>
+<p>The index for a document can be seen as counting the number of hits within a certain division of this document into <i>blocks</i>. Several types of such a division are possible: by number, size or query. </p>
+<div class="section">
+<h3><a name="Number_of_blocks"></a>Number of blocks</h3>
+<p>To divide the document into a fixed number of separate blocks of equal length (as closely as possible), this number has to be provided. The size of the blocks will depend on the size of the document.</p>
+
+<table border="0" class="table table-striped">
+  <thead>
+    
+<tr class="a">
+      
+<th>Parameter </th>
+      
+<th>Value </th>
+      
+<th>Info </th>
+      
+<th>Obligatory </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+<tr class="b">
+      
+<td>mtas.index.&lt;identifier&gt;.block.number </td>
+      
+<td>&lt;integer&gt; </td>
+      
+<td>number of blocks within the document </td>
+      
+<td>yes </td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="section">
+<h3><a name="Size_of_blocks"></a>Size of blocks</h3>
+<p>To divide the document into separate blocks of fixed length (as far is possible), this size has to be provided. The number of blocks will depend on the size of the document.</p>
+
+<table border="0" class="table table-striped">
+  <thead>
+    
+<tr class="a">
+      
+<th>Parameter </th>
+      
+<th>Value </th>
+      
+<th>Info </th>
+      
+<th>Obligatory </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+<tr class="b">
+      
+<td>mtas.index.&lt;identifier&gt;.block.size </td>
+      
+<td>&lt;integer&gt; </td>
+      
+<td>size of blocks within the document </td>
+      
+<td>yes </td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="section">
+<h3><a name="Query_based_blocks"></a>Query based blocks</h3>
+<p>To divide the document into separate blocks defined by a query (other than the main query for the index), this query has to be provided. </p>
+
+<table border="0" class="table table-striped">
+  <thead>
+    
+<tr class="a">
+      
+<th>Parameter </th>
+      
+<th>Value </th>
+      
+<th>Info </th>
+      
+<th>Obligatory </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+<tr class="b">
+      
+<td>mtas.index.&lt;identifier&gt;.block.query.type </td>
+      
+<td>&lt;string&gt; </td>
+      
+<td>query language: <a href="search_cql.html">cql</a> </td>
+      
+<td>yes </td>
+    </tr>
+    
+<tr class="a">
+      
+<td>mtas.index.&lt;identifier&gt;.block.query.value </td>
+      
+<td>&lt;string&gt; </td>
+      
+<td>query: <a href="search_cql.html">cql</a> </td>
+      
+<td>yes </td>
+    </tr>
+    
+<tr class="b">
+      
+<td>mtas.index.&lt;identifier&gt;.block.query.prefix </td>
+      
+<td>&lt;string&gt; </td>
+      
+<td>default prefix </td>
+      
+<td>no </td>
+    </tr>
+    
+<tr class="a">
+      
+<td>mtas.index.&lt;identifier&gt;.block.query.ignore </td>
+      
+<td>&lt;string&gt; </td>
+      
+<td>ignore query: <a href="search_cql.html">cql</a> </td>
+      
+<td>no </td>
+    </tr>
+    
+<tr class="b">
+      
+<td>mtas.index.&lt;identifier&gt;.block.query.maximumIgnoreLength </td>
+      
+<td>&lt;integer&gt; </td>
+      
+<td>maximum number of succeeding occurrences to ignore </td>
+      
+<td>no </td>
+    </tr>
+  </tbody>
+</table>
+<p>And of course, this query can contain variables.</p>
+
+<table border="0" class="table table-striped">
+  <thead>
+    
+<tr class="a">
+      
+<th>Parameter </th>
+      
+<th>Value </th>
+      
+<th>Info </th>
+      
+<th>Obligatory </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+<tr class="b">
+      
+<td>mtas.index.&lt;identifier&gt;.block.query.variable.&lt;identifier variable&gt;.name </td>
+      
+<td>&lt;string&gt; </td>
+      
+<td>name of variable </td>
+      
+<td>yes </td>
+    </tr>
+    
+<tr class="a">
+      
+<td>mtas.index.&lt;identifier&gt;.block.query.variable.&lt;identifier variable&gt;.value </td>
       
 <td>&lt;string&gt; </td>
       
@@ -495,8 +669,8 @@
   </tbody>
 </table></div></div>
 <div class="section">
-<h2><a name="Geospatial"></a>Geospatial</h2>
-<p>One geospatial field has to be defined, and like for the Solr facet.heatmap several parameters can be configured. </p>
+<h2><a name="Match"></a>Match</h2>
+<p>Also because a match for the query may contain multiple positions, it can occur that a match intersects with multiple blocks. By default, a match is taken into account for this block, if it intersects. However, this behavior can be configured to containing the start position of the match, or to contain the match completely. </p>
 
 <table border="0" class="table table-striped">
   <thead>
@@ -516,127 +690,19 @@
     
 <tr class="b">
       
-<td>mtas.heatmap.&lt;identifier&gt;.heatmapField </td>
+<td>mtas.index.&lt;identifier&gt;.match </td>
       
 <td>&lt;string&gt; </td>
       
-<td>Geospatial field </td>
-      
-<td>yes </td>
-    </tr>
-    
-<tr class="a">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.geom </td>
-      
-<td>&lt;string&gt; </td>
-      
-<td>The region to compute the heatmap on, specified using the rectangle-range syntax or WKT. It defaults to the world. </td>
-      
-<td>no </td>
-    </tr>
-    
-<tr class="b">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.gridLevel </td>
-      
-<td>&lt;integer&gt; </td>
-      
-<td>A specific grid level, which determines how big each grid cell is. Defaults to being computed via distErrPct (or distErr). </td>
-      
-<td>no </td>
-    </tr>
-    
-<tr class="a">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.distErrPct </td>
-      
-<td>&lt;double&gt; </td>
-      
-<td>A fraction of the size of geom used to compute gridLevel. Defaults to 0.15. It&#x2019;s computed the same as a similarly named parameter for RPT. </td>
-      
-<td>no </td>
-    </tr>
-    
-<tr class="b">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.distErr </td>
-      
-<td>&lt;double&gt; </td>
-      
-<td>A cell error distance used to pick the grid level indirectly. It&#x2019;s computed the same as a similarly named parameter for RPT. </td>
-      
-<td>no </td>
-    </tr>
-    
-<tr class="a">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.maxCells </td>
-      
-<td>&lt;integer&gt; </td>
-      
-<td>The maximum number of cells. </td>
+<td>&#x201c;intersect&#x201d;, &#x201c;start&#x201d;, or &#x201c;complete&#x201d; </td>
       
 <td>no </td>
     </tr>
   </tbody>
-</table>
-<h1>Statistics</h1>
-<p>Optionally, the type of statistics and minimum/maximum number of occurrences can be defined.</p>
-
-<table border="0" class="table table-striped">
-  <thead>
-    
-<tr class="a">
-      
-<th>Parameter </th>
-      
-<th>Value </th>
-      
-<th>Info </th>
-      
-<th>Obligatory </th>
-    </tr>
-  </thead>
-  <tbody>
-    
-<tr class="b">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.type </td>
-      
-<td>&lt;string&gt; </td>
-      
-<td>required <a href="search_stats.html">type of statistics</a> </td>
-      
-<td>no </td>
-    </tr>
-    
-<tr class="a">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.minimum </td>
-      
-<td>&lt;double&gt; </td>
-      
-<td>minimum number of occurrences span </td>
-      
-<td>no </td>
-    </tr>
-    
-<tr class="b">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.maximum </td>
-      
-<td>&lt;double&gt; </td>
-      
-<td>maximum number of occurrences span </td>
-      
-<td>no </td>
-    </tr>
-  </tbody>
-</table>
+</table></div>
 <div class="section">
-<h3><a name="Functions"></a>Functions</h3>
-<p>To compute statistics for values based on the occurrence of one or multiple spans, optionally <a href="search_functions.html">functions</a> can be added. The parameters for these functions are the number of occurrences <i>$q0</i>, <i>$q1</i>, &#x2026; for each query and the number of positions <i>$n</i> in a document. Statistics on the value computed for each document in the set are added to the response.</p>
+<h2><a name="List"></a>List</h2>
+<p>Within a block, not only the total number of matches for the query can be listed, but also a list of grouped prefixes for these matches. Typically, this may result in words matching your query. Optionally, the size of the list can be limited by providing a maximum number. Default the list is sorted descending by frequency (count), but sorting by <i>term frequency&#x2013;inverse block frequency</i> (variant of tf-idf) can be used to emphasis block specific words.</p>
 
 <table border="0" class="table table-striped">
   <thead>
@@ -656,81 +722,137 @@
     
 <tr class="b">
       
-<td>mtas.heatmap.&lt;identifier&gt;.function.&lt;identifier function&gt;.key </td>
+<td>mtas.index.&lt;identifier&gt;.list.prefix </td>
       
 <td>&lt;string&gt; </td>
       
-<td>key used in response </td>
-      
-<td>no </td>
-    </tr>
-    
-<tr class="a">
-      
-<td>mtas.heatmap.&lt;identifier&gt;.function.&lt;identifier function&gt;.expression </td>
-      
-<td>&lt;string&gt; </td>
-      
-<td>see <a href="search_functions.html">functions</a> </td>
+<td>comma separated list of prefixes </td>
       
 <td>yes </td>
     </tr>
     
+<tr class="a">
+      
+<td>mtas.index.&lt;identifier&gt;.list.number </td>
+      
+<td>&lt;integer&gt; </td>
+      
+<td>maximum number of items in the list </td>
+      
+<td>no </td>
+    </tr>
+    
 <tr class="b">
       
-<td>mtas.heatmap.&lt;identifier&gt;.function.&lt;identifier function&gt;.type </td>
+<td>mtas.index.&lt;identifier&gt;.list.sort </td>
       
 <td>&lt;string&gt; </td>
       
-<td>required <a href="search_stats.html">type of statistics</a> </td>
+<td>&#x201c;index&#x201d;, &#x201c;count&#x201d;, &#x201c;tfibf&#x201d; </td>
       
 <td>no </td>
     </tr>
   </tbody>
 </table>
-<p>The key is added to the response and may be used to distinguish between multiple functions, and should therefore be unique within the set of functions for each heatmap.</p>
-<hr /></div></div>
+<hr /></div>
 <div class="section">
 <h2><a name="Examples"></a>Examples</h2>
 
 <ol style="list-style-type: decimal">
   
-<li><a href="#basic">Basic</a> : TODO</li>
+<li><a href="#basic">Basic</a> : Create an index with the number of adjectives in each block.</li>
   
-<li><a href="#variable">Variable</a> : TODO</li>
+<li><a href="#block-number">Block number</a> : Create an index with the number of adjectives in each block</li>
   
-<li><a href="#function">Function</a> : TODO</li>
+<li><a href="#block-size">Block size</a> : Create an index with the number of adjectives in each block</li>
+  
+<li><a href="#block-query">Block query</a> : Create an index with the number of adjectives in each block</li>
+  
+<li><a href="#list">List</a> : Create an index with the number of adjectives in each block</li>
 </ol>
 <hr />
 <p><a name="basic"></a> </p>
 <div class="section">
 <h3><a name="Basic"></a>Basic</h3>
-<p><b>Example</b><br />Heatmap for CQL query <tt>[pos=&quot;N&quot;]</tt>.</p>
-<p><b>Request and response</b><br /><tt>q=*:*&amp;wt=json&amp;indent=true</tt></p>
+<p><b>Example</b><br />Create an index with the number of adjectives in each block.</p>
+<p><b>CQL</b><br /><tt>[pos=&quot;ADJ&quot;]</tt></p>
+<p><b>Request and response</b><br /><tt>q=*:*&amp;mtas=true&amp;mtas.index=true&amp;mtas.index.0.field=text&amp;mtas.index.0.query.type=cql&amp;mtas.index.0.query.value=[pos=&quot;ADJ&quot;]&amp;mtas.index.0.key=adjective&amp;fl=id&amp;rows=2&amp;wt=json&amp;indent=true</tt></p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint">&quot;mtas&quot;:{}
+<div class="source"><pre class="prettyprint">&quot;mtas&quot;:{
+    &quot;index&quot;:[{
+        &quot;key&quot;:&quot;adjective&quot;,
+        &quot;list&quot;:[{
+            &quot;documentKey&quot;:&quot;e6a7cd11-36d3-494a-b131-eadeb2df77c4&quot;,
+            &quot;documentMinPosition&quot;:0,
+            &quot;documentMaxPosition&quot;:18437,
+            &quot;data&quot;:[{
+                &quot;positionStart&quot;:0,
+                &quot;positionEnd&quot;:1843,
+                &quot;number&quot;:67},
+              {
+                &quot;positionStart&quot;:1844,
+                &quot;positionEnd&quot;:3687,
+                &quot;number&quot;:38},
+                ...
+              {
+                &quot;positionStart&quot;:16596,
+                &quot;positionEnd&quot;:18437,
+                &quot;number&quot;:72}]},
+          {
+            &quot;documentKey&quot;:&quot;447616c5-ee0d-4404-a987-73c4b43630ee&quot;,
+            &quot;documentMinPosition&quot;:0,
+            &quot;documentMaxPosition&quot;:186,
+            &quot;data&quot;:[{
+                &quot;positionStart&quot;:0,
+                &quot;positionEnd&quot;:18,
+                &quot;number&quot;:1},
+              {
+                &quot;positionStart&quot;:19,
+                &quot;positionEnd&quot;:37,
+                &quot;number&quot;:1}, 
+                ...
+              {
+                &quot;positionStart&quot;:171,
+                &quot;positionEnd&quot;:186,
+                &quot;number&quot;:0}]}]}]}
 </pre></div></div>
-<p><a name="variable"></a> </p></div>
+<p><a name="block-number"></a> </p></div>
 <div class="section">
-<h3><a name="Variable"></a>Variable</h3>
-<p><b>Example</b><br />Heatmap for CQL query <tt>[pos=$1]</tt> with <tt>$1</tt> equal to <tt>N,ADJ</tt>.</p>
-<p><b>Request and response</b><br /><tt>q=*:*&amp;wt=json&amp;indent=true</tt></p>
-
-<div class="source">
-<div class="source"><pre class="prettyprint">&quot;mtas&quot;:{}
-</pre></div></div>
-<p><a name="function"></a> </p></div>
+<h3><a name="Block_number"></a>Block number</h3>
+<p><b>Example</b><br />Create an index with the number of adjectives in each block.</p>
+<p><b>CQL</b><br /><tt>[pos=&quot;ADJ&quot;]</tt></p>
+<p><b>Request and response</b><br />``</p>
+<p><tt>json
+</tt></p>
+<p><a name="block-size"></a> </p></div>
 <div class="section">
-<h3><a name="Function"></a>Function</h3>
-<p><b>Example</b><br />Heatmap for CQL query <tt>[pos=&quot;N&quot;]</tt> with function.</p>
-<p><b>Request and response</b><br /><tt>q=*:*&amp;wt=json&amp;indent=true</tt></p>
-
-<div class="source">
-<div class="source"><pre class="prettyprint">&quot;mtas&quot;:{}
-</pre></div></div>
-<p><b>Lucene</b></p>
-<p>To produce facets on metadata <a href="installation_lucene.html">directly in Lucene</a>, <i>ComponentHeatmap</i> together with the provided <i>collect</i> method can be used.</p></div></div>
+<h3><a name="Block_size"></a>Block size</h3>
+<p><b>Example</b><br />Create an index with the number of adjectives in each block.</p>
+<p><b>CQL</b><br /><tt>[pos=&quot;ADJ&quot;]</tt></p>
+<p><b>Request and response</b><br />``</p>
+<p><tt>json
+</tt></p>
+<p><a name="block-query"></a> </p></div>
+<div class="section">
+<h3><a name="Block_query"></a>Block query</h3>
+<p><b>Example</b><br />Create an index with the number of adjectives in each block.</p>
+<p><b>CQL</b><br /><tt>[pos=&quot;ADJ&quot;]</tt></p>
+<p><b>Request and response</b><br />``</p>
+<p><tt>json
+</tt></p>
+<p><a name="list"></a> </p></div>
+<div class="section">
+<h3><a name="List"></a>List</h3>
+<p><b>Example</b><br />Create an index with the number of adjectives in each block.</p>
+<p><b>CQL</b><br /><tt>[pos=&quot;ADJ&quot;]</tt></p>
+<p><b>Request and response</b><br />``</p>
+<p><tt>json
+</tt></p>
+<hr /></div></div>
+<div class="section">
+<h2><a name="Lucene"></a>Lucene</h2>
+<p>To use keywords in context <a href="installation_lucene.html">directly in Lucene</a>, <i>ComponentIndex</i> together with the provided <i>collect</i> method can be used.</p></div>
                   </div>
             </div>
           </div>
