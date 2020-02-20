@@ -31,8 +31,6 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
   /** The pattern word. */
   final Pattern patternWord = Pattern.compile("^([^:]+):(.*)$");
   
-  /** The split conditions. */
-  final String splitConditions = "(?<!\\\\)" + Pattern.quote("+");
 
   /**
    * Instantiates a new mtas simple parser word query.

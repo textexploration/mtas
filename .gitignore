@@ -17,3 +17,4 @@ demo/
 generated-sources/*
 release.properties
 testindexMtas
+/bin/

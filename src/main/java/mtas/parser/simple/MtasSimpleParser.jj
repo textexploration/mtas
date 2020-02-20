@@ -20,18 +20,22 @@ import mtas.search.spans.util.MtasSpanUniquePositionQuery;
 import mtas.search.spans.MtasSpanSequenceItem;
 import mtas.search.spans.MtasSpanSequenceQuery;
 import mtas.search.spans.MtasSpanAndQuery;
+import mtas.search.spans.MtasSpanOrQuery;
 
 public class MtasSimpleParser
 {
   public List<MtasSpanQuery> parse(String field, String defaultPrefix, MtasSpanQuery ignore, Integer maximumIgnoreLength) throws ParseException
   {
-    List<MtasSpanQuery> queries = simple(field, defaultPrefix, ignore, maximumIgnoreLength);
+    List<MtasSpanQuery> queries = simple(field, defaultPrefix, ignore, maximumIgnoreLength, true);
     for(int i=0; i<queries.size(); i++) {
       queries.set(i, new MtasSpanUniquePositionQuery(queries.get(i)));
     }
     return queries; 
   }
 
+  private String unescapeWord(String escapedWord) {
+    return escapedWord.replaceAll("\\\\(.)", "$1");  
+  }
 }
 
 PARSER_END(MtasSimpleParser)
@@ -50,7 +54,7 @@ TOKEN :
     (
       "\\" ~[ ] //any escaped character
     | //or
-      ~[ "\"", "\\", " ", "\r", "\t", "+"] //any character except quote or backslash
+      ~[ "\"", "\\", " ", "\r", "\t", "&", "|", "(", ")"] 
     )+ >
 }
 
@@ -65,50 +69,98 @@ TOKEN:
 TOKEN:
 
 {
-    < PLUS : ["+"] >
+    < AND : ["&"] >
+}
+
+TOKEN:
+
+{
+    < OR : ["|"] >
+}
+
+TOKEN:
+
+{
+    < BRACKET_OPEN : "(" >
+}
+
+TOKEN:
+
+{
+    < BRACKET_CLOSE : [")"] >
 }
 
 
-
-
-private List<MtasSpanQuery> simple(String field, String defaultPrefix, MtasSpanQuery ignore, Integer maximumIgnoreLength)  :
+private List<MtasSpanQuery> simple(String field, String defaultPrefix, MtasSpanQuery ignore, Integer maximumIgnoreLength, boolean fullQuery)  :
 {
+  Token eol;
+  MtasSpanQuery quotedQuery;
   MtasSpanQuery wordQuery;
-  Token quoted;
   List<MtasSpanQuery> queries = new ArrayList<MtasSpanQuery>();
-  List<MtasSpanSequenceItem> quotedItems;
+  List<MtasSpanQuery> wordQueries;  
 } 
-{ 
-    
+{
   (
-    < QUOTE >
-    {
-      quotedItems = new ArrayList<MtasSpanSequenceItem>();
-    }
-    (
-      wordQuery = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
+    
+      quotedQuery = quotedSimple(field, defaultPrefix, ignore,  maximumIgnoreLength)
+        {
+          queries.add(quotedQuery);
+        }
+     
+  | 
+          wordQuery = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
 	    {
-	      quotedItems.add(new MtasSpanSequenceItem(wordQuery, false));
+	      queries.add(wordQuery);
 	    }
-	 )+
-	 < QUOTE >
-	 {
-       queries.add(new MtasSpanSequenceQuery(quotedItems, null, null));
-	 }
-    |
-    (
-      wordQuery = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
+
+  |
+      < BRACKET_OPEN >
+      wordQueries = simple(field, defaultPrefix, ignore, maximumIgnoreLength, false)
+      < BRACKET_CLOSE >
       {
-        queries.add(wordQuery);
-      }
-    )+
-  )*
-  
-  <EOF>
-  
+        queries.addAll(wordQueries);
+      }   
+       
+  )+
+
+  (    <EOF>
+  | 
+    {
+      if(fullQuery) {
+        //System.out.println("Expected <EOF>");
+        throw new ParseException("Expected <EOF>");
+      }  
+    }
+  )  
   {
     return queries;
   }
+}
+
+private MtasSpanQuery quotedSimple(String field, String defaultPrefix, MtasSpanQuery ignore, Integer maximumIgnoreLength)  :
+{
+  MtasSpanQuery wordQuery;
+  List<MtasSpanSequenceItem> quotedItems = new ArrayList<MtasSpanSequenceItem>();
+} 
+{ 
+  < QUOTE >
+  {
+    quotedItems = new ArrayList<MtasSpanSequenceItem>();
+  }
+  (
+      wordQuery = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
+      {        
+        quotedItems.add(new MtasSpanSequenceItem(wordQuery, false));
+      }
+  )+
+  < QUOTE >
+  {
+    if(quotedItems.size() >1) { 
+      return new MtasSpanSequenceQuery(quotedItems, null, null);
+    } else {
+      return quotedItems.get(0).getQuery();
+    }
+  }   
 }
 
 private MtasSpanQuery simpleWord(String field, String defaultPrefix, MtasSpanQuery ignore, Integer maximumIgnoreLength) :
@@ -118,24 +170,73 @@ private MtasSpanQuery simpleWord(String field, String defaultPrefix, MtasSpanQue
   ArrayList < MtasSpanQuery > queryList = new ArrayList < MtasSpanQuery > ();
 }
 {
-  word = < WORD >
-  {
-    queryList.add(new MtasSimpleParserWordQuery(field, defaultPrefix, word.image));    
-  }
-  (    < PLUS >
-    word = < WORD >
-    {
-      queryList.add(new MtasSimpleParserWordQuery(field, defaultPrefix, word.image)); 
-    }
-  )*
-  {
-    if(queryList.size()==1) { 
-      query = queryList.get(0);
-    } else {
-      query = new MtasSpanAndQuery(queryList.toArray(new MtasSpanQuery[queryList.size()]));
-    }
-    return query;
- }    
+  (
+
+    (      word = < WORD >
+      {
+        queryList.add(new MtasSimpleParserWordQuery(field, defaultPrefix, unescapeWord(word.image)));    
+      }
+    |
+      < BRACKET_OPEN >
+      query = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
+      < BRACKET_CLOSE >
+      {
+        queryList.add(query);    
+      }
+    )  
+    (
+      (
+        < AND >
+        (
+	      word = < WORD >
+	      {
+	        queryList.add(new MtasSimpleParserWordQuery(field, defaultPrefix, unescapeWord(word.image)));    
+	      }
+	    |
+	      < BRACKET_OPEN >
+	      query = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
+	      < BRACKET_CLOSE >
+	      {
+	        queryList.add(query);    
+	      }
+	    ) 
+      )+
+      {
+        if(queryList.size()==1) { 
+          query = queryList.get(0);
+        } else {
+          query = new MtasSpanAndQuery(queryList.toArray(new MtasSpanQuery[queryList.size()]));
+        }
+        return query;
+      }
+    |
+      (
+        < OR >
+        (
+	      word = < WORD >
+	      {
+	        queryList.add(new MtasSimpleParserWordQuery(field, defaultPrefix, unescapeWord(word.image)));    
+	      }
+	    |
+	      < BRACKET_OPEN >
+	      query = simpleWord(field, defaultPrefix, ignore,  maximumIgnoreLength)
+	      < BRACKET_CLOSE >
+	      {
+	        queryList.add(query);    
+	      }
+	    ) 
+      )*
+      {
+        if(queryList.size()==1) { 
+          query = queryList.get(0);
+        } else {
+          query = new MtasSpanOrQuery(queryList.toArray(new MtasSpanQuery[queryList.size()]));
+        }
+        return query;
+      }
+    )
+  )       
 }
+
 
 
