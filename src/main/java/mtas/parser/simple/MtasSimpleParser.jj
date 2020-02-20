@@ -19,6 +19,7 @@ import mtas.search.spans.util.MtasSpanQuery;
 import mtas.search.spans.util.MtasSpanUniquePositionQuery;
 import mtas.search.spans.MtasSpanSequenceItem;
 import mtas.search.spans.MtasSpanSequenceQuery;
+import mtas.search.spans.MtasSpanAndQuery;
 
 public class MtasSimpleParser
 {
@@ -49,7 +50,7 @@ TOKEN :
     (
       "\\" ~[ ] //any escaped character
     | //or
-      ~[ "\"", "\\", " ", "\r", "\t"] //any character except quote or backslash
+      ~[ "\"", "\\", " ", "\r", "\t", "+"] //any character except quote or backslash
     )+ >
 }
 
@@ -61,7 +62,11 @@ TOKEN:
 }
 
 
+TOKEN:
 
+{
+    < PLUS : ["+"] >
+}
 
 
 
@@ -110,12 +115,27 @@ private MtasSpanQuery simpleWord(String field, String defaultPrefix, MtasSpanQue
 {
   Token word;
   MtasSpanQuery query;
+  ArrayList < MtasSpanQuery > queryList = new ArrayList < MtasSpanQuery > ();
 }
 {
   word = < WORD >
   {
-    query = new MtasSimpleParserWordQuery(field, defaultPrefix, word.image);
-    return query;
+    queryList.add(new MtasSimpleParserWordQuery(field, defaultPrefix, word.image));    
   }
-}  
+  (    < PLUS >
+    word = < WORD >
+    {
+      queryList.add(new MtasSimpleParserWordQuery(field, defaultPrefix, word.image)); 
+    }
+  )*
+  {
+    if(queryList.size()==1) { 
+      query = queryList.get(0);
+    } else {
+      query = new MtasSpanAndQuery(queryList.toArray(new MtasSpanQuery[queryList.size()]));
+    }
+    return query;
+ }    
+}
+
 

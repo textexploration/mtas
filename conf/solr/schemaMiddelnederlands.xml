@@ -14,11 +14,33 @@
 		multiValued="false" indexed="true" stored="true" />
 	<field name="sourceCollection" type="middelnederlands_string"
 		multiValued="false" indexed="true" stored="true" />
-	<field name="ingestTime" type="middelnederlands_date"
+	<field name="sourceSubCollection" type="middelnederlands_string"
+    multiValued="false" indexed="true" stored="true" />
+  <field name="ingestTime" type="middelnederlands_date"
 		required="true" multiValued="false" indexed="true" stored="true" />
 	<field name="modificationTime" type="middelnederlands_date"
 		multiValued="false" indexed="true" stored="true" />
-	
+		
+  <field name="info" type="middelnederlands_string"
+    multiValued="false" indexed="true" stored="true" />	
+    
+  <field name="archiveCode" type="middelnederlands_string"
+    multiValued="true" indexed="true" stored="true" /> 
+  <field name="archiveNumber" type="middelnederlands_string"
+    multiValued="true" indexed="true" stored="true" /> 
+  <field name="archiveInfo" type="middelnederlands_string"
+    multiValued="true" indexed="true" stored="true" /> 
+    
+  <field name="publicationCode" type="middelnederlands_string"
+    multiValued="true" indexed="true" stored="true" />    	
+	<field name="publicationNumber" type="middelnederlands_string"
+    multiValued="true" indexed="true" stored="true" /> 
+  <field name="publicationInfo" type="middelnederlands_string"
+    multiValued="true" indexed="true" stored="true" /> 
+    
+  <field name="otherInfo" type="middelnederlands_string"
+    multiValued="true" indexed="true" stored="true" />   
+      
 	<!-- title -->
 	<field name="title" type="middelnederlands_text" required="false"
 		multiValued="false" indexed="true" stored="true" />
@@ -68,6 +90,7 @@
     <copyField source="versionId" dest="metadata" />
     <copyField source="sourceRef" dest="metadata" />
     <copyField source="sourceCollection" dest="metadata" />
+    <copyField source="sourceSubCollection" dest="metadata" />
     <copyField source="title" dest="metadata" />
     <copyField source="type" dest="metadata" />
     <copyField source="year" dest="metadata" />
@@ -75,7 +98,14 @@
     <copyField source="localizationTown" dest="metadata" />
     <copyField source="localizationProvince" dest="metadata" />
     <copyField source="localizationCountry" dest="metadata" />
-
+    <copyField source="info" dest="metadata" />
+    <copyField source="archiveCode" dest="metadata" />
+    <copyField source="archiveInfo" dest="metadata" />
+    <copyField source="archiveNumber" dest="metadata" />
+    <copyField source="publicationCode" dest="metadata" />
+    <copyField source="publicationInfo" dest="metadata" />
+    <copyField source="publicationNumber" dest="metadata" />
+    <copyField source="otherInfo" dest="metadata" />
 	<uniqueKey>versionId</uniqueKey>
 
 	<fieldType name="middelnederlands_string" class="solr.StrField" sortMissingLast="true" />

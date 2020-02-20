@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import mtas.parser.simple.ParseException;
 import mtas.parser.simple.util.MtasSimpleParserWordQuery;
 import mtas.parser.simple.MtasSimpleParser;
+import mtas.search.spans.MtasSpanAndQuery;
 import mtas.search.spans.MtasSpanSequenceItem;
 import mtas.search.spans.MtasSpanSequenceQuery;
 import mtas.search.spans.util.MtasSpanQuery;
@@ -88,6 +89,30 @@ public class MtasSimpleParserTest {
     String prefix = "lemma";
     String simple = "pos:N";
     MtasSpanQuery q = new MtasSimpleParserWordQuery(field, "pos", "N");
+    testSimpleParse(field, prefix, simple, new MtasSpanUniquePositionQuery(q));
+  }
+  
+  @org.junit.Test
+  public void singleWordPrefixMultiple() throws ParseException {
+    String field = "testveld";
+    String prefix = "lemma";
+    String simple = "pos:LID+t:den+de";
+    MtasSpanQuery q1 = new MtasSimpleParserWordQuery(field, "pos", "LID");
+    MtasSpanQuery q2 = new MtasSimpleParserWordQuery(field, "t", "den");
+    MtasSpanQuery q3 = new MtasSimpleParserWordQuery(field, "lemma", "de");
+    MtasSpanQuery q = new MtasSpanAndQuery(q1,q2,q3);
+    testSimpleParse(field, prefix, simple, new MtasSpanUniquePositionQuery(q));
+  }
+  
+  @org.junit.Test
+  public void singleWordPrefixMultipleEscaped() throws ParseException {
+    String field = "testveld";
+    String prefix = "lemma";
+    String simple = "pos:LID+t:d\\+en+de";
+    MtasSpanQuery q1 = new MtasSimpleParserWordQuery(field, "pos", "LID");
+    MtasSpanQuery q2 = new MtasSimpleParserWordQuery(field, "t", "d+en");
+    MtasSpanQuery q3 = new MtasSimpleParserWordQuery(field, "lemma", "de");
+    MtasSpanQuery q = new MtasSpanAndQuery(q1,q2,q3);
     testSimpleParse(field, prefix, simple, new MtasSpanUniquePositionQuery(q));
   }
   

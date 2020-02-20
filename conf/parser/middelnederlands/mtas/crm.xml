@@ -356,15 +356,15 @@
 				</condition>
 			</function>
 			<function type="wordAnnotation" name="4" split="+">
-				<condition value="000,001,002,003,004,005,006,009">
+				<condition value="000,001,002,003,004,005,006,008,009">
 					<output name="pos" value="N" />
 					<output name="feat.getal" value="ev" />
 				</condition>
-				<condition value="010,011,012,013,014,015,016,019">
+				<condition value="010,011,012,013,014,015,016,018,019,031,034">
 					<output name="pos" value="N" />
 					<output name="feat.getal" value="mv" />
 				</condition>
-				<condition value="020,021,022,023,024,025,026,029">
+				<condition value="020,021,022,023,024,025,026,028,029,031,034">
 					<output name="pos" value="N" />
 					<output name="feat.ntype" value="eigen" />
 				</condition>
@@ -385,19 +385,19 @@
 					<output name="feat.probleemgeval" />
 				</condition>
 
-				<condition value="200,201,202,203,204,205,206,209">
+				<condition value="200,201,202,203,204,205,206,207,209">
 					<output name="pos" value="WW" />
 					<output name="feat.pvtijd" value="tgw" />
 				</condition>
-				<condition value="210,211,212,213,214,215,216,219">
+				<condition value="210,211,212,213,214,215,216,217,219">
 					<output name="pos" value="WW" />
 					<output name="feat.pvtijd" value="tgw" />
 				</condition>
-				<condition value="220,221,222,223,224,225,226,229">
+				<condition value="220,221,222,223,224,225,226,227,229">
 					<output name="pos" value="WW" />
 					<output name="feat.pvtijd" value="verl" />
 				</condition>
-				<condition value="230,231,232,233,234,235,236,239">
+				<condition value="230,231,232,233,234,235,236,237,239">
 					<output name="pos" value="WW" />
 					<output name="feat.pvtijd" value="verl" />
 				</condition>
@@ -482,7 +482,7 @@
 					<output name="pos" value="VNW" />
 					<output name="feat.vwtype" value="betr" />
 				</condition>
-				<condition value="430,431,432,433,434,435,436,439">
+				<condition value="430,431,432,433,434,435,436,438,439">
 					<output name="pos" value="VNW" />
 					<output name="feat.vwtype" value="vb" />
 				</condition>
@@ -494,7 +494,7 @@
 					<output name="pos" value="VNW" />
 					<output name="feat.lwtype" value="onbep" />
 				</condition>
-				<condition value="450,451,452,453,454,455,456,459">
+				<condition value="450,451,452,453,454,455,456,458,459">
 					<output name="pos" value="VNW" />
 					<output name="feat.vwtype" value="bez" />
 				</condition>
@@ -649,7 +649,7 @@
 				</condition>
 
 				<condition
-					value="001,011,021,091,101,111,191,201,211,221,231,241,251,261,271,281,291,301,311,321,391,411,421,431,441,451,471,481,491,501,511,521,531,541,551,561,591,601,611,621,631,641,651,691,701,791,801,811,821,831,841,851,861,871,881,891,901,911,991">
+					value="001,011,021,031,091,101,111,191,201,211,221,231,241,251,261,271,281,291,301,311,321,391,411,421,431,441,451,471,481,491,501,511,521,531,541,551,561,591,601,611,621,631,641,651,691,701,791,801,811,821,831,841,851,861,871,881,891,901,911,991">
 					<output name="feat.form" value="-e" />
 				</condition>
 				<condition
@@ -661,7 +661,7 @@
 					<output name="feat.form" value="-t" />
 				</condition>
 				<condition
-					value="004,014,024,094,104,114,194,204,214,224,234,244,254,264,274,284,294,304,314,324,394,414,424,434,444,454,474,484,494,504,514,524,534,544,554,564,594,604,614,624,634,644,654,694,704,794,804,814,824,834,844,854,864,874,884,894,904,914,994">
+					value="004,014,024,034,094,104,114,194,204,214,224,234,244,254,264,274,284,294,304,314,324,394,414,424,434,444,454,474,484,494,504,514,524,534,544,554,564,594,604,614,624,634,644,654,694,704,794,804,814,824,834,844,854,864,874,884,894,904,914,994">
 					<output name="feat.form" value="-n" />
 				</condition>
 				<condition
