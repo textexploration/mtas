@@ -191,6 +191,27 @@ public class MtasSearchTestConsistency {
     assertEquals("Intersecting: - twoPhaseIterator", queryResult1.hits,
         queryResult1disabled.hits);
   }
+  
+  /**
+   * Basic search intersecting 3.
+   *
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  @org.junit.Test
+  public void basicSearchIntersecting3() throws IOException {
+    String cql = "([]</s>) intersecting (<s>[])";
+    // get total number
+    IndexReader indexReader = DirectoryReader.open(directory);
+    QueryResult queryResult1 = doQuery(indexReader, FIELD_CONTENT, cql, null,
+        null, null, false);
+    QueryResult queryResult1disabled = doQuery(indexReader, FIELD_CONTENT, cql,
+        null, null, null, true);
+    assertTrue(
+        "Intersecting: " + cql + " has hits (" + queryResult1.hits + ")",
+        queryResult1.hits == 0);
+    assertEquals("Intersecting: - twoPhaseIterator", queryResult1.hits,
+        queryResult1disabled.hits);
+  }
 
   /**
    * Basic search ignore.

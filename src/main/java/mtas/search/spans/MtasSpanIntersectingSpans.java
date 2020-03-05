@@ -261,7 +261,7 @@ public class MtasSpanIntersectingSpans extends MtasSpans {
         .nextStartPosition()) != NO_MORE_POSITIONS) {
       nextSpans1EndPosition = spans1.spans.endPosition();
       if (nextSpans1StartPosition <= lastSpans2EndPosition
-          && nextSpans1EndPosition >= lastSpans2StartPosition) {
+          && nextSpans1EndPosition > lastSpans2StartPosition) {
         return true;
       } else {
         while (lastSpans2StartPosition <= nextSpans1EndPosition) {
@@ -277,7 +277,7 @@ public class MtasSpanIntersectingSpans extends MtasSpans {
                 lastSpans2StartPosition = nextSpans2StartPosition;
                 lastSpans2EndPosition = nextSpans2EndPosition;
                 if (nextSpans1StartPosition <= lastSpans2EndPosition
-                    && nextSpans1EndPosition >= lastSpans2StartPosition) {
+                    && nextSpans1EndPosition > lastSpans2StartPosition) {
                   return true;
                 }
               }
