@@ -81,13 +81,13 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
   @Override
   public MtasSpanWeight createWeight(IndexSearcher searcher,
       ScoreMode scoreMode, float boost) throws IOException {
-    return new SpanAllWeight(searcher, null, boost);
+    return new SpanPositionWeight(searcher, null, boost);
   }
 
   /**
-   * The Class SpanAllWeight.
+   * The Class SpanPositionWeight.
    */
-  protected class SpanAllWeight extends MtasSpanWeight {
+  protected class SpanPositionWeight extends MtasSpanWeight {
 
     /** The Constant METHOD_GET_DELEGATE. */
     private static final String METHOD_GET_DELEGATE = "getDelegate";
@@ -96,13 +96,13 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
     private static final String METHOD_GET_POSTINGS_READER = "getPostingsReader";
 
     /**
-     * Instantiates a new span all weight.
+     * Instantiates a new span position weight.
      *
      * @param searcher the searcher
      * @param termContexts the term contexts
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public SpanAllWeight(IndexSearcher searcher,
+    public SpanPositionWeight(IndexSearcher searcher,
         Map<Term, TermStates> termContexts, float boost) throws IOException {
       super(MtasSpanPositionQuery.this, searcher, termContexts, boost);
     }

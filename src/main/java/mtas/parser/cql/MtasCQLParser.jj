@@ -8,6 +8,7 @@ options
   DEBUG_TOKEN_MANAGER = false;
 
   LOOKAHEAD= 1000;
+  FORCE_LA_CHECK = true;
 }
 
 PARSER_BEGIN(MtasCQLParser)
@@ -37,6 +38,7 @@ import mtas.search.spans.MtasSpanNotQuery;
 import mtas.search.spans.MtasSpanSequenceItem;
 import mtas.search.spans.MtasSpanSequenceQuery;
 import mtas.search.spans.MtasSpanOrQuery;
+import mtas.parser.cql.util.MtasCQLParserWordComparatorQuery;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -261,10 +263,14 @@ TOKEN :
 TOKEN :
 {
   < UNQUOTED_VALUE :
-    (
-      < ALLOWED_UNQUOTED_CHARACTER >
-    | < DIGIT >
-    )+ >
+    (      (< ALLOWED_UNQUOTED_CHARACTER > | < DIGIT >)+
+    )  >
+}
+
+TOKEN :
+{
+  < NUMBER_VALUE :
+    (< DIGIT >)+ >
 }
 
 TOKEN :
@@ -289,7 +295,7 @@ private MtasSpanQuery cql(String field, String defaultPrefix, HashMap < String, 
   MtasSpanSequenceItem si;
   MtasSpanQuery mainCQL = null;
   MtasSpanQuery orCQL = null;
-  ArrayList < MtasSpanSequenceItem > itemList = new ArrayList < MtasSpanSequenceItem > ();
+  ArrayList < MtasSpanSequenceItem > itemList = new ArrayList < MtasSpanSequenceItem > ();  
 }
 {
   si = cqlBlock(field, defaultPrefix, variables, usedVariables, ignore, maximumIgnoreLength)
@@ -353,7 +359,7 @@ private MtasSpanSequenceItem cqlBlock(String field, String defaultPrefix, HashMa
 {
   (
     sc1 = sentence(field, defaultPrefix, variables, usedVariables, ignore, maximumIgnoreLength)
-  | 
+  |  
     < BRACKET_START > 
     si1 = cqlBlock(field, defaultPrefix, variables, usedVariables, ignore, maximumIgnoreLength)
     {
@@ -367,6 +373,7 @@ private MtasSpanSequenceItem cqlBlock(String field, String defaultPrefix, HashMa
     )*
     < BRACKET_END >
   )
+  
   [
     (
       < CONTAINING >
@@ -876,7 +883,7 @@ private MtasCQLParserWordCondition wordCondition(String field, HashMap < String,
   Token negation = null;
   MtasCQLParserWordCondition condition, subCondition;
 }
-{
+{ 
   (
     //condition with brackets    [ negation = < NEGATION > ] < BRACKET_START >
     (
@@ -967,6 +974,8 @@ private MtasCQLParserWordCondition wordAtomCondition(String field, HashMap < Str
   Token nequals = null;
   Token prefix;
   Token value;
+  Token comparator;
+  Token equals = null;
 }
 {
   [ negation = < NEGATION > ]
@@ -1065,5 +1074,38 @@ private MtasCQLParserWordCondition wordAtomCondition(String field, HashMap < Str
         }
       }
     )
+  |
+    (
+      (prefix = < UNQUOTED_VALUE >)
+      (
+        comparator = < GROUP_START >
+      | comparator = < GROUP_END >
+      )
+      [ equals = < TOKEN_EQUALS > ]
+      (value = < NUMBER >)
+      {
+        if (nequals != null)
+        {
+          //use RegexpQuery combined with SpanMultiTermQueryWrapper
+          throw new ParseException("TODO: not implemented '" + prefix.image + comparator.image + "'");
+        }
+        else
+        {
+          MtasCQLParserWordCondition condition = new MtasCQLParserWordCondition(field, MtasCQLParserWordCondition.TYPE_AND);
+          String operator = comparator.image;
+          if (equals != null) {
+            operator += equals.image; 
+          }
+          MtasSpanQuery q = new MtasCQLParserWordComparatorQuery(field, prefix.image, operator, Integer.parseInt(value.image));
+          if (negation != null)
+          {
+            condition.swapNot();
+          }
+          condition.addPositiveQuery(q);
+          //System.out.println("=== wordAtomCondition ===\n" + condition + "\n");
+          return condition;
+        }
+      }
+    )           
   )
 }

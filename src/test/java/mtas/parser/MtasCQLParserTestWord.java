@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 
 import mtas.parser.cql.MtasCQLParser;
 import mtas.parser.cql.ParseException;
+import mtas.parser.cql.util.MtasCQLParserWordComparatorQuery;
 import mtas.parser.cql.util.MtasCQLParserWordPositionQuery;
 import mtas.parser.cql.util.MtasCQLParserWordQuery;
 import mtas.search.spans.MtasSpanAndQuery;
@@ -43,6 +44,7 @@ public class MtasCQLParserTestWord {
       // System.out.println("Tested CQL parsing:\t"+cql);
     } catch (ParseException e) {
       // System.out.println("Error CQL parsing:\t"+cql);
+      e.printStackTrace();
       log.error(e);
     }
   }
@@ -388,5 +390,21 @@ public class MtasCQLParserTestWord {
     MtasSpanQuery q = new MtasCQLParserWordQuery(field, "t_lc", "de", null,
         null);
     testCQLParse(field, "t_lc", cql, new MtasSpanUniquePositionQuery(q));
+  }
+  
+  /**
+   * Basic test CQL 14.
+   *
+   * @throws ParseException the parse exception
+   */
+  @org.junit.Test
+  public void basicTestCQL14() throws ParseException {
+    String field = "testveld";
+    String cql1 = "[t<34]";
+    String cql2 = "[t>34]";
+    MtasSpanQuery q1 = new MtasCQLParserWordComparatorQuery(field, "t", "<", 34);
+    MtasSpanQuery q2 = new MtasCQLParserWordComparatorQuery(field, "t", ">", 34);
+    testCQLParse(field, "t", cql1, new MtasSpanUniquePositionQuery(q1));
+    testCQLParse(field, "t", cql2, new MtasSpanUniquePositionQuery(q2));
   }
 }
