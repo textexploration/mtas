@@ -4,17 +4,20 @@ import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import mtas.parser.cql.MtasCQLParser;
 import mtas.parser.cql.ParseException;
-import mtas.parser.cql.util.MtasCQLParserWordComparatorQuery;
+import mtas.parser.cql.util.MtasCQLParserWordOperatorQuery;
 import mtas.parser.cql.util.MtasCQLParserWordPositionQuery;
 import mtas.parser.cql.util.MtasCQLParserWordQuery;
 import mtas.search.spans.MtasSpanAndQuery;
 import mtas.search.spans.MtasSpanNotQuery;
+import mtas.search.spans.MtasSpanOperatorQuery;
 import mtas.search.spans.MtasSpanOrQuery;
 import mtas.search.spans.util.MtasSpanQuery;
 import mtas.search.spans.util.MtasSpanUniquePositionQuery;
@@ -37,17 +40,22 @@ public class MtasCQLParserTestWord {
    */
   private void testCQLParse(String field, String defaultPrefix, String cql,
       MtasSpanQuery q) {
-    MtasCQLParser p = new MtasCQLParser(
-        new BufferedReader(new StringReader(cql)));
-    try {
-      assertEquals(p.parse(field, defaultPrefix, null, null, null), q);
-      // System.out.println("Tested CQL parsing:\t"+cql);
-    } catch (ParseException e) {
-      // System.out.println("Error CQL parsing:\t"+cql);
-      e.printStackTrace();
-      log.error(e);
-    }
+    testCQLParse(field, defaultPrefix, cql, null, q);
   }
+  
+  private void testCQLParse(String field, String defaultPrefix, String cql,
+		  HashMap < String, String [] > variables, MtasSpanQuery q) {
+	    MtasCQLParser p = new MtasCQLParser(
+	        new BufferedReader(new StringReader(cql)));
+	    try {
+	      assertEquals(p.parse(field, defaultPrefix, variables, null, null), q);
+	      // System.out.println("Tested CQL parsing:\t"+cql);
+	    } catch (ParseException e) {
+	      // System.out.println("Error CQL parsing:\t"+cql);
+	      e.printStackTrace();
+	      log.error(e);
+	    }
+	  }
 
   /**
    * Test CQL equivalent.
@@ -151,10 +159,24 @@ public class MtasCQLParserTestWord {
   @org.junit.Test
   public void basicTestCQL1() throws ParseException {
     String field = "testveld";
-    String cql = "[lemma=\"koe\"]";
-    MtasSpanQuery q = new MtasCQLParserWordQuery(field, "lemma", "koe", null,
+    String cql1 = "[lemma=\"koe\"]";
+    String cql2 = "[lemma=\".\"]";
+    String cql3 = "[lemma==\".\"]";
+    String cql2v = "[lemma=$1]";
+    String cql3v = "[lemma==$1]";
+    HashMap<String, String[]> vars = new HashMap<>();
+    vars.put("1", new String[] {"."});
+    MtasSpanQuery q1 = new MtasCQLParserWordQuery(field, "lemma", "koe", null,
         null);
-    testCQLParse(field, null, cql, new MtasSpanUniquePositionQuery(q));
+    MtasSpanQuery q2 = new MtasCQLParserWordQuery(field, "lemma", ".", MtasCQLParserWordQuery.MTAS_CQL_REGEXP_QUERY, null,
+            null);
+    MtasSpanQuery q3 = new MtasCQLParserWordQuery(field, "lemma", ".", MtasCQLParserWordQuery.MTAS_CQL_TERM_QUERY, null,
+            null);
+    testCQLParse(field, null, cql1, new MtasSpanUniquePositionQuery(q1));
+    testCQLParse(field, null, cql2, new MtasSpanUniquePositionQuery(q2));
+    testCQLParse(field, null, cql3, new MtasSpanUniquePositionQuery(q3));
+    testCQLParse(field, null, cql2v, vars, new MtasSpanUniquePositionQuery(q2));
+    //testCQLParse(field, null, cql3v, vars, new MtasSpanUniquePositionQuery(q3));
   }
 
   /**
@@ -402,9 +424,18 @@ public class MtasCQLParserTestWord {
     String field = "testveld";
     String cql1 = "[t<34]";
     String cql2 = "[t>34]";
-    MtasSpanQuery q1 = new MtasCQLParserWordComparatorQuery(field, "t", "<", 34);
-    MtasSpanQuery q2 = new MtasCQLParserWordComparatorQuery(field, "t", ">", 34);
+    String cql3 = "[t<=34]";
+    String cql4 = "[t>=34]";
+    String cql5 = "[t=34]";
+    MtasSpanQuery q1 = new MtasCQLParserWordOperatorQuery(field, "t", MtasSpanOperatorQuery.MTAS_OPERATOR_LESS_THAN, 34);
+    MtasSpanQuery q2 = new MtasCQLParserWordOperatorQuery(field, "t", MtasSpanOperatorQuery.MTAS_OPERATOR_MORE_THAN, 34);
+    MtasSpanQuery q3 = new MtasCQLParserWordOperatorQuery(field, "t", MtasSpanOperatorQuery.MTAS_OPERATOR_LESS_THAN_OR_EQUAL, 34);
+    MtasSpanQuery q4 = new MtasCQLParserWordOperatorQuery(field, "t", MtasSpanOperatorQuery.MTAS_OPERATOR_MORE_THAN_OR_EQUAL, 34);
+    MtasSpanQuery q5 = new MtasCQLParserWordOperatorQuery(field, "t", MtasSpanOperatorQuery.MTAS_OPERATOR_EQUAL, 34);
     testCQLParse(field, "t", cql1, new MtasSpanUniquePositionQuery(q1));
     testCQLParse(field, "t", cql2, new MtasSpanUniquePositionQuery(q2));
+    testCQLParse(field, "t", cql3, new MtasSpanUniquePositionQuery(q3));
+    testCQLParse(field, "t", cql4, new MtasSpanUniquePositionQuery(q4));
+    testCQLParse(field, "t", cql5, new MtasSpanUniquePositionQuery(q5));
   }
 }

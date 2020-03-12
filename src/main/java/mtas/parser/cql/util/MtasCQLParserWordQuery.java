@@ -8,6 +8,7 @@ import java.util.Set;
 import mtas.analysis.token.MtasToken;
 import mtas.parser.cql.ParseException;
 import mtas.search.spans.MtasSpanMatchNoneQuery;
+import mtas.search.spans.MtasSpanOperatorQuery;
 import mtas.search.spans.MtasSpanOrQuery;
 import mtas.search.spans.MtasSpanPrefixQuery;
 import mtas.search.spans.MtasSpanRegexpQuery;
@@ -42,7 +43,8 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
   public static final String MTAS_CQL_WILDCARD_QUERY = "wildcard";
 
   /** The Constant MTAS_CQL_VARIABLE_QUERY. */
-  public static final String MTAS_CQL_VARIABLE_QUERY = "variable";
+  public static final String MTAS_CQL_VARIABLE_REGEXP_QUERY = "variable_regexp";
+  public static final String MTAS_CQL_VARIABLE_TERM_QUERY = "variable_term";
 
   /**
    * Instantiates a new mtas CQL parser word query.
@@ -91,16 +93,16 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
     super(1, 1);
     String termBase = prefix + MtasToken.DELIMITER + value;
     if (type.equals(MTAS_CQL_REGEXP_QUERY)) {
-      term = new Term(field, termBase + "\u0000*");
+      term = new Term(field, termBase + "\u0000*");      
       query = new MtasSpanRegexpQuery(term, true);
     } else if (type.equals(MTAS_CQL_WILDCARD_QUERY)) {
       term = new Term(field, termBase);
       query = new MtasSpanWildcardQuery(term, true);
     } else if (type.equals(MTAS_CQL_TERM_QUERY)) {
       term = new Term(field,
-          "\"" + termBase.replace("\"", "\"\\\"\"") + "\"\u0000*");
-      query = new MtasSpanRegexpQuery(term, true);
-    } else if (type.equals(MTAS_CQL_VARIABLE_QUERY)) {
+              "\"" + termBase.replace("\"", "\"\\\"\"") + "\"\u0000*");
+      query = new MtasSpanOperatorQuery(field, prefix, MtasSpanOperatorQuery.MTAS_OPERATOR_DEQUAL, value, true);
+    } else if (type.equals(MTAS_CQL_VARIABLE_REGEXP_QUERY) || type.equals(MTAS_CQL_VARIABLE_TERM_QUERY)) {
       if (value != null && variables != null && variables.containsKey(value)
           && variables.get(value) != null) {
         if (usedVariables.contains(value)) {
@@ -114,7 +116,11 @@ public class MtasCQLParserWordQuery extends MtasSpanQuery {
         term = new Term(field, prefix + MtasToken.DELIMITER);
         for (int i = 0; i < list.length; i++) {
           termBase = prefix + MtasToken.DELIMITER + list[i];
-          term = new Term(field, "\"" + termBase + "\"\u0000*");
+          if(type.equals(MTAS_CQL_VARIABLE_TERM_QUERY)) {
+            term = new Term(field, "\"" + termBase + "\"\u0000*");
+          } else {
+        	term = new Term(field, termBase + "\u0000*");  
+          }
           queries[i] = new MtasSpanRegexpQuery(term, true);
         }
         if (queries.length == 0) {

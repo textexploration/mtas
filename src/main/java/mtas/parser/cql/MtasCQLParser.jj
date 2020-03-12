@@ -13,7 +13,6 @@ options
 
 PARSER_BEGIN(MtasCQLParser)
 package mtas.parser.cql;
-import mtas.analysis.token.MtasToken;
 import mtas.parser.cql.util.MtasCQLParserGroupCondition;
 import mtas.parser.cql.util.MtasCQLParserGroupFullCondition;
 import mtas.parser.cql.util.MtasCQLParserWordCondition;
@@ -25,6 +24,8 @@ import mtas.parser.cql.util.MtasCQLParserSentencePartCondition;
 import mtas.parser.cql.util.MtasCQLParserGroupQuery;
 import mtas.parser.cql.util.MtasCQLParserWordQuery;
 import mtas.parser.cql.util.MtasCQLParserDefaultPrefixCondition;
+import mtas.parser.cql.util.MtasCQLParserWordOperatorQuery;
+import mtas.parser.cql.util.MtasCQLParserGroupOperatorQuery;
 import org.apache.lucene.index.Term;
 import mtas.search.spans.util.MtasSpanQuery;
 import mtas.search.spans.util.MtasSpanUniquePositionQuery;
@@ -38,7 +39,6 @@ import mtas.search.spans.MtasSpanNotQuery;
 import mtas.search.spans.MtasSpanSequenceItem;
 import mtas.search.spans.MtasSpanSequenceQuery;
 import mtas.search.spans.MtasSpanOrQuery;
-import mtas.parser.cql.util.MtasCQLParserWordComparatorQuery;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -755,30 +755,58 @@ private MtasCQLParserGroupFullCondition group(String field) throws ParseExceptio
 private MtasCQLParserGroupCondition groupCondition(String field) throws ParseException :
 {
   Token prefix;
+  Token dequals = null;
   Token value = null;
+  Token operator1 = null;
+  Token operator2 = null;  
 }
 {
   (
-    prefix = < UNQUOTED_VALUE > < TOKEN_EQUALS > value = < QUOTED_VALUE >
-  | prefix = < UNQUOTED_VALUE >
+    (prefix = < UNQUOTED_VALUE >)      
+      (
+        operator1 = < GROUP_START >
+        [operator2 = < TOKEN_EQUALS >]
+      | operator1 = < GROUP_END >
+        [operator2 = < TOKEN_EQUALS >]  
+      | operator1 = < TOKEN_EQUALS >  
+      )
+      (value = < NUMBER >)
     {
-      value = null;
+        String operator = operator1.image;
+        if(operator2!=null) {
+          operator = operator + operator2.image;
+        }
+        MtasSpanQuery q = new MtasCQLParserGroupOperatorQuery(field, prefix.image, operator, Integer.parseInt(value.image));
+        MtasCQLParserGroupCondition condition = new MtasCQLParserGroupCondition(field, q);           
+        return condition;                     
     }
-  )
-  {
-    if (value != null)
-    {
-      MtasSpanQuery q = new MtasCQLParserGroupQuery(field, prefix.image, unquoteString(value.image));
-      MtasCQLParserGroupCondition condition = new MtasCQLParserGroupCondition(field, q);
-      return condition;
-    }
-    else
-    {
-      MtasSpanQuery q = new MtasCQLParserGroupQuery(field, prefix.image, null);
-      MtasCQLParserGroupCondition condition = new MtasCQLParserGroupCondition(field, q);
-      return condition;
-    }
-  }
+ )| (    (
+	    prefix = < UNQUOTED_VALUE > < TOKEN_EQUALS > [ dequals = < TOKEN_EQUALS > ] value = < QUOTED_VALUE >
+	  | prefix = < UNQUOTED_VALUE >
+	    {
+	      value = null;
+	    }
+	  )
+	  {
+	    if (value != null)
+	    {
+	      MtasSpanQuery q;
+	      if(dequals != null) {
+	        q = new MtasCQLParserGroupQuery(field, prefix.image, unquoteString(value.image), MtasCQLParserGroupQuery.MTAS_CQL_TERM_QUERY);
+	      } else {
+	        q = new MtasCQLParserGroupQuery(field, prefix.image, unquoteString(value.image), MtasCQLParserGroupQuery.MTAS_CQL_REGEXP_QUERY);
+	      }  
+	      MtasCQLParserGroupCondition condition = new MtasCQLParserGroupCondition(field, q);
+	      return condition;
+	    }
+	    else
+	    {
+	      MtasSpanQuery q = new MtasCQLParserGroupQuery(field, prefix.image, null);
+	      MtasCQLParserGroupCondition condition = new MtasCQLParserGroupCondition(field, q);
+	      return condition;
+	    }
+	  }
+  )          
 }
 
 private MtasCQLParserWordFullCondition word(String field, String defaultPrefix, HashMap < String, String [ ] > variables, HashSet < String > usedVariables) throws ParseException :
@@ -972,10 +1000,11 @@ private MtasCQLParserWordCondition wordAtomCondition(String field, HashMap < Str
 {
   Token negation = null;
   Token nequals = null;
+  Token dequals = null;
   Token prefix;
   Token value;
-  Token comparator;
-  Token equals = null;
+  Token operator1 = null;
+  Token operator2 = null;
 }
 {
   [ negation = < NEGATION > ]
@@ -1027,6 +1056,7 @@ private MtasCQLParserWordCondition wordAtomCondition(String field, HashMap < Str
         nequals = < TOKEN_NOTEQUALS >
       | < TOKEN_EQUALS >
       )
+      [ dequals = < TOKEN_EQUALS > ]
       (value = < VARIABLE >)
       {
         if (nequals != null)
@@ -1037,7 +1067,12 @@ private MtasCQLParserWordCondition wordAtomCondition(String field, HashMap < Str
         else
         {
           MtasCQLParserWordCondition condition = new MtasCQLParserWordCondition(field, MtasCQLParserWordCondition.TYPE_OR);
-          MtasSpanQuery q = new MtasCQLParserWordQuery(field, prefix.image, variableString(value.image), MtasCQLParserWordQuery.MTAS_CQL_VARIABLE_QUERY, variables, usedVariables);
+          MtasSpanQuery q;
+          if (dequals != null) {
+            q = new MtasCQLParserWordQuery(field, prefix.image, variableString(value.image), MtasCQLParserWordQuery.MTAS_CQL_VARIABLE_TERM_QUERY, variables, usedVariables);
+          } else {
+            q = new MtasCQLParserWordQuery(field, prefix.image, variableString(value.image), MtasCQLParserWordQuery.MTAS_CQL_VARIABLE_REGEXP_QUERY, variables, usedVariables);
+          }  
           if (negation != null)
           {
             condition.swapNot();
@@ -1055,6 +1090,7 @@ private MtasCQLParserWordCondition wordAtomCondition(String field, HashMap < Str
         nequals = < TOKEN_NOTEQUALS >
       | < TOKEN_EQUALS >
       )
+      [ dequals = < TOKEN_EQUALS > ]
       (value = < QUOTED_VALUE >)
       {
         if (nequals != null)
@@ -1064,7 +1100,12 @@ private MtasCQLParserWordCondition wordAtomCondition(String field, HashMap < Str
         else
         {
           MtasCQLParserWordCondition condition = new MtasCQLParserWordCondition(field, MtasCQLParserWordCondition.TYPE_AND);
-          MtasSpanQuery q = new MtasCQLParserWordQuery(field, prefix.image, unquoteString(value.image), MtasCQLParserWordQuery.MTAS_CQL_REGEXP_QUERY, variables, usedVariables);
+          MtasSpanQuery q;
+          if (dequals != null) { 
+            q = new MtasCQLParserWordQuery(field, prefix.image, unquoteString(value.image), MtasCQLParserWordQuery.MTAS_CQL_TERM_QUERY, variables, usedVariables);
+          } else {
+            q = new MtasCQLParserWordQuery(field, prefix.image, unquoteString(value.image), MtasCQLParserWordQuery.MTAS_CQL_REGEXP_QUERY, variables, usedVariables);
+          }  
           if (negation != null)
           {
             condition.swapNot();
@@ -1076,34 +1117,37 @@ private MtasCQLParserWordCondition wordAtomCondition(String field, HashMap < Str
     )
   |
     (
-      (prefix = < UNQUOTED_VALUE >)
+      (prefix = < UNQUOTED_VALUE >)      
       (
-        comparator = < GROUP_START >
-      | comparator = < GROUP_END >
+        operator1 = < GROUP_START >
+        [operator2 = < TOKEN_EQUALS >]
+      | operator1 = < GROUP_END >
+        [operator2 = < TOKEN_EQUALS >]
+      | operator1 = < TOKEN_EQUALS >  
       )
-      [ equals = < TOKEN_EQUALS > ]
       (value = < NUMBER >)
       {
+        String operator = operator1.image;
+        if(operator2!=null) {
+          operator = operator + operator2.image;
+        }
         if (nequals != null)
         {
-          //use RegexpQuery combined with SpanMultiTermQueryWrapper
-          throw new ParseException("TODO: not implemented '" + prefix.image + comparator.image + "'");
+          //use RegexpQuery combined with SpanMultiTermQueryWrapper        
+          throw new ParseException("TODO: not implemented '" + prefix.image + operator + "'");
         }
         else
         {
           MtasCQLParserWordCondition condition = new MtasCQLParserWordCondition(field, MtasCQLParserWordCondition.TYPE_AND);
-          String operator = comparator.image;
-          if (equals != null) {
-            operator += equals.image; 
-          }
-          MtasSpanQuery q = new MtasCQLParserWordComparatorQuery(field, prefix.image, operator, Integer.parseInt(value.image));
+           
+          MtasSpanQuery q = new MtasCQLParserWordOperatorQuery(field, prefix.image, operator, Integer.parseInt(value.image));
           if (negation != null)
           {
             condition.swapNot();
           }
           condition.addPositiveQuery(q);
           //System.out.println("=== wordAtomCondition ===\n" + condition + "\n");
-          return condition;
+          return condition;	            
         }
       }
     )           

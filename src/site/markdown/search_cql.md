@@ -14,7 +14,8 @@ For each field containing Mtas tokenized text, every token is associated with a 
 
 #### Value
 
-The optional postfix associated with a token can be queried within CQL by providing a *value*. This is a regular expression, the supported syntax is documented in the RegExp class provided by Lucene. By using a [termvector query](search_component_termvector.html), for each [prefix](#prefix) a list of postfix values can be produced. 
+The optional postfix associated with a token can be queried within CQL by providing a *value*. This can be a regular expression if combined with the `=` operator, but not if 
+combined with the `==` operator. The supported syntax is documented in the RegExp class provided by Lucene. By using a [termvector query](search_component_termvector.html), for each [prefix](#prefix) a list of postfix values can be produced. 
 
 <a name="variable"></a>
 
@@ -70,8 +71,15 @@ The optional postfix associated with a token can also be queried within CQL by p
 
 | Expression  | Syntax                                      | Example |
 |-------------|---------------------------------------------|---------|
-| basic       | [prefix](#prefix) **= \"**[value](#value)**\"** | `t="de"`
-| variable       | [prefix](#prefix) **= $**[variable-name] | `t=$1`
+| basic       | [prefix](#prefix) **= \"**[value](#value)**\"** | `t="de"` |
+|             | [prefix](#prefix) **== \"**[value](#value)**\"** | `t=="."` |
+| number      | [prefix](#prefix) **=** \<number\> | `code=100` |
+|             | [prefix](#prefix) **\<** \<number\> | `code<100` |
+|             | [prefix](#prefix) **\<=** \<number\> | `code<=100` |
+|             | [prefix](#prefix) **\>** \<number\> | `code>100` |
+|             | [prefix](#prefix) **\>=** \<number\> | `code>=100` |
+| variable       | [prefix](#prefix) **= $**[variable-name] | `t=$1` |
+| variable       | [prefix](#prefix) **== $**[variable-name] | `t==$2` |
 | not         | **\!** [single-position-expression](#single-position-expression) | `!t="de"` |
 | and         | **\(** [single-position-expression](#single-position-expression) **\&** [single-position-expression](#single-position-expression) **\&** ... **\)** | `t="de" & pos="LID"`|
 | or          | **\(** [single-position-expression](#single-position-expression) **\|** [single-position-expression](#single-position-expression) **\|** ... **\)** | `t="de" | t="het"` |
@@ -94,11 +102,16 @@ The optional postfix associated with a token can also be queried within CQL by p
 
 #### Multi Position Expression
 
-| Expression  | Syntax                                            |
-|-------------|---------------------------------------------------|
-| prefix      | [prefix](#prefix)                                 |
-| basic       | [prefix](#prefix) **= \"**[value](#value)**\"** |
-
+| Expression  | Syntax                                            |  Example  |
+|-------------|---------------------------------------------------|-----------|
+| prefix      | [prefix](#prefix)                                 |  `<s/>`   |
+| basic       | [prefix](#prefix) **=** \"**[value](#value)**\"** | `<language="dutch"/>` |
+|             | [prefix](#prefix) **==** \"**[value](#value)**\"** | `<test=="."/>` |
+| number      | [prefix](#prefix) **=** \<number\> | `<code=100/>` |
+|             | [prefix](#prefix) **\<** \<number\> | `<code<100/>` |
+|             | [prefix](#prefix) **\<=** \<number\> | `<code<=100/>` |
+|             | [prefix](#prefix) **\>** \<number\> | `<code>100/>` |
+|             | [prefix](#prefix) **\>=** \<number\> | `<code>=100/>` |
 
 <a name="sequence"></a>
 

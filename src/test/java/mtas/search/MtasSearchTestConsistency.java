@@ -115,6 +115,20 @@ public class MtasSearchTestConsistency {
 			log.error(e);
 		}
 	}
+	
+	/**
+	 * Basic search equals.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@org.junit.Test
+	public void basicSearchEquals() throws IOException {
+		IndexReader indexReader = DirectoryReader.open(directory);		
+		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t==\"de\"]"), Arrays.asList("[t=\"de\"]"));		
+		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t==\".\"]"), Arrays.asList("[t=\"\\.\"]"));		
+		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t=1]"), Arrays.asList("[t=\"1\"]"));		
+		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t=1]"), Arrays.asList("[t==\"1\"]"));		
+	}		
 
 	/**
 	 * Basic search comparator.
@@ -122,17 +136,19 @@ public class MtasSearchTestConsistency {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@org.junit.Test
-	public void basicSearchComparator() throws IOException {
+	public void basicSearchNumbers() throws IOException {
 		IndexReader indexReader = DirectoryReader.open(directory);
 		int value1 = 34;
 		int value2 = 10;
 		List valuesLess = new ArrayList<String>();
 		List valuesLessOrEqual = new ArrayList<String>();
+		List valuesEqual = new ArrayList<String>();
 		for(int i=0;i<value1;i++) {
 			valuesLess.add("[t=\""+Integer.toString(i)+"\"]");
 			valuesLessOrEqual.add("[t=\""+Integer.toString(i)+"\"]");
 		}
 		valuesLessOrEqual.add("[t=\""+Integer.toString(value1)+"\"]");
+		valuesEqual.add("[t=\""+Integer.toString(value1)+"\"]");
 		List valuesInterval = new ArrayList<String>();
 		List valuesIntervalInclusive = new ArrayList<String>();
 		for(int i=value2+1;i<value1;i++) {
@@ -143,6 +159,7 @@ public class MtasSearchTestConsistency {
 		valuesIntervalInclusive.add("[t=\""+Integer.toString(value2)+"\"]");
 		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t<"+Integer.toString(value1)+"]"), valuesLess);
 		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t<="+Integer.toString(value1)+"]"), valuesLessOrEqual);
+		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t="+Integer.toString(value1)+"]"), valuesEqual);
 		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t<"+Integer.toString(value1)+" & t>"+Integer.toString(value2)+"]"), valuesInterval);
 		testNumberOfHits(indexReader, FIELD_CONTENT, Arrays.asList("[t<="+Integer.toString(value1)+" & t>="+Integer.toString(value2)+"]"), valuesIntervalInclusive);
 		indexReader.close();

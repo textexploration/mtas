@@ -14,7 +14,7 @@ import org.apache.lucene.search.spans.SpanWeight;
 /**
  * The Class MtasCQLParserWordComparatorQuery.
  */
-public class MtasCQLParserWordComparatorQuery extends MtasSpanQuery {
+public class MtasCQLParserGroupOperatorQuery extends MtasSpanQuery {
 
 	/** The query. */
 	MtasSpanQuery query;
@@ -23,11 +23,26 @@ public class MtasCQLParserWordComparatorQuery extends MtasSpanQuery {
 	 * Instantiates a new mtas CQL parser word position query.
 	 *
 	 * @param field    the field
-	 * @param position the position
+	 * @param prefix the prefix
+	 * @param operator the operator
+	 * @param value the value
 	 */
-	public MtasCQLParserWordComparatorQuery(String field, String prefix, String comparator, int value) {
+	public MtasCQLParserGroupOperatorQuery(String field, String prefix, String operator, int value) {
 		super(1, 1);
-		query = new MtasSpanOperatorQuery(field, prefix, comparator, value);		
+		query = new MtasSpanOperatorQuery(field, prefix, operator, value, false);
+	}
+	
+	/**
+	 * Instantiates a new mtas CQL parser group operator query.
+	 *
+	 * @param field the field
+	 * @param prefix the prefix
+	 * @param operator the operator
+	 * @param value the value
+	 */
+	public MtasCQLParserGroupOperatorQuery(String field, String prefix, String operator, String value) {
+		super(1, 1);
+		query = new MtasSpanOperatorQuery(field, prefix, operator, value, false);
 	}
 
 	/*
@@ -85,7 +100,7 @@ public class MtasCQLParserWordComparatorQuery extends MtasSpanQuery {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final MtasCQLParserWordComparatorQuery that = (MtasCQLParserWordComparatorQuery) obj;
+		final MtasCQLParserGroupOperatorQuery that = (MtasCQLParserGroupOperatorQuery) obj;
 		return query.equals(that.query);
 	}
 
@@ -110,6 +125,9 @@ public class MtasCQLParserWordComparatorQuery extends MtasSpanQuery {
 		query.disableTwoPhaseIterator();
 	}
 
+	/* (non-Javadoc)
+	 * @see mtas.search.spans.util.MtasSpanQuery#isMatchAllPositionsQuery()
+	 */
 	@Override
 	public boolean isMatchAllPositionsQuery() {
 		return false;
