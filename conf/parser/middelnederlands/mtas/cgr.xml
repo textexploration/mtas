@@ -94,6 +94,32 @@
       <filter type="replace" name="0,1,2,3" value="i&amp;super;" replace="&#x034F;&#x0365;" />
       <filter type="replace" name="0,1,2,3" value="o&amp;super;" replace="&#x034F;&#x0366;" />
       <filter type="replace" name="0,1,2,3" value="&amp;r;" replace="&#x034F;&#x030A;" />
+      <filter type="replace" name="0,1,2,3" value="&amp;lpt;" replace="." />
+      <filter type="replace" name="0,1,2,3" value="&amp;lp;" replace="." />
+      <filter type="replace" name="0,1,2,3" value="&amp;l2p;" replace=".." />
+      <filter type="replace" name="0,1,2,3" value="&amp;l3p;" replace="..." />
+      <filter type="replace" name="0,1,2,3" value="&amp;l4p;" replace="...." />
+      <filter type="replace" name="0,1,2,3" value="&amp;l5p;" replace="....." />
+      <filter type="replace" name="0,1,2,3" value="&amp;l6p;" replace="......" />
+      <filter type="replace" name="0,1,2,3" value="&amp;l7p;" replace="......." />
+      <filter type="replace" name="0,1,2,3" value="&amp;lk;" replace="," />
+      <filter type="replace" name="0,1,2,3" value="&amp;ls;" replace="-" />
+      <filter type="replace" name="0,1,2,3" value="&amp;l2s;" replace="--" />
+      <filter type="replace" name="0,1,2,3" value="&amp;l3s;" replace="---" />
+      <filter type="replace" name="0,1,2,3" value="&amp;l4s;" replace="----" />
+      <filter type="replace" name="0,1,2,3" value="&amp;l5s;" replace="-----" />
+      <filter type="replace" name="0,1,2,3" value="&amp;l6s;" replace="------" />
+      <filter type="replace" name="0,1,2,3" value="&amp;l7s;" replace="-------" />
+      <filter type="replace" name="0,1,2,3" value="&amp;l8s;" replace="--------" />
+      <filter type="replace" name="0,1,2,3" value="&amp;lpr;" replace="." />
+      <filter type="replace" name="0,1,2,3" value="&amp;l2pr;" replace=".." />
+      <filter type="replace" name="0,1,2,3" value="&amp;lkt;" replace="," />
+      <filter type="replace" name="0,1,2,3" value="&amp;lkr;" replace="," />
+      <filter type="replace" name="0,1,2,3" value="&amp;lpk;" replace=";" />
+      <filter type="replace" name="0,1,2,3" value="&amp;lpkr;" replace=";" />
+      <filter type="replace" name="0,1,2,3" value="&amp;lpkt;" replace=";" />
+      <filter type="replace" name="0,1,2,3" value="&amp;lpw;" replace="." />
+
     </filters>
 
     <mappings>
