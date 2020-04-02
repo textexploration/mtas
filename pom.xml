@@ -9,7 +9,7 @@
     <connection>scm:git:git@github.com:textexploration/mtas.git</connection>
     <url>https://github.com/textexploration/mtas</url>
     <developerConnection>scm:git:git@github.com:textexploration/mtas.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v8.4.1.2</tag>
   </scm>
 	<distributionManagement>
 		<snapshotRepository>
@@ -24,7 +24,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.textexploration.mtas</groupId>
 	<artifactId>mtas</artifactId>
-	<version>8.4.1.2-SNAPSHOT</version>
+	<version>8.4.1.2</version>
 	<packaging>jar</packaging>
 	<licenses>
 		<license>
