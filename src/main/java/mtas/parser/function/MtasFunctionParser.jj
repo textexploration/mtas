@@ -36,7 +36,12 @@ SKIP :
 
 TOKEN :
 {
-  < VARIABLE : "$q" ([ "0"-"9" ])+ >
+  < VARIABLE_Q : "$q" ([ "0"-"9" ])+ >
+}
+
+TOKEN :
+{
+  < VARIABLE_D : "$d" ([ "0"-"9" ])* >
 }
 
 TOKEN :
@@ -201,11 +206,23 @@ private MtasFunctionParserItem parserFunctionItem() throws ParseException :
 }
 {
   (
-    v = < VARIABLE >
+    v = < VARIABLE_Q >
     {
       vInt = Integer.parseInt(v.image.substring(2));
-      item = new MtasFunctionParserItem(MtasFunctionParserItem.TYPE_ARGUMENT, vInt);
+      item = new MtasFunctionParserItem(MtasFunctionParserItem.TYPE_ARGUMENT_Q, vInt);
       return item;
+    }
+  |
+    v = < VARIABLE_D >
+    {
+      if(v.image.length() >2) { 
+        vInt = Integer.parseInt(v.image.substring(2));
+        item = new MtasFunctionParserItem(MtasFunctionParserItem.TYPE_ARGUMENT_D, vInt);
+        return item;
+	  } else {
+	    item = new MtasFunctionParserItem(MtasFunctionParserItem.TYPE_D);
+	    return item;
+	  }  
     }
   | 
     < N >

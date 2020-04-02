@@ -279,6 +279,22 @@ public class MtasSolrMtasResult implements Serializable {
           "only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
     }
   }
+  
+  /**
+   * Gets the size.
+   *
+   * @return the size
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  public Integer getSize() throws IOException {
+    if (dataCollector.getCollectorType()
+        .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+      return dataCollector.getSize();
+    } else {
+      throw new IOException(
+          "only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
+    }
+  }
 
   /**
    * Gets the full key list.
@@ -382,6 +398,11 @@ public class MtasSolrMtasResult implements Serializable {
     }
   }
 
+  /**
+   * To string.
+   *
+   * @return the string
+   */
   /*
    * (non-Javadoc)
    * 

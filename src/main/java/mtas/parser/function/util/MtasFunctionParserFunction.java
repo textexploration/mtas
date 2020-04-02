@@ -54,20 +54,19 @@ public abstract class MtasFunctionParserFunction {
    * @param n the n
    * @return the response
    */
-  public final MtasFunctionParserFunctionResponse getResponse(long[] args,
-      long n) {
+  public final MtasFunctionParserFunctionResponse getResponse(long[] argsQ, long[] argsD, long n, long d) {
     if (dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
       try {
-        long l = getValueLong(args, n);
-        return new MtasFunctionParserFunctionResponseLong(l, true);
+        long lv = getValueLong(argsQ, argsD, n, d);
+        return new MtasFunctionParserFunctionResponseLong(lv, true);
       } catch (IOException e) {
         log.debug(e);
         return new MtasFunctionParserFunctionResponseLong(0, false);
       }
     } else if (dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
       try {
-        double d = getValueDouble(args, n);
-        return new MtasFunctionParserFunctionResponseDouble(d, true);
+        double dv = getValueDouble(argsQ, argsD, n, d); 
+        return new MtasFunctionParserFunctionResponseDouble(dv, true);
       } catch (IOException e) {
         log.debug(e);
         return new MtasFunctionParserFunctionResponseDouble(0, false);
@@ -85,7 +84,7 @@ public abstract class MtasFunctionParserFunction {
    * @return the value double
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public abstract double getValueDouble(long[] args, long n) throws IOException;
+  public abstract double getValueDouble(long[] argsQ, long[] argsD, long n, long d) throws IOException;
 
   /**
    * Gets the value long.
@@ -95,7 +94,7 @@ public abstract class MtasFunctionParserFunction {
    * @return the value long
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public abstract long getValueLong(long[] args, long n) throws IOException;
+  public abstract long getValueLong(long[] argsQ, long[] argsD, long n, long d) throws IOException;
 
   /**
    * Close.

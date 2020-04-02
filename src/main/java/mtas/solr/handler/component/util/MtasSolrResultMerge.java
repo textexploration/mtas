@@ -334,22 +334,32 @@ public class MtasSolrResultMerge {
 			} else {
 				Object original = mainResponse.getVal(originalId);
 				if (original == null) {
-					original = adjustablePartsCloned(shardValue);
+				  original = adjustablePartsCloned(shardValue);
 				} else if (shardValue != null && original.getClass().equals(shardValue.getClass())) {
 					// merge ArrayList
 					if (original instanceof ArrayList) {
-						ArrayList originalList = (ArrayList) original;
+					  ArrayList originalList = (ArrayList) original;
 						ArrayList shardList = (ArrayList) shardValue;
 						mergeResponsesArrayList(originalList, shardList);
 						// merge Namedlist
 					} else if (original instanceof NamedList<?>) {
-						mergeResponsesNamedList((NamedList<Object>) original, (NamedList<Object>) shardValue);
+					  mergeResponsesNamedList((NamedList<Object>) original, (NamedList<Object>) shardValue);
 						// merge SortedSet
 					} else if (original instanceof SortedSet<?>) {
 						mergeResponsesSortedSet((SortedSet<Object>) original, (SortedSet<Object>) shardValue);
 					} else if (original instanceof MtasSolrMtasResult) {
-						MtasSolrMtasResult originalComponentResult = (MtasSolrMtasResult) original;
-						originalComponentResult.merge((MtasSolrMtasResult) shardValue);
+					  MtasSolrMtasResult originalComponentResult = (MtasSolrMtasResult) original;
+					  Integer tmpSize;
+					  try {
+					    tmpSize = originalComponentResult.getSize();
+					  } catch(Exception e) {
+					    tmpSize = null;
+					  }
+					  if(tmpSize!=null && tmpSize==0) {
+					    original = adjustablePartsCloned(shardValue);              	
+					  } else {
+					    originalComponentResult.merge((MtasSolrMtasResult) shardValue);  
+					  }
 					} else if (original instanceof MtasSolrCollectionResult) {
 						MtasSolrCollectionResult originalComponentResult = (MtasSolrCollectionResult) original;
 						originalComponentResult.merge((MtasSolrCollectionResult) shardValue);

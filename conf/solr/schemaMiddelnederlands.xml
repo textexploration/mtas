@@ -56,11 +56,11 @@
 	<!-- location -->	
 	<field name="localizationKloekecode" type="middelnederlands_string"
 		multiValued="false" indexed="true" stored="true" />
-	<field name="localizationTown" type="middelnederlands_text" 
+	<field name="localizationTown" type="middelnederlands_string" 
 	    multiValued="false" indexed="true" stored="true" />
-	<field name="localizationProvince" type="middelnederlands_text" 
+	<field name="localizationProvince" type="middelnederlands_string" 
 	    multiValued="false" indexed="true" stored="true" />
-	<field name="localizationCountry" type="middelnederlands_text" 
+	<field name="localizationCountry" type="middelnederlands_string" 
 	    multiValued="false" indexed="true" stored="true" />
 	<field name="localizationLatLng" type="middelnederlands_geo" 
 	    multiValued="false" indexed="true" stored="true" />   

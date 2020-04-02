@@ -85,6 +85,11 @@ public class MtasFunctionParserFunctionBasic
       dataType = CodecUtil.DATA_TYPE_LONG;
       needPositions = true;
       break;
+    case MtasFunctionParserItem.TYPE_D:
+      firstId = 0;
+      dataType = CodecUtil.DATA_TYPE_LONG;
+      needPositions = false;
+      break;
     case MtasFunctionParserItem.TYPE_CONSTANT_LONG:
       firstId = tmpConstantLongs.size();
       dataType = CodecUtil.DATA_TYPE_LONG;
@@ -95,7 +100,13 @@ public class MtasFunctionParserFunctionBasic
       dataType = CodecUtil.DATA_TYPE_DOUBLE;
       tmpConstantDoubles.add(item.getValueDouble());
       break;
-    case MtasFunctionParserItem.TYPE_ARGUMENT:
+    case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+      firstType = type;
+      firstId = item.getId();
+      dataType = CodecUtil.DATA_TYPE_LONG;
+      needArgument.add(item.getId());
+      break;
+    case MtasFunctionParserItem.TYPE_ARGUMENT_D:
       firstType = type;
       firstId = item.getId();
       dataType = CodecUtil.DATA_TYPE_LONG;
@@ -257,7 +268,8 @@ public class MtasFunctionParserFunctionBasic
       }
       switch (type) {
       case MtasFunctionParserItem.TYPE_N:
-        tmpTypeList.add(type);
+      case MtasFunctionParserItem.TYPE_D:
+          tmpTypeList.add(type);
         tmpIdList.add(0);
         needPositions = true;
         if (sumRule && degree != null) {
@@ -275,7 +287,8 @@ public class MtasFunctionParserFunctionBasic
           }
         }
         break;
-      case MtasFunctionParserItem.TYPE_ARGUMENT:
+      case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+      case MtasFunctionParserItem.TYPE_ARGUMENT_D:
         tmpTypeList.add(type);
         tmpIdList.add(item.getId());
         needArgument.add(item.getId());
@@ -422,17 +435,20 @@ public class MtasFunctionParserFunctionBasic
    * long)
    */
   @Override
-  public double getValueDouble(long[] args, long n) throws IOException {
+  public double getValueDouble(long[] argsQ, long[] argsD, long n, long d) throws IOException {
     double sum;
     switch (firstType) {
-    case MtasFunctionParserItem.TYPE_ARGUMENT:
-      sum = args[firstId];
+    case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+      sum = argsQ[firstId];
+      break;
+    case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+      sum = argsD[firstId];
       break;
     case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-      sum = parserDoubles[firstId].getValueDouble(args, n);
+      sum = parserDoubles[firstId].getValueDouble(argsQ, argsD, n, d);
       break;
     case MtasFunctionParserItem.TYPE_PARSER_LONG:
-      sum = parserLongs[firstId].getValueLong(args, n);
+      sum = parserLongs[firstId].getValueLong(argsQ, argsD, n, d);
       break;
     case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
       sum = constantDoubles[firstId];
@@ -443,6 +459,9 @@ public class MtasFunctionParserFunctionBasic
     case MtasFunctionParserItem.TYPE_N:
       sum = n;
       break;
+    case MtasFunctionParserItem.TYPE_D:
+      sum = d;
+      break;
     default:
       throw new IOException("no first value");
     }
@@ -450,14 +469,17 @@ public class MtasFunctionParserFunctionBasic
       switch (operatorList[i]) {
       case BASIC_OPERATOR_ADD:
         switch (typeList[i]) {
-        case MtasFunctionParserItem.TYPE_ARGUMENT:
-          sum += args[idList[i]];
+        case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+          sum += argsQ[idList[i]];
+          break;
+        case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+          sum += argsD[idList[i]];
           break;
         case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-          sum += parserDoubles[idList[i]].getValueDouble(args, n);
+          sum += parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
           break;
         case MtasFunctionParserItem.TYPE_PARSER_LONG:
-          sum += parserLongs[idList[i]].getValueLong(args, n);
+          sum += parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
           break;
         case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
           sum += constantDoubles[idList[i]];
@@ -468,20 +490,26 @@ public class MtasFunctionParserFunctionBasic
         case MtasFunctionParserItem.TYPE_N:
           sum += n;
           break;
+        case MtasFunctionParserItem.TYPE_D:
+          sum += d;
+          break;
         default:
           throw new IOException("unknown type");
         }
         break;
       case BASIC_OPERATOR_SUBTRACT:
         switch (typeList[i]) {
-        case MtasFunctionParserItem.TYPE_ARGUMENT:
-          sum -= args[idList[i]];
+        case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+          sum -= argsQ[idList[i]];
+          break;
+        case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+          sum -= argsD[idList[i]];
           break;
         case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-          sum -= parserDoubles[idList[i]].getValueDouble(args, n);
+          sum -= parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
           break;
         case MtasFunctionParserItem.TYPE_PARSER_LONG:
-          sum -= parserLongs[idList[i]].getValueLong(args, n);
+          sum -= parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
           break;
         case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
           sum -= constantDoubles[idList[i]];
@@ -492,20 +520,26 @@ public class MtasFunctionParserFunctionBasic
         case MtasFunctionParserItem.TYPE_N:
           sum -= n;
           break;
+        case MtasFunctionParserItem.TYPE_D:
+          sum -= d;
+          break;
         default:
           throw new IOException("unknown type");
         }
         break;
       case BASIC_OPERATOR_MULTIPLY:
         switch (typeList[i]) {
-        case MtasFunctionParserItem.TYPE_ARGUMENT:
-          sum *= args[idList[i]];
+        case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+          sum *= argsQ[idList[i]];
+          break;
+        case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+          sum *= argsD[idList[i]];
           break;
         case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-          sum *= parserDoubles[idList[i]].getValueDouble(args, n);
+          sum *= parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
           break;
         case MtasFunctionParserItem.TYPE_PARSER_LONG:
-          sum *= parserLongs[idList[i]].getValueLong(args, n);
+          sum *= parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
           break;
         case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
           sum *= constantDoubles[idList[i]];
@@ -516,6 +550,9 @@ public class MtasFunctionParserFunctionBasic
         case MtasFunctionParserItem.TYPE_N:
           sum *= n;
           break;
+        case MtasFunctionParserItem.TYPE_D:
+          sum *= d;
+          break;
         default:
           throw new IOException("unknown type");
         }
@@ -523,14 +560,17 @@ public class MtasFunctionParserFunctionBasic
       case BASIC_OPERATOR_DIVIDE:
         double v;
         switch (typeList[i]) {
-        case MtasFunctionParserItem.TYPE_ARGUMENT:
-          v = args[idList[i]];
+        case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+          v = argsQ[idList[i]];
+          break;
+        case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+          v = argsD[idList[i]];
           break;
         case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-          v = parserDoubles[idList[i]].getValueDouble(args, n);
+          v = parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
           break;
         case MtasFunctionParserItem.TYPE_PARSER_LONG:
-          v = parserLongs[idList[i]].getValueLong(args, n);
+          v = parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
           break;
         case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
           v = constantDoubles[idList[i]];
@@ -540,6 +580,9 @@ public class MtasFunctionParserFunctionBasic
           break;
         case MtasFunctionParserItem.TYPE_N:
           v = n;
+          break;
+        case MtasFunctionParserItem.TYPE_D:
+          v = d;
           break;
         default:
           throw new IOException("unknown type");
@@ -552,14 +595,17 @@ public class MtasFunctionParserFunctionBasic
         break;
       case BASIC_OPERATOR_POWER:
         switch (typeList[i]) {
-        case MtasFunctionParserItem.TYPE_ARGUMENT:
-          sum = Math.pow(sum, args[idList[i]]);
+        case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+          sum = Math.pow(sum, argsQ[idList[i]]);
+          break;
+        case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+          sum = Math.pow(sum, argsD[idList[i]]);
           break;
         case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-          sum = Math.pow(sum, parserDoubles[idList[i]].getValueDouble(args, n));
+          sum = Math.pow(sum, parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d));
           break;
         case MtasFunctionParserItem.TYPE_PARSER_LONG:
-          sum = Math.pow(sum, parserLongs[idList[i]].getValueLong(args, n));
+          sum = Math.pow(sum, parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d));
           break;
         case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
           sum = Math.pow(sum, constantDoubles[idList[i]]);
@@ -569,6 +615,9 @@ public class MtasFunctionParserFunctionBasic
           break;
         case MtasFunctionParserItem.TYPE_N:
           sum = Math.pow(sum, n);
+          break;
+        case MtasFunctionParserItem.TYPE_D:
+          sum = Math.pow(sum, d);
           break;
         default:
           throw new IOException("unknown type");
@@ -589,18 +638,21 @@ public class MtasFunctionParserFunctionBasic
    * long)
    */
   @Override
-  public long getValueLong(long[] args, long n) throws IOException {
+  public long getValueLong(long[] argsQ, long[] argsD, long n, long d) throws IOException {
     try {
       long sum;
       switch (firstType) {
-      case MtasFunctionParserItem.TYPE_ARGUMENT:
-        sum = args[firstId];
+      case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+        sum = argsQ[firstId];
+        break;
+      case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+        sum = argsD[firstId];
         break;
       case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-        sum = (long) parserDoubles[firstId].getValueDouble(args, n);
+        sum = (long) parserDoubles[firstId].getValueDouble(argsQ, argsD, n, d);
         break;
       case MtasFunctionParserItem.TYPE_PARSER_LONG:
-        sum = parserLongs[firstId].getValueLong(args, n);
+        sum = parserLongs[firstId].getValueLong(argsQ, argsD, n, d);
         break;
       case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
         sum = constantDoubles[firstId].longValue();
@@ -611,6 +663,9 @@ public class MtasFunctionParserFunctionBasic
       case MtasFunctionParserItem.TYPE_N:
         sum = n;
         break;
+      case MtasFunctionParserItem.TYPE_D:
+        sum = d;
+        break;
       default:
         throw new IOException("no first value");
       }
@@ -618,14 +673,17 @@ public class MtasFunctionParserFunctionBasic
         switch (operatorList[i]) {
         case BASIC_OPERATOR_ADD:
           switch (typeList[i]) {
-          case MtasFunctionParserItem.TYPE_ARGUMENT:
-            sum += args[idList[i]];
+          case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+            sum += argsQ[idList[i]];
+            break;
+          case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+            sum += argsD[idList[i]];
             break;
           case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-            sum += (long) parserDoubles[idList[i]].getValueDouble(args, n);
+            sum += (long) parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_PARSER_LONG:
-            sum += parserLongs[idList[i]].getValueLong(args, n);
+            sum += parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
             sum += constantDoubles[idList[i]].longValue();
@@ -636,20 +694,26 @@ public class MtasFunctionParserFunctionBasic
           case MtasFunctionParserItem.TYPE_N:
             sum += n;
             break;
+          case MtasFunctionParserItem.TYPE_D:
+            sum += d;
+            break;
           default:
             throw new IOException("unknown type");
           }
           break;
         case BASIC_OPERATOR_SUBTRACT:
           switch (typeList[i]) {
-          case MtasFunctionParserItem.TYPE_ARGUMENT:
-            sum -= args[idList[i]];
+          case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+            sum -= argsQ[idList[i]];
+            break;
+          case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+            sum -= argsD[idList[i]];
             break;
           case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-            sum -= (long) parserDoubles[idList[i]].getValueDouble(args, n);
+            sum -= (long) parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_PARSER_LONG:
-            sum -= parserLongs[idList[i]].getValueLong(args, n);
+            sum -= parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
             sum -= constantDoubles[idList[i]].longValue();
@@ -660,20 +724,26 @@ public class MtasFunctionParserFunctionBasic
           case MtasFunctionParserItem.TYPE_N:
             sum -= n;
             break;
+          case MtasFunctionParserItem.TYPE_D:
+            sum -= d;
+            break;
           default:
             throw new IOException("unknown type");
           }
           break;
         case BASIC_OPERATOR_MULTIPLY:
           switch (typeList[i]) {
-          case MtasFunctionParserItem.TYPE_ARGUMENT:
-            sum *= args[idList[i]];
+          case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+            sum *= argsQ[idList[i]];
+            break;
+          case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+            sum *= argsD[idList[i]];
             break;
           case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-            sum *= (long) parserDoubles[idList[i]].getValueDouble(args, n);
+            sum *= (long) parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_PARSER_LONG:
-            sum *= parserLongs[idList[i]].getValueLong(args, n);
+            sum *= parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
             sum *= constantDoubles[idList[i]].longValue();
@@ -684,6 +754,9 @@ public class MtasFunctionParserFunctionBasic
           case MtasFunctionParserItem.TYPE_N:
             sum *= n;
             break;
+          case MtasFunctionParserItem.TYPE_D:
+            sum *= d;
+            break;
           default:
             throw new IOException("unknown type");
           }
@@ -691,14 +764,17 @@ public class MtasFunctionParserFunctionBasic
         case BASIC_OPERATOR_DIVIDE:
           long v;
           switch (typeList[i]) {
-          case MtasFunctionParserItem.TYPE_ARGUMENT:
-            v = args[idList[i]];
+          case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+            v = argsQ[idList[i]];
+            break;
+          case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+            v = argsD[idList[i]];
             break;
           case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-            v = (long) parserDoubles[idList[i]].getValueDouble(args, n);
+            v = (long) parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_PARSER_LONG:
-            v = parserLongs[idList[i]].getValueLong(args, n);
+            v = parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
             v = constantDoubles[idList[i]].longValue();
@@ -708,6 +784,9 @@ public class MtasFunctionParserFunctionBasic
             break;
           case MtasFunctionParserItem.TYPE_N:
             v = n;
+            break;
+          case MtasFunctionParserItem.TYPE_D:
+            v = d;
             break;
           default:
             throw new IOException("unknown type");
@@ -720,14 +799,17 @@ public class MtasFunctionParserFunctionBasic
           break;
         case BASIC_OPERATOR_POWER:
           switch (typeList[i]) {
-          case MtasFunctionParserItem.TYPE_ARGUMENT:
-            sum = sum ^ args[idList[i]];
+          case MtasFunctionParserItem.TYPE_ARGUMENT_Q:
+            sum = sum ^ argsQ[idList[i]];
+            break;
+          case MtasFunctionParserItem.TYPE_ARGUMENT_D:
+            sum = sum ^ argsD[idList[i]];
             break;
           case MtasFunctionParserItem.TYPE_PARSER_DOUBLE:
-            sum = sum ^ (long) parserDoubles[idList[i]].getValueDouble(args, n);
+            sum = sum ^ (long) parserDoubles[idList[i]].getValueDouble(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_PARSER_LONG:
-            sum = sum ^ parserLongs[idList[i]].getValueLong(args, n);
+            sum = sum ^ parserLongs[idList[i]].getValueLong(argsQ, argsD, n, d);
             break;
           case MtasFunctionParserItem.TYPE_CONSTANT_DOUBLE:
             sum = sum ^ constantDoubles[idList[i]].longValue();
@@ -737,6 +819,9 @@ public class MtasFunctionParserFunctionBasic
             break;
           case MtasFunctionParserItem.TYPE_N:
             sum = sum ^ n;
+            break;
+          case MtasFunctionParserItem.TYPE_D:
+            sum = sum ^ d;
             break;
           default:
             throw new IOException("unknown type");
@@ -800,10 +885,14 @@ public class MtasFunctionParserFunctionBasic
       return "(" + tmpParserLongs.get(id).toString() + ")";
     } else if (type.equals(MtasFunctionParserItem.TYPE_PARSER_DOUBLE)) {
       return "(" + tmpParserDoubles.get(id).toString() + ")";
-    } else if (type.equals(MtasFunctionParserItem.TYPE_ARGUMENT)) {
+    } else if (type.equals(MtasFunctionParserItem.TYPE_ARGUMENT_Q)) {
       return "$q" + id;
+    } else if (type.equals(MtasFunctionParserItem.TYPE_ARGUMENT_D)) {
+      return "$d" + id;
     } else if (type.equals(MtasFunctionParserItem.TYPE_N)) {
       return "$n";
+    } else if (type.equals(MtasFunctionParserItem.TYPE_D)) {
+      return "$d";
     } else {
       return "..";
     }

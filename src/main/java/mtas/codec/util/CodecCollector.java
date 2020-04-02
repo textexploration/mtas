@@ -1393,7 +1393,8 @@ public class CodecCollector {
                   || (span.functionBasic() && span.functionSumRule() && !span.functionNeedPositions()))) {
             // initialise
             int length = span.parser.needArgumentsNumber();
-            long[] valueSum = new long[length];
+            long[] valueQSum = new long[length];
+            long[] valueDSum = new long[length];
             long valuePositions = 0;
             // collect
             if (docSet.length > 0) {
@@ -1403,14 +1404,17 @@ public class CodecCollector {
                 valuePositions += (positionsData == null) ? 0 : positionsData.get(docId);
                 if (tmpArgs != null) {
                   for (int i = 0; i < length; i++) {
-                    valueSum[i] += tmpArgs[i];
+                    if(tmpArgs[i]>0) {
+                      valueQSum[i] += tmpArgs[i];
+                      valueDSum[i] += 1;
+                    }  
                   }
                 }
               }
               long valueLong;
               span.dataCollector.initNewList(1);
               try {
-                valueLong = span.parser.getValueLong(valueSum, valuePositions);
+                valueLong = span.parser.getValueLong(valueQSum, valueDSum, valuePositions, docSet.length);
                 span.dataCollector.add(valueLong, docSet.length);
               } catch (IOException e) {
                 log.debug(e);
@@ -1421,7 +1425,7 @@ public class CodecCollector {
                   function.dataCollector.initNewList(1);
                   if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
                     try {
-                      valueLong = function.parserFunction.getValueLong(valueSum, valuePositions);
+                      valueLong = function.parserFunction.getValueLong(valueQSum, valueDSum, valuePositions, docSet.length);
                       function.dataCollector.add(valueLong, docSet.length);
                     } catch (IOException e) {
                       log.debug(e);
@@ -1429,7 +1433,7 @@ public class CodecCollector {
                     }
                   } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
                     try {
-                      double valueDouble = function.parserFunction.getValueDouble(valueSum, valuePositions);
+                      double valueDouble = function.parserFunction.getValueDouble(valueQSum, valueDSum, valuePositions, docSet.length);
                       function.dataCollector.add(valueDouble, docSet.length);
                     } catch (IOException e) {
                       log.debug(e);
@@ -1475,7 +1479,11 @@ public class CodecCollector {
                 } else {
                   positions = (positionsData.get(docId) == null ? 0 : positionsData.get(docId));
                 }
-                valueLong = span.parser.getValueLong(args.get(docId), positions);
+                long[] argsD = args.get(docId).clone();
+                for(int k=0; k<argsD.length; k++) {
+                  argsD[k] = (argsD[k]>0)?1:0;
+                }
+                valueLong = span.parser.getValueLong(args.get(docId), argsD, positions, 1);
                 if (((span.minimumLong == null) || (valueLong >= span.minimumLong))
                     && ((span.maximumLong == null) || (valueLong <= span.maximumLong))) {
                   values[number] = valueLong;
@@ -1484,10 +1492,10 @@ public class CodecCollector {
                       SubComponentFunction function = span.functions.get(i);
                       try {
                         if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-                          valueLong = function.parserFunction.getValueLong(args.get(docId), positions);
+                          valueLong = function.parserFunction.getValueLong(args.get(docId), argsD, positions, 1);
                           functionValuesLong[i][number] = valueLong;
                         } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
-                          valueDouble = function.parserFunction.getValueDouble(args.get(docId), positions);
+                          valueDouble = function.parserFunction.getValueDouble(args.get(docId), argsD, positions, 1);
                           functionValuesDouble[i][number] = valueDouble;
                         }
                       } catch (IOException e) {
@@ -2458,34 +2466,13 @@ public class CodecCollector {
               } else {
                 docPositions = (positionsData.get(docId) == null ? 0 : positionsData.get(docId));
               }
-              docValueLong = heatmap.parser.getValueLong(args.get(docId), docPositions);
+              docValueLong = heatmap.parser.getValueLong(args.get(docId), new long[] {1}, docPositions, 1);
               if (((heatmap.minimumLong == null) || (docValueLong >= heatmap.minimumLong))
                   && ((heatmap.maximumLong == null) || (docValueLong <= heatmap.maximumLong))) {
                 values[number] = docValueLong;
                 docs[number] = docId - lrc.docBase;
                 positions[number] = docPositions;
-                arguments[number] = args.get(docId);
-
-                // if (heatmap.hm.functions != null) {
-                //
-                // for (int i = 0; i < heatmap.hm.functions.size(); i++) {
-                // SubComponentFunction function = heatmap.hm.functions.get(i);
-                // try {
-                // if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-                // valueLong = function.parserFunction.getValueLong(args.get(docId), positions);
-                // functionValuesLong[i][number] = valueLong;
-                // } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
-                // valueDouble = function.parserFunction.getValueDouble(args.get(docId),
-                // positions);
-                // functionValuesDouble[i][number] = valueDouble;
-                // }
-                // } catch (IOException e) {
-                // log.debug(e);
-                // //TODO implement for list
-                // //function.dataCollector.error(e.getMessage());
-                // }
-                // }
-                // }
+                arguments[number] = args.get(docId);                
                 number++;
               }
             }
@@ -2922,7 +2909,8 @@ public class CodecCollector {
                     // initialise
                     Integer[] subDocSet = docLists.get(key);
                     int length = cf.baseParsers[level].needArgumentsNumber();
-                    long[] valueSum = new long[length];
+                    long[] valueQSum = new long[length];
+                    long[] valueDSum = new long[length];
                     long valuePositions = 0;
                     // collect
                     if (subDocSet.length > 0) {
@@ -2935,13 +2923,16 @@ public class CodecCollector {
                         }
                         if (tmpArgs != null) {
                           for (int i = 0; i < length; i++) {
-                            valueSum[i] += tmpArgs[i];
+                            if(tmpArgs[i]>0) {
+                              valueQSum[i] += tmpArgs[i];
+                              valueDSum[i] += 1;
+                            }  
                           }
                         }
                       }
                       long value;
                       try {
-                        value = cf.baseParsers[level].getValueLong(valueSum, valuePositions);
+                        value = cf.baseParsers[level].getValueLong(valueQSum, valueDSum, valuePositions, subDocSet.length);
                         subDataCollector = dataCollector.add(key, value, subDocSet.length);
                       } catch (IOException e) {
                         log.debug(e);
@@ -2953,7 +2944,7 @@ public class CodecCollector {
                         for (SubComponentFunction function : functionList) {
                           if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
                             try {
-                              long valueLong = function.parserFunction.getValueLong(valueSum, valuePositions);
+                              long valueLong = function.parserFunction.getValueLong(valueQSum, valueDSum, valuePositions, subDocSet.length);
                               function.dataCollector.add(key, valueLong, subDocSet.length);
                             } catch (IOException e) {
                               log.debug(e);
@@ -2961,7 +2952,7 @@ public class CodecCollector {
                             }
                           } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
                             try {
-                              double valueDouble = function.parserFunction.getValueDouble(valueSum, valuePositions);
+                              double valueDouble = function.parserFunction.getValueDouble(valueQSum, valueDSum, valuePositions, subDocSet.length);
                               function.dataCollector.add(key, valueDouble, subDocSet.length);
                             } catch (IOException e) {
                               log.debug(e);
@@ -3004,10 +2995,14 @@ public class CodecCollector {
                       Integer[] restrictedSubDocSet = new Integer[subDocSet.length];
                       long[] values = new long[subDocSet.length];
                       for (int docId : subDocSet) {
-                        long[] tmpArgs = args.get(docId);
+                        long[] tmpArgsQ = args.get(docId);
+                        long[] tmpArgsD = tmpArgsQ.clone();
+                        for(int k=0; k<tmpArgsD.length; k++) {
+                          tmpArgsD[k] = (tmpArgsD[k]>0)?1:0;
+                        }
                         int tmpPositions = (positionsData == null) ? 0
                             : (positionsData.get(docId) == null ? 0 : positionsData.get(docId));
-                        long value = cf.baseParsers[level].getValueLong(tmpArgs, tmpPositions);
+                        long value = cf.baseParsers[level].getValueLong(tmpArgsQ, tmpArgsD, tmpPositions, 1);
                         if ((cf.baseMinimumLongs[level] == null || value >= cf.baseMinimumLongs[level])
                             && (cf.baseMaximumLongs[level] == null || value <= cf.baseMaximumLongs[level])) {
                           values[number] = value;
@@ -3019,7 +3014,7 @@ public class CodecCollector {
                               if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
                                 try {
                                   functionValuesLong[i][functionNumber[i]] = function.parserFunction
-                                      .getValueLong(tmpArgs, tmpPositions);
+                                      .getValueLong(tmpArgsQ, tmpArgsD, tmpPositions, 1);
                                   functionNumber[i]++;
                                 } catch (IOException e) {
                                   log.debug(e);
@@ -3028,7 +3023,7 @@ public class CodecCollector {
                               } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
                                 try {
                                   functionValuesDouble[i][functionNumber[i]] = function.parserFunction
-                                      .getValueDouble(tmpArgs, tmpPositions);
+                                      .getValueDouble(tmpArgsQ, tmpArgsD, tmpPositions, 1);
                                   functionNumber[i]++;
                                 } catch (IOException e) {
                                   log.debug(e);
@@ -3317,7 +3312,7 @@ public class CodecCollector {
                           key = MtasToken.getPostfixFromValue(term);
                           try {
                             valueLong = termVector.subComponentFunction.parserFunction
-                                .getValueLong(numberBasic.valueSum, 1);
+                                .getValueLong(numberBasic.valueSum, new long[] {numberBasic.docNumber}, 1, numberBasic.docNumber);
                           } catch (IOException e) {
                             log.debug(e);
                             termVector.subComponentFunction.dataCollector.error(MtasToken.getPostfixFromValue(term),
@@ -3327,10 +3322,10 @@ public class CodecCollector {
                           if (termVector.functions != null) {
                             for (SubComponentFunction function : termVector.functions) {
                               if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-                                long valueFunction = function.parserFunction.getValueLong(numberBasic.valueSum, 0);
+                                long valueFunction = function.parserFunction.getValueLong(numberBasic.valueSum, new long[] {numberBasic.docNumber}, 0, numberBasic.docNumber);
                                 function.dataCollector.add(key, valueFunction, numberBasic.docNumber);
                               } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
-                                double valueFunction = function.parserFunction.getValueDouble(numberBasic.valueSum, 0);
+                                double valueFunction = function.parserFunction.getValueDouble(numberBasic.valueSum, new long[] {numberBasic.docNumber}, 0, numberBasic.docNumber);
                                 function.dataCollector.add(key, valueFunction, numberBasic.docNumber);
                               }
                             }
@@ -3345,7 +3340,7 @@ public class CodecCollector {
                           for (int i = 0; i < numberFull.docNumber; i++) {
                             try {
                               valuesLong[i] = termVector.subComponentFunction.parserFunction
-                                  .getValueLong(new long[] { numberFull.args[i] }, numberFull.positions[i]);
+                                  .getValueLong(new long[] { numberFull.args[i] }, new long[] {1}, numberFull.positions[i], 1);
                             } catch (IOException e) {
                               log.debug(e);
                               termVector.subComponentFunction.dataCollector.error(key, e.getMessage(), 1);
@@ -3359,7 +3354,7 @@ public class CodecCollector {
                                 for (int i = 0; i < numberFull.docNumber; i++) {
                                   try {
                                     valuesLong[i] = function.parserFunction
-                                        .getValueLong(new long[] { numberFull.args[i] }, numberFull.positions[i]);
+                                        .getValueLong(new long[] { numberFull.args[i] }, new long[] {1}, numberFull.positions[i], 1);
                                   } catch (IOException e) {
                                     log.debug(e);
                                     function.dataCollector.error(key, e.getMessage(), 1);
@@ -3371,7 +3366,7 @@ public class CodecCollector {
                                 for (int i = 0; i < numberFull.docNumber; i++) {
                                   try {
                                     valuesDouble[i] = function.parserFunction
-                                        .getValueDouble(new long[] { numberFull.args[i] }, numberFull.positions[i]);
+                                        .getValueDouble(new long[] { numberFull.args[i] }, new long[] {1}, numberFull.positions[i], 1);
                                   } catch (IOException e) {
                                     log.debug(e);
                                     function.dataCollector.error(key, e.getMessage(), 1);
@@ -4065,7 +4060,7 @@ public class CodecCollector {
   private static RegisterStatus registerValue(BytesRef term, ComponentTermVector termVector,
       TermvectorNumberBasic number, Integer termNumberMaximum, Integer segmentNumber, boolean forceAccept,
       String[] mutableKey) throws IOException {
-    long value = termVector.subComponentFunction.parserFunction.getValueLong(number.valueSum, 0);
+    long value = termVector.subComponentFunction.parserFunction.getValueLong(number.valueSum, new long[] {number.docNumber}, 0, number.docNumber);
     long sortValue = 0;
     if (termVector.subComponentFunction.sortType.equals(CodecUtil.STATS_TYPE_SUM)) {
       sortValue = value;
@@ -4162,10 +4157,10 @@ public class CodecCollector {
           if (function.parserFunction.sumRule() && !function.parserFunction.needPositions()
               && function.statsType.equals(CodecUtil.STATS_BASIC)) {
             if (function.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-              long valueFunction = function.parserFunction.getValueLong(number.valueSum, 0);
+              long valueFunction = function.parserFunction.getValueLong(number.valueSum, new long[] {number.docNumber}, 0, number.docNumber);
               function.dataCollector.add(mutableKey[0], valueFunction, number.docNumber);
             } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
-              double valueFunction = function.parserFunction.getValueDouble(number.valueSum, 0);
+              double valueFunction = function.parserFunction.getValueDouble(number.valueSum, new long[] {number.docNumber}, 0, number.docNumber);
               function.dataCollector.add(mutableKey[0], valueFunction, number.docNumber);
             }
           } else {
@@ -4205,7 +4200,7 @@ public class CodecCollector {
     long sortValue = 0;
     if (termVector.subComponentFunction.sortDirection.equals(CodecUtil.SORT_DESC)
         && termVector.subComponentFunction.sortType.equals(CodecUtil.STATS_TYPE_SUM)) {
-      sortValue = termVector.subComponentFunction.parserFunction.getValueLong(number.valueSum, 0);
+      sortValue = termVector.subComponentFunction.parserFunction.getValueLong(number.valueSum, new long[] {number.docNumber}, 0, number.docNumber);
     } else if (termVector.subComponentFunction.sortDirection.equals(CodecUtil.SORT_DESC)
         && termVector.subComponentFunction.sortType.equals(CodecUtil.STATS_TYPE_N)) {
       sortValue = number.docNumber;
@@ -4260,8 +4255,8 @@ public class CodecCollector {
       long[] valuesLong = new long[number.docNumber];
       for (int i = 0; i < number.docNumber; i++) {
         try {
-          valuesLong[i] = termVector.subComponentFunction.parserFunction.getValueLong(new long[] { number.args[i] },
-              number.positions[i]);
+          valuesLong[i] = termVector.subComponentFunction.parserFunction.getValueLong(new long[] { number.args[i] }, new long[] { 1 },
+              number.positions[i], 1);
         } catch (IOException e) {
           log.debug(e);
           dataCollector.error(mutableKey[0], e.getMessage(), 1);
@@ -4277,8 +4272,8 @@ public class CodecCollector {
             valuesLong = new long[number.docNumber];
             for (int i = 0; i < number.docNumber; i++) {
               try {
-                valuesLong[i] = function.parserFunction.getValueLong(new long[] { number.args[i] },
-                    number.positions[i]);
+                valuesLong[i] = function.parserFunction.getValueLong(new long[] { number.args[i] }, new long[] {1},
+                    number.positions[i], 1);
               } catch (IOException e) {
                 log.debug(e);
                 function.dataCollector.error(mutableKey[0], e.getMessage(), 1);
@@ -4289,8 +4284,8 @@ public class CodecCollector {
             double[] valuesDouble = new double[number.docNumber];
             for (int i = 0; i < number.docNumber; i++) {
               try {
-                valuesDouble[i] = function.parserFunction.getValueDouble(new long[] { number.args[i] },
-                    number.positions[i]);
+                valuesDouble[i] = function.parserFunction.getValueDouble(new long[] { number.args[i] }, new long[] {1},
+                    number.positions[i], 1);
               } catch (IOException e) {
                 log.debug(e);
                 function.dataCollector.error(mutableKey[0], e.getMessage(), 1);

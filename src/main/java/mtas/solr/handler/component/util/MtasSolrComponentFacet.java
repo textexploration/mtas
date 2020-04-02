@@ -577,6 +577,7 @@ public class MtasSolrComponentFacet
       mtasFacetResponse.add("list", data);
       MtasSolrResultUtil.rewrite(mtasFacetResponse, searchComponent);
     }
+    
     return mtasFacetResponse;
   }
 

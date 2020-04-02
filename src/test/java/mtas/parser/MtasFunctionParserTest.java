@@ -31,10 +31,10 @@ public class MtasFunctionParserTest {
    * @param n the n
    * @param r the r
    */
-  private void testFunction(MtasFunctionParserFunction pf, long[] args, int n,
+  private void testFunction(MtasFunctionParserFunction pf, long[] argsQ, long[] argsD, int n, int d,
       MtasFunctionParserFunctionResponse r) {
-    assertEquals(pf + "\tn:" + n + "\targs:" + Arrays.toString(args),
-        pf.getResponse(args, n), r);
+    assertEquals(pf + "\tn:" + n+ "\td:" + d + "\targsQ:" + Arrays.toString(argsQ) + "\targsD:" + Arrays.toString(argsD),
+        pf.getResponse(argsQ, argsD, n, d), r);
   }
 
   /**
@@ -45,10 +45,18 @@ public class MtasFunctionParserTest {
    * @param max the max
    * @return the args
    */
-  private long[] getArgs(int n, int min, int max) {
+  private long[] getArgsQ(int n, int min, int max) {
     long[] args = new long[n];
     for (int i = 0; i < n; i++) {
       args[i] = min + generator.nextInt((1 + max - min));
+    }
+    return args;
+  }
+  
+  private long[] getArgsD(int n, long[] argsQ, int max) {
+    long[] args = new long[n];
+    for (int i = 0; i < n; i++) {
+      args[i] = (argsQ[i]>0)?generator.nextInt(Math.min(max,(int) argsQ[i]+1)):0;
     }
     return args;
   }
@@ -72,18 +80,22 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       for (int i = 0; i < 1000; i++) {
         int n = getN(0, 10000);
+        int d = getN(0, 100);
         int k = generator.nextInt(10);
         function = "$q" + k;
         p = new MtasFunctionParser(
             new BufferedReader(new StringReader(function)));
         pf = p.parse();
-        args = getArgs(1 + k + generator.nextInt(20), -1000, 1000);
-        testFunction(pf, args, n,
-            new MtasFunctionParserFunctionResponseLong(args[k], true));
+        int l = 1 + k + generator.nextInt(20);
+        argsQ = getArgsQ(l, -1000, 1000);
+        argsD = getArgsQ(l, 10,100);
+        testFunction(pf, argsQ, argsD, n, d,
+            new MtasFunctionParserFunctionResponseLong(argsQ[k], true));
       }
     } catch (ParseException e) {
       e.printStackTrace();
@@ -98,16 +110,20 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     function = "$n";
     p = new MtasFunctionParser(new BufferedReader(new StringReader(function)));
     try {
       pf = p.parse();
       for (int i = 0; i < 1000; i++) {
         int n = getN(0, 10000);
+        int d = getN(0, 100);
         int k = generator.nextInt(10);
-        args = getArgs(k + generator.nextInt(20), -1000, 1000);
-        testFunction(pf, args, n,
+        int l = 1 + k + generator.nextInt(20);
+        argsQ = getArgsQ(l, -1000, 1000);
+        argsD = getArgsQ(l, 10,100);
+        testFunction(pf, argsQ, argsD, n, d,
             new MtasFunctionParserFunctionResponseLong(n, true));
       }
     } catch (ParseException e) {
@@ -123,10 +139,12 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       for (int i = 0; i < 1000; i++) {
         int n = getN(0, 10);
+        int d = getN(0, 3);
         int i1 = generator.nextInt(100) - 50;
         int o0 = generator.nextInt(4);
         int k1 = generator.nextInt(10);
@@ -149,42 +167,44 @@ public class MtasFunctionParserTest {
         p = new MtasFunctionParser(
             new BufferedReader(new StringReader(function)));
         pf = p.parse();
-        args = getArgs(10 + generator.nextInt(20), -10, 10);
+        int l = 10 + generator.nextInt(20);
+        argsQ = getArgsQ(l, -10, 10);
+        argsD = getArgsQ(l, 2,8);
         Object answer = null;
         try {
-          answer = compute(o0, i1, args[k1]);
+          answer = compute(o0, i1, argsQ[k1]);
           answer = answer instanceof Double
-              ? compute(o1, (double) answer, args[k2])
-              : compute(o1, (int) answer, args[k2]);
+              ? compute(o1, (double) answer, argsQ[k2])
+              : compute(o1, (int) answer, argsQ[k2]);
           answer = answer instanceof Double
-              ? compute(o2, (double) answer, args[k3])
-              : compute(o2, (int) answer, args[k3]);
+              ? compute(o2, (double) answer, argsQ[k3])
+              : compute(o2, (int) answer, argsQ[k3]);
           answer = answer instanceof Double
-              ? compute(o3, (double) answer, args[k4])
-              : compute(o3, (int) answer, args[k4]);
+              ? compute(o3, (double) answer, argsQ[k4])
+              : compute(o3, (int) answer, argsQ[k4]);
           answer = answer instanceof Double
-              ? compute(o4, (double) answer, args[k5])
-              : compute(o4, (int) answer, args[k5]);
+              ? compute(o4, (double) answer, argsQ[k5])
+              : compute(o4, (int) answer, argsQ[k5]);
           answer = answer instanceof Double ? compute(o5, (double) answer, n)
               : compute(o5, (int) answer, n);
           answer = answer instanceof Double
-              ? compute(o6, (double) answer, args[k6])
-              : compute(o6, (int) answer, args[k6]);
+              ? compute(o6, (double) answer, argsQ[k6])
+              : compute(o6, (int) answer, argsQ[k6]);
           if (answer instanceof Double) {
-            testFunction(pf, args, n,
+            testFunction(pf, argsQ,argsD, n, d,
                 new MtasFunctionParserFunctionResponseDouble((double) answer,
                     true));
           } else {
-            testFunction(pf, args, n,
+            testFunction(pf, argsQ,argsD, n, d,
                 new MtasFunctionParserFunctionResponseLong((int) answer, true));
           }
         } catch (IOException | IllegalArgumentException e) {
           if (answer != null && answer instanceof Double) {
-            testFunction(pf, args, n,
+            testFunction(pf, argsQ,argsD, n, d,
                 new MtasFunctionParserFunctionResponseDouble((double) answer,
                     false));
           } else {
-            testFunction(pf, args, n,
+            testFunction(pf, argsQ,argsD, n, d,
                 new MtasFunctionParserFunctionResponseDouble((int) 0, false));
           }
         }
@@ -202,17 +222,21 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       int n = getN(0, 10000);
+      int d = getN(0, 100);
       int k1 = generator.nextInt(10);
       function = "100/$q" + k1;
       p = new MtasFunctionParser(
           new BufferedReader(new StringReader(function)));
       pf = p.parse();
-      args = getArgs(10 + generator.nextInt(20), 100, 1000);
-      double answer = 100.0 / args[k1];
-      testFunction(pf, args, n,
+      int l = 10 + generator.nextInt(20);
+      argsQ = getArgsQ(l, 100, 1000);
+      argsD = getArgsD(l, argsQ, d);
+      double answer = 100.0 / argsQ[k1];
+      testFunction(pf, argsQ, argsD, n, d,
           new MtasFunctionParserFunctionResponseDouble(answer, true));
     } catch (ParseException e) {
       e.printStackTrace();
@@ -227,14 +251,16 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       function = "$n+100/$q0";
       p = new MtasFunctionParser(
           new BufferedReader(new StringReader(function)));
       pf = p.parse();
-      args = new long[] { 0 };
-      testFunction(pf, args, 10,
+      argsQ = new long[] { 0 };
+      argsD = new long[] { 0 };
+      testFunction(pf, argsQ, argsD, 10, 10,
           new MtasFunctionParserFunctionResponseDouble(0, false));
     } catch (ParseException e) {
       e.printStackTrace();
@@ -249,19 +275,23 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       for (int i = 0; i < 1000; i++) {
         int n = getN(0, 10000);
+        int d = getN(0, 100);
         int k = generator.nextInt(10);
         function = "$n+1.3+2.6/$q" + k;
         p = new MtasFunctionParser(
             new BufferedReader(new StringReader(function)));
         pf = p.parse();
-        args = getArgs(10 + generator.nextInt(20), -1000, 1000);
-        double answer = (args[k] != 0) ? (n + 1.3 + 2.6) / args[k] : 0;
-        testFunction(pf, args, n,
-            new MtasFunctionParserFunctionResponseDouble(answer, args[k] != 0));
+        int l = 10 + generator.nextInt(20);
+        argsQ = getArgsQ(l, -1000, 1000);
+        argsD = getArgsQ(l, 10,100);
+        double answer = (argsQ[k] != 0) ? (n + 1.3 + 2.6) / argsQ[k] : 0;
+        testFunction(pf, argsQ, argsD, n, d,
+            new MtasFunctionParserFunctionResponseDouble(answer, argsQ[k] != 0));
       }
     } catch (ParseException e) {
       e.printStackTrace();
@@ -276,10 +306,12 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       for (int i = 0; i < 1000; i++) {
         int n = getN(0, 10000);
+        int d = getN(0, 100);
         int k1 = generator.nextInt(10);
         int k2 = generator.nextInt(10);
         int k3 = generator.nextInt(10);
@@ -287,11 +319,13 @@ public class MtasFunctionParserTest {
         p = new MtasFunctionParser(
             new BufferedReader(new StringReader(function)));
         pf = p.parse();
-        args = getArgs(10 + generator.nextInt(20), -1000, 1000);
-        double answer = (args[k3] != 0)
-            ? (double) (n * (args[k1] + args[k2])) / args[k3] : 0;
-        testFunction(pf, args, n, new MtasFunctionParserFunctionResponseDouble(
-            answer, args[k3] != 0));
+        int l = 10 + generator.nextInt(20);
+        argsQ = getArgsQ(l, -1000, 1000);
+        argsD = getArgsQ(l, 10,100);
+        double answer = (argsQ[k3] != 0)
+            ? (double) (n * (argsQ[k1] + argsQ[k2])) / argsQ[k3] : 0;
+        testFunction(pf, argsQ, argsD, n, d, new MtasFunctionParserFunctionResponseDouble(
+            answer, argsQ[k3] != 0));
       }
     } catch (ParseException e) {
       e.printStackTrace();
@@ -306,10 +340,12 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       for (int i = 0; i < 100000; i++) {
         int n = getN(0, 10000);
+        int d = getN(0, 100);
         int k1 = generator.nextInt(10);
         int k2 = generator.nextInt(10);
         int k3 = generator.nextInt(10);
@@ -319,13 +355,15 @@ public class MtasFunctionParserTest {
         p = new MtasFunctionParser(
             new BufferedReader(new StringReader(function)));
         pf = p.parse();
-        args = getArgs(10 + generator.nextInt(20), -1000, 1000);
-        double answer = (args[k3] + args[k4] != 0)
-            ? ((double) ((args[k1] + args[k2]))
-                / (double) ((args[k3] + args[k4]))) + 1 - n
+        int l = 10 + generator.nextInt(20);
+        argsQ = getArgsQ(l, -1000, 1000);
+        argsD = getArgsQ(l, 10,100);
+        double answer = (argsQ[k3] + argsQ[k4] != 0)
+            ? ((double) ((argsQ[k1] + argsQ[k2]))
+                / (double) ((argsQ[k3] + argsQ[k4]))) + 1 - n
             : 0;
-        testFunction(pf, args, n, new MtasFunctionParserFunctionResponseDouble(
-            answer, (args[k3] + args[k4]) != 0));
+        testFunction(pf, argsQ, argsD, n, d, new MtasFunctionParserFunctionResponseDouble(
+            answer, (argsQ[k3] + argsQ[k4]) != 0));
       }
     } catch (ParseException e) {
       e.printStackTrace();
@@ -340,17 +378,21 @@ public class MtasFunctionParserTest {
     String function = null;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       int n = getN(0, 100);
+      int d = getN(0, 10);
       int k1 = generator.nextInt(10);
       function = "$n^$q" + k1;
       p = new MtasFunctionParser(
           new BufferedReader(new StringReader(function)));
       pf = p.parse();
-      args = getArgs(10 + generator.nextInt(20), 0, 2);
-      long answer = n ^ args[k1];
-      testFunction(pf, args, n,
+      int l = 10 + generator.nextInt(20);
+      argsQ = getArgsQ(l, 0, 2);
+      argsD = getArgsD(l, argsQ, d);
+      long answer = n ^ argsQ[k1];
+      testFunction(pf, argsQ, argsD, n, d,
           new MtasFunctionParserFunctionResponseLong(answer, true));
     } catch (ParseException e) {
       e.printStackTrace();
@@ -362,23 +404,27 @@ public class MtasFunctionParserTest {
    */
   @org.junit.Test
   public void basicTestFunction10() {
-    String function = "(1+2)/3";
+    String function;
     MtasFunctionParser p;
     MtasFunctionParserFunction pf;
-    long[] args = null;
+    long[] argsQ = null;
+    long[] argsD = null;
     try {
       int n = getN(0, 100);
+      int d = getN(0, 10);
       int k1 = generator.nextInt(10);
       int k2 = generator.nextInt(10);
       int k3 = generator.nextInt(10);
-      function = "(" + k1 + " + " + k2 + ")/($q0 + 1 + " + k3 + " - 2)";
+      function = "($d0 + 1 + $d)*(" + k1 + " + " + k2 + ")/($q0 + 1 + " + k3 + " - 2)";
       p = new MtasFunctionParser(
           new BufferedReader(new StringReader(function)));
       pf = p.parse();
-      args = getArgs(10 + generator.nextInt(20), 0, 2);
-      if ((args[0] + 1 + k3 - 2) != 0) {
-        double answer = (double) (k1 + k2) / (args[0] + 1 + k3 - 2);
-        testFunction(pf, args, n,
+      int l = 10 + generator.nextInt(20);
+      argsQ = getArgsQ(l, 0, 2);
+      argsD = getArgsQ(l, 0, 2);
+      if ((argsQ[0] + 1 + k3 - 2) != 0) {
+        double answer = (double) (argsD[0] + 1 + d)*(k1 + k2) / (argsQ[0] + 1 + k3 - 2);
+        testFunction(pf, argsQ, argsD, n, d,
             new MtasFunctionParserFunctionResponseDouble(answer, true));
       }
     } catch (ParseException e) {

@@ -33,10 +33,10 @@ public class MtasFunctionParserFunctionDefault
    * long)
    */
   @Override
-  public double getValueDouble(long[] args, long n) throws IOException {
+  public double getValueDouble(long[] argsQ, long[] argsD, long n, long d) throws IOException {
     double value = 0;
-    if (args != null) {
-      for (long a : args) {
+    if (argsQ != null) {
+      for (long a : argsQ) {
         value += a;
       }
     }
@@ -51,10 +51,10 @@ public class MtasFunctionParserFunctionDefault
    * long)
    */
   @Override
-  public long getValueLong(long[] args, long n) throws IOException {
+  public long getValueLong(long[] argsQ, long[] argsD, long n, long d) throws IOException {
     long value = 0;
-    if (args != null) {
-      for (long a : args) {
+    if (argsQ != null) {
+      for (long a : argsQ) {
         value += a;
       }
     }

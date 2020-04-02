@@ -181,13 +181,16 @@ public class PrefixTreeMtasCounter {
                   for(int i=0; i<heatmap.hm.functions.size(); i++) {
                     SubComponentFunction f = heatmap.hm.functions.get(i);
                     try{
+                      long[] argsD = args[docSetCounter].clone();
+                      for(int k=0; k<argsD.length; k++) {
+                        argsD[k] = (argsD[k]>0)?1:0;
+                      }
                       if(f.dataType.equals(CodecUtil.DATA_TYPE_LONG)) {
-                      
-                        functionValueLong = f.parserFunction.getValueLong(args[docSetCounter], positions[docSetCounter]); 
+                        functionValueLong = f.parserFunction.getValueLong(args[docSetCounter], argsD, positions[docSetCounter], 1); 
                         functionValuesLong[i][functionValuesCounter[i]] = functionValueLong;
                         functionValuesCounter[i]++;
                       } else if(f.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {                      
-                        functionValueDouble = f.parserFunction.getValueDouble(args[docSetCounter], positions[docSetCounter]); 
+                        functionValueDouble = f.parserFunction.getValueDouble(args[docSetCounter], argsD, positions[docSetCounter], 1); 
                         functionValuesDouble[i][functionValuesCounter[i]] = functionValueDouble;
                         functionValuesCounter[i]++;
                       }

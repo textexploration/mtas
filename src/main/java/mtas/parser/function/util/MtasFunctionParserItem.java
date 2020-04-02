@@ -38,10 +38,16 @@ public class MtasFunctionParserItem {
   public static final String TYPE_PARSER_DOUBLE = "parserDouble";
 
   /** The Constant TYPE_ARGUMENT. */
-  public static final String TYPE_ARGUMENT = "argument";
+  public static final String TYPE_ARGUMENT_Q = "argumentQ";
+  
+  /** The Constant TYPE_ARGUMENT_D. */
+  public static final String TYPE_ARGUMENT_D = "argumentD";
 
   /** The Constant TYPE_N. */
   public static final String TYPE_N = "n";
+  
+  /** The Constant TYPE_D. */
+  public static final String TYPE_D = "d";
 
   /**
    * Instantiates a new mtas function parser item.
@@ -50,7 +56,7 @@ public class MtasFunctionParserItem {
    * @throws ParseException the parse exception
    */
   public MtasFunctionParserItem(String t) throws ParseException {
-    if (t.equals(TYPE_N)) {
+    if (t.equals(TYPE_N) || t.equals(TYPE_D)) {
       type = t;
       degree = 0;
     } else {
@@ -66,7 +72,7 @@ public class MtasFunctionParserItem {
    * @throws ParseException the parse exception
    */
   public MtasFunctionParserItem(String t, int i) throws ParseException {
-    if (t.equals(TYPE_ARGUMENT)) {
+    if (t.equals(TYPE_ARGUMENT_Q) || t.equals(TYPE_ARGUMENT_D)) {
       type = t;
       id = i;
       degree = 1;
