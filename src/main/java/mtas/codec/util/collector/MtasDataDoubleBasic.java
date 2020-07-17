@@ -74,7 +74,7 @@ public class MtasDataDoubleBasic extends MtasDataBasic<Double, Double> {
   @Override
   public MtasDataCollector<?, ?> add(long valueSum, long valueN)
       throws IOException {
-    MtasDataCollector<?, ?> dataCollector = add(false);
+    MtasDataCollector<?, ?> dataCollector = getSubCollector(false);
     setValue(newCurrentPosition, Double.valueOf(valueSum), valueN,
         newCurrentExisting);
     return dataCollector;
@@ -88,7 +88,7 @@ public class MtasDataDoubleBasic extends MtasDataBasic<Double, Double> {
   @Override
   public MtasDataCollector<?, ?> add(long[] values, int number)
       throws IOException {
-    MtasDataCollector<?, ?> dataCollector = add(false);
+    MtasDataCollector<?, ?> dataCollector = getSubCollector(false);
     Double[] newValues = new Double[number];
     for (int i = 0; i < values.length; i++)
       newValues[i] = Long.valueOf(values[i]).doubleValue();
@@ -104,7 +104,7 @@ public class MtasDataDoubleBasic extends MtasDataBasic<Double, Double> {
   @Override
   public MtasDataCollector<?, ?> add(double valueSum, long valueN)
       throws IOException {
-    MtasDataCollector<?, ?> dataCollector = add(false);
+    MtasDataCollector<?, ?> dataCollector = getSubCollector(false);
     setValue(newCurrentPosition, valueSum, valueN, newCurrentExisting);
     return dataCollector;
   }
@@ -117,7 +117,7 @@ public class MtasDataDoubleBasic extends MtasDataBasic<Double, Double> {
   @Override
   public MtasDataCollector<?, ?> add(double[] values, int number)
       throws IOException {
-    MtasDataCollector<?, ?> dataCollector = add(false);
+    MtasDataCollector<?, ?> dataCollector = getSubCollector(false);
     Double[] objectValues = Arrays.stream(values).boxed().toArray(Double[]::new);
     setValue(newCurrentPosition,objectValues, number,
         newCurrentExisting);
@@ -135,7 +135,7 @@ public class MtasDataDoubleBasic extends MtasDataBasic<Double, Double> {
   public MtasDataCollector<?, ?> add(String key, long valueSum, long valueN)
       throws IOException {
     if (key != null) {
-      MtasDataCollector<?, ?> subCollector = add(key, false);
+      MtasDataCollector<?, ?> subCollector = getSubCollector(key, false);
       setValue(newCurrentPosition, Double.valueOf(valueSum), valueN,
           newCurrentExisting);
       return subCollector;
@@ -158,7 +158,7 @@ public class MtasDataDoubleBasic extends MtasDataBasic<Double, Double> {
       Double[] newValues = new Double[number];
       for (int i = 0; i < values.length; i++)
         newValues[i] = Long.valueOf(values[i]).doubleValue();
-      MtasDataCollector<?, ?> subCollector = add(key, false);
+      MtasDataCollector<?, ?> subCollector = getSubCollector(key, false);
       setValue(newCurrentPosition, newValues, number, newCurrentExisting);
       return subCollector;
     } else {
@@ -177,7 +177,7 @@ public class MtasDataDoubleBasic extends MtasDataBasic<Double, Double> {
   public MtasDataCollector<?, ?> add(String key, double valueSum, long valueN)
       throws IOException {
     if (key != null) {
-      MtasDataCollector<?, ?> subCollector = add(key, false);
+      MtasDataCollector<?, ?> subCollector = getSubCollector(key, false);
       setValue(newCurrentPosition, valueSum, valueN, newCurrentExisting);
       return subCollector;
     } else {
@@ -196,7 +196,7 @@ public class MtasDataDoubleBasic extends MtasDataBasic<Double, Double> {
   public MtasDataCollector<?, ?> add(String key, double[] values, int number)
       throws IOException {
     if (key != null) {
-      MtasDataCollector<?, ?> subCollector = add(key, false);
+      MtasDataCollector<?, ?> subCollector = getSubCollector(key, false);
       Double[] objectValues = Arrays.stream(values).boxed().toArray(Double[]::new);
       setValue(newCurrentPosition, objectValues, number,
           newCurrentExisting);

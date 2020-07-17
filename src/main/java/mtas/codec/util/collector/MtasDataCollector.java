@@ -361,6 +361,27 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
       newSubCollectorListNextLevel = new MtasDataCollector[0];
     }
   }
+  
+  private void readObject(java.io.ObjectInputStream in)
+      throws IOException, ClassNotFoundException {
+    in.defaultReadObject();
+    if (subCollectorTypes !=null && subCollectorTypes.length > 1) {
+      newSubCollectorTypes = Arrays.copyOfRange(subCollectorTypes, 1,
+          subCollectorTypes.length);
+      newSubDataTypes = Arrays.copyOfRange(subDataTypes, 1,
+          subStatsTypes.length);
+      newSubStatsTypes = Arrays.copyOfRange(subStatsTypes, 1,
+          subStatsTypes.length);
+      newSubStatsItems = Arrays.copyOfRange(subStatsItems, 1,
+          subStatsItems.length);
+      newSubSortTypes = Arrays.copyOfRange(subSortTypes, 1,
+          subSortTypes.length);
+      newSubSortDirections = Arrays.copyOfRange(subSortDirections, 1,
+          subSortDirections.length);
+      newSubStart = Arrays.copyOfRange(subStart, 1, subStart.length);
+      newSubNumber = Arrays.copyOfRange(subNumber, 1, subNumber.length);
+    }
+  }
 
   /**
    * Merge.
@@ -497,7 +518,7 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
    * @return the mtas data collector
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  protected final MtasDataCollector add(boolean increaseSourceNumber)
+  protected final MtasDataCollector getSubCollector(boolean increaseSourceNumber)
       throws IOException {
     if (!closed) {
       if (!collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
@@ -559,7 +580,7 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
    * @return the mtas data collector
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  protected final MtasDataCollector add(String key,
+  protected final MtasDataCollector getSubCollector(String key,
       boolean increaseSourceNumber) throws IOException {
     if (!closed) {
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
@@ -653,6 +674,39 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
     } else {
       throw new IOException("already closed");
     }
+  }
+  
+  protected final MtasDataCollector<?, ?> addNewFrom(String key, MtasDataCollector<?, ?> otherSubCollector) {
+      hasSub = true;
+      this.subCollectorTypes = new String[]{otherSubCollector.collectorType};
+      this.subDataTypes = new String[]{otherSubCollector.dataType};
+      this.subStatsTypes = new String[]{otherSubCollector.statsType};
+      this.subStatsItems = (SortedSet<String>[]) new SortedSet<?>[] {otherSubCollector.statsItems};
+      this.subSortTypes = new String[]{otherSubCollector.sortType};
+      this.subSortDirections = new String[]{otherSubCollector.sortDirection};
+      this.subStart = new Integer[]{otherSubCollector.start};
+      this.subNumber = new Integer[]{otherSubCollector.number};
+      this.newSubCollectorListNextLevel = new MtasDataCollector<?, ?>[1];
+      
+      newKeyList[newPosition] = key;
+      newSourceNumberList[newPosition] = 1;
+      newErrorNumber[newPosition] = 0;
+      newErrorList[newPosition] = new HashMap<>();
+      newCurrentPosition = newPosition - 1;
+      newCurrentExisting = false;
+      // ready, only handle sub
+      try {
+        newSubCollectorListNextLevel[newCurrentPosition] = DataCollector
+            .getCollector(subCollectorTypes[0], subDataTypes[0],
+                subStatsTypes[0], subStatsItems[0], subSortTypes[0],
+                subSortDirections[0], subStart[0], subNumber[0],
+                newSubCollectorTypes, newSubDataTypes, newSubStatsTypes,
+                newSubStatsItems, newSubSortTypes, newSubSortDirections,
+                newSubStart, newSubNumber, segmentRegistration, null);
+        return newSubCollectorListNextLevel[newCurrentPosition];
+      } catch (IOException e) {
+        return null;
+      }
   }
 
   /**

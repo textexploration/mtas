@@ -83,7 +83,7 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
    */
   @Override
   public final void error(String error, int number) throws IOException {
-    add(false);
+    getSubCollector(false);
     setError(newCurrentPosition, error, number, newCurrentExisting);
   }
 
@@ -97,7 +97,7 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
   @Override
   public final void error(String key, String error, int number) throws IOException {
     if (key != null) {
-      add(key, false);
+      getSubCollector(key, false);
       setError(newCurrentPosition, error, number, newCurrentExisting);
     }
   }
@@ -334,8 +334,7 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
           map.put(newDataCollector, this);
         }
         for (int i = 0; i < newMtasDataBasic.getSize(); i++) {
-          MtasDataCollector<?, ?>[] subCollectors = new MtasDataCollector[1];
-          subCollectors[0] = add(newMtasDataBasic.keyList[i],
+          MtasDataCollector<?, ?> subCollector = getSubCollector(newMtasDataBasic.keyList[i],
               increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataBasic.errorNumber[i],
               newMtasDataBasic.errorList[i], newCurrentExisting);
@@ -343,10 +342,10 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
               newMtasDataBasic.basicValueNList[i], newCurrentExisting);
           if (hasSub() && newMtasDataBasic.hasSub()) {
             // single key implies exactly one subCollector if hasSub
-            subCollectors[0].merge(
+            subCollector.merge(
                 newMtasDataBasic.subCollectorListNextLevel[i], map,
                 increaseSourceNumber);
-          }
+          } 
         }
         closeNewList();
       } else if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
@@ -354,7 +353,7 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
           map.put(newDataCollector, this);
         }
         if (newMtasDataBasic.getSize() > 0) {
-          MtasDataCollector<?, ?> subCollector = add(increaseSourceNumber);
+          MtasDataCollector<?, ?> subCollector = getSubCollector(increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataBasic.errorNumber[0],
               newMtasDataBasic.errorList[0], newCurrentExisting);
           setValue(newCurrentPosition, newMtasDataBasic.basicValueSumList[0],

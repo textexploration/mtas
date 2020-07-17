@@ -77,7 +77,7 @@ abstract class MtasDataFull<T1 extends Number & Comparable<T1>, T2 extends Numbe
    */
   @Override
   public final void error(String error, int number) throws IOException {
-    add(false);
+    getSubCollector(false);
     setError(newCurrentPosition, error, number, newCurrentExisting);
   }
 
@@ -91,7 +91,7 @@ abstract class MtasDataFull<T1 extends Number & Comparable<T1>, T2 extends Numbe
   @Override
   public final void error(String key, String error, int number) throws IOException {
     if (key != null) {
-      add(key, false);
+      getSubCollector(key, false);
       setError(newCurrentPosition, error, number, newCurrentExisting);
     }
   }
@@ -301,8 +301,7 @@ abstract class MtasDataFull<T1 extends Number & Comparable<T1>, T2 extends Numbe
         }
         for (int i = 0; i < newMtasDataFull.getSize(); i++) {
           if (newMtasDataFull.fullValueList[i].length > 0) {
-            MtasDataCollector<?, ?>[] subCollectors = new MtasDataCollector<?, ?>[1];
-            subCollectors[0] = add(newMtasDataFull.keyList[i],
+            MtasDataCollector<?, ?> subCollector = getSubCollector(newMtasDataFull.keyList[i],
                 increaseSourceNumber);
             setError(newCurrentPosition, newMtasDataFull.errorNumber[i],
                 newMtasDataFull.errorList[i], newCurrentExisting);
@@ -310,7 +309,7 @@ abstract class MtasDataFull<T1 extends Number & Comparable<T1>, T2 extends Numbe
                 newMtasDataFull.fullValueList[i].length, newCurrentExisting);
             if (hasSub() && newMtasDataFull.hasSub()) {
               // single key implies exactly one subCollector if hasSub
-              subCollectors[0].merge(
+              subCollector.merge(
                   newMtasDataFull.subCollectorListNextLevel[i], map,
                   increaseSourceNumber);
             }
@@ -321,7 +320,7 @@ abstract class MtasDataFull<T1 extends Number & Comparable<T1>, T2 extends Numbe
           map.put(newDataCollector, this);
         }
         if (newMtasDataFull.getSize() > 0) {
-          MtasDataCollector<?, ?> subCollector = add(increaseSourceNumber);
+          MtasDataCollector<?, ?> subCollector = getSubCollector(increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataFull.errorNumber[0],
               newMtasDataFull.errorList[0], newCurrentExisting);
           setValue(newCurrentPosition, newMtasDataFull.fullValueList[0],

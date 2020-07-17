@@ -107,7 +107,7 @@ public class MtasSolrResultUtil {
   private static void rewrite(NamedList<Object> nl,
       MtasSolrSearchComponent searchComponent, boolean doCollapse)
       throws IOException {
-    boolean showDebugInfo = false;
+    boolean showDebugInfo = true;
     HashMap<String, NamedList<Object>> collapseNamedList = new HashMap<>();
     int length = nl.size();
     for (int i = 0; i < length; i++) {

@@ -107,7 +107,7 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
    */
   @Override
   public final void error(String error, int number) throws IOException {
-    add(false);
+    getSubCollector(false);
     setError(newCurrentPosition, error, number, newCurrentExisting);
   }
 
@@ -121,7 +121,7 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
   @Override
   public final void error(String key, String error, int number) throws IOException {
     if (key != null) {
-      add(key, false);
+      getSubCollector(key, false);
       setError(newCurrentPosition, error, number, newCurrentExisting);
     }
   }
@@ -453,8 +453,7 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
           map.put(newDataCollector, this);
         }
         for (int i = 0; i < newMtasDataAdvanced.getSize(); i++) {
-          MtasDataCollector<?, ?>[] subCollectors = new MtasDataCollector[1];
-          subCollectors[0] = add(newMtasDataAdvanced.keyList[i],
+          MtasDataCollector<?, ?> subCollector = getSubCollector(newMtasDataAdvanced.keyList[i],
               increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataAdvanced.errorNumber[i],
               newMtasDataAdvanced.errorList[i], newCurrentExisting);
@@ -466,7 +465,7 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
               newMtasDataAdvanced.advancedValueMaxList[i],
               newMtasDataAdvanced.advancedValueNList[i], newCurrentExisting);
           if (hasSub() && newMtasDataAdvanced.hasSub()) {
-            subCollectors[0].merge(
+            subCollector.merge(
                 newMtasDataAdvanced.subCollectorListNextLevel[i], map,
                 increaseSourceNumber);
           }
@@ -477,7 +476,7 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
           map.put(newDataCollector, this);
         }
         if (newMtasDataAdvanced.getSize() > 0) {
-          MtasDataCollector<?, ?> subCollector = add(increaseSourceNumber);
+          MtasDataCollector<?, ?> subCollector = getSubCollector(increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataAdvanced.errorNumber[0],
               newMtasDataAdvanced.errorList[0], newCurrentExisting);
           setValue(newCurrentPosition,

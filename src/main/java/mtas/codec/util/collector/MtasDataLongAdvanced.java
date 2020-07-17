@@ -87,7 +87,7 @@ public class MtasDataLongAdvanced extends MtasDataAdvanced<Long, Double> {
   @Override
   public MtasDataCollector<?, ?> add(long[] values, int number)
       throws IOException {
-    MtasDataCollector<?, ?> dataCollector = add(false);
+    MtasDataCollector<?, ?> dataCollector = getSubCollector(false);
     Long[] objectValues = Arrays.stream(values).boxed().toArray(Long[]::new);
     setValue(newCurrentPosition, objectValues, number,
         newCurrentExisting);
@@ -113,7 +113,7 @@ public class MtasDataLongAdvanced extends MtasDataAdvanced<Long, Double> {
   @Override
   public MtasDataCollector<?, ?> add(double[] values, int number)
       throws IOException {
-    MtasDataCollector<?, ?> dataCollector = add(false);
+    MtasDataCollector<?, ?> dataCollector = getSubCollector(false);
     Long[] newValues = new Long[number];
     for (int i = 0; i < values.length; i++)
       newValues[i] = Double.valueOf(values[i]).longValue();
@@ -145,7 +145,7 @@ public class MtasDataLongAdvanced extends MtasDataAdvanced<Long, Double> {
   public MtasDataCollector<?, ?> add(String key, long[] values, int number)
       throws IOException {
     if (key != null) {
-      MtasDataCollector<?, ?> subCollector = add(key, false);
+      MtasDataCollector<?, ?> subCollector = getSubCollector(key, false);
       Long[] objectValues = Arrays.stream(values).boxed().toArray(Long[]::new);
       setValue(newCurrentPosition, objectValues, number,
           newCurrentExisting);
@@ -182,7 +182,7 @@ public class MtasDataLongAdvanced extends MtasDataAdvanced<Long, Double> {
       Long[] newValues = new Long[number];
       for (int i = 0; i < values.length; i++)
         newValues[i] = Double.valueOf(values[i]).longValue();
-      MtasDataCollector<?, ?> subCollector = add(key, false);
+      MtasDataCollector<?, ?> subCollector = getSubCollector(key, false);
       setValue(newCurrentPosition, newValues, number, newCurrentExisting);
       return subCollector;
     } else {

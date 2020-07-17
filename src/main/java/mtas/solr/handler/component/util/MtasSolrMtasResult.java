@@ -170,7 +170,7 @@ public class MtasSolrMtasResult implements Serializable {
     if (newItem.dataCollector.withTotal()) {
       dataCollector.setWithTotal();
     }
-    dataCollector.merge(newItem.dataCollector, map, true);
+    dataCollector.merge(newItem.dataCollector, map, true);   
     if (newItem.functionData != null) {
       if (functionData == null) {
         functionData = new HashMap<>();

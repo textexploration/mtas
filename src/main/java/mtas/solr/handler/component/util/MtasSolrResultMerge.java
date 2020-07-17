@@ -140,7 +140,7 @@ public class MtasSolrResultMerge {
 	private void mergeNamedList(ShardRequest sreq, NamedList<Object> mtasResponse, String key,
 			Integer preferredPurpose) {
 	  // create new response for key
-		NamedList<Object> mtasListResponse;
+	  NamedList<Object> mtasListResponse;
 		Object o = mtasResponse.get(key);
 		if (o instanceof NamedList) {
 			mtasListResponse = (NamedList<Object>) o;
@@ -195,7 +195,7 @@ public class MtasSolrResultMerge {
 	private void mergeArrayList(ShardRequest sreq, NamedList<Object> mtasResponse, String key, Integer preferredPurpose,
 			boolean mergeAllShardResponses) {
 		// create new response for key
-		ArrayList<Object> mtasListResponse;
+	  ArrayList<Object> mtasListResponse;
 		Object o = mtasResponse.get(key);
 		if (o instanceof ArrayList) {
 			mtasListResponse = (ArrayList<Object>) o;
@@ -230,8 +230,7 @@ public class MtasSolrResultMerge {
 				log.error(e);
 			}
 		}
-
-		try {
+    try {
 			for (ArrayList<Object> mtasListShardResponse : mtasListShardResponses.values()) {
 				mergeResponsesArrayList(mtasListResponse, mtasListShardResponse);
 			}
@@ -289,7 +288,7 @@ public class MtasSolrResultMerge {
 				if ((key != null) && (key instanceof String)) {
 					// merge
 					if (originalKeyList.containsKey(key)) {
-						Object originalItem = originalKeyList.get(key);
+					  Object originalItem = originalKeyList.get(key);
 						if (originalItem.getClass().equals(item.getClass())) {
 							mergeResponsesNamedList((NamedList<Object>) originalItem, (NamedList<Object>) item);
 						} else {
@@ -297,7 +296,7 @@ public class MtasSolrResultMerge {
 						}
 						// add
 					} else {
-						Object clonedItem = adjustablePartsCloned(item);
+					  Object clonedItem = adjustablePartsCloned(item);
 						originalList.add(clonedItem);
 						originalKeyList.put((String) key, clonedItem);
 					}
@@ -330,9 +329,9 @@ public class MtasSolrResultMerge {
 			Object shardValue = entry.getValue();
 			int originalId = mainResponse.indexOf(name, 0);
 			if (originalId < 0) {
-				mainResponse.add(name, adjustablePartsCloned(shardValue));
+			  mainResponse.add(name, adjustablePartsCloned(shardValue));
 			} else {
-				Object original = mainResponse.getVal(originalId);
+			  Object original = mainResponse.getVal(originalId);
 				if (original == null) {
 				  original = adjustablePartsCloned(shardValue);
 				} else if (shardValue != null && original.getClass().equals(shardValue.getClass())) {
