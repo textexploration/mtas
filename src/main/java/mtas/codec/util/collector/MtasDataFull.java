@@ -295,6 +295,7 @@ abstract class MtasDataFull<T1 extends Number & Comparable<T1>, T2 extends Numbe
       MtasDataFull<T1, T2> newMtasDataFull = (MtasDataFull<T1, T2>) newDataCollector;
       closeNewList();
       initNewList(newMtasDataFull.getSize());
+      newDataCollector.mergedInto = this;
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
         if(map!=null) {
           map.put(newDataCollector, this);

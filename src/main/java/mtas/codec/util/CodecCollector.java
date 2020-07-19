@@ -2855,7 +2855,7 @@ public class CodecCollector {
         for (SubComponentFunction function : tmpList) {
           function.dataCollector.initNewList(1);
         }
-      }
+      } 
       // check type
       if (dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
         dataCollector.setWithTotal();
@@ -3070,7 +3070,7 @@ public class CodecCollector {
         for (SubComponentFunction function : tmpList) {
           function.dataCollector.closeNewList();
         }
-      }
+      } 
     }
 
   }

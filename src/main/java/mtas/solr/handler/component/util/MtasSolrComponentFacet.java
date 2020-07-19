@@ -552,7 +552,7 @@ public class MtasSolrComponentFacet
             .keySet()) {
           SubComponentFunction[] tmpSubComponentFunctionList = facet.baseFunctionList[i]
               .get(functionDataCollector);
-          if (tmpSubComponentFunctionList != null) {
+          if (tmpSubComponentFunctionList != null) {           
             HashMap<String, MtasSolrMtasResult> tmpList = new HashMap<>();
             for (SubComponentFunction tmpSubComponentFunction : tmpSubComponentFunctionList) {
               tmpList.put(tmpSubComponentFunction.key,
@@ -560,7 +560,7 @@ public class MtasSolrComponentFacet
                       tmpSubComponentFunction.dataType,
                       tmpSubComponentFunction.statsType,
                       tmpSubComponentFunction.statsItems, null, null));
-            }
+            }            
             functionData.put(functionDataCollector, tmpList);
           }
         }

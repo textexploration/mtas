@@ -82,25 +82,34 @@ public class MtasSolrMtasResult implements Serializable {
   /**
    * Instantiates a new mtas solr mtas result.
    *
-   * @param dataCollector the data collector
-   * @param dataType the data type
-   * @param statsType the stats type
-   * @param statsItems the stats items
-   * @param distances the distances
-   * @param sortType the sort type
-   * @param sortDirection the sort direction
-   * @param start the start
-   * @param number the number
-   * @param functionData the function data
+   * @param dataCollector
+   *          the data collector
+   * @param dataType
+   *          the data type
+   * @param statsType
+   *          the stats type
+   * @param statsItems
+   *          the stats items
+   * @param distances
+   *          the distances
+   * @param sortType
+   *          the sort type
+   * @param sortDirection
+   *          the sort direction
+   * @param start
+   *          the start
+   * @param number
+   *          the number
+   * @param functionData
+   *          the function data
    */
   @SuppressWarnings("unchecked")
-  public MtasSolrMtasResult(MtasDataCollector<?, ?> dataCollector,
-      String[] dataType, String[] statsType, SortedSet<String>[] statsItems,
-      List<SubComponentDistance>[] distances, String[] sortType,
-      String[] sortDirection, Integer[] start, Integer[] number,
+  public MtasSolrMtasResult(MtasDataCollector<?, ?> dataCollector, String[] dataType, String[] statsType,
+      SortedSet<String>[] statsItems, List<SubComponentDistance>[] distances, String[] sortType, String[] sortDirection,
+      Integer[] start, Integer[] number,
       Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> functionData) {
-    this.dataCollector = dataCollector;
-    this.functionData = functionData;
+    this.dataCollector = MtasDataCollector.resolve(dataCollector);
+    this.functionData = resolve(functionData);
     this.dataType = (dataType == null) ? null : dataType[0];
     this.statsType = (statsType == null) ? null : statsType[0];
     this.distances = (distances == null) ? null : distances[0];
@@ -113,21 +122,20 @@ public class MtasSolrMtasResult implements Serializable {
     if ((dataType != null) && (dataType.length > 1)) {
       subDataType = new String[dataType.length - 1];
       subStatsType = new String[dataType.length - 1];
-      subStatsItems = new TreeSet[dataType.length - 1];      
+      subStatsItems = new TreeSet[dataType.length - 1];
       subSortType = new String[dataType.length - 1];
       subSortDirection = new String[dataType.length - 1];
       System.arraycopy(dataType, 1, subDataType, 0, dataType.length - 1);
       System.arraycopy(statsType, 1, subStatsType, 0, dataType.length - 1);
-      System.arraycopy(statsItems, 1, subStatsItems, 0, dataType.length - 1);      
+      System.arraycopy(statsItems, 1, subStatsItems, 0, dataType.length - 1);
       System.arraycopy(sortType, 1, subSortType, 0, dataType.length - 1);
-      System.arraycopy(sortDirection, 1, subSortDirection, 0,
-          dataType.length - 1);
-      if(distances!=null) {
+      System.arraycopy(sortDirection, 1, subSortDirection, 0, dataType.length - 1);
+      if (distances != null) {
         subDistances = new List[dataType.length - 1];
         System.arraycopy(distances, 1, subDistances, 0, dataType.length - 1);
       } else {
         subDistances = null;
-      }      
+      }
     } else {
       subDataType = null;
       subStatsType = null;
@@ -138,67 +146,114 @@ public class MtasSolrMtasResult implements Serializable {
     }
   }
 
+
   /**
    * Instantiates a new mtas solr mtas result.
    *
-   * @param dataCollector the data collector
-   * @param dataType the data type
-   * @param statsType the stats type
-   * @param statsItems the stats items
-   * @param distance the distance
-   * @param functionData the function data
+   * @param dataCollector
+   *          the data collector
+   * @param dataType
+   *          the data type
+   * @param statsType
+   *          the stats type
+   * @param statsItems
+   *          the stats items
+   * @param distance
+   *          the distance
+   * @param functionData
+   *          the function data
    */
   @SuppressWarnings("unchecked")
-  public MtasSolrMtasResult(MtasDataCollector<?, ?> dataCollector,
-      String dataType, String statsType, SortedSet<String> statsItems,
-      List<SubComponentDistance> distance,
+  public MtasSolrMtasResult(MtasDataCollector<?, ?> dataCollector, String dataType, String statsType,
+      SortedSet<String> statsItems, List<SubComponentDistance> distance,
       Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> functionData) {
-    this(dataCollector, new String[] { dataType }, new String[] { statsType },
-        new SortedSet[] { statsItems }, new List[] { distance },
-        new String[] { null }, new String[] { null }, new Integer[] { 0 },
-        new Integer[] { 1 }, functionData);
+    this(dataCollector, new String[] { dataType }, new String[] { statsType }, new SortedSet[] { statsItems },
+        new List[] { distance }, new String[] { null }, new String[] { null }, new Integer[] { 0 }, new Integer[] { 1 },
+        functionData);
+  }
+  
+  public Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> resolve(Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> fd) {
+    if(fd==null) {
+      return fd;
+    } else {
+      HashMap<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> functionData = new HashMap<>();
+      HashMap<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> tmpFunctionData = new HashMap<>();
+      for(Entry<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> entry : fd.entrySet()) {
+        MtasDataCollector<?, ?> itemKey = entry.getKey();
+        HashMap<String, MtasSolrMtasResult> itemMap = entry.getValue();
+        while(itemKey.mergedInto!=null) {
+          if(fd.containsKey(itemKey)) {
+            fd.put(itemKey,null);
+          }
+          tmpFunctionData.remove(itemKey);
+          itemKey=itemKey.mergedInto;
+          HashMap<String, MtasSolrMtasResult> oldItemMap = itemMap;
+          itemMap = fd.get(itemKey);
+          if(itemKey==null) {
+            itemMap = tmpFunctionData.get(itemKey);
+          }
+          if(itemMap!=null) {
+            //merge with old
+            if(oldItemMap!=null) {
+              for(Entry<String, MtasSolrMtasResult> subEntry : oldItemMap.entrySet()) {
+                if(itemMap.containsKey(subEntry.getKey())) {
+                  try {
+                    itemMap.get(subEntry.getKey()).merge(subEntry.getValue());
+                  } catch (IOException e) {
+                    //do nothing?
+                  }
+                } else {
+                  itemMap.put(subEntry.getKey(), subEntry.getValue());
+                }
+              }
+            }
+          } else {
+            itemMap = oldItemMap;
+          }  
+          tmpFunctionData.put(itemKey,itemMap);          
+        }
+        functionData.put(itemKey, itemMap);
+      }
+      return functionData;
+    }
   }
 
   /**
    * Merge.
    *
-   * @param newItem the new item
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @param newItem
+   *          the new item
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
    */
   void merge(MtasSolrMtasResult newItem) throws IOException {
     HashMap<MtasDataCollector<?, ?>, MtasDataCollector<?, ?>> map = new HashMap<>();
     if (newItem.dataCollector.withTotal()) {
       dataCollector.setWithTotal();
     }
-    dataCollector.merge(newItem.dataCollector, map, true);   
+    dataCollector.merge(newItem.dataCollector, map, true);
     if (newItem.functionData != null) {
       if (functionData == null) {
         functionData = new HashMap<>();
       }
-      for (MtasDataCollector<?, ?> keyCollector : newItem.functionData
-          .keySet()) {
+      for (MtasDataCollector<?, ?> keyCollector : newItem.functionData.keySet()) {
         if (map.containsKey(keyCollector)) {
           // compute mapped key
           MtasDataCollector<?, ?> newKeyCollector = keyCollector;
           while (map.containsKey(newKeyCollector)) {
-            newKeyCollector = map.get(keyCollector);
+            newKeyCollector = map.get(newKeyCollector);
           }
           if (functionData.containsKey(newKeyCollector)) {
-            HashMap<String, MtasSolrMtasResult> tmpList = functionData
-                .get(newKeyCollector);
-            for (String functionKey : newItem.functionData.get(keyCollector)
-                .keySet()) {
+            HashMap<String, MtasSolrMtasResult> tmpList = functionData.get(newKeyCollector);
+            for (String functionKey : newItem.functionData.get(keyCollector).keySet()) {
               if (tmpList.containsKey(functionKey)) {
-                tmpList.get(functionKey).merge(
-                    newItem.functionData.get(keyCollector).get(functionKey));
+                tmpList.get(functionKey).merge(newItem.functionData.get(keyCollector).get(functionKey));
               } else {
-                tmpList.put(functionKey,
-                    newItem.functionData.get(keyCollector).get(functionKey));
+                tmpList.put(functionKey, newItem.functionData.get(keyCollector).get(functionKey));
               }
             }
           } else {
-            functionData.put(newKeyCollector,
-                newItem.functionData.get(keyCollector));
+            functionData.put(newKeyCollector, newItem.functionData.get(keyCollector));
           }
         }
       }
@@ -208,30 +263,27 @@ public class MtasSolrMtasResult implements Serializable {
   /**
    * Gets the data.
    *
-   * @param showDebugInfo the show debug info
+   * @param showDebugInfo
+   *          the show debug info
    * @return the data
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
    */
   NamedList<Object> getData(boolean showDebugInfo) throws IOException {
-    if (dataCollector.getCollectorType()
-        .equals(DataCollector.COLLECTOR_TYPE_DATA)) {
+    if (dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_DATA)) {
       NamedList<Object> mtasResponse = new SimpleOrderedMap<>();
       // functions
       Map<String, NamedList<Object>> functionList = new HashMap<>();
       if (functionData != null && functionData.containsKey(dataCollector)) {
-        HashMap<String, MtasSolrMtasResult> functionDataItem = functionData
-            .get(dataCollector);
-        for (Entry<String, MtasSolrMtasResult> entry : functionDataItem
-            .entrySet()) {
+        HashMap<String, MtasSolrMtasResult> functionDataItem = functionData.get(dataCollector);
+        for (Entry<String, MtasSolrMtasResult> entry : functionDataItem.entrySet()) {
           MtasSolrMtasResult functionResult = entry.getValue();
-          if (functionResult.dataCollector.getCollectorType()
-              .equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-            NamedList<Object> functionData = functionResult
-                .getData(showDebugInfo);
+          if (functionResult.dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_DATA)) {
+            NamedList<Object> functionData = functionResult.getData(showDebugInfo);
             functionList.put(entry.getKey(), functionData);
           } else {
-            throw new IOException("unexpected function collectorType "
-                + functionResult.dataCollector.getCollectorType());
+            throw new IOException(
+                "unexpected function collectorType " + functionResult.dataCollector.getCollectorType());
           }
         }
       }
@@ -243,24 +295,18 @@ public class MtasSolrMtasResult implements Serializable {
           mtasResponse.add("functions", functionList);
         }
         if ((subDataType != null) && (dataItem.getSub() != null)) {
-          MtasSolrMtasResult css = new MtasSolrMtasResult(dataItem.getSub(),
-              subDataType, subStatsType, subStatsItems, subDistances,
-              subSortType, subSortDirection, subStart, subNumber, functionData);
-          if (dataItem.getSub().getCollectorType()
-              .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-            mtasResponse.add(dataItem.getSub().getCollectorType(),
-                css.getNamedList(showDebugInfo));
-          } else if (dataItem.getSub().getCollectorType()
-              .equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-            mtasResponse.add(dataItem.getSub().getCollectorType(),
-                css.getData(showDebugInfo));
+          MtasSolrMtasResult css = new MtasSolrMtasResult(dataItem.getSub(), subDataType, subStatsType, subStatsItems,
+              subDistances, subSortType, subSortDirection, subStart, subNumber, functionData);
+          if (dataItem.getSub().getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+            mtasResponse.add(dataItem.getSub().getCollectorType(), css.getNamedList(showDebugInfo));
+          } else if (dataItem.getSub().getCollectorType().equals(DataCollector.COLLECTOR_TYPE_DATA)) {
+            mtasResponse.add(dataItem.getSub().getCollectorType(), css.getData(showDebugInfo));
           }
         }
       }
       return mtasResponse;
     } else {
-      throw new IOException(
-          "only allowed for " + DataCollector.COLLECTOR_TYPE_DATA);
+      throw new IOException("only allowed for " + DataCollector.COLLECTOR_TYPE_DATA);
     }
   }
 
@@ -268,31 +314,29 @@ public class MtasSolrMtasResult implements Serializable {
    * Gets the key list.
    *
    * @return the key list
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
    */
   public Set<String> getKeyList() throws IOException {
-    if (dataCollector.getCollectorType()
-        .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+    if (dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
       return dataCollector.getResult().getComparatorList().keySet();
     } else {
-      throw new IOException(
-          "only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
+      throw new IOException("only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
     }
   }
-  
+
   /**
    * Gets the size.
    *
    * @return the size
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
    */
   public Integer getSize() throws IOException {
-    if (dataCollector.getCollectorType()
-        .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+    if (dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
       return dataCollector.getSize();
     } else {
-      throw new IOException(
-          "only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
+      throw new IOException("only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
     }
   }
 
@@ -300,55 +344,50 @@ public class MtasSolrMtasResult implements Serializable {
    * Gets the full key list.
    *
    * @return the full key list
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
    */
   public Set<String> getFullKeyList() throws IOException {
-    if (dataCollector.getCollectorType()
-        .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+    if (dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
       return dataCollector.getKeyList();
     } else {
-      throw new IOException(
-          "only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
+      throw new IOException("only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
     }
   }
 
   /**
    * Gets the named list.
    *
-   * @param showDebugInfo the show debug info
+   * @param showDebugInfo
+   *          the show debug info
    * @return the named list
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
    */
   NamedList<Object> getNamedList(boolean showDebugInfo) throws IOException {
-    if (dataCollector.getCollectorType()
-        .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+    if (dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
       SimpleOrderedMap<Object> mtasResponseList = new SimpleOrderedMap<>();
       // functions
       Map<String, SimpleOrderedMap<Object>> functionList = new HashMap<>();
       if (functionData != null && functionData.containsKey(dataCollector)) {
-        HashMap<String, MtasSolrMtasResult> functionDataItem = functionData
-            .get(dataCollector);
-        for (Entry<String, MtasSolrMtasResult> entry : functionDataItem
-            .entrySet()) {
+        HashMap<String, MtasSolrMtasResult> functionDataItem = functionData.get(dataCollector);
+        for (Entry<String, MtasSolrMtasResult> entry : functionDataItem.entrySet()) {
           MtasSolrMtasResult functionResult = entry.getValue();
-          if (functionResult.dataCollector.getCollectorType()
-              .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-            NamedList<Object> functionNamedList = functionResult
-                .getNamedList(showDebugInfo);
+          if (functionResult.dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+            NamedList<Object> functionNamedList = functionResult.getNamedList(showDebugInfo);
             for (int i = 0; i < functionNamedList.size(); i++) {
               if (functionList.containsKey(functionNamedList.getName(i))) {
-                SimpleOrderedMap<Object> tmpMap = functionList
-                    .get(functionNamedList.getName(i));
+                SimpleOrderedMap<Object> tmpMap = functionList.get(functionNamedList.getName(i));
                 tmpMap.add(entry.getKey(), functionNamedList.getVal(i));
               } else {
                 SimpleOrderedMap<Object> tmpMap = new SimpleOrderedMap<>();
                 tmpMap.add(entry.getKey(), functionNamedList.getVal(i));
                 functionList.put(functionNamedList.getName(i), tmpMap);
               }
-            }        
+            }
           } else {
-            throw new IOException("unexpected function collectorType "
-                + functionResult.dataCollector.getCollectorType());
+            throw new IOException(
+                "unexpected function collectorType " + functionResult.dataCollector.getCollectorType());
           }
         }
       }
@@ -360,41 +399,31 @@ public class MtasSolrMtasResult implements Serializable {
         if (this.distances != null && !this.distances.isEmpty()) {
           SimpleOrderedMap<Object> mtasResponseListItemDistance = new SimpleOrderedMap<>();
           for (SubComponentDistance item : this.distances) {
-            mtasResponseListItemDistance.add(item.key,
-                item.getDistance().compute(entry.getKey()));
+            mtasResponseListItemDistance.add(item.key, item.getDistance().compute(entry.getKey()));
           }
           mtasResponseListItem.add(Distance.NAME, mtasResponseListItemDistance);
         }
         mtasResponseListItem.addAll(dataItem.rewrite(showDebugInfo));
         if (functionList.containsKey(entry.getKey())) {
-          mtasResponseListItem.add("functions",
-              functionList.get(entry.getKey()));
+          mtasResponseListItem.add("functions", functionList.get(entry.getKey()));
         }
         if ((subDataType != null) && (dataItem.getSub() != null)) {
-          MtasSolrMtasResult css = new MtasSolrMtasResult(dataItem.getSub(),
-              subDataType, subStatsType, subStatsItems, subDistances,
-              subSortType, subSortDirection, subStart, subNumber, functionData);
-          if (dataItem.getSub().getCollectorType()
-              .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+          MtasSolrMtasResult css = new MtasSolrMtasResult(dataItem.getSub(), subDataType, subStatsType, subStatsItems,
+              subDistances, subSortType, subSortDirection, subStart, subNumber, functionData);
+          if (dataItem.getSub().getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
             if (css.dataCollector.withTotal()) {
-              mtasResponseListItem.add(
-                  DataCollector.COLLECTOR_TYPE_LIST + "Total",
-                  css.dataCollector.getSize());
+              mtasResponseListItem.add(DataCollector.COLLECTOR_TYPE_LIST + "Total", css.dataCollector.getSize());
             }
-            mtasResponseListItem.add(DataCollector.COLLECTOR_TYPE_LIST,
-                css.getNamedList(showDebugInfo));
-          } else if (dataItem.getSub().getCollectorType()
-              .equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-            mtasResponseListItem.add(DataCollector.COLLECTOR_TYPE_DATA,
-                css.getData(showDebugInfo));
+            mtasResponseListItem.add(DataCollector.COLLECTOR_TYPE_LIST, css.getNamedList(showDebugInfo));
+          } else if (dataItem.getSub().getCollectorType().equals(DataCollector.COLLECTOR_TYPE_DATA)) {
+            mtasResponseListItem.add(DataCollector.COLLECTOR_TYPE_DATA, css.getData(showDebugInfo));
           }
         }
         mtasResponseList.add(entry.getKey(), mtasResponseListItem);
       }
       return mtasResponseList;
     } else {
-      throw new IOException(
-          "only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
+      throw new IOException("only allowed for " + DataCollector.COLLECTOR_TYPE_LIST);
     }
   }
 
@@ -410,14 +439,11 @@ public class MtasSolrMtasResult implements Serializable {
    */
   @Override
   public String toString() {
-    if (dataCollector.getCollectorType()
-        .equals(DataCollector.COLLECTOR_TYPE_DATA)) {
+    if (dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_DATA)) {
       return this.getClass().getSimpleName() + "(data-" + hashCode() + ")";
     }
-    if (dataCollector.getCollectorType()
-        .equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-      return this.getClass().getSimpleName() + "(list("
-          + dataCollector.getSize() + ")-" + hashCode() + ")";
+    if (dataCollector.getCollectorType().equals(DataCollector.COLLECTOR_TYPE_LIST)) {
+      return this.getClass().getSimpleName() + "(list(" + dataCollector.getSize() + ")-" + hashCode() + ")";
     } else {
       return this.getClass().getSimpleName() + ": unknown";
     }
@@ -427,7 +453,8 @@ public class MtasSolrMtasResult implements Serializable {
    * Gets the result.
    *
    * @return the result
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
    */
   public MtasDataCollectorResult getResult() throws IOException {
     return dataCollector.getResult();

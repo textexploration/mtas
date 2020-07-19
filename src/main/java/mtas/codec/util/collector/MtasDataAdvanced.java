@@ -448,6 +448,7 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
       MtasDataAdvanced<T1, T2> newMtasDataAdvanced = (MtasDataAdvanced<T1, T2>) newDataCollector;
       newMtasDataAdvanced.closeNewList();
       initNewList(newMtasDataAdvanced.getSize());
+      newDataCollector.mergedInto = this;
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
         if(map!=null) {
           map.put(newDataCollector, this);

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -16,6 +17,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import mtas.codec.util.DataCollector;
+import mtas.solr.handler.component.util.MtasSolrMtasResult;
 
 /**
  * The Class MtasDataCollector.
@@ -162,7 +164,10 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
 
   /** The sub collector next level. */
   protected MtasDataCollector<?, ?> subCollectorNextLevel = null;
-
+  
+  /** The merged into. */
+  public MtasDataCollector<?, ?> mergedInto = null;
+  
   /** The new size. */
   protected transient int newSize;
 
@@ -362,6 +367,20 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
     }
   }
   
+  public static MtasDataCollector<?, ?> resolve (MtasDataCollector<?, ?> dc) { 
+    while(dc!=null && dc.mergedInto!=null) {
+      dc = dc.mergedInto;
+    }
+    return dc;
+  }
+  
+  /**
+   * Read object.
+   *
+   * @param in the in
+   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws ClassNotFoundException the class not found exception
+   */
   private void readObject(java.io.ObjectInputStream in)
       throws IOException, ClassNotFoundException {
     in.defaultReadObject();
@@ -676,6 +695,13 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
     }
   }
   
+  /**
+   * Adds the new from.
+   *
+   * @param key the key
+   * @param otherSubCollector the other sub collector
+   * @return the mtas data collector
+   */
   protected final MtasDataCollector<?, ?> addNewFrom(String key, MtasDataCollector<?, ?> otherSubCollector) {
       hasSub = true;
       this.subCollectorTypes = new String[]{otherSubCollector.collectorType};
@@ -1378,6 +1404,11 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
   public abstract MtasDataCollector add(String key, double[] values, int number)
       throws IOException;
 
+  /**
+   * To string.
+   *
+   * @return the string
+   */
   /*
    * (non-Javadoc)
    * 
@@ -1560,5 +1591,6 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
           "can't get total for dataCollector of type " + collectorType);
     }
   }
+
 
 }

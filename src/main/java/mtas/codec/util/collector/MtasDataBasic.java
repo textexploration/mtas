@@ -2,6 +2,7 @@ package mtas.codec.util.collector;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -329,6 +330,7 @@ abstract class MtasDataBasic<T1 extends Number & Comparable<T1>, T2 extends Numb
       MtasDataBasic<T1, T2> newMtasDataBasic = (MtasDataBasic<T1, T2>) newDataCollector;
       newMtasDataBasic.closeNewList();
       initNewList(newMtasDataBasic.getSize());
+      newDataCollector.mergedInto = this;
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
         if(map!=null) {
           map.put(newDataCollector, this);
