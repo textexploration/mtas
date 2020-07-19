@@ -146,7 +146,6 @@ public class MtasSolrMtasResult implements Serializable {
     }
   }
 
-
   /**
    * Instantiates a new mtas solr mtas result.
    *
@@ -171,36 +170,37 @@ public class MtasSolrMtasResult implements Serializable {
         new List[] { distance }, new String[] { null }, new String[] { null }, new Integer[] { 0 }, new Integer[] { 1 },
         functionData);
   }
-  
-  public Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> resolve(Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> fd) {
-    if(fd==null) {
+
+  public Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> resolve(
+      Map<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> fd) {
+    if (fd == null) {
       return fd;
     } else {
       HashMap<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> functionData = new HashMap<>();
       HashMap<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> tmpFunctionData = new HashMap<>();
-      for(Entry<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> entry : fd.entrySet()) {
+      for (Entry<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> entry : fd.entrySet()) {
         MtasDataCollector<?, ?> itemKey = entry.getKey();
         HashMap<String, MtasSolrMtasResult> itemMap = entry.getValue();
-        while(itemKey.mergedInto!=null) {
-          if(fd.containsKey(itemKey)) {
-            fd.put(itemKey,null);
+        while (itemKey.mergedInto != null) {
+          if (fd.containsKey(itemKey)) {
+            fd.put(itemKey, null);
           }
           tmpFunctionData.remove(itemKey);
-          itemKey=itemKey.mergedInto;
+          itemKey = itemKey.mergedInto;
           HashMap<String, MtasSolrMtasResult> oldItemMap = itemMap;
           itemMap = fd.get(itemKey);
-          if(itemKey==null) {
+          if (itemKey == null) {
             itemMap = tmpFunctionData.get(itemKey);
           }
-          if(itemMap!=null) {
-            //merge with old
-            if(oldItemMap!=null) {
-              for(Entry<String, MtasSolrMtasResult> subEntry : oldItemMap.entrySet()) {
-                if(itemMap.containsKey(subEntry.getKey())) {
+          if (itemMap != null) {
+            // merge with old
+            if (oldItemMap != null) {
+              for (Entry<String, MtasSolrMtasResult> subEntry : oldItemMap.entrySet()) {
+                if (itemMap.containsKey(subEntry.getKey())) {
                   try {
                     itemMap.get(subEntry.getKey()).merge(subEntry.getValue());
                   } catch (IOException e) {
-                    //do nothing?
+                    // do nothing?
                   }
                 } else {
                   itemMap.put(subEntry.getKey(), subEntry.getValue());
@@ -209,8 +209,8 @@ public class MtasSolrMtasResult implements Serializable {
             }
           } else {
             itemMap = oldItemMap;
-          }  
-          tmpFunctionData.put(itemKey,itemMap);          
+          }
+          tmpFunctionData.put(itemKey, itemMap);
         }
         functionData.put(itemKey, itemMap);
       }
@@ -227,34 +227,27 @@ public class MtasSolrMtasResult implements Serializable {
    *           Signals that an I/O exception has occurred.
    */
   void merge(MtasSolrMtasResult newItem) throws IOException {
-    HashMap<MtasDataCollector<?, ?>, MtasDataCollector<?, ?>> map = new HashMap<>();
     if (newItem.dataCollector.withTotal()) {
       dataCollector.setWithTotal();
     }
-    dataCollector.merge(newItem.dataCollector, map, true);
+    dataCollector.merge(newItem.dataCollector, true);
     if (newItem.functionData != null) {
       if (functionData == null) {
         functionData = new HashMap<>();
       }
       for (MtasDataCollector<?, ?> keyCollector : newItem.functionData.keySet()) {
-        if (map.containsKey(keyCollector)) {
-          // compute mapped key
-          MtasDataCollector<?, ?> newKeyCollector = keyCollector;
-          while (map.containsKey(newKeyCollector)) {
-            newKeyCollector = map.get(newKeyCollector);
-          }
-          if (functionData.containsKey(newKeyCollector)) {
-            HashMap<String, MtasSolrMtasResult> tmpList = functionData.get(newKeyCollector);
-            for (String functionKey : newItem.functionData.get(keyCollector).keySet()) {
-              if (tmpList.containsKey(functionKey)) {
-                tmpList.get(functionKey).merge(newItem.functionData.get(keyCollector).get(functionKey));
-              } else {
-                tmpList.put(functionKey, newItem.functionData.get(keyCollector).get(functionKey));
-              }
+        MtasDataCollector<?, ?> newKeyCollector = MtasDataCollector.resolve(keyCollector);
+        if (functionData.containsKey(newKeyCollector)) {
+          HashMap<String, MtasSolrMtasResult> tmpList = functionData.get(newKeyCollector);
+          for (String functionKey : newItem.functionData.get(keyCollector).keySet()) {
+            if (tmpList.containsKey(functionKey)) {
+              tmpList.get(functionKey).merge(newItem.functionData.get(keyCollector).get(functionKey));
+            } else {
+              tmpList.put(functionKey, newItem.functionData.get(keyCollector).get(functionKey));
             }
-          } else {
-            functionData.put(newKeyCollector, newItem.functionData.get(keyCollector));
           }
+        } else {
+          functionData.put(newKeyCollector, newItem.functionData.get(keyCollector));
         }
       }
     }

@@ -411,7 +411,6 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
    * @throws IOException Signals that an I/O exception has occurred.
    */
   abstract public void merge(MtasDataCollector<?, ?> newDataCollector,
-      Map<MtasDataCollector<?, ?>, MtasDataCollector<?, ?>> map,
       boolean increaseSourceNumber) throws IOException;
 
   /**
@@ -1178,7 +1177,6 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
       // remap and merge keys
       String[] newKeyList = new String[mapping.length];
       // process mapping for functions?
-      HashMap<MtasDataCollector<?, ?>, MtasDataCollector<?, ?>> map = new HashMap<>();
       int[] newSourceNumberList = new int[mapping.length];
       int[] newErrorNumber = new int[mapping.length];
       @SuppressWarnings("unchecked")
@@ -1212,7 +1210,7 @@ public abstract class MtasDataCollector<T1 extends Number & Comparable<T1>, T2 e
               newSubCollectorListNextLevel[i] = subCollectorListNextLevel[mapping[i][j]];
             } else {
               newSubCollectorListNextLevel[i]
-                  .merge(subCollectorListNextLevel[mapping[i][j]], map, false);
+                  .merge(subCollectorListNextLevel[mapping[i][j]], false);
             }
           }
         }

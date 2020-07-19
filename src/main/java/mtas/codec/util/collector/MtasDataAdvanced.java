@@ -434,7 +434,6 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
    */
   @Override
   public void merge(MtasDataCollector<?, ?> newDataCollector,
-      Map<MtasDataCollector<?, ?>, MtasDataCollector<?, ?>> map,
       boolean increaseSourceNumber) throws IOException {
     closeNewList();
     if (!collectorType.equals(newDataCollector.getCollectorType())
@@ -450,9 +449,6 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
       initNewList(newMtasDataAdvanced.getSize());
       newDataCollector.mergedInto = this;
       if (collectorType.equals(DataCollector.COLLECTOR_TYPE_LIST)) {
-        if(map!=null) {
-          map.put(newDataCollector, this);
-        }
         for (int i = 0; i < newMtasDataAdvanced.getSize(); i++) {
           MtasDataCollector<?, ?> subCollector = getSubCollector(newMtasDataAdvanced.keyList[i],
               increaseSourceNumber);
@@ -467,15 +463,12 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
               newMtasDataAdvanced.advancedValueNList[i], newCurrentExisting);
           if (hasSub() && newMtasDataAdvanced.hasSub()) {
             subCollector.merge(
-                newMtasDataAdvanced.subCollectorListNextLevel[i], map,
+                newMtasDataAdvanced.subCollectorListNextLevel[i], 
                 increaseSourceNumber);
           }
         }
         closeNewList();
       } else if (collectorType.equals(DataCollector.COLLECTOR_TYPE_DATA)) {
-        if(map!=null) {
-          map.put(newDataCollector, this);
-        }
         if (newMtasDataAdvanced.getSize() > 0) {
           MtasDataCollector<?, ?> subCollector = getSubCollector(increaseSourceNumber);
           setError(newCurrentPosition, newMtasDataAdvanced.errorNumber[0],
@@ -488,7 +481,7 @@ abstract class MtasDataAdvanced<T1 extends Number & Comparable<T1>, T2 extends N
               newMtasDataAdvanced.advancedValueMaxList[0],
               newMtasDataAdvanced.advancedValueNList[0], newCurrentExisting);
           if (hasSub() && newMtasDataAdvanced.hasSub()) {
-            subCollector.merge(newMtasDataAdvanced.subCollectorNextLevel, map,
+            subCollector.merge(newMtasDataAdvanced.subCollectorNextLevel, 
                 increaseSourceNumber);
           }
         }
