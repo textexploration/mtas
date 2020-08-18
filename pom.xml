@@ -3,7 +3,7 @@
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<currentLuceneVersion>8.5.0</currentLuceneVersion>
+		<currentLuceneVersion>8.6.1</currentLuceneVersion>
 	</properties>
 	<scm>
     <connection>scm:git:git@github.com:textexploration/mtas.git</connection>
@@ -24,7 +24,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.textexploration.mtas</groupId>
 	<artifactId>mtas</artifactId>
-	<version>8.5.0.2-SNAPSHOT</version>
+	<version>8.6.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<licenses>
 		<license>

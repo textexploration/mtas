@@ -189,9 +189,6 @@ public class MtasSolrMtasResult implements Serializable {
           itemKey = itemKey.mergedInto;
           HashMap<String, MtasSolrMtasResult> oldItemMap = itemMap;
           itemMap = fd.get(itemKey);
-          if (itemKey == null) {
-            itemMap = tmpFunctionData.get(itemKey);
-          }
           if (itemMap != null) {
             // merge with old
             if (oldItemMap != null) {

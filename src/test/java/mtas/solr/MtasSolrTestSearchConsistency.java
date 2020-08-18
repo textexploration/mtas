@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.logging.Log;
@@ -68,7 +69,7 @@ public class MtasSolrTestSearchConsistency {
           Arrays.asList("collection1", "collection2", "collection3"));
       initializeDirectory(dataPath, collections);
       CoreContainer container = new CoreContainer(
-          solrPath.toAbsolutePath().toString());
+          solrPath.toAbsolutePath(), new Properties());
       container.load();
       server = new EmbeddedSolrServer(container, collections.get(0));
       
