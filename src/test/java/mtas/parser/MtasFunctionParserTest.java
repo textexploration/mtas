@@ -382,7 +382,7 @@ public class MtasFunctionParserTest {
     long[] argsD = null;
     try {
       int n = getN(0, 100);
-      int d = getN(0, 10);
+      int d = getN(1, 10);
       int k1 = generator.nextInt(10);
       function = "$n^$q" + k1;
       p = new MtasFunctionParser(
