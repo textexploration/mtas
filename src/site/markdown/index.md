@@ -47,7 +47,7 @@ Collections are added and updated regularly by adding new cores, replacing cores
 
 **Middelnederlands** 
 
-Mtas is also used on [Middelnederlands.nl](https://www.middelnederlands.nl/), including geographical selections and new analysis options<sup>2</sup>. 
+Mtas is also used on [Middelnederlands.nl](https://www.middelnederlands.nl/), including geographical selections and new analysis options.<sup>2</sup>
 
 ![example document](images/example_document.jpg "Show document")
 
