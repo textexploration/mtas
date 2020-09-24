@@ -41,7 +41,7 @@ Collections are added and updated regularly by adding new cores, replacing cores
 | Words           | 18,494,454,357  | 446          | 1     | 3,537,883  |
 | Annotations     | 95,921,919,849  | 2,314        | 4     | 23,589,831 |
 
-Mtas is also used on [Middelnederlands.nl](https://www.middelnederlands.nl/) including geographical selections and new analysis options. 
+Mtas is also used on [Middelnederlands.nl](https://www.middelnederlands.nl/), including geographical selections and new analysis options. 
 
 
 ---
