@@ -28,7 +28,7 @@ This project builds upon the latest commit from April 30, 2018 for [meertensinst
 
 **Nederlab** 
 
-One of the primary use cases for Mtas, the [Nederlab project](http://www.nederlab.nl/), currently<sup>1</sup> provides access, both in terms of metadata and 
+One of the primary use cases for Mtas, the [Nederlab project](https://www.nederlab.nl/), currently<sup>1</sup> provides access, both in terms of metadata and 
 annotated text, to over 74 million items for search and analysis as specified below. 
 
 |                 | Total          | Mean      | Min   | Max        |
@@ -42,6 +42,36 @@ Collections are added and updated regularly by adding new cores, replacing cores
 |-----------------|----------------:|-------------:|------:|-----------:|
 | Words           | 18,494,454,357  | 446          | 1     | 3,537,883  |
 | Annotations     | 95,921,919,849  | 2,314        | 4     | 23,589,831 |
+
+---
+
+**Middelnederlands** 
+
+Mtas is also used on [Middelnederlands.nl](https://www.middelnederlands.nl/), including geographical selections and new analysis options. 
+
+![example document](images/example_document.jpg "Show document")
+
+***Keyword in context*** 
+
+![example kwic](images/example_kwic.jpg "Keyword in context")
+
+***Group results*** 
+
+![example group](images/example_group.jpg "Group results")
+
+***Geographic conditions*** 
+
+![example geographic](images/example_geographic.jpg "Geographic condition")
+
+***Correlation analysis*** 
+
+![example correlation](images/example_correlation.jpg "Correlation analysis")
+
+***Geographical analysis*** 
+
+![example map1](images/example_map_1.jpg "Geographical analysis")
+
+![example map1](images/example_map_2.jpg "Geographical analysis")
 
 ---
 

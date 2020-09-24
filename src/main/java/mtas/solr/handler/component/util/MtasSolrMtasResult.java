@@ -177,7 +177,6 @@ public class MtasSolrMtasResult implements Serializable {
       return fd;
     } else {
       HashMap<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> functionData = new HashMap<>();
-      HashMap<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> tmpFunctionData = new HashMap<>();
       for (Entry<MtasDataCollector<?, ?>, HashMap<String, MtasSolrMtasResult>> entry : fd.entrySet()) {
         MtasDataCollector<?, ?> itemKey = entry.getKey();
         HashMap<String, MtasSolrMtasResult> itemMap = entry.getValue();
@@ -185,7 +184,6 @@ public class MtasSolrMtasResult implements Serializable {
           if (fd.containsKey(itemKey)) {
             fd.put(itemKey, null);
           }
-          tmpFunctionData.remove(itemKey);
           itemKey = itemKey.mergedInto;
           HashMap<String, MtasSolrMtasResult> oldItemMap = itemMap;
           itemMap = fd.get(itemKey);
@@ -207,7 +205,6 @@ public class MtasSolrMtasResult implements Serializable {
           } else {
             itemMap = oldItemMap;
           }
-          tmpFunctionData.put(itemKey, itemMap);
         }
         functionData.put(itemKey, itemMap);
       }
