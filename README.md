@@ -43,6 +43,29 @@ Collections are added and updated regularly by adding new cores, replacing cores
 
 Mtas is also used on [Middelnederlands.nl](https://www.middelnederlands.nl/), including geographical selections and new analysis options. 
 
+![example document](https://raw.githubusercontent.com/textexploration/mtas/master/src/site/resources/images/example_document.jpg "Show document")
+
+***Keyword in context*** 
+
+![example kwic](https://raw.githubusercontent.com/textexploration/mtas/master/src/site/resources/images/example_kwic.jpg "Keyword in context")
+
+***Group results*** 
+
+![example group](https://raw.githubusercontent.com/textexploration/mtas/master/src/site/resources/images/example_group.jpg "Group results")
+
+***Geographic conditions*** 
+
+![example geographic](https://raw.githubusercontent.com/textexploration/mtas/master/src/site/resources/images/example_geographic.jpg "Geographic condition")
+
+***Correlation analysis*** 
+
+![example correlation](https://raw.githubusercontent.com/textexploration/mtas/master/src/site/resources/images/example_correlation.jpg "Correlation analysis")
+
+***Geographical analysis*** 
+
+![example map1](https://raw.githubusercontent.com/textexploration/mtas/master/src/site/resources/images/example_map_1.jpg "Geographical analysis")
+
+![example map1](https://raw.githubusercontent.com/textexploration/mtas/master/src/site/resources/images/example_map_2.jpg "Geographical analysis")
 
 ---
 <sup><a name="footnote">1</a></sup> <small>situation June 2018</small>
