@@ -1,13 +1,14 @@
 package mtas.solr.handler.component.util;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.handler.component.ResponseBuilder;
@@ -35,8 +36,7 @@ public class MtasSolrComponentFacet
     implements MtasSolrComponent<ComponentFacet> {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasSolrComponentFacet.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The search component. */
   MtasSolrSearchComponent searchComponent;
@@ -143,7 +143,8 @@ public class MtasSolrComponentFacet
    * handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
+  @Override
+public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     Set<String> ids = MtasSolrResultUtil
         .getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_FACET);
@@ -426,7 +427,8 @@ public class MtasSolrComponentFacet
    * org.apache.solr.handler.component.SearchComponent,
    * org.apache.solr.handler.component.ShardRequest)
    */
-  public void modifyRequest(ResponseBuilder rb, SearchComponent who,
+  @Override
+public void modifyRequest(ResponseBuilder rb, SearchComponent who,
       ShardRequest sreq) {
     if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)
         && sreq.params.getBool(PARAM_MTAS_FACET, false)) {
@@ -541,7 +543,8 @@ public class MtasSolrComponentFacet
    * mtas.solr.handler.component.util.MtasSolrComponent#create(mtas.codec.util.
    * CodecComponent.BasicComponent, java.lang.Boolean)
    */
-  public SimpleOrderedMap<Object> create(ComponentFacet facet, Boolean encode)
+  @Override
+public SimpleOrderedMap<Object> create(ComponentFacet facet, Boolean encode)
       throws IOException {
     SimpleOrderedMap<Object> mtasFacetResponse = new SimpleOrderedMap<>();
     mtasFacetResponse.add("key", facet.key);
@@ -588,7 +591,8 @@ public class MtasSolrComponentFacet
    * mtas.solr.handler.component.util.MtasSolrComponent#finishStage(org.apache.
    * solr.handler.component.ResponseBuilder)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void finishStage(ResponseBuilder rb) {
     if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)
         && rb.stage >= ResponseBuilder.STAGE_EXECUTE_QUERY
@@ -606,7 +610,7 @@ public class MtasSolrComponentFacet
                 MtasSolrResultUtil.decode(data);
               }
             } catch (ClassCastException e) {
-              log.debug(e);
+              log.debug("Error", e);
               // shouldn't happen
             }
           }
@@ -623,7 +627,8 @@ public class MtasSolrComponentFacet
    * apache.solr.handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void distributedProcess(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     // rewrite
@@ -631,7 +636,7 @@ public class MtasSolrComponentFacet
     try {
       mtasResponse = (NamedList<Object>) rb.rsp.getValues().get("mtas");
     } catch (ClassCastException e) {
-      log.debug(e);
+      log.debug("Error", e);
       mtasResponse = null;
     }
     if (mtasResponse != null) {
@@ -642,7 +647,7 @@ public class MtasSolrComponentFacet
           MtasSolrResultUtil.rewrite(mtasResponseFacet, searchComponent);
         }
       } catch (ClassCastException e) {
-        log.debug(e);
+        log.debug("Error", e);
         mtasResponse.remove(NAME);
       }
     }

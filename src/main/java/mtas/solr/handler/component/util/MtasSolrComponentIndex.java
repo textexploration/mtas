@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.handler.component.ResponseBuilder;
@@ -46,7 +46,7 @@ import mtas.solr.handler.component.MtasSolrSearchComponent;
 public class MtasSolrComponentIndex implements MtasSolrComponent<ComponentIndex> {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasSolrComponentIndex.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasSolrComponentIndex.class);
 
   /** The Constant NAME. */
   public static final String NAME = "index";

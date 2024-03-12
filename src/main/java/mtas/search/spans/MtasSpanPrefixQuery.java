@@ -11,12 +11,13 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanMultiTermQueryWrapper;
-import org.apache.lucene.search.spans.SpanOrQuery;
-import org.apache.lucene.search.spans.SpanQuery;
-import org.apache.lucene.search.spans.SpanTermQuery;
-import org.apache.lucene.search.spans.SpanWeight;
+import org.apache.lucene.queries.spans.SpanMultiTermQueryWrapper;
+import org.apache.lucene.queries.spans.SpanOrQuery;
+import org.apache.lucene.queries.spans.SpanQuery;
+import org.apache.lucene.queries.spans.SpanTermQuery;
+import org.apache.lucene.queries.spans.SpanWeight;
 
 /**
  * The Class MtasSpanPrefixQuery.
@@ -146,12 +147,15 @@ public class MtasSpanPrefixQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     MtasSpanPrefixQuery other = (MtasSpanPrefixQuery) obj;
     return other.term.equals(term) && (other.singlePosition == singlePosition);
   }
@@ -170,5 +174,11 @@ public class MtasSpanPrefixQuery extends MtasSpanQuery {
   public boolean isMatchAllPositionsQuery() {
     return false;
   }
+
+@Override
+public void visit(QueryVisitor aVisitor)
+{
+    query.visit(aVisitor);
+}
 
 }

@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>6.0.0</luceneMatchVersion>
+  <luceneMatchVersion>9.9.2</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
@@ -490,8 +490,7 @@
            autowarmCount - the number of entries to prepopulate from
                and old cache.
       -->
-    <filterCache class="solr.FastLRUCache"
-                 size="512"
+    <filterCache size="512"
                  initialSize="512"
                  autowarmCount="0"/>
 
@@ -503,8 +502,7 @@
             maxRamMB - the maximum amount of RAM (in MB) that this cache is allowed
                        to occupy
       -->
-    <queryResultCache class="solr.LRUCache"
-                      size="512"
+    <queryResultCache size="512"
                       initialSize="512"
                       autowarmCount="0"/>
 
@@ -514,8 +512,7 @@
          document).  Since Lucene internal document ids are transient,
          this cache will not be autowarmed.
       -->
-    <documentCache class="solr.LRUCache"
-                   size="512"
+    <documentCache size="512"
                    initialSize="512"
                    autowarmCount="0"/>
 
@@ -526,8 +523,7 @@
          even if not configured here.
       -->
     <!--
-       <fieldValueCache class="solr.FastLRUCache"
-                        size="512"
+       <fieldValueCache size="512"
                         autowarmCount="128"
                         showItems="32" />
       -->
@@ -1556,7 +1552,7 @@
        in Solr's conf/xslt directory.  Changes to xslt files are checked for
        every xsltCacheLifetimeSeconds.  
     -->
-  <queryResponseWriter name="xslt" class="solr.XSLTResponseWriter">
+  <queryResponseWriter name="xslt" class="solr.scripting.xslt.XSLTResponseWriter">
     <int name="xsltCacheLifetimeSeconds">5</int>
   </queryResponseWriter>
 

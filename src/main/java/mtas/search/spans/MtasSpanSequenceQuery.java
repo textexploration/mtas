@@ -6,17 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanWeight;
-import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.queries.spans.SpanWeight;
+import org.apache.lucene.queries.spans.Spans;
 
 import mtas.search.spans.util.MtasExpandSpanQuery;
 import mtas.search.spans.util.MtasIgnoreItem;
@@ -355,12 +354,15 @@ public class MtasSpanSequenceQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     MtasSpanSequenceQuery other = (MtasSpanSequenceQuery) obj;
     boolean isEqual;
     isEqual = field.equals(other.field);
@@ -539,21 +541,6 @@ public class MtasSpanSequenceQuery extends MtasSpanQuery {
       }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.lucene.search.Weight#extractTerms(java.util.Set)
-     */
-    @Override
-    public void extractTerms(Set<Term> terms) {
-      for (MtasSpanSequenceQueryWeight w : subWeights) {
-        w.spanWeight.extractTerms(terms);
-      }
-      if (ignoreWeight != null) {
-        ignoreWeight.extractTerms(terms);
-      }
-    }
-    
 //    @Override
 //    public boolean isCacheable(LeafReaderContext arg0) {      
 //      for(MtasSpanSequenceQueryWeight sqw : subWeights) {
@@ -622,5 +609,18 @@ public class MtasSpanSequenceQuery extends MtasSpanQuery {
   public boolean isMatchAllPositionsQuery() {
     return false;
   }
+
+@Override
+public void visit(QueryVisitor aVisitor)
+{
+    for (var item : items) {
+        item.getQuery().visit(aVisitor);
+      }
+    
+      if (ignoreQuery != null) {
+          ignoreQuery.visit(aVisitor);
+      }
+    
+}
 
 }

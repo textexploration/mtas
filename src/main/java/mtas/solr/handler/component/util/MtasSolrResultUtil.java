@@ -22,10 +22,10 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.solr.common.params.SolrParams;
-import org.apache.solr.common.util.Base64;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 
@@ -45,7 +45,7 @@ import mtas.solr.handler.component.MtasSolrSearchComponent;
 public class MtasSolrResultUtil {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasSolrResultUtil.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasSolrResultUtil.class);
 
   /** The Constant QUERY_TYPE_CQL. */
   public static final String QUERY_TYPE_CQL = "cql";
@@ -302,10 +302,10 @@ public class MtasSolrResultUtil {
         objectOutputStream.writeObject(o);
         objectOutputStream.close();
         byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.byteArrayToBase64(byteArray);
+        return Base64.encodeBase64String(byteArray);
       } catch (IOException e) {
         e.printStackTrace();
-        log.error(e);
+        log.error("Error", e);
         return null;
       }
     } else {
@@ -320,14 +320,14 @@ public class MtasSolrResultUtil {
    * @return the object
    */
   static Object decode(String s) {
-    byte[] bytes = Base64.base64ToByteArray(s);
+    byte[] bytes = Base64.decodeBase64(s);
     ObjectInputStream objectInputStream;
     try {
       objectInputStream = new ObjectInputStream(
           new ByteArrayInputStream(bytes));
       return objectInputStream.readObject();
     } catch (IOException | ClassNotFoundException e) {
-      log.error(e);
+      log.error("Error", e);
       return null;
     }
   }

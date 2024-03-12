@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
@@ -43,8 +43,8 @@ import org.apache.solr.core.CoreContainer;
 public class MtasSolrTestSearchConsistency {
 
   /** The log. */
-  private static Log log = LogFactory
-      .getLog(MtasSolrTestSearchConsistency.class);
+    private static final Logger log = LoggerFactory
+      .getLogger(MtasSolrTestSearchConsistency.class);
 
   /** The server. */
   private static EmbeddedSolrServer server;
@@ -56,14 +56,13 @@ public class MtasSolrTestSearchConsistency {
    * Setup.
    */
   @org.junit.BeforeClass
-  public static void setup() {
-    try {
+  public static void setup() throws Exception {
       Path dataPath = Paths.get("src" + File.separator + "test"
           + File.separator + "resources" + File.separator + "data");
       // data
       Map<Integer, SolrInputDocument> solrDocuments = MtasSolrBase
           .createDocuments(true);
-
+    
       // create
       ArrayList<String> collections = new ArrayList<>(
           Arrays.asList("collection1", "collection2", "collection3"));
@@ -79,17 +78,13 @@ public class MtasSolrTestSearchConsistency {
       server.add("collection1", solrDocuments.get(2));
       server.add("collection1", solrDocuments.get(3));
       server.commit("collection1");
-
+    
       server.add("collection2", solrDocuments.get(1));
       server.commit("collection2");
-
+    
       server.add("collection3", solrDocuments.get(3));
       server.add("collection3", solrDocuments.get(2));
       server.commit("collection3");
-
-    } catch (IOException | SolrServerException e) {
-      log.error(e);
-    }
   }
 
   /**
@@ -927,8 +922,7 @@ public class MtasSolrTestSearchConsistency {
       if (subListRaw != null && subListRaw instanceof Map) {
         Object subSubListRaw = ((Map<String, Object>) subListRaw).get("hit");
         if (subSubListRaw != null && subSubListRaw instanceof Map) {
-          Object subSubSubListRaw = ((Map<String, Object>) subSubListRaw)
-              .get(0);
+          Object subSubSubListRaw = ((List<Object>) subSubListRaw).get(0);
           if (subSubSubListRaw != null && subSubSubListRaw instanceof List) {
             Object subSubSubSubListRaw = ((List<Object>) subSubSubListRaw)
                 .get(0);

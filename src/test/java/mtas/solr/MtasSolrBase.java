@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.NamedList;
@@ -54,7 +54,7 @@ public class MtasSolrBase {
   }
 
   /** The log. */
-  private static Log log = LogFactory.getLog(MtasSolrBase.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasSolrBase.class);
   
   /**
    * Gets the num found.

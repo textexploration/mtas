@@ -15,8 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mtas.analysis.token.MtasTokenCollection;
 import mtas.analysis.token.MtasTokenIdFactory;
@@ -32,7 +32,7 @@ import mtas.analysis.util.MtasParserException;
 public class MtasCRMParser extends MtasBasicParser {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasCRMParser.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasCRMParser.class);
 
   /** The word type. */
   private MtasParserType<MtasParserMapping<?>> wordType = null;
@@ -83,7 +83,7 @@ public class MtasCRMParser extends MtasBasicParser {
       initParser();
       // System.out.print(printConfig());
     } catch (MtasConfigException e) {
-      log.error(e);
+      log.error("Error", e);
     }
   }
 
@@ -125,7 +125,7 @@ public class MtasCRMParser extends MtasBasicParser {
                         }
                         nameMap.put(value, replace);
                       } catch (NumberFormatException e) {
-                        log.info(e);                        
+                        log.info("Error", e);                        
                       }                      
                     }                    
                   } else {
@@ -445,7 +445,7 @@ public class MtasCRMParser extends MtasBasicParser {
       closePrevious(mtasTokenIdFactory, previousClause, previousOffset,
           unknownAncestors, currentList, updateList, idPositions, idOffsets);
     } catch (IOException e) {
-      log.debug(e);
+      log.debug("Error", e);
       throw new MtasParserException(e.getMessage());
     }
     // final check

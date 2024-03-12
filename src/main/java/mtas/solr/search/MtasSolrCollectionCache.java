@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
+import java.lang.invoke.MethodHandles;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,13 +29,13 @@ import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.automaton.Automata;
 import org.apache.lucene.util.automaton.Automaton;
-import org.apache.solr.common.util.Base64;
 import org.apache.solr.common.util.SimpleOrderedMap;
 
 /**
@@ -43,8 +44,7 @@ import org.apache.solr.common.util.SimpleOrderedMap;
 public class MtasSolrCollectionCache {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasSolrCollectionCache.class);
+  private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The Constant DEFAULT_LIFETIME. */
   private static final long DEFAULT_LIFETIME = 86400;
@@ -485,7 +485,7 @@ public class MtasSolrCollectionCache {
       objectOutputStream.writeObject(o);
       objectOutputStream.close();
       byte[] byteArray = byteArrayOutputStream.toByteArray();
-      return Base64.byteArrayToBase64(byteArray);
+      return Base64.encodeBase64String(byteArray);
     } else {
       throw new IOException("nothing to encode");
     }
@@ -499,7 +499,7 @@ public class MtasSolrCollectionCache {
    * @throws IOException Signals that an I/O exception has occurred.
    */
   private MtasSolrCollectionCacheItem decode(String s) throws IOException {
-    byte[] bytes = Base64.base64ToByteArray(s);
+    byte[] bytes = Base64.decodeBase64(s);
     ObjectInputStream objectInputStream;
     objectInputStream = new ObjectInputStream(new ByteArrayInputStream(bytes));
     try {
@@ -559,12 +559,15 @@ class MtasSolrCollectionCacheItem implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasSolrCollectionCacheItem that = (MtasSolrCollectionCacheItem) obj;
     return (id.equals(that.id));
   }

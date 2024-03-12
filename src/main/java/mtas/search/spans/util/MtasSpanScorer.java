@@ -3,9 +3,9 @@ package mtas.search.spans.util;
 import java.io.IOException;
 
 import org.apache.lucene.search.LeafSimScorer;
-import org.apache.lucene.search.spans.SpanScorer;
-import org.apache.lucene.search.spans.SpanWeight;
-import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.queries.spans.SpanScorer;
+import org.apache.lucene.queries.spans.SpanWeight;
+import org.apache.lucene.queries.spans.Spans;
 
 public class MtasSpanScorer extends SpanScorer {
 

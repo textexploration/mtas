@@ -5,11 +5,9 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import mtas.analysis.token.MtasToken;
 import mtas.codec.util.CodecUtil;
 import org.apache.lucene.index.FieldInfo;
-import org.apache.lucene.index.IndexReaderContext;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.PostingsEnum;
@@ -19,11 +17,12 @@ import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.FilterSpans;
-import org.apache.lucene.search.spans.SpanTermQuery;
-import org.apache.lucene.search.spans.SpanWeight;
-import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.queries.spans.FilterSpans;
+import org.apache.lucene.queries.spans.SpanTermQuery;
+import org.apache.lucene.queries.spans.SpanWeight;
+import org.apache.lucene.queries.spans.Spans;
 
 /**
  * The Class MtasExtendedSpanTermQuery.
@@ -41,6 +40,7 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
 
   /** The local term. */
   private Term localTerm;
+  private SpanTermQuery query;
 
   /**
    * Instantiates a new mtas extended span term query.
@@ -70,6 +70,7 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
   public MtasExtendedSpanTermQuery(SpanTermQuery query,
       boolean singlePosition) {
     super(query.getTerm());
+    this.query = query;
     localTerm = query.getTerm();
     this.singlePosition = singlePosition;
     int i = localTerm.text().indexOf(MtasToken.DELIMITER);
@@ -94,9 +95,8 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
   public SpanWeight createWeight(IndexSearcher searcher, ScoreMode scoreMode, float boost)
       throws IOException {
     final TermStates context;
-    final IndexReaderContext topContext = searcher.getTopReaderContext();
     if (termStates == null) {
-      context = TermStates.build(topContext, localTerm, true);
+      context = TermStates.build(searcher, localTerm, true);
     } else {
       context = termStates;
     }
@@ -128,16 +128,6 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
       super(MtasExtendedSpanTermQuery.this, searcher, terms, boost);
       this.termStates = termStates;
       assert termStates != null : "TermStates must not be null";
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.lucene.search.Weight#extractTerms(java.util.Set)
-     */
-    @Override
-    public void extractTerms(Set<Term> terms) {
-      terms.add(localTerm);
     }
 
     /*
@@ -175,10 +165,11 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
       if (terms == null) {
         return null;
       }
-      if (!terms.hasPositions())
+      if (!terms.hasPositions()) {
         throw new IllegalStateException("field \"" + localTerm.field()
             + "\" was indexed without position data; cannot run SpanTermQuery (term="
             + localTerm.text() + ")");
+    }
 
       final TermsEnum termsEnum = terms.iterator();
       termsEnum.seekExact(localTerm.bytes(), state);
@@ -269,12 +260,15 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     MtasExtendedSpanTermQuery other = (MtasExtendedSpanTermQuery) obj;
     return other.localTerm.equals(localTerm)
         && (other.singlePosition == singlePosition);
@@ -289,5 +283,10 @@ public class MtasExtendedSpanTermQuery extends SpanTermQuery {
   public int hashCode() {
     return Objects.hash(this.getClass().getSimpleName(), localTerm, singlePosition);   
   }
-
+  
+  @Override
+    public void visit(QueryVisitor aVisitor)
+    {
+      query.visit(aVisitor);
+    }
 }

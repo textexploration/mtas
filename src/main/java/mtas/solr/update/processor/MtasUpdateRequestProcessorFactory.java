@@ -3,6 +3,7 @@ package mtas.solr.update.processor;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -10,16 +11,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.apache.lucene.analysis.CharFilterFactory;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.FlagsAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
-import org.apache.lucene.analysis.util.CharFilterFactory;
-import org.apache.lucene.analysis.util.ResourceLoader;
 import org.apache.lucene.util.BytesRef;
+import org.apache.lucene.util.ResourceLoader;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.SolrInputField;
 import org.apache.solr.common.util.ByteArrayUtf8CharSequence;
@@ -33,6 +33,8 @@ import org.apache.solr.schema.SchemaField;
 import org.apache.solr.update.AddUpdateCommand;
 import org.apache.solr.update.processor.UpdateRequestProcessor;
 import org.apache.solr.update.processor.UpdateRequestProcessorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mtas.analysis.MtasTokenizer;
 import mtas.analysis.util.MtasCharFilterFactory;
@@ -47,8 +49,7 @@ public class MtasUpdateRequestProcessorFactory
     extends UpdateRequestProcessorFactory {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasUpdateRequestProcessorFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The config. */
   private MtasUpdateRequestProcessorConfig config = null;
@@ -265,7 +266,7 @@ public class MtasUpdateRequestProcessorFactory
     try {
       init(req);
     } catch (IOException e) {
-      log.error(e);
+      log.error("Error", e);
     }
     return new MtasUpdateRequestProcessor(next, config);
   }
@@ -275,7 +276,7 @@ public class MtasUpdateRequestProcessorFactory
 class MtasUpdateRequestProcessor extends UpdateRequestProcessor {
 
   /** The log. */
-  private static Log log = LogFactory.getLog(MtasUpdateRequestProcessor.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasUpdateRequestProcessor.class);
 
   private MtasUpdateRequestProcessorConfig config;
 
@@ -431,7 +432,7 @@ class MtasUpdateRequestProcessor extends UpdateRequestProcessor {
 	            }
             }    
           } catch (IOException e) {
-            log.info(e);
+            log.info("Error", e);
             // update error
             doc.addField(config.fieldTypeErrorField.get(fieldType),
                 e.getMessage());
@@ -521,13 +522,15 @@ class MtasUpdateRequestProcessorSizeReader extends Reader {
     totalReadSize = 0;
   }
 
-  public int read(char[] cbuf, int off, int len) throws IOException {
+  @Override
+public int read(char[] cbuf, int off, int len) throws IOException {
     int read = reader.read(cbuf, off, len);
     totalReadSize += read;
     return read;
   }
 
-  public void close() throws IOException {
+  @Override
+public void close() throws IOException {
     reader.close();
   }
 

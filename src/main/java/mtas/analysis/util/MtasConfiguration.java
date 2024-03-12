@@ -13,9 +13,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.analysis.util.ResourceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.lucene.util.ResourceLoader;
 
 /**
  * The Class MtasConfiguration.
@@ -23,7 +23,7 @@ import org.apache.lucene.analysis.util.ResourceLoader;
 public class MtasConfiguration {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasConfiguration.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasConfiguration.class);
 
   /** The Constant CONFIGURATIONS_MTAS. */
   public static final String CONFIGURATIONS_MTAS = "mtas";
@@ -189,7 +189,7 @@ public class MtasConfiguration {
         streamReader.close();
       }
     } catch (XMLStreamException e) {
-      log.debug(e);
+      log.debug("Error", e);
     }
     return configs;
   }
@@ -336,12 +336,13 @@ public class MtasConfiguration {
         streamReader.close();
       }
     } catch (XMLStreamException e) {
-      log.debug(e);
+      log.debug("Error", e);
     }
     return null;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return toString(0);
   }
 

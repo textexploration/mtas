@@ -10,14 +10,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
 import org.apache.solr.handler.component.ShardRequest;
 import org.apache.solr.handler.component.ShardResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mtas.codec.util.CodecComponent.ComponentField;
 import mtas.codec.util.CodecComponent.ComponentFields;
@@ -38,8 +38,8 @@ public class MtasSolrComponentStats
     implements MtasSolrComponent<ComponentStats> {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasSolrComponentStats.class);
+  private static final Logger log = LoggerFactory
+      .getLogger(MtasSolrComponentStats.class);
 
   /** The search component. */
   MtasSolrSearchComponent searchComponent;
@@ -171,7 +171,8 @@ public class MtasSolrComponentStats
    * handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
+  @Override
+public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     if (rb.req.getParams().getBool(PARAM_MTAS_STATS_POSITIONS, false)) {
       preparePositions(rb, mtasFields);
@@ -740,7 +741,8 @@ public class MtasSolrComponentStats
    * org.apache.solr.handler.component.SearchComponent,
    * org.apache.solr.handler.component.ShardRequest)
    */
-  public void modifyRequest(ResponseBuilder rb, SearchComponent who,
+  @Override
+public void modifyRequest(ResponseBuilder rb, SearchComponent who,
       ShardRequest sreq) {
     if ((sreq.purpose & ShardRequest.PURPOSE_GET_TOP_IDS) != 0) {
       // do nothing
@@ -963,7 +965,8 @@ public class MtasSolrComponentStats
    * mtas.solr.handler.component.util.MtasSolrComponent#finishStage(org.apache.
    * solr.handler.component.ResponseBuilder)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void finishStage(ResponseBuilder rb) {
     if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)
         && rb.stage >= ResponseBuilder.STAGE_EXECUTE_QUERY
@@ -981,7 +984,7 @@ public class MtasSolrComponentStats
                 MtasSolrResultUtil.decode(data);
               }
             } catch (ClassCastException e) {
-              log.debug(e);
+              log.debug("Error", e);
               // shouldnt happen
             }
           }
@@ -998,7 +1001,8 @@ public class MtasSolrComponentStats
    * apache.solr.handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void distributedProcess(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     // rewrite
@@ -1006,7 +1010,7 @@ public class MtasSolrComponentStats
     try {
       mtasResponse = (NamedList<Object>) rb.rsp.getValues().get("mtas");
     } catch (ClassCastException e) {
-      log.debug(e);
+      log.debug("Error", e);
       mtasResponse = null;
     }
     if (mtasResponse != null) {
@@ -1017,7 +1021,7 @@ public class MtasSolrComponentStats
           MtasSolrResultUtil.rewrite(mtasResponseStats, searchComponent);
         }
       } catch (ClassCastException e) {
-        log.debug(e);
+        log.debug("Error", e);
         mtasResponse.remove(NAME);
       }
     }

@@ -4,16 +4,12 @@ import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.codecs.CodecUtil;
 import org.apache.lucene.codecs.FieldsProducer;
 import org.apache.lucene.codecs.PostingsFormat;
@@ -22,8 +18,6 @@ import org.apache.lucene.index.IndexFormatTooOldException;
 import org.apache.lucene.index.SegmentReadState;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.store.IndexInput;
-import org.apache.lucene.util.Accountable;
-import org.apache.lucene.util.Accountables;
 
 /**
  * The Class MtasFieldsProducer.
@@ -31,7 +25,7 @@ import org.apache.lucene.util.Accountables;
 public class MtasFieldsProducer extends FieldsProducer {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasFieldsProducer.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasFieldsProducer.class);
 
   /** The delegate fields producer. */
   private FieldsProducer delegateFieldsProducer;
@@ -92,7 +86,7 @@ public class MtasFieldsProducer extends FieldsProducer {
               version, version),
           postingsFormatName);
     } catch (IndexFormatTooOldException e) {
-      log.debug(e);
+      log.debug("Error", e);
       throw new IOException(
           "This MTAS doesn't support your index version, please upgrade");
     }
@@ -176,31 +170,31 @@ public class MtasFieldsProducer extends FieldsProducer {
     return delegateFieldsProducer.size();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.apache.lucene.util.Accountable#ramBytesUsed()
-   */
-  @Override
-  public long ramBytesUsed() {
-    // return BASE_RAM_BYTES_USED + delegateFieldsProducer.ramBytesUsed();
-    return 3 * delegateFieldsProducer.ramBytesUsed();
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.apache.lucene.util.Accountable#getChildResources()
-   */
-  @Override
-  public Collection<Accountable> getChildResources() {
-    List<Accountable> resources = new ArrayList<>();
-    if (delegateFieldsProducer != null) {
-      resources.add(
-          Accountables.namedAccountable("delegate", delegateFieldsProducer));
-    }
-    return Collections.unmodifiableList(resources);
-  }
+//  /*
+//   * (non-Javadoc)
+//   * 
+//   * @see org.apache.lucene.util.Accountable#ramBytesUsed()
+//   */
+//  @Override
+//  public long ramBytesUsed() {
+//    // return BASE_RAM_BYTES_USED + delegateFieldsProducer.ramBytesUsed();
+//    return 3 * delegateFieldsProducer.ramBytesUsed();
+//  }
+//
+//  /*
+//   * (non-Javadoc)
+//   * 
+//   * @see org.apache.lucene.util.Accountable#getChildResources()
+//   */
+//  @Override
+//  public Collection<Accountable> getChildResources() {
+//    List<Accountable> resources = new ArrayList<>();
+//    if (delegateFieldsProducer != null) {
+//      resources.add(
+//          Accountables.namedAccountable("delegate", delegateFieldsProducer));
+//    }
+//    return Collections.unmodifiableList(resources);
+//  }
 
   /*
    * (non-Javadoc)
@@ -242,7 +236,7 @@ public class MtasFieldsProducer extends FieldsProducer {
     try {
       object = state.directory.openInput(fileName, state.context);
     } catch (FileNotFoundException | NoSuchFileException e) {
-      log.debug(e);
+      log.debug("Error", e);
       // throw new NoSuchFileException(e.getMessage());
       return null;
     }
@@ -255,12 +249,12 @@ public class MtasFieldsProducer extends FieldsProducer {
           state.segmentInfo.getId(), state.segmentSuffix);
     } catch (IndexFormatTooOldException e) {
       object.close();
-      log.debug(e);
+      log.debug("Error", e);
       throw new IndexFormatTooOldException(e.getMessage(), e.getVersion(),
           e.getMinVersion(), e.getMaxVersion());
     } catch (EOFException e) {
       object.close();
-      log.debug(e);
+      log.debug("Error", e);
       // throw new EOFException(e.getMessage());
       return null;
     }

@@ -8,7 +8,7 @@ import mtas.analysis.token.MtasToken;
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.util.TokenFilterFactory;
+import org.apache.lucene.analysis.TokenFilterFactory;
 
 /**
  * A factory for creating MtasPrefixTokenFilter objects.
@@ -94,12 +94,15 @@ public class MtasPrefixTokenFilterFactory extends TokenFilterFactory {
      */
     @Override
     public boolean equals(Object obj) {
-      if (this == obj)
+      if (this == obj) {
         return true;
-      if (obj == null)
+    }
+      if (obj == null) {
         return false;
-      if (getClass() != obj.getClass())
+    }
+      if (getClass() != obj.getClass()) {
         return false;
+    }
       final MtasPrefixTokenFilter that = (MtasPrefixTokenFilter) obj;
       return prefix.equals(that.prefix) && super.equals(that);
     }

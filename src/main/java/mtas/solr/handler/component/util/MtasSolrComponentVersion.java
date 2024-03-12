@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.handler.component.ResponseBuilder;
@@ -28,7 +28,7 @@ import mtas.solr.handler.component.MtasSolrSearchComponent;
 public class MtasSolrComponentVersion implements MtasSolrComponent<ComponentVersion> {
 
 	/** The Constant log. */
-	private static final Log log = LogFactory.getLog(MtasSolrComponentVersion.class);
+	private static final Logger log = LoggerFactory.getLogger(MtasSolrComponentVersion.class);
 
 	/** The search component. */
 	MtasSolrSearchComponent searchComponent;
@@ -161,7 +161,7 @@ public class MtasSolrComponentVersion implements MtasSolrComponent<ComponentVers
 								// add shardInfo
 								data.add(NAME_MTAS_VERSION_SHARDS, dataShards);
 							} catch (ClassCastException | IOException e) {
-								log.debug(e);
+								log.debug("Error", e);
 								// shouldn't happen
 							}
 

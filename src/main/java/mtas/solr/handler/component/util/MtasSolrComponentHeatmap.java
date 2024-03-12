@@ -1,6 +1,7 @@
 package mtas.solr.handler.component.util;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.spatial.prefix.PrefixTreeStrategy;
 import org.apache.lucene.spatial.query.SpatialArgs;
 import org.apache.lucene.spatial.query.SpatialOperation;
@@ -47,8 +48,7 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent<ComponentHeat
 
   
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasSolrComponentHeatmap.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The search component. */
   MtasSolrSearchComponent searchComponent;
@@ -162,7 +162,8 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent<ComponentHeat
    * handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  public void prepare(ResponseBuilder rb, ComponentFields mtasFields) throws IOException {
+  @Override
+public void prepare(ResponseBuilder rb, ComponentFields mtasFields) throws IOException {
     Set<String> ids = MtasSolrResultUtil.getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_HEATMAP);
     if (!ids.isEmpty()) {
       int tmpCounter = 0;
@@ -524,7 +525,7 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent<ComponentHeat
                 MtasSolrResultUtil.decode(data);
               }
             } catch (ClassCastException e) {
-              log.debug(e);
+              log.debug("Error", e);
               // shouldn't happen
             }
           }
@@ -540,7 +541,7 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent<ComponentHeat
     try {
       mtasResponse = (NamedList<Object>) rb.rsp.getValues().get("mtas");
     } catch (ClassCastException e) {
-      log.debug(e);
+      log.debug("Error", e);
       mtasResponse = null;
     }
     if (mtasResponse != null) {
@@ -551,7 +552,7 @@ public class MtasSolrComponentHeatmap implements MtasSolrComponent<ComponentHeat
           MtasSolrResultUtil.rewrite(mtasResponseHeatmap, searchComponent);
         }
       } catch (ClassCastException e) {
-        log.debug(e);
+        log.debug("Error", e);
         mtasResponse.remove(NAME);
       }
     }

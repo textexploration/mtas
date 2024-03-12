@@ -14,8 +14,9 @@ import mtas.search.spans.util.MtasSpanQuery;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanWeight;
+import org.apache.lucene.queries.spans.SpanWeight;
 
 /**
  * The Class MtasSimpleParserWordQuery.
@@ -121,12 +122,15 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasSimpleParserWordQuery that = (MtasSimpleParserWordQuery) obj;
     return query.equals(that.query);
   }
@@ -160,6 +164,12 @@ public class MtasSimpleParserWordQuery extends MtasSpanQuery {
   @Override
   public boolean isMatchAllPositionsQuery() {
     return false;
+  }
+
+  @Override
+  public void visit(QueryVisitor aVisitor)
+  {
+      query.visit(aVisitor);    
   }
 
 }

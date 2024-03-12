@@ -3,15 +3,14 @@ package mtas.search.spans.util;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermStates;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanWeight;
+import org.apache.lucene.queries.spans.SpanWeight;
 import mtas.search.spans.MtasSpanMatchNoneQuery;
 
 /**
@@ -74,7 +73,8 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
    * 
    * @see org.apache.lucene.search.spans.SpanQuery#getField()
    */
-  public String getField() {
+  @Override
+public String getField() {
     return subQuery.getField();
   }
 
@@ -95,12 +95,15 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasDisabledTwoPhaseIteratorSpanQuery that = (MtasDisabledTwoPhaseIteratorSpanQuery) obj;
     return that.subQuery.equals(subQuery);
   }
@@ -180,16 +183,6 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
       return new MtasDisabledTwoPhaseIteratorSpans(
           subWeight.getSpans(ctx, requiredPostings));
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.lucene.search.Weight#extractTerms(java.util.Set)
-     */
-    @Override
-    public void extractTerms(Set<Term> terms) {
-      subWeight.extractTerms(terms);
-    }
     
 //    @Override
 //    public boolean isCacheable(LeafReaderContext arg0) {
@@ -198,4 +191,9 @@ public class MtasDisabledTwoPhaseIteratorSpanQuery extends MtasSpanQuery {
 
   }
 
+@Override
+public void visit(QueryVisitor aVisitor)
+{
+    subQuery.visit(aVisitor);    
+}
 }

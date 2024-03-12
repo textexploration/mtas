@@ -1,10 +1,10 @@
 package mtas.analysis.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.analysis.util.CharFilterFactory;
-import org.apache.lucene.analysis.util.ResourceLoader;
-import org.apache.lucene.analysis.util.ResourceLoaderAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.lucene.analysis.CharFilterFactory;
+import org.apache.lucene.util.ResourceLoader;
+import org.apache.lucene.util.ResourceLoaderAware;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
@@ -15,8 +15,11 @@ import java.util.Map;
  */
 public class MtasCharFilterFactory extends CharFilterFactory implements ResourceLoaderAware {
 
+    /** SPI name */
+    public static final String NAME = "mtas";
+
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasCharFilterFactory.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasCharFilterFactory.class);
 
   /** The Constant ARGUMENT_TYPE. */
   public static final String ARGUMENT_TYPE = "type";
@@ -73,6 +76,11 @@ public class MtasCharFilterFactory extends CharFilterFactory implements Resource
    */
   public MtasCharFilterFactory(Map<String, String> args) throws IOException {
     this(args, null);
+  }
+
+  /** Default ctor for compatibility with SPI */
+  public MtasCharFilterFactory() {
+    throw defaultCtorException();
   }
 
   /**
@@ -159,7 +167,7 @@ public class MtasCharFilterFactory extends CharFilterFactory implements Resource
     try {
       return create(input, configuration);
     } catch (IOException e) {
-      log.debug(e);
+      log.debug("Error", e);
       return null;
     }
   }
@@ -242,7 +250,7 @@ public class MtasCharFilterFactory extends CharFilterFactory implements Resource
           return fetchData.getUrl(config.attributes.get(MtasConfiguration.CHARFILTER_CONFIGURATION_PREFIX),
               config.attributes.get(MtasConfiguration.CHARFILTER_CONFIGURATION_POSTFIX));
         } catch (MtasParserException e) {
-          log.debug(e);
+          log.debug("Error", e);
           throw new IOException(e.getMessage());
         }
       } else if (config.attributes.get(MtasConfiguration.CHARFILTER_CONFIGURATION_TYPE).equals(VALUE_TYPE_FILE)) {

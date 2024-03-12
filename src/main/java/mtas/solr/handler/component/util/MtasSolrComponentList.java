@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
@@ -37,7 +37,7 @@ import mtas.solr.handler.component.MtasSolrSearchComponent;
 public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasSolrComponentList.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasSolrComponentList.class);
 
   /** The Constant NAME. */
   public static final String NAME = "list";
@@ -116,7 +116,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
    * handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
+  @Override
+public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     Set<String> ids = MtasSolrResultUtil
         .getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_LIST);
@@ -293,7 +294,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
    * org.apache.solr.handler.component.SearchComponent,
    * org.apache.solr.handler.component.ShardRequest)
    */
-  public void modifyRequest(ResponseBuilder rb, SearchComponent who,
+  @Override
+public void modifyRequest(ResponseBuilder rb, SearchComponent who,
       ShardRequest sreq) {
     if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)
         && sreq.params.getBool(PARAM_MTAS_LIST, false)) {
@@ -373,7 +375,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
    * apache.solr.handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void distributedProcess(ResponseBuilder rb,
       ComponentFields mtasFields) {
 
@@ -405,7 +408,7 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
                 }
               }
             } catch (ClassCastException e) {
-              log.debug(e);
+              log.debug("Error", e);
             }
           }
         }
@@ -525,7 +528,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
    * mtas.solr.handler.component.util.MtasSolrComponent#create(mtas.codec.util.
    * CodecComponent.BasicComponent, java.lang.Boolean)
    */
-  public SimpleOrderedMap<Object> create(ComponentList list, Boolean encode) {
+  @Override
+public SimpleOrderedMap<Object> create(ComponentList list, Boolean encode) {
     SimpleOrderedMap<Object> mtasListResponse = new SimpleOrderedMap<>();
     mtasListResponse.add("key", list.key);
     if (list.number == 0) {
@@ -670,7 +674,8 @@ public class MtasSolrComponentList implements MtasSolrComponent<ComponentList> {
    * mtas.solr.handler.component.util.MtasSolrComponent#finishStage(org.apache.
    * solr.handler.component.ResponseBuilder)
    */
-  public void finishStage(ResponseBuilder rb) {
+  @Override
+public void finishStage(ResponseBuilder rb) {
     if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)
         && rb.stage >= ResponseBuilder.STAGE_EXECUTE_QUERY
         && rb.stage < ResponseBuilder.STAGE_GET_FIELDS) {

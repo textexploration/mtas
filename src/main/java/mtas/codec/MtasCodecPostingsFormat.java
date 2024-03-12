@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import mtas.analysis.token.MtasTokenString;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.codecs.Codec;
 import org.apache.lucene.codecs.FieldsConsumer;
 import org.apache.lucene.codecs.FieldsProducer;
@@ -21,8 +21,8 @@ import org.apache.lucene.util.BytesRef;
 public class MtasCodecPostingsFormat extends PostingsFormat {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasCodecPostingsFormat.class);
+  private static final Logger log = LoggerFactory
+      .getLogger(MtasCodecPostingsFormat.class);
 
   /** The Constant VERSION_START. */
   public static final int VERSION_START = 3;
@@ -150,7 +150,7 @@ public class MtasCodecPostingsFormat extends PostingsFormat {
       Class.forName("mtas.codec.util.CodecInfo");
       Class.forName("mtas.codec.tree.MtasTreeNodeId");
     } catch (ClassNotFoundException e) {
-      log.error(e);
+      log.error("Error", e);
     }
   }
 
@@ -174,7 +174,7 @@ public class MtasCodecPostingsFormat extends PostingsFormat {
       Class.forName("mtas.codec.util.CodecInfo");
       Class.forName("mtas.codec.tree.MtasTreeNodeId");
     } catch (ClassNotFoundException e) {
-      log.error(e);
+      log.error("Error", e);
     }
   }
 

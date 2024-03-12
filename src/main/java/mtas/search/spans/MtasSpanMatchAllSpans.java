@@ -7,7 +7,7 @@ import mtas.codec.util.CodecInfo.IndexDoc;
 import mtas.search.spans.util.MtasSpans;
 
 import org.apache.lucene.search.TwoPhaseIterator;
-import org.apache.lucene.search.spans.SpanCollector;
+import org.apache.lucene.queries.spans.SpanCollector;
 
 /**
  * The Class MtasSpanMatchAllSpans.

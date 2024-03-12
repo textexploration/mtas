@@ -3,8 +3,8 @@ package mtas.parser.function.util;
 import java.io.IOException;
 import java.util.HashSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mtas.codec.util.CodecUtil;
 import mtas.parser.function.ParseException;
@@ -15,7 +15,7 @@ import mtas.parser.function.ParseException;
 public abstract class MtasFunctionParserFunction {
 
   /** The log. */
-  private static Log log = LogFactory.getLog(MtasFunctionParserFunction.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasFunctionParserFunction.class);
 
   /** The parser doubles. */
   protected MtasFunctionParserFunction[] parserDoubles;
@@ -60,7 +60,7 @@ public abstract class MtasFunctionParserFunction {
         long lv = getValueLong(argsQ, argsD, n, d);
         return new MtasFunctionParserFunctionResponseLong(lv, true);
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
         return new MtasFunctionParserFunctionResponseLong(0, false);
       }
     } else if (dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
@@ -68,7 +68,7 @@ public abstract class MtasFunctionParserFunction {
         double dv = getValueDouble(argsQ, argsD, n, d); 
         return new MtasFunctionParserFunctionResponseDouble(dv, true);
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
         return new MtasFunctionParserFunctionResponseDouble(0, false);
       }
     } else {

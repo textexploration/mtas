@@ -23,8 +23,6 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenString;
 import mtas.codec.MtasCodecPostingsFormat;
@@ -70,8 +68,8 @@ import mtas.search.spans.MtasSpanSequenceQuery;
 import mtas.search.spans.MtasSpanTermQuery;
 import mtas.search.spans.util.MtasSpanQuery;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DocValuesType;
 import org.apache.lucene.index.FieldInfo;
@@ -91,8 +89,8 @@ import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanWeight;
-import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.queries.spans.SpanWeight;
+import org.apache.lucene.queries.spans.Spans;
 import org.apache.lucene.util.Bits;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.automaton.Automaton;
@@ -108,7 +106,7 @@ import org.apache.solr.schema.NumberType;
 public class CodecCollector {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(CodecCollector.class);
+  private static final Logger log = LoggerFactory.getLogger(CodecCollector.class);
 
   /** The Constant INDEX_MATCH_INTERSECT. */
   public static final String MATCH_INTERSECT = "intersect";
@@ -610,7 +608,7 @@ public class CodecCollector {
                 while (docIterator.hasNext()) {
                   docId = docIterator.next() - lrc.docBase;
                   if (docValues.advanceExact(docId)) {
-                    String value = docValues.binaryValue().utf8ToString();
+                    String value = docValues.lookupOrd(docValues.ordValue()).utf8ToString();
                     if (!facetDataSubList.containsKey(value)) {
                       List<Integer> facetDataSubListItem = new ArrayList<>();
                       facetDataSubListItem.add(docId + lrc.docBase);
@@ -1417,7 +1415,7 @@ public class CodecCollector {
                 valueLong = span.parser.getValueLong(valueQSum, valueDSum, valuePositions, docSet.length);
                 span.dataCollector.add(valueLong, docSet.length);
               } catch (IOException e) {
-                log.debug(e);
+                log.debug("Error", e);
                 span.dataCollector.error(e.getMessage(), 1);
               }
               if (span.functions != null) {
@@ -1428,7 +1426,7 @@ public class CodecCollector {
                       valueLong = function.parserFunction.getValueLong(valueQSum, valueDSum, valuePositions, docSet.length);
                       function.dataCollector.add(valueLong, docSet.length);
                     } catch (IOException e) {
-                      log.debug(e);
+                      log.debug("Error", e);
                       function.dataCollector.error(e.getMessage(), 1);
                     }
                   } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
@@ -1436,7 +1434,7 @@ public class CodecCollector {
                       double valueDouble = function.parserFunction.getValueDouble(valueQSum, valueDSum, valuePositions, docSet.length);
                       function.dataCollector.add(valueDouble, docSet.length);
                     } catch (IOException e) {
-                      log.debug(e);
+                      log.debug("Error", e);
                       function.dataCollector.error(e.getMessage(), 1);
                     }
                   } else {
@@ -1499,7 +1497,7 @@ public class CodecCollector {
                           functionValuesDouble[i][number] = valueDouble;
                         }
                       } catch (IOException e) {
-                        log.debug(e);
+                        log.debug("Error", e);
                         function.dataCollector.error(e.getMessage(), 1);
                       }
                     }
@@ -2935,7 +2933,7 @@ public class CodecCollector {
                         value = cf.baseParsers[level].getValueLong(valueQSum, valueDSum, valuePositions, subDocSet.length);
                         subDataCollector = dataCollector.add(key, value, subDocSet.length);
                       } catch (IOException e) {
-                        log.debug(e);
+                        log.debug("Error", e);
                         dataCollector.error(key, e.getMessage(), 1);
                         subDataCollector = null;
                       }
@@ -2947,7 +2945,7 @@ public class CodecCollector {
                               long valueLong = function.parserFunction.getValueLong(valueQSum, valueDSum, valuePositions, subDocSet.length);
                               function.dataCollector.add(key, valueLong, subDocSet.length);
                             } catch (IOException e) {
-                              log.debug(e);
+                              log.debug("Error", e);
                               function.dataCollector.error(key, e.getMessage(), 1);
                             }
                           } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
@@ -2955,7 +2953,7 @@ public class CodecCollector {
                               double valueDouble = function.parserFunction.getValueDouble(valueQSum, valueDSum, valuePositions, subDocSet.length);
                               function.dataCollector.add(key, valueDouble, subDocSet.length);
                             } catch (IOException e) {
-                              log.debug(e);
+                              log.debug("Error", e);
                               function.dataCollector.error(key, e.getMessage(), 1);
                             }
                           }
@@ -3017,7 +3015,7 @@ public class CodecCollector {
                                       .getValueLong(tmpArgsQ, tmpArgsD, tmpPositions, 1);
                                   functionNumber[i]++;
                                 } catch (IOException e) {
-                                  log.debug(e);
+                                  log.debug("Error", e);
                                   function.dataCollector.error(key, e.getMessage(), 1);
                                 }
                               } else if (function.dataType.equals(CodecUtil.DATA_TYPE_DOUBLE)) {
@@ -3026,7 +3024,7 @@ public class CodecCollector {
                                       .getValueDouble(tmpArgsQ, tmpArgsD, tmpPositions, 1);
                                   functionNumber[i]++;
                                 } catch (IOException e) {
-                                  log.debug(e);
+                                  log.debug("Error", e);
                                   function.dataCollector.error(key, e.getMessage(), 1);
                                 }
                               }
@@ -3140,22 +3138,26 @@ public class CodecCollector {
     Integer tmp;
     while (i < a.length && j < b.length) {
       tmp = a[i] < b[j] ? a[i++] : b[j++];
-      for (; i < a.length && a[i].equals(tmp); i++)
+      for (; i < a.length && a[i].equals(tmp); i++) {
         ;
-      for (; j < b.length && b[j].equals(tmp); j++)
+    }
+      for (; j < b.length && b[j].equals(tmp); j++) {
         ;
+    }
       answer[k++] = tmp;
     }
     while (i < a.length) {
       tmp = a[i++];
-      for (; i < a.length && a[i].equals(tmp); i++)
+      for (; i < a.length && a[i].equals(tmp); i++) {
         ;
+    }
       answer[k++] = tmp;
     }
     while (j < b.length) {
       tmp = b[j++];
-      for (; j < b.length && b[j].equals(tmp); j++)
+      for (; j < b.length && b[j].equals(tmp); j++) {
         ;
+    }
       answer[k++] = tmp;
     }
     return Arrays.copyOf(answer, k);
@@ -3314,7 +3316,7 @@ public class CodecCollector {
                             valueLong = termVector.subComponentFunction.parserFunction
                                 .getValueLong(numberBasic.valueSum, new long[] {numberBasic.docNumber}, 1, numberBasic.docNumber);
                           } catch (IOException e) {
-                            log.debug(e);
+                            log.debug("Error", e);
                             termVector.subComponentFunction.dataCollector.error(MtasToken.getPostfixFromValue(term),
                                 e.getMessage(), 1);
                           }
@@ -3342,7 +3344,7 @@ public class CodecCollector {
                               valuesLong[i] = termVector.subComponentFunction.parserFunction
                                   .getValueLong(new long[] { numberFull.args[i] }, new long[] {1}, numberFull.positions[i], 1);
                             } catch (IOException e) {
-                              log.debug(e);
+                              log.debug("Error", e);
                               termVector.subComponentFunction.dataCollector.error(key, e.getMessage(), 1);
                             }
                           }
@@ -3356,7 +3358,7 @@ public class CodecCollector {
                                     valuesLong[i] = function.parserFunction
                                         .getValueLong(new long[] { numberFull.args[i] }, new long[] {1}, numberFull.positions[i], 1);
                                   } catch (IOException e) {
-                                    log.debug(e);
+                                    log.debug("Error", e);
                                     function.dataCollector.error(key, e.getMessage(), 1);
                                   }
                                 }
@@ -3368,7 +3370,7 @@ public class CodecCollector {
                                     valuesDouble[i] = function.parserFunction
                                         .getValueDouble(new long[] { numberFull.args[i] }, new long[] {1}, numberFull.positions[i], 1);
                                   } catch (IOException e) {
-                                    log.debug(e);
+                                    log.debug("Error", e);
                                     function.dataCollector.error(key, e.getMessage(), 1);
                                   }
                                 }
@@ -3504,7 +3506,7 @@ public class CodecCollector {
                           continueAfterPreliminaryCheck = false;
                         }
                       } catch (IOException e) {
-                        log.debug(e);
+                        log.debug("Error", e);
                         continueAfterPreliminaryCheck = true;
                       }
                     }
@@ -4258,7 +4260,7 @@ public class CodecCollector {
           valuesLong[i] = termVector.subComponentFunction.parserFunction.getValueLong(new long[] { number.args[i] }, new long[] { 1 },
               number.positions[i], 1);
         } catch (IOException e) {
-          log.debug(e);
+          log.debug("Error", e);
           dataCollector.error(mutableKey[0], e.getMessage(), 1);
         }
       }
@@ -4275,7 +4277,7 @@ public class CodecCollector {
                 valuesLong[i] = function.parserFunction.getValueLong(new long[] { number.args[i] }, new long[] {1},
                     number.positions[i], 1);
               } catch (IOException e) {
-                log.debug(e);
+                log.debug("Error", e);
                 function.dataCollector.error(mutableKey[0], e.getMessage(), 1);
               }
             }
@@ -4287,7 +4289,7 @@ public class CodecCollector {
                 valuesDouble[i] = function.parserFunction.getValueDouble(new long[] { number.args[i] }, new long[] {1},
                     number.positions[i], 1);
               } catch (IOException e) {
-                log.debug(e);
+                log.debug("Error", e);
                 function.dataCollector.error(mutableKey[0], e.getMessage(), 1);
               }
             }

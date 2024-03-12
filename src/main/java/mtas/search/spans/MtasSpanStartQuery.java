@@ -3,16 +3,15 @@ package mtas.search.spans;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermStates;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanQuery;
-import org.apache.lucene.search.spans.SpanWeight;
+import org.apache.lucene.queries.spans.SpanQuery;
+import org.apache.lucene.queries.spans.SpanWeight;
 import mtas.search.spans.util.MtasSpanQuery;
 import mtas.search.spans.util.MtasSpanWeight;
 import mtas.search.spans.util.MtasSpans;
@@ -146,16 +145,6 @@ public class MtasSpanStartQuery extends MtasSpanQuery {
           spanWeight.getSpans(ctx, requiredPostings));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.lucene.search.Weight#extractTerms(java.util.Set)
-     */
-    @Override
-    public void extractTerms(Set<Term> terms) {
-      spanWeight.extractTerms(terms);
-    }
-    
 //    @Override
 //    public boolean isCacheable(LeafReaderContext arg0) {
 //      return spanWeight.isCacheable(arg0);
@@ -170,12 +159,15 @@ public class MtasSpanStartQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasSpanStartQuery that = (MtasSpanStartQuery) obj;
     return clause.equals(that.clause);
   }
@@ -205,5 +197,11 @@ public class MtasSpanStartQuery extends MtasSpanQuery {
   public boolean isMatchAllPositionsQuery() {
     return false;
   }
+
+@Override
+public void visit(QueryVisitor aVisitor)
+{
+    clause.visit(aVisitor);
+}
   
 }

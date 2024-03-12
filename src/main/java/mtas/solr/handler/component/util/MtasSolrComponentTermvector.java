@@ -1,6 +1,7 @@
 package mtas.solr.handler.component.util;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,8 +19,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.params.ShardParams;
@@ -48,8 +49,7 @@ public class MtasSolrComponentTermvector
     implements MtasSolrComponent<ComponentTermVector> {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasSolrComponentTermvector.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The search component. */
   MtasSolrSearchComponent searchComponent;
@@ -168,7 +168,8 @@ public class MtasSolrComponentTermvector
    * handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
+  @Override
+public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     Set<String> ids = MtasSolrResultUtil
         .getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_TERMVECTOR);
@@ -446,7 +447,8 @@ public class MtasSolrComponentTermvector
    * org.apache.solr.handler.component.SearchComponent,
    * org.apache.solr.handler.component.ShardRequest)
    */
-  public void modifyRequest(ResponseBuilder rb, SearchComponent who,
+  @Override
+public void modifyRequest(ResponseBuilder rb, SearchComponent who,
       ShardRequest sreq) {
     if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)) {
       if (sreq.params.getBool(PARAM_MTAS_TERMVECTOR, false)) {
@@ -558,7 +560,8 @@ public class MtasSolrComponentTermvector
    * mtas.solr.handler.component.util.MtasSolrComponent#create(mtas.codec.util.
    * CodecComponent.BasicComponent, java.lang.Boolean)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public SimpleOrderedMap<Object> create(ComponentTermVector termVector,
       Boolean encode) throws IOException {
     SimpleOrderedMap<Object> mtasTermVectorResponse = new SimpleOrderedMap<>();
@@ -609,7 +612,8 @@ public class MtasSolrComponentTermvector
    * mtas.solr.handler.component.util.MtasSolrComponent#finishStage(org.apache.
    * solr.handler.component.ResponseBuilder)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void finishStage(ResponseBuilder rb) {
     if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)) {
       if (rb.stage >= ResponseBuilder.STAGE_EXECUTE_QUERY
@@ -627,7 +631,7 @@ public class MtasSolrComponentTermvector
                   MtasSolrResultUtil.decode(data);
                 }
               } catch (ClassCastException e) {
-                log.debug(e);
+                log.debug("Error", e);
                 // shouldnt happen
               }
             }
@@ -661,7 +665,7 @@ public class MtasSolrComponentTermvector
                 mtasResponse = (NamedList<Object>) rb.rsp.getValues()
                     .get("mtas");
               } catch (ClassCastException e) {
-                log.debug(e);
+                log.debug("Error", e);
                 mtasResponse = null;
               }
               if (mtasResponse == null) {
@@ -840,13 +844,13 @@ public class MtasSolrComponentTermvector
                     throw new IOException("no data returned");
                   }
                 } catch (ClassCastException e) {
-                  log.debug(e);
+                  log.debug("Error", e);
                   dataItem.clear();
                 }
               }
             }
           } catch (ClassCastException e) {
-            log.debug(e);
+            log.debug("Error", e);
             // shouldnt happen
           }
           shardResponse.getSolrResponse().setResponse(response);
@@ -1018,13 +1022,13 @@ public class MtasSolrComponentTermvector
                       dataItem.add("key", key);
                     }
                   } catch (ClassCastException e) {
-                    log.debug(e);
+                    log.debug("Error", e);
                     dataItem.clear();
                   }
                 }
               }
             } catch (ClassCastException e) {
-              log.debug(e);
+              log.debug("Error", e);
               // shouldnt happen
             }
             shardResponse.getSolrResponse().setResponse(response);
@@ -1433,12 +1437,12 @@ public class MtasSolrComponentTermvector
                     itemSet.addAll(keyList);
                   }
                 } catch (ClassCastException e) {
-                  log.debug(e);
+                  log.debug("Error", e);
                 }
               }
             }
           } catch (ClassCastException e) {
-            log.debug(e);
+            log.debug("Error", e);
           }
         }
       }

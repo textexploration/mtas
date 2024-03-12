@@ -6,48 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 
-import mtas.codec.util.CodecComponent.ComponentDocument;
-import mtas.codec.util.CodecComponent.ComponentFacet;
-import mtas.codec.util.CodecComponent.ComponentFields;
-import mtas.codec.util.CodecComponent.ComponentGroup;
-import mtas.codec.util.CodecComponent.ComponentHeatmap;
-import mtas.codec.util.CodecComponent.ComponentIndex;
-import mtas.codec.util.CodecComponent.ComponentCollection;
-import mtas.codec.util.CodecComponent.ComponentKwic;
-import mtas.codec.util.CodecComponent.ComponentList;
-import mtas.codec.util.CodecComponent.ComponentPage;
-import mtas.codec.util.CodecComponent.ComponentPosition;
-import mtas.codec.util.CodecComponent.ComponentSpan;
-import mtas.codec.util.CodecComponent.ComponentTermVector;
-import mtas.codec.util.CodecComponent.ComponentToken;
-import mtas.codec.util.CodecUtil;
-import mtas.codec.util.Status;
-import mtas.solr.handler.component.util.MtasSolrResultMerge;
-import mtas.solr.handler.util.MtasSolrStatus;
-import mtas.solr.handler.util.MtasSolrStatus.ShardStatus;
-import mtas.solr.search.MtasSolrCollectionCache;
-import mtas.solr.handler.component.util.MtasSolrComponentDocument;
-import mtas.solr.handler.component.util.MtasSolrComponentFacet;
-import mtas.solr.handler.component.util.MtasSolrComponentGroup;
-import mtas.solr.handler.component.util.MtasSolrComponentHeatmap;
-import mtas.solr.handler.component.util.MtasSolrComponentIndex;
-import mtas.solr.handler.MtasRequestHandler;
-import mtas.solr.handler.MtasRequestHandler.ShardInformation;
-import mtas.solr.handler.component.util.MtasSolrComponentCollection;
-import mtas.solr.handler.component.util.MtasSolrComponentKwic;
-import mtas.solr.handler.component.util.MtasSolrComponentList;
-import mtas.solr.handler.component.util.MtasSolrComponentPage;
-import mtas.solr.handler.component.util.MtasSolrComponentPrefix;
-import mtas.solr.handler.component.util.MtasSolrComponentStats;
-import mtas.solr.handler.component.util.MtasSolrComponentStatus;
-import mtas.solr.handler.component.util.MtasSolrComponentTermvector;
-import mtas.solr.handler.component.util.MtasSolrComponentVersion;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.index.ExitableDirectoryReader;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.ShardParams;
@@ -60,6 +21,45 @@ import org.apache.solr.handler.component.ShardRequest;
 import org.apache.solr.search.DocList;
 import org.apache.solr.search.DocSet;
 import org.apache.solr.search.SolrIndexSearcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mtas.codec.util.CodecComponent.ComponentCollection;
+import mtas.codec.util.CodecComponent.ComponentDocument;
+import mtas.codec.util.CodecComponent.ComponentFacet;
+import mtas.codec.util.CodecComponent.ComponentFields;
+import mtas.codec.util.CodecComponent.ComponentGroup;
+import mtas.codec.util.CodecComponent.ComponentHeatmap;
+import mtas.codec.util.CodecComponent.ComponentIndex;
+import mtas.codec.util.CodecComponent.ComponentKwic;
+import mtas.codec.util.CodecComponent.ComponentList;
+import mtas.codec.util.CodecComponent.ComponentPage;
+import mtas.codec.util.CodecComponent.ComponentPosition;
+import mtas.codec.util.CodecComponent.ComponentSpan;
+import mtas.codec.util.CodecComponent.ComponentTermVector;
+import mtas.codec.util.CodecComponent.ComponentToken;
+import mtas.codec.util.CodecUtil;
+import mtas.codec.util.Status;
+import mtas.solr.handler.MtasRequestHandler;
+import mtas.solr.handler.MtasRequestHandler.ShardInformation;
+import mtas.solr.handler.component.util.MtasSolrComponentCollection;
+import mtas.solr.handler.component.util.MtasSolrComponentDocument;
+import mtas.solr.handler.component.util.MtasSolrComponentFacet;
+import mtas.solr.handler.component.util.MtasSolrComponentGroup;
+import mtas.solr.handler.component.util.MtasSolrComponentHeatmap;
+import mtas.solr.handler.component.util.MtasSolrComponentIndex;
+import mtas.solr.handler.component.util.MtasSolrComponentKwic;
+import mtas.solr.handler.component.util.MtasSolrComponentList;
+import mtas.solr.handler.component.util.MtasSolrComponentPage;
+import mtas.solr.handler.component.util.MtasSolrComponentPrefix;
+import mtas.solr.handler.component.util.MtasSolrComponentStats;
+import mtas.solr.handler.component.util.MtasSolrComponentStatus;
+import mtas.solr.handler.component.util.MtasSolrComponentTermvector;
+import mtas.solr.handler.component.util.MtasSolrComponentVersion;
+import mtas.solr.handler.component.util.MtasSolrResultMerge;
+import mtas.solr.handler.util.MtasSolrStatus;
+import mtas.solr.handler.util.MtasSolrStatus.ShardStatus;
+import mtas.solr.search.MtasSolrCollectionCache;
 
 /**
  * The Class MtasSolrSearchComponent.
@@ -67,7 +67,7 @@ import org.apache.solr.search.SolrIndexSearcher;
 public class MtasSolrSearchComponent extends SearchComponent {
 
 	/** The log. */
-	private static Log log = LogFactory.getLog(MtasSolrSearchComponent.class);
+	private static Logger log = LoggerFactory.getLogger(MtasSolrSearchComponent.class);
 
 	/** The search component. */
 	MtasSolrSearchComponent searchComponent;
@@ -413,7 +413,7 @@ public class MtasSolrSearchComponent extends SearchComponent {
 											docSetList, mtasFields.list.get(field), solrStatus.status());
 								} catch (IllegalAccessException | IllegalArgumentException
 										| InvocationTargetException e) {
-									log.error(e);
+									log.error("Error",e);
 									throw new IOException(e);
 								}
 							}
@@ -1031,7 +1031,7 @@ public class MtasSolrSearchComponent extends SearchComponent {
 				requestHandler.finishStatus(status);
 			}
 		} catch (IOException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 
@@ -1048,7 +1048,7 @@ public class MtasSolrSearchComponent extends SearchComponent {
 				try {
 					requestHandler.finishStatus(status);
 				} catch (IOException e) {
-					log.error(e);
+					log.error("Error", e);
 				}
 			}
 		}
