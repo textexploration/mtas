@@ -3,7 +3,7 @@ package mtas.search.spans;
 import java.io.IOException;
 
 import org.apache.lucene.search.TwoPhaseIterator;
-import org.apache.lucene.search.spans.SpanCollector;
+import org.apache.lucene.queries.spans.SpanCollector;
 import mtas.search.spans.MtasSpanIntersectingQuery.MtasSpanIntersectingQuerySpans;
 import mtas.search.spans.util.MtasSpans;
 

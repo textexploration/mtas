@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.FlagsAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
@@ -26,7 +26,7 @@ import mtas.solr.update.processor.MtasUpdateRequestProcessorResultReader;
 public class MtasPreAnalyzedParser implements PreAnalyzedParser {
 
   /** The log. */
-  private static Log log = LogFactory.getLog(MtasPreAnalyzedParser.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasPreAnalyzedParser.class);
 
   /*
    * (non-Javadoc)
@@ -93,7 +93,7 @@ public class MtasPreAnalyzedParser implements PreAnalyzedParser {
       }
     } catch (IOException e) {
       // ignore
-      log.debug(e);
+      log.debug("Error", e);
     }
     return res;
   }

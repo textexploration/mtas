@@ -13,8 +13,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.analysis.payloads.PayloadHelper;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.automaton.Automaton;
@@ -30,7 +30,7 @@ import org.apache.lucene.util.automaton.TooComplexToDeterminizeException;
 public abstract class MtasToken {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasToken.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasToken.class);
 
   /** The Constant DELIMITER. */
   public static final String DELIMITER = "\u0001";
@@ -808,7 +808,7 @@ public abstract class MtasToken {
         try {
           compiledAutomaton = new CompiledAutomaton(automaton);
         } catch (TooComplexToDeterminizeException e) {
-          log.debug(e);
+          log.debug("Error", e);
           success = false;
           if (localStep > 1) {
             localStep /= 2;

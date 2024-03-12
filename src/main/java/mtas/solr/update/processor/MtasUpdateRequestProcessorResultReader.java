@@ -5,11 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.invoke.MethodHandles;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class MtasUpdateRequestProcessorResultReader.
@@ -17,8 +18,7 @@ import org.apache.commons.logging.LogFactory;
 public class MtasUpdateRequestProcessorResultReader implements Closeable {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasUpdateRequestProcessorResultReader.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The stored string value. */
   private String storedStringValue;
@@ -188,7 +188,7 @@ public class MtasUpdateRequestProcessorResultReader implements Closeable {
     try {
       objectInputStream.close();
     } catch (IOException e) {
-      log.debug(e);
+      log.debug("Error", e);
     }
     closed = true;
   }

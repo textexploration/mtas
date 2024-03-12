@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mtas.parser.simple.ParseException;
 import mtas.parser.simple.util.MtasSimpleParserWordQuery;
@@ -27,7 +27,7 @@ import mtas.search.spans.util.MtasSpanUniquePositionQuery;
 public class MtasSimpleParserTest {
 
   /** The log. */
-  private static Log log = LogFactory.getLog(MtasSimpleParserTest.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasSimpleParserTest.class);
 
   
   private void testSimpleParse(String field, String defaultPrefix, String simple,
@@ -44,7 +44,7 @@ public class MtasSimpleParserTest {
     try {
       assertEquals(p.parse(field, defaultPrefix, null, null), qList);
     } catch (ParseException e) {
-      log.error(e);
+      log.error("Error", e);
       e.printStackTrace();
     }
   }
@@ -67,7 +67,7 @@ public class MtasSimpleParserTest {
       assertEquals(p1.parse(field, defaultPrefix, null, null),
           p2.parse(field, defaultPrefix, null, null));
     } catch (ParseException e) {
-      log.error(e);
+      log.error("Error", e);
     }
   }
 

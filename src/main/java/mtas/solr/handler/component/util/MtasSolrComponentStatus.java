@@ -1,8 +1,10 @@
 package mtas.solr.handler.component.util;
 
 import java.io.IOException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.lang.invoke.MethodHandles;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
@@ -20,8 +22,7 @@ public class MtasSolrComponentStatus
     implements MtasSolrComponent<ComponentStatus> {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasSolrComponentStatus.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The search component. */
   MtasSolrSearchComponent searchComponent;

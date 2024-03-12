@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.search.TwoPhaseIterator;
-import org.apache.lucene.search.spans.SpanCollector;
-import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.queries.spans.SpanCollector;
+import org.apache.lucene.queries.spans.Spans;
 
 import mtas.search.spans.util.MtasIgnoreItem;
 import mtas.search.spans.util.MtasSpans;
@@ -20,7 +20,7 @@ import mtas.search.spans.util.MtasSpans;
 public class MtasSpanRecurrenceSpans extends MtasSpans {
 
   /** The log. */
-  private static Log log = LogFactory.getLog(MtasSpanRecurrenceSpans.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasSpanRecurrenceSpans.class);
 
   /** The query. */
   private MtasSpanRecurrenceQuery query;
@@ -361,7 +361,7 @@ public class MtasSpanRecurrenceSpans extends MtasSpans {
         }
       }
     } catch (IOException e) {
-      log.debug(e);
+      log.debug("Error", e);
     }
     return list;
   }
@@ -413,12 +413,15 @@ public class MtasSpanRecurrenceSpans extends MtasSpans {
      */
     @Override
     public boolean equals(Object obj) {
-      if (this == obj)
+      if (this == obj) {
         return true;
-      if (obj == null)
+    }
+      if (obj == null) {
         return false;
-      if (getClass() != obj.getClass())
+    }
+      if (getClass() != obj.getClass()) {
         return false;
+    }
       final Match that = (Match) obj;
       return startPosition == that.startPosition
           && endPosition == that.endPosition;

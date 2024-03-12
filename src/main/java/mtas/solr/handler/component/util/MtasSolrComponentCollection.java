@@ -1,6 +1,7 @@
 package mtas.solr.handler.component.util;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,8 +11,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
@@ -34,8 +35,7 @@ public class MtasSolrComponentCollection
     implements MtasSolrComponent<ComponentCollection> {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasSolrComponentCollection.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The Constant NAME. */
   public static final String NAME = "collection";
@@ -88,7 +88,8 @@ public class MtasSolrComponentCollection
    * handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
+  @Override
+public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     // System.out.println(
     // "collection: " + System.nanoTime() + " - " +
@@ -276,7 +277,8 @@ public class MtasSolrComponentCollection
    * org.apache.solr.handler.component.SearchComponent,
    * org.apache.solr.handler.component.ShardRequest)
    */
-  public void modifyRequest(ResponseBuilder rb, SearchComponent who,
+  @Override
+public void modifyRequest(ResponseBuilder rb, SearchComponent who,
       ShardRequest sreq) {
     // System.out.println(
     // "collection: " + System.nanoTime() + " - " +
@@ -319,7 +321,8 @@ public class MtasSolrComponentCollection
    * mtas.solr.handler.component.util.MtasSolrComponent#create(mtas.codec.util.
    * CodecComponent.BasicComponent, java.lang.Boolean)
    */
-  public SimpleOrderedMap<Object> create(
+  @Override
+public SimpleOrderedMap<Object> create(
       ComponentCollection componentCollection, Boolean encode)
       throws IOException {
     MtasSolrCollectionResult data = createMtasSolrCollectionResult(
@@ -437,7 +440,8 @@ public class MtasSolrComponentCollection
    * mtas.solr.handler.component.util.MtasSolrComponent#finishStage(org.apache.
    * solr.handler.component.ResponseBuilder)
    */
-  public void finishStage(ResponseBuilder rb) {
+  @Override
+public void finishStage(ResponseBuilder rb) {
     // System.out.println(
     // "collection: " + System.nanoTime() + " - " +
     // Thread.currentThread().getId()
@@ -455,7 +459,7 @@ public class MtasSolrComponentCollection
               mtasResponse = (NamedList<Object>) rb.rsp.getValues()
                   .get(MtasSolrSearchComponent.NAME);
             } catch (ClassCastException e) {
-              log.debug(e);
+              log.debug("Error", e);
               mtasResponse = null;
             }
             if (mtasResponse == null) {
@@ -482,7 +486,7 @@ public class MtasSolrComponentCollection
                 mtasCollectionResponse.add("data", collectionResult);
                 mtasCollectionResponses.add(mtasCollectionResponse);
               } catch (IOException e) {
-                log.debug(e);
+                log.debug("Error", e);
               }
             }
           }
@@ -533,7 +537,7 @@ public class MtasSolrComponentCollection
                     }
                   }
                 } catch (ClassCastException e) {
-                  log.debug(e);
+                  log.debug("Error", e);
                   // shouldn't happen
                 }
               }
@@ -552,7 +556,8 @@ public class MtasSolrComponentCollection
    * apache.solr.handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void distributedProcess(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     // System.out.println("collection: " + System.nanoTime() + " - "
@@ -564,7 +569,7 @@ public class MtasSolrComponentCollection
       mtasResponse = (NamedList<Object>) rb.rsp.getValues()
           .get(MtasSolrSearchComponent.NAME);
     } catch (ClassCastException e) {
-      log.debug(e);
+      log.debug("Error", e);
       mtasResponse = null;
     }
     if (mtasResponse != null) {
@@ -586,7 +591,7 @@ public class MtasSolrComponentCollection
             }
           }
         } catch (ClassCastException e) {
-          log.debug(e);
+          log.debug("Error", e);
           mtasResponse.remove(NAME);
         }
         // check and remove previous responses
@@ -625,7 +630,7 @@ public class MtasSolrComponentCollection
                   data.clear();
                 }
               } catch (ClassCastException e) {
-                log.debug(e);
+                log.debug("Error", e);
                 // shouldn't happen
               }
             }
@@ -736,7 +741,7 @@ public class MtasSolrComponentCollection
             MtasSolrResultUtil.rewrite(mtasResponseCollection, searchComponent);
           }
         } catch (ClassCastException e) {
-          log.debug(e);
+          log.debug("Error", e);
           mtasResponse.remove(NAME);
         }
       }

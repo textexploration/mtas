@@ -9,6 +9,16 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
+import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
+import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
+import org.apache.lucene.util.AttributeFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mtas.analysis.parser.MtasParser;
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenCollection;
@@ -16,14 +26,6 @@ import mtas.analysis.util.MtasConfigException;
 import mtas.analysis.util.MtasConfiguration;
 import mtas.analysis.util.MtasParserException;
 import mtas.codec.payload.MtasPayloadEncoder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
-import org.apache.lucene.analysis.tokenattributes.PayloadAttribute;
-import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
-import org.apache.lucene.util.AttributeFactory;
 
 /**
  * The Class MtasTokenizer.
@@ -32,7 +34,7 @@ import org.apache.lucene.util.AttributeFactory;
 public final class MtasTokenizer extends Tokenizer {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasTokenizer.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasTokenizer.class);
 
   /** The Constant CONFIGURATION_MTAS. */
   public static final String CONFIGURATION_MTAS = "mtas";
@@ -192,7 +194,7 @@ public final class MtasTokenizer extends Tokenizer {
       end();
       close();
     } catch (IOException e) {
-      log.error(e);
+      log.error("Error", e);
       throw new MtasParserException(e.getClass() + " : " + e.getMessage());
     }
   }
@@ -213,7 +215,7 @@ public final class MtasTokenizer extends Tokenizer {
       close();
       return result;
     } catch (MtasParserException e) {
-      log.info(e);
+      log.info("Error", e);
       throw new IOException("can't produce list");
     }
   }
@@ -240,13 +242,13 @@ public final class MtasTokenizer extends Tokenizer {
         throw new MtasConfigException("no instance of MtasParser");
       }
     } catch (MtasParserException e) {
-      log.debug(e);
+      log.debug("Error", e);
       tokenCollection = new MtasTokenCollection();
       throw new MtasParserException(e.getMessage());
     } catch (NoSuchMethodException | InvocationTargetException
         | IllegalAccessException | ClassNotFoundException
         | InstantiationException e) {
-      log.debug(e);
+      log.debug("Error", e);
       throw new MtasConfigException(
           e.getClass().getName() + " : '" + e.getMessage() + "'");
     }
@@ -322,12 +324,15 @@ public final class MtasTokenizer extends Tokenizer {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasTokenizer that = (MtasTokenizer) obj;
     return super.equals(that);
   }

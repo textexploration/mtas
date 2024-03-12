@@ -3,8 +3,8 @@ package mtas.parser.function.util;
 import java.io.IOException;
 import java.util.Objects;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class MtasFunctionParserFunctionResponseDouble.
@@ -13,8 +13,8 @@ public class MtasFunctionParserFunctionResponseDouble
     extends MtasFunctionParserFunctionResponse {
 
   /** The log. */
-  private static Log log = LogFactory
-      .getLog(MtasFunctionParserFunctionResponseDouble.class);
+    private static final Logger log = LoggerFactory
+      .getLogger(MtasFunctionParserFunctionResponseDouble.class);
 
   /** The value. */
   private double value;
@@ -53,12 +53,15 @@ public class MtasFunctionParserFunctionResponseDouble
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     MtasFunctionParserFunctionResponseDouble other = (MtasFunctionParserFunctionResponseDouble) obj;
     try {
       if (value == other.getValue()) {
@@ -67,7 +70,7 @@ public class MtasFunctionParserFunctionResponseDouble
         return false;
       }
     } catch (IOException e) {
-      log.debug(e);
+      log.debug("Error", e);
       return !defined;
     }
   }

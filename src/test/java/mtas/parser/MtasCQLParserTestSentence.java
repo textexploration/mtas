@@ -7,14 +7,13 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mtas.parser.cql.MtasCQLParser;
 import mtas.parser.cql.ParseException;
 import mtas.parser.cql.util.MtasCQLParserGroupOperatorQuery;
 import mtas.parser.cql.util.MtasCQLParserGroupQuery;
-import mtas.parser.cql.util.MtasCQLParserWordOperatorQuery;
 import mtas.parser.cql.util.MtasCQLParserWordQuery;
 import mtas.search.spans.MtasSpanContainingQuery;
 import mtas.search.spans.MtasSpanFollowedByQuery;
@@ -38,7 +37,7 @@ import mtas.search.spans.util.MtasSpanUniquePositionQuery;
 public class MtasCQLParserTestSentence {
 
 	/** The log. */
-	private static Log log = LogFactory.getLog(MtasCQLParserTestSentence.class);
+	private static final Logger log = LoggerFactory.getLogger(MtasCQLParserTestSentence.class);
 
 	/**
 	 * Test CQL parse.
@@ -56,7 +55,7 @@ public class MtasCQLParserTestSentence {
 			//System.out.print("\n");
 		} catch (ParseException e) {
 			//System.out.println("Error CQL parsing:\t"+cql);
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 
@@ -77,7 +76,7 @@ public class MtasCQLParserTestSentence {
 					p2.parse(field, defaultPrefix, null, null, null));
 		} catch (ParseException e) {
 			// System.out.println("Error CQL equivalent:\t"+cql1+" and "+cql2);
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 

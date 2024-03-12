@@ -14,9 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.GZIPInputStream;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.analysis.util.ResourceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.lucene.util.ResourceLoader;
 
 /**
  * The Class MtasFetchData.
@@ -24,7 +24,7 @@ import org.apache.lucene.analysis.util.ResourceLoader;
 public class MtasFetchData {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasFetchData.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasFetchData.class);
 
   /** The reader. */
   Reader reader;
@@ -62,7 +62,7 @@ public class MtasFetchData {
       bufferedReader.close();
       return(buffer.toString());
     } catch (IOException e) {
-      log.debug(e);
+      log.debug("Error", e);
       throw new MtasParserException("couldn't read text");
     }
   }
@@ -102,7 +102,7 @@ public class MtasFetchData {
           }
           return in;
         } catch (IOException ex) {
-          log.debug(ex);
+          log.debug("Error", ex);
           throw new MtasParserException("couldn't get " + url);
         }
       } else {
@@ -139,11 +139,11 @@ public class MtasFetchData {
         try {
           return new InputStreamReader(new GZIPInputStream(resourceLoader.openResource(file)), StandardCharsets.UTF_8);
         } catch (IOException e1) {
-          log.debug(e1);
+          log.debug("Error", e1);
           try {
             return new InputStreamReader(resourceLoader.openResource(file), StandardCharsets.UTF_8);
           } catch (IOException e2) {
-            log.debug(e2);
+            log.debug("Error", e2);
             // throw new MtasParserException(e2.getMessage());
           }
         }
@@ -152,12 +152,12 @@ public class MtasFetchData {
         try {
           return new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8);
         } catch (IOException e1) {
-          log.debug(e1);
+          log.debug("Error", e1);
           try {
             String text = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
             return new StringReader(text);
           } catch (IOException e2) {
-            log.debug(e2);
+            log.debug("Error", e2);
             throw new MtasParserException(e2.getMessage());
           }
         }

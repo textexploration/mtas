@@ -18,8 +18,8 @@ import mtas.codec.tree.IntervalRBTree;
 import mtas.codec.tree.IntervalTreeNodeData;
 import mtas.codec.util.CodecSearchTree.MtasTreeHit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.store.IndexInput;
 
@@ -29,7 +29,7 @@ import org.apache.lucene.store.IndexInput;
 public class CodecInfo {
 
   /** The log. */
-  private static Log log = LogFactory.getLog(CodecInfo.class);
+  private static final Logger log = LoggerFactory.getLogger(CodecInfo.class);
 
   /** The index input list. */
   HashMap<String, IndexInput> indexInputList;
@@ -131,7 +131,7 @@ public class CodecInfo {
         fieldReferences.put(field, new FieldReferences(refIndexDoc,
             refIndexDocId, numberOfDocs, refPrefix, numberOfPrefixes));
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
         doInit = false;
       }
     }
@@ -557,7 +557,7 @@ public class CodecInfo {
             refs.put(prefix, ref);
           }
         } catch (Exception e) {
-          log.error(e);
+          log.error("Error", e);
           refs.clear();
         }
         prefixReferences.put(field, refs);
@@ -590,7 +590,7 @@ public class CodecInfo {
           return new IndexDoc(list.get(0).ref);
         }
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
         return null;
       }
     }
@@ -624,7 +624,7 @@ public class CodecInfo {
           }
         }
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
         return null;
       }
     }

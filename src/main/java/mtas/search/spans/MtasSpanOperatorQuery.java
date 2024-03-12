@@ -12,12 +12,13 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.AutomatonQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanMultiTermQueryWrapper;
-import org.apache.lucene.search.spans.SpanOrQuery;
-import org.apache.lucene.search.spans.SpanQuery;
-import org.apache.lucene.search.spans.SpanTermQuery;
-import org.apache.lucene.search.spans.SpanWeight;
+import org.apache.lucene.queries.spans.SpanMultiTermQueryWrapper;
+import org.apache.lucene.queries.spans.SpanOrQuery;
+import org.apache.lucene.queries.spans.SpanQuery;
+import org.apache.lucene.queries.spans.SpanTermQuery;
+import org.apache.lucene.queries.spans.SpanWeight;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.automaton.Automata;
 import org.apache.lucene.util.automaton.Automaton;
@@ -156,12 +157,15 @@ public class MtasSpanOperatorQuery extends MtasSpanQuery {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) {
+            return true;
+        }
+		if (obj == null) {
+            return false;
+        }
+		if (getClass() != obj.getClass()) {
+            return false;
+        }
 		MtasSpanOperatorQuery other = (MtasSpanOperatorQuery) obj;
 		return singlePosition==other.singlePosition && field.equals(other.field) && operator.equals(other.operator) && prefix.equals(other.prefix)
 				&& (ivalue == other.ivalue) && (svalue.equals(other.svalue));
@@ -260,4 +264,9 @@ public class MtasSpanOperatorQuery extends MtasSpanQuery {
 		return Operations.concatenate(automata);
 	}
 
+    @Override
+    public void visit(QueryVisitor aVisitor)
+    {
+        query.visit(aVisitor);
+    }
 }

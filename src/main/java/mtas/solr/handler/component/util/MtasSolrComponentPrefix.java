@@ -1,12 +1,13 @@
 package mtas.solr.handler.component.util;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.handler.component.ResponseBuilder;
@@ -26,8 +27,7 @@ public class MtasSolrComponentPrefix
     implements MtasSolrComponent<ComponentPrefix> {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasSolrComponentPrefix.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The search component. */
   MtasSolrSearchComponent searchComponent;
@@ -62,7 +62,8 @@ public class MtasSolrComponentPrefix
    * handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
+  @Override
+public void prepare(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     Set<String> ids = MtasSolrResultUtil
         .getIdsFromParameters(rb.req.getParams(), PARAM_MTAS_PREFIX);
@@ -110,7 +111,8 @@ public class MtasSolrComponentPrefix
    * org.apache.solr.handler.component.SearchComponent,
    * org.apache.solr.handler.component.ShardRequest)
    */
-  public void modifyRequest(ResponseBuilder rb, SearchComponent who,
+  @Override
+public void modifyRequest(ResponseBuilder rb, SearchComponent who,
       ShardRequest sreq) {
     if (sreq.params.getBool(MtasSolrSearchComponent.PARAM_MTAS, false)) {
       if (sreq.params.getBool(PARAM_MTAS_PREFIX, false)
@@ -138,7 +140,8 @@ public class MtasSolrComponentPrefix
    * mtas.solr.handler.component.util.MtasSolrComponent#create(mtas.codec.util.
    * CodecComponent.BasicComponent, java.lang.Boolean)
    */
-  public SimpleOrderedMap<Object> create(ComponentPrefix prefix, Boolean encode)
+  @Override
+public SimpleOrderedMap<Object> create(ComponentPrefix prefix, Boolean encode)
       throws IOException {
     SimpleOrderedMap<Object> mtasPrefixResponse = new SimpleOrderedMap<>();
     mtasPrefixResponse.add("key", prefix.key);
@@ -167,7 +170,8 @@ public class MtasSolrComponentPrefix
    * mtas.solr.handler.component.util.MtasSolrComponent#finishStage(org.apache.
    * solr.handler.component.ResponseBuilder)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void finishStage(ResponseBuilder rb) {
     if (rb.req.getParams().getBool(MtasSolrSearchComponent.PARAM_MTAS, false)
         && rb.stage >= ResponseBuilder.STAGE_EXECUTE_QUERY
@@ -185,7 +189,7 @@ public class MtasSolrComponentPrefix
                 MtasSolrResultUtil.decode(data);
               }
             } catch (ClassCastException e) {
-              log.debug(e);
+              log.debug("Error", e);
               // shouldnt happen
             }
           }
@@ -202,7 +206,8 @@ public class MtasSolrComponentPrefix
    * apache.solr.handler.component.ResponseBuilder,
    * mtas.codec.util.CodecComponent.ComponentFields)
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void distributedProcess(ResponseBuilder rb, ComponentFields mtasFields)
       throws IOException {
     // rewrite
@@ -210,7 +215,7 @@ public class MtasSolrComponentPrefix
     try {
       mtasResponse = (NamedList<Object>) rb.rsp.getValues().get("mtas");
     } catch (ClassCastException e) {
-      log.debug(e);
+      log.debug("Error", e);
       mtasResponse = null;
     }
     if (mtasResponse != null) {
@@ -226,7 +231,7 @@ public class MtasSolrComponentPrefix
           }
         }
       } catch (ClassCastException e) {
-        log.debug(e);
+        log.debug("Error", e);
         mtasResponse.remove(NAME);
       }
     }
@@ -260,7 +265,7 @@ public class MtasSolrComponentPrefix
         }
       }
     } catch (ClassCastException e) {
-      log.debug(e);
+      log.debug("Error", e);
     }
   }
 

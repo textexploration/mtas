@@ -16,23 +16,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.embedded.JettyConfig;
-import org.apache.solr.client.solrj.embedded.SSLConfig;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.cloud.MiniSolrCloudCluster;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.cloud.SolrZkClient;
-import org.apache.solr.common.cloud.ZkConfigManager;
 import org.apache.solr.common.params.CollectionParams;
 import org.apache.solr.common.params.CoreAdminParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
-import org.apache.solr.util.SSLTestConfig;
+import org.apache.solr.embedded.JettyConfig;
 
 import com.google.common.io.Files;
 
@@ -42,8 +38,8 @@ import com.google.common.io.Files;
 public class MtasSolrTestDistributedSearchConsistency {
 
   /** The log. */
-  private static Log log = LogFactory
-      .getLog(MtasSolrTestDistributedSearchConsistency.class);
+    private static final Logger log = LoggerFactory
+      .getLogger(MtasSolrTestDistributedSearchConsistency.class);
 
   /** The Constant COLLECTION_ALL_OPTIMIZED. */
   private static final String COLLECTION_ALL_OPTIMIZED = "collection1";
@@ -775,7 +771,7 @@ public class MtasSolrTestDistributedSearchConsistency {
       }
     } catch (SolrServerException | IOException e) {
       // System.out.println(e.getMessage());
-      log.error(e);
+      log.error("Error", e);
     }
     return list;
   }
@@ -981,15 +977,15 @@ public class MtasSolrTestDistributedSearchConsistency {
             jettyConfig);
         CloudSolrClient client = cloudCluster.getSolrClient();
         client.connect();
-        createCloudCollection(COLLECTION_ALL_OPTIMIZED, 1, 1,
+        createCloudCollection(cloudCluster, COLLECTION_ALL_OPTIMIZED, 1, 1,
             dataPath.resolve("conf"));
-        createCloudCollection(COLLECTION_ALL_MULTIPLE_SEGMENTS, 1, 1,
+        createCloudCollection(cloudCluster, COLLECTION_ALL_MULTIPLE_SEGMENTS, 1, 1,
             dataPath.resolve("conf"));
-        createCloudCollection(COLLECTION_PART1_OPTIMIZED, 1, 1,
+        createCloudCollection(cloudCluster, COLLECTION_PART1_OPTIMIZED, 1, 1,
             dataPath.resolve("conf"));
-        createCloudCollection(COLLECTION_PART2_MULTIPLE_SEGMENTS, 1, 1,
+        createCloudCollection(cloudCluster, COLLECTION_PART2_MULTIPLE_SEGMENTS, 1, 1,
             dataPath.resolve("conf"));
-        createCloudCollection(COLLECTION_DISTRIBUTED, 1, 1,
+        createCloudCollection(cloudCluster, COLLECTION_DISTRIBUTED, 1, 1,
             dataPath.resolve("conf"));
 
         // collection1
@@ -1012,8 +1008,7 @@ public class MtasSolrTestDistributedSearchConsistency {
         client.add(COLLECTION_PART2_MULTIPLE_SEGMENTS, solrDocuments.get(3));
         client.commit(COLLECTION_PART2_MULTIPLE_SEGMENTS);
       } catch (Exception e) {
-        e.printStackTrace();
-        log.error(e);
+        log.error("Error", e);
       }
     } else {
       log.error("couldn't create directories");
@@ -1022,6 +1017,7 @@ public class MtasSolrTestDistributedSearchConsistency {
 
   /**
    * Creates the cloud collection.
+ * @param aCloudCluster 
    *
    * @param collectionName
    *          the collection name
@@ -1034,22 +1030,20 @@ public class MtasSolrTestDistributedSearchConsistency {
    * @throws Exception
    *           the exception
    */
-  private static void createCloudCollection(String collectionName,
+  private static void createCloudCollection(MiniSolrCloudCluster aCloudCluster, String collectionName,
       int numShards, int replicationFactor, Path confDir) throws Exception {
     CloudSolrClient client = cloudCluster.getSolrClient();
     String confName = collectionName + "Configuration";
-    if (confDir != null) {
-      SolrZkClient zkClient = client.getZkStateReader().getZkClient();
-      ZkConfigManager zkConfigManager = new ZkConfigManager(zkClient);
-      zkConfigManager.uploadConfigDir(confDir, confName);
-    }
+    
+    aCloudCluster.uploadConfigSet(confDir, confName);
+    
     ModifiableSolrParams modParams = new ModifiableSolrParams();
     modParams.set(CoreAdminParams.ACTION,
         CollectionParams.CollectionAction.CREATE.name());
     modParams.set("name", collectionName);
     modParams.set("numShards", numShards);
     modParams.set("replicationFactor", replicationFactor);
-    int liveNodes = client.getZkStateReader().getClusterState().getLiveNodes()
+    int liveNodes = client.getClusterState().getLiveNodes()
         .size();
     int maxShardsPerNode = (int) Math
         .ceil(((double) numShards * replicationFactor) / liveNodes);
@@ -1068,7 +1062,7 @@ public class MtasSolrTestDistributedSearchConsistency {
       System.clearProperty("solr.log.dir");
       cloudCluster.shutdown();
     } catch (Exception e) {
-      log.error(e);
+      log.error("Error", e);
     } finally {
       MtasSolrBase.deleteDirectory(cloudBaseDir.toFile());
     }

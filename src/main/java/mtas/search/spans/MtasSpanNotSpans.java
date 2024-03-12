@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.lucene.search.TwoPhaseIterator;
-import org.apache.lucene.search.spans.SpanCollector;
+import org.apache.lucene.queries.spans.SpanCollector;
 import mtas.search.spans.MtasSpanNotQuery.MtasSpanNotQuerySpans;
 import mtas.search.spans.util.MtasSpans;
 
