@@ -23,8 +23,8 @@ import mtas.analysis.util.MtasConfigException;
 import mtas.analysis.util.MtasConfiguration;
 import mtas.analysis.util.MtasParserException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.payloads.PayloadHelper;
 import org.apache.lucene.util.BytesRef;
@@ -35,7 +35,7 @@ import org.apache.lucene.util.BytesRef;
 public abstract class MtasBasicParser extends MtasParser {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasBasicParser.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasBasicParser.class);
 
   /** The Constant MAPPING_TYPE_REF. */
   protected static final String MAPPING_TYPE_REF = "ref";
@@ -1100,7 +1100,7 @@ public abstract class MtasBasicParser extends MtasParser {
       String postfix = decodeAndUpdateWithVariables(postfixSplit, variables);
       return prefix + MtasToken.DELIMITER + postfix;
     } catch (MtasParserException e) {
-      log.debug(e);
+      log.debug("Error", e);
       return null;
     }
   }
@@ -1143,7 +1143,7 @@ public abstract class MtasBasicParser extends MtasParser {
         try {
           builder.append(new String(dec.decode(split), StandardCharsets.UTF_8));
         } catch (IllegalArgumentException e) {
-          log.info(e);
+          log.info("Error", e);
         }
       }
     }
@@ -1220,7 +1220,7 @@ public abstract class MtasBasicParser extends MtasParser {
         precheckMappingConditions(object, mapping.getConditions(), currentList);
         return true;
       } catch (MtasParserException e) {
-        log.debug(e);
+        log.debug("Error", e);
       }
     }
     return false;
@@ -1246,7 +1246,7 @@ public abstract class MtasBasicParser extends MtasParser {
         try {
           number = Integer.parseInt(mappingCondition.get("number"));
         } catch (Exception e) {
-          log.debug(e);
+          log.debug("Error", e);
         }
         String type = computeTypeFromMappingSource(
             mappingCondition.get(MAPPING_VALUE_SOURCE));
@@ -1262,7 +1262,7 @@ public abstract class MtasBasicParser extends MtasParser {
         try {
           number = Integer.parseInt(mappingCondition.get("number"));
         } catch (Exception e) {
-          log.debug(e);
+          log.debug("Error", e);
         }
         if (number != object.getUnknownAncestorNumber()) {
           throw new MtasParserException(

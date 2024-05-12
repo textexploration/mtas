@@ -5,17 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanWeight;
-import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.queries.spans.SpanWeight;
+import org.apache.lucene.queries.spans.Spans;
 import mtas.search.spans.util.MtasSpanQuery;
 import mtas.search.spans.util.MtasSpanWeight;
 import mtas.search.spans.util.MtasSpans;
@@ -139,12 +138,15 @@ public class MtasSpanFullyAlignedWithQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasSpanFullyAlignedWithQuery other = (MtasSpanFullyAlignedWithQuery) obj;
     return q1.equals(other.q1) && q2.equals(other.q2);
   }
@@ -277,17 +279,6 @@ public class MtasSpanFullyAlignedWithQuery extends MtasSpanQuery {
           MtasSpanFullyAlignedWithQuery.this, s1, s2);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.lucene.search.Weight#extractTerms(java.util.Set)
-     */
-    @Override
-    public void extractTerms(Set<Term> terms) {
-      w1.spanWeight.extractTerms(terms);
-      w2.spanWeight.extractTerms(terms);
-    }
-
 //    @Override
 //    public boolean isCacheable(LeafReaderContext arg0) {
 //      return w1.spanWeight.isCacheable(arg0) && w2.spanWeight.isCacheable(arg0);
@@ -338,5 +329,12 @@ public class MtasSpanFullyAlignedWithQuery extends MtasSpanQuery {
   public boolean isMatchAllPositionsQuery() {
     return false;
   }
+
+@Override
+public void visit(QueryVisitor aVisitor)
+{
+    q1.visit(aVisitor);
+    q2.visit(aVisitor);
+}
 
 }

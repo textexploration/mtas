@@ -7,8 +7,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.lucene.search.TwoPhaseIterator;
-import org.apache.lucene.search.spans.SpanCollector;
-import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.queries.spans.SpanCollector;
+import org.apache.lucene.queries.spans.Spans;
 
 import mtas.codec.util.CodecInfo;
 import mtas.codec.util.CodecInfo.IndexDoc;

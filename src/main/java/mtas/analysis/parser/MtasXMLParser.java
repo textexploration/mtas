@@ -18,8 +18,8 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenCollection;
@@ -34,7 +34,7 @@ import mtas.analysis.util.MtasConfiguration;
 abstract class MtasXMLParser extends MtasBasicParser {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasXMLParser.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasXMLParser.class);
 
   /** The namespace URI. */
   protected String namespaceURI = null;
@@ -129,7 +129,7 @@ abstract class MtasXMLParser extends MtasBasicParser {
       initParser();
       // System.out.print(printConfig());
     } catch (MtasConfigException e) {
-      log.error(e);
+      log.error("Error", e);
     }
   }
 
@@ -744,7 +744,7 @@ abstract class MtasXMLParser extends MtasBasicParser {
       assert unknownAncestors == 0 : "error in administration unknownAncestors";
       assert hasRoot : "no " + rootTag;
     } catch (XMLStreamException e) {
-      log.debug(e);
+      log.debug("Error", e);
       throw new MtasParserException("No valid XML: " + e.getMessage());
     }
 

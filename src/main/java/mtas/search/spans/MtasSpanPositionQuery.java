@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import mtas.codec.util.CodecInfo;
 import mtas.search.similarities.MtasSimScorer;
 import mtas.search.spans.util.MtasSpanQuery;
@@ -20,8 +19,8 @@ import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.LeafSimScorer;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.similarities.Similarity.SimScorer;
 
 /**
  * The Class MtasSpanPositionQuery.
@@ -169,16 +168,6 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
     /*
      * (non-Javadoc)
      * 
-     * @see org.apache.lucene.search.Weight#extractTerms(java.util.Set)
-     */
-    @Override
-    public void extractTerms(Set<Term> terms) {
-      // don't do anything
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see
      * org.apache.lucene.search.spans.SpanWeight#getSimScorer(org.apache.lucene.
      * index.LeafReaderContext)
@@ -216,12 +205,15 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasSpanPositionQuery that = (MtasSpanPositionQuery) obj;
     return field.equals(that.field) && start == that.start && end == that.end;
   }
@@ -240,5 +232,11 @@ public class MtasSpanPositionQuery extends MtasSpanQuery {
   public boolean isMatchAllPositionsQuery() {
     return false;
   }
+
+@Override
+public void visit(QueryVisitor aVisitor)
+{
+    // don't do anything
+}
 
 }

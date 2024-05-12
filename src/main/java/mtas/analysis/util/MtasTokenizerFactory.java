@@ -2,12 +2,12 @@ package mtas.analysis.util;
 
 import mtas.analysis.MtasTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.util.ResourceLoader;
-import org.apache.lucene.analysis.util.ResourceLoaderAware;
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import org.apache.lucene.util.ResourceLoader;
+import org.apache.lucene.util.ResourceLoaderAware;
+import org.apache.lucene.analysis.TokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,8 +19,11 @@ import java.util.Map;
 public class MtasTokenizerFactory extends TokenizerFactory
     implements ResourceLoaderAware {
 
+    /** SPI name */
+    public static final String NAME = "mtas";
+
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasTokenizerFactory.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasTokenizerFactory.class);
 
   /** The Constant ARGUMENT_CONFIGFILE. */
   public static final String ARGUMENT_CONFIGFILE = "configFile";
@@ -68,6 +71,11 @@ public class MtasTokenizerFactory extends TokenizerFactory
     this(args, null);
   }
 
+  /** Default ctor for compatibility with SPI */
+  public MtasTokenizerFactory() {
+    throw defaultCtorException();
+  }
+  
   /**
    * Instantiates a new mtas tokenizer factory.
    *
@@ -114,7 +122,7 @@ public class MtasTokenizerFactory extends TokenizerFactory
     try {
       tokenizer = create(factory, null);
     } catch (IOException e) {
-      log.error(e);
+      log.error("Error", e);
     }
     return tokenizer;
   }

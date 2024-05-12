@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -26,6 +26,7 @@ import org.apache.solr.common.util.ContentStream;
 import org.apache.solr.handler.RequestHandlerBase;
 import org.apache.solr.request.SolrQueryRequest;
 import org.apache.solr.response.SolrQueryResponse;
+import org.apache.solr.security.AuthorizationContext;
 import org.noggit.JSONParser;
 import org.noggit.ObjectBuilder;
 
@@ -45,7 +46,7 @@ import mtas.solr.handler.util.MtasSolrStatus;
 public class MtasRequestHandler extends RequestHandlerBase {
 
   /** The log. */
-  private static Log log = LogFactory.getLog(MtasRequestHandler.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasRequestHandler.class);
 
   /** The Constant MESSAGE_ERROR. */
   public static final String MESSAGE_ERROR = "error";
@@ -169,7 +170,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
             is = req.getCore().getResourceLoader().openResource(file);
             rsp.add(ACTION_CONFIG_FILE, IOUtils.toString(is, StandardCharsets.UTF_8));
           } catch (IOException e) {
-            log.debug(e);
+            log.debug("Error", e);
             rsp.add(MESSAGE_ERROR, e.getMessage());
           }
         }
@@ -200,7 +201,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
             rsp.add(ACTION_MAPPING, tokenizer.getList(fetchData.getUrl(null, null)));
             tokenizer.close();
           } catch (IOException | MtasParserException e) {
-            log.debug(e);
+            log.debug("Error", e);
             rsp.add(MESSAGE_ERROR, e.getMessage());
           } finally {
             stream.close();
@@ -211,7 +212,7 @@ public class MtasRequestHandler extends RequestHandlerBase {
             rsp.add(ACTION_MAPPING, tokenizer.getList(new StringReader(document)));
             tokenizer.close();
           } catch (IOException e) {
-            log.debug(e);
+            log.debug("Error", e);
             rsp.add(MESSAGE_ERROR, e.getMessage());
           } finally {
             stream.close();
@@ -304,8 +305,9 @@ public class MtasRequestHandler extends RequestHandlerBase {
     JSONParser parser = new JSONParser(json);
     try {
       Object o = ObjectBuilder.getVal(parser);
-      if (!(o instanceof Map))
+      if (!(o instanceof Map)) {
         return;
+    }
       Map<String, Object> map = (Map<String, Object>) o;
       // To make consistent with json.param handling, we should make query
       // params come after json params (i.e. query params should
@@ -441,14 +443,14 @@ public class MtasRequestHandler extends RequestHandlerBase {
       }
       shardIndex.put(shard, shardInformation);
     } catch (NullPointerException | SolrServerException | IOException e) {
-      log.error(e);
+      log.error("Error", e);
       return null;
     } finally {
       if (solrClient != null) {
         try {
           solrClient.close();
         } catch (IOException e) {
-          log.error(e);
+          log.error("Error", e);
         }
       }
     }
@@ -529,4 +531,8 @@ public class MtasRequestHandler extends RequestHandlerBase {
     }
   }
 
+  @Override
+  public Name getPermissionName(AuthorizationContext request) {
+    return Name.ALL;
+  }
 }

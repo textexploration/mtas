@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.custom.CustomAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
@@ -40,17 +40,14 @@ import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.SegmentReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.Terms;
+import org.apache.lucene.queries.spans.SpanWeight;
+import org.apache.lucene.queries.spans.Spans;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanWeight;
-import org.apache.lucene.search.spans.Spans;
+import org.apache.lucene.store.ByteBuffersDirectory;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
+
 import mtas.analysis.token.MtasToken;
-import mtas.codec.util.CodecInfo;
-import mtas.codec.util.CodecUtil;
-import mtas.codec.util.Status;
-import mtas.codec.util.collector.MtasDataItem;
 import mtas.codec.util.CodecComponent.ComponentField;
 import mtas.codec.util.CodecComponent.ComponentGroup;
 import mtas.codec.util.CodecComponent.ComponentPosition;
@@ -59,7 +56,11 @@ import mtas.codec.util.CodecComponent.ComponentTermVector;
 import mtas.codec.util.CodecComponent.ComponentToken;
 import mtas.codec.util.CodecComponent.GroupHit;
 import mtas.codec.util.CodecComponent.SubComponentFunction;
+import mtas.codec.util.CodecInfo;
 import mtas.codec.util.CodecSearchTree.MtasTreeHit;
+import mtas.codec.util.CodecUtil;
+import mtas.codec.util.Status;
+import mtas.codec.util.collector.MtasDataItem;
 import mtas.parser.cql.MtasCQLParser;
 import mtas.parser.cql.ParseException;
 import mtas.search.spans.MtasSpanRegexpQuery;
@@ -72,7 +73,7 @@ import mtas.search.spans.util.MtasSpanQuery;
 public class MtasSearchTestConsistency {
 
 	/** The log. */
-	private static Log log = LogFactory.getLog(MtasSearchTestConsistency.class);
+	private static final Logger log = LoggerFactory.getLogger(MtasSearchTestConsistency.class);
 
 	/** The Constant FIELD_ID. */
 	private static final String FIELD_ID = "id";
@@ -101,7 +102,7 @@ public class MtasSearchTestConsistency {
 			Path dataPath = Paths
 					.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "data");
 			// directory = FSDirectory.open(Paths.get("testindexMtas"));
-			directory = new RAMDirectory();
+			directory = new ByteBuffersDirectory();
 			files = new HashMap<>();
 			files.put("Een onaangenaam mens in de Haarlemmerhout",
 					dataPath.resolve("resources").resolve("beets1.xml.gz").toAbsolutePath().toString());
@@ -112,7 +113,7 @@ public class MtasSearchTestConsistency {
 			createIndex(dataPath.resolve("conf").resolve("folia.xml").toAbsolutePath().toString(), files);
 			docs = getLiveDocs(DirectoryReader.open(directory));
 		} catch (IOException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 	
@@ -688,7 +689,7 @@ public class MtasSearchTestConsistency {
 			assertEquals("Number of positions", total.longValue(), queryResult.hits);
 			assertEquals("Minimum and maximum on number of positions", total.longValue(), totalMinimum + totalMaximum);
 		} catch (mtas.parser.function.ParseException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 
@@ -743,7 +744,7 @@ public class MtasSearchTestConsistency {
 			assertEquals("Minimum positions", minimum, subMinimum);
 			assertEquals("Maximum positions", maximum, subMaximum);
 		} catch (mtas.parser.function.ParseException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 
@@ -797,7 +798,7 @@ public class MtasSearchTestConsistency {
 			assertEquals("Minimum positions", minimum, subMinimum);
 			assertEquals("Maximum positions", maximum, subMaximum);
 		} catch (mtas.parser.function.ParseException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 
@@ -885,7 +886,7 @@ public class MtasSearchTestConsistency {
 			assertEquals("Minimum and maximum on number of positions nouns", total1.longValue(),
 					totalMinimum1 + totalMaximum1);
 		} catch (mtas.parser.function.ParseException | ParseException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 
@@ -927,7 +928,7 @@ public class MtasSearchTestConsistency {
 			assertEquals("Total number of articles", total, Long.valueOf(subTotal));
 			indexReader.close();
 		} catch (ParseException | mtas.parser.function.ParseException e) {
-			log.error(e);
+			log.error("Error", e);
 		} finally {
 			indexReader.close();
 		}
@@ -984,7 +985,7 @@ public class MtasSearchTestConsistency {
 			assertEquals("Total number of hits for full list and positions", total, fullTotal);
 			indexReader.close();
 		} catch (mtas.parser.function.ParseException e) {
-			log.error(e);
+			log.error("Error", e);
 		} finally {
 			indexReader.close();
 		}
@@ -1051,7 +1052,7 @@ public class MtasSearchTestConsistency {
 			}
 			indexReader.close();
 		} catch (IOException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 		return response;
 	}
@@ -1188,7 +1189,7 @@ public class MtasSearchTestConsistency {
 			MtasSpanQuery q = createQuery(field, cql, ignore, maximumIgnoreLength, disableTwoPhaseIterator);
 			queryResult = doQuery(indexReader, field, q, prefixes);
 		} catch (mtas.parser.cql.ParseException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 		return queryResult;
 	}

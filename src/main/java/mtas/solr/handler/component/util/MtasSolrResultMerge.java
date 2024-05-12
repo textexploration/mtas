@@ -7,15 +7,14 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.SortedSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.ShardRequest;
 import org.apache.solr.handler.component.ShardResponse;
 
-import mtas.codec.util.heatmap.HeatmapMtasCounter.Heatmap;
 import mtas.solr.handler.component.MtasSolrSearchComponent;
 
 /**
@@ -24,7 +23,7 @@ import mtas.solr.handler.component.MtasSolrSearchComponent;
 public class MtasSolrResultMerge {
 
 	/** The Constant log. */
-	private static final Log log = LogFactory.getLog(MtasSolrResultMerge.class);
+	private static final Logger log = LoggerFactory.getLogger(MtasSolrResultMerge.class);
 
 	/**
 	 * Merge.
@@ -41,7 +40,7 @@ public class MtasSolrResultMerge {
 			try {
 				mtasResponse = (NamedList<Object>) rb.rsp.getValues().get(MtasSolrSearchComponent.NAME);
 			} catch (ClassCastException e) {
-				log.debug(e);
+				log.debug("Error", e);
 				mtasResponse = null;
 			}
 			if (mtasResponse == null) {
@@ -165,7 +164,7 @@ public class MtasSolrResultMerge {
 					mtasListShardResponses.put(response.getShard(), MtasSolrResultUtil.decode(data));
 				}
 			} catch (ClassCastException e) {
-				log.debug(e);
+				log.debug("Error", e);
 			}
 		}
 		try {
@@ -173,7 +172,7 @@ public class MtasSolrResultMerge {
 			  mergeResponsesNamedList(mtasListResponse, mtasListShardResponse);
 			}
 		} catch (IOException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 
@@ -227,7 +226,7 @@ public class MtasSolrResultMerge {
 					}
 				}
 			} catch (ClassCastException e) {
-				log.error(e);
+				log.error("Error", e);
 			}
 		}
     try {
@@ -238,7 +237,7 @@ public class MtasSolrResultMerge {
 				mergeResponsesArrayList(mtasListResponse, mtasListShardResponse);
 			}
 		} catch (IOException e) {
-			log.error(e);
+			log.error("Error", e);
 		}
 	}
 

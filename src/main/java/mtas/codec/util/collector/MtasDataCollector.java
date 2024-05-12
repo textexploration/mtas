@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -17,7 +16,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import mtas.codec.util.DataCollector;
-import mtas.solr.handler.component.util.MtasSolrMtasResult;
+
 
 /**
  * The Class MtasDataCollector.

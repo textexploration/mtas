@@ -5,9 +5,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.lang.invoke.MethodHandles;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.util.BytesRef;
 
 /**
@@ -16,8 +17,7 @@ import org.apache.lucene.util.BytesRef;
 public class MtasUpdateRequestProcessorResultWriter implements Closeable {
 
   /** The Constant log. */
-  private static final Log log = LogFactory
-      .getLog(MtasUpdateRequestProcessorResultWriter.class);
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** The object output stream. */
   private ObjectOutputStream objectOutputStream;
@@ -52,7 +52,7 @@ public class MtasUpdateRequestProcessorResultWriter implements Closeable {
       objectOutputStream.writeObject(value);
     } catch (IOException e) {
       forceCloseAndDelete();
-      log.debug(e);
+      log.debug("Error", e);
     }
   }
 
@@ -78,7 +78,7 @@ public class MtasUpdateRequestProcessorResultWriter implements Closeable {
         objectOutputStream.flush();
       } catch (IOException e) {
         forceCloseAndDelete();
-        log.debug(e);
+        log.debug("Error", e);
       }
     }
   }
@@ -134,7 +134,7 @@ public class MtasUpdateRequestProcessorResultWriter implements Closeable {
         fileOutputStream = null;
       }
     } catch (IOException e) {
-      log.debug(e);
+      log.debug("Error", e);
     }
     closed = true;
     tokenNumber = 0;

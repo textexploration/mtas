@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.search.spans.Spans;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.lucene.queries.spans.Spans;
 
 /**
  * The Class MtasIgnoreItem.
@@ -15,7 +15,7 @@ import org.apache.lucene.search.spans.Spans;
 public class MtasIgnoreItem {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasIgnoreItem.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasIgnoreItem.class);
 
   /** The Constant DEFAULT_MAXIMUM_IGNORE_LENGTH. */
   public static final int DEFAULT_MAXIMUM_IGNORE_LENGTH = 10;
@@ -305,7 +305,7 @@ public class MtasIgnoreItem {
               .add(ignoreSpans.endPosition());
         }
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
         currentPosition = Spans.NO_MORE_POSITIONS;
         break;
       }

@@ -2,8 +2,8 @@ package mtas.search.spans.util;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import org.apache.lucene.search.spans.SpanNearQuery;
-import org.apache.lucene.search.spans.SpanQuery;
+import org.apache.lucene.queries.spans.SpanNearQuery;
+import org.apache.lucene.queries.spans.SpanQuery;
 
 /**
  * The Class MtasExtendedSpanAndQuery.

@@ -4,9 +4,10 @@ import java.io.IOException;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.spans.SpanContainingQuery;
-import org.apache.lucene.search.spans.SpanWeight;
+import org.apache.lucene.queries.spans.SpanContainingQuery;
+import org.apache.lucene.queries.spans.SpanWeight;
 
 import mtas.search.spans.util.MtasSpanQuery;
 
@@ -147,12 +148,15 @@ public class MtasSpanContainingQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasSpanContainingQuery that = (MtasSpanContainingQuery) obj;
     return baseQuery.equals(that.baseQuery);
   }
@@ -183,5 +187,11 @@ public class MtasSpanContainingQuery extends MtasSpanQuery {
   public boolean isMatchAllPositionsQuery() {
     return false;
   }
+
+@Override
+public void visit(QueryVisitor aVisitor)
+{
+    baseQuery.visit(aVisitor);
+}
 
 }

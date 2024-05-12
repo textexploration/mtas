@@ -25,8 +25,8 @@ import mtas.codec.tree.MtasTree;
 import mtas.codec.tree.MtasTreeNode;
 import mtas.codec.tree.MtasTreeNodeId;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.codecs.CodecUtil;
 import org.apache.lucene.codecs.FieldsConsumer;
 import org.apache.lucene.codecs.FieldsProducer;
@@ -327,7 +327,7 @@ import org.apache.lucene.util.IOUtils;
 public class MtasFieldsConsumer extends FieldsConsumer {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasFieldsConsumer.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasFieldsConsumer.class);
 
   /** The delegate fields consumer. */
   private FieldsConsumer delegateFieldsConsumer;
@@ -956,7 +956,7 @@ public class MtasFieldsConsumer extends FieldsConsumer {
               // update temporary index in memory
               memoryTmpDocChainList.put(docId, currentFilepointer);
             } catch (IOException ex) {
-              log.debug(ex);
+              log.debug("Error", ex);
               break;
             }
           }
@@ -1305,7 +1305,7 @@ public class MtasFieldsConsumer extends FieldsConsumer {
               MtasCodecPostingsFormat.MTAS_FIELDINFO_ATTRIBUTE_PREFIX_INTERSECTION,
               getPrefixStatsIntersectionPrefixAttribute(field));
         } catch (EOFException e) {
-          log.debug(e);
+          log.debug("Error", e);
           doWrite = false;
         }
         // end loop over fields
@@ -1343,23 +1343,23 @@ public class MtasFieldsConsumer extends FieldsConsumer {
     } catch (IOException e) {
       // ignore, can happen when merging segment already written by
       // delegateFieldsConsumer
-      log.error(e);
+      log.error("Error", e);
     } finally {  
       IOUtils.closeWhileHandlingException(closeables);
       try {
         state.directory.deleteFile(mtasTmpDocsFileName);
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
       }
       try {
         state.directory.deleteFile(mtasTmpDocFileName);
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
       }
       try {
         state.directory.deleteFile(mtasTmpFieldFileName);
       } catch (IOException e) {
-        log.debug(e);
+        log.debug("Error", e);
       }
     }
   }
@@ -1522,7 +1522,7 @@ public class MtasFieldsConsumer extends FieldsConsumer {
       }
       return mtasId;
     } catch (Exception e) {
-      log.error(e);
+      log.error("Error", e);
       throw new IOException(e);
     }
   }

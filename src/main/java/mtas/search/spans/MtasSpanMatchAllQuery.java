@@ -3,41 +3,24 @@ package mtas.search.spans;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import mtas.codec.util.CodecInfo;
-import mtas.search.similarities.MtasSimScorer;
 import mtas.search.spans.util.MtasSpanQuery;
-import mtas.search.spans.util.MtasSpanScorer;
 import mtas.search.spans.util.MtasSpanWeight;
 import mtas.search.spans.util.MtasSpans;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.codecs.FieldsProducer;
-import org.apache.lucene.index.FieldInvertState;
-import org.apache.lucene.index.IndexReaderContext;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermStates;
 import org.apache.lucene.index.Terms;
-import org.apache.lucene.search.CollectionStatistics;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.LeafSimScorer;
+import org.apache.lucene.search.QueryVisitor;
 import org.apache.lucene.search.ScoreMode;
-import org.apache.lucene.search.TermStatistics;
-import org.apache.lucene.search.similarities.Similarity;
-import org.apache.lucene.search.similarities.Similarity.SimScorer;
-import org.apache.lucene.search.spans.SpanQuery;
-import org.apache.lucene.search.spans.SpanScorer;
-import org.apache.lucene.search.spans.SpanTermQuery;
-import org.apache.lucene.search.spans.SpanWeight;
-import org.apache.lucene.search.spans.Spans;
-import org.apache.lucene.search.spans.SpanWeight.Postings;
-import org.apache.lucene.util.ArrayUtil;
 
 /**
  * The Class MtasSpanMatchAllQuery.
@@ -45,7 +28,7 @@ import org.apache.lucene.util.ArrayUtil;
 public class MtasSpanMatchAllQuery extends MtasSpanQuery {
 
   /** The log. */
-  private static Log log = LogFactory.getLog(MtasSpanMatchAllQuery.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasSpanMatchAllQuery.class);
 
   /** The field. */
   private String field;
@@ -123,11 +106,10 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
     public void extractTermStates(Map<Term, TermStates> contexts) {
       Term term = new Term(field);
       if (!contexts.containsKey(term)) {
-        IndexReaderContext topContext = searcher.getTopReaderContext();
         try {
-          contexts.put(term, TermStates.build(topContext, term, true));
+          contexts.put(term, TermStates.build(searcher, term, true));
         } catch (IOException e) {
-          log.debug(e);
+          log.debug("Error", e);
           // fail
         }
       }
@@ -180,16 +162,6 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.lucene.search.Weight#extractTerms(java.util.Set)
-     */
-    @Override
-    public void extractTerms(Set<Term> terms) {
-      // don't do anything
-    }
-
 
 //    @Override
 //    public boolean isCacheable(LeafReaderContext arg0) {
@@ -218,12 +190,15 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) {
+        return true;
+    }
+    if (obj == null) {
+        return false;
+    }
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
     final MtasSpanMatchAllQuery that = (MtasSpanMatchAllQuery) obj;
     return field.equals(that.field);
   }
@@ -243,4 +218,9 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
     return true;
   }
 
+@Override
+public void visit(QueryVisitor aVisitor)
+{
+    // don't do anything
+}
 }

@@ -11,8 +11,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mtas.analysis.token.MtasToken;
 import mtas.analysis.token.MtasTokenCollection;
@@ -28,7 +28,7 @@ import mtas.analysis.util.MtasParserException;
 final public class MtasSketchParser extends MtasBasicParser {
 
   /** The Constant log. */
-  private static final Log log = LogFactory.getLog(MtasSketchParser.class);
+  private static final Logger log = LoggerFactory.getLogger(MtasSketchParser.class);
 
   /** The word type. */
   private MtasParserType<MtasParserMapping<?>> wordType = null;
@@ -51,7 +51,7 @@ final public class MtasSketchParser extends MtasBasicParser {
       initParser();
       // System.out.print(printConfig());
     } catch (MtasConfigException e) {
-      log.error(e);
+      log.error("Error", e);
     }
   }
 
@@ -311,7 +311,7 @@ final public class MtasSketchParser extends MtasBasicParser {
         previousOffset = br.getPosition();
       }
     } catch (IOException e) {
-      log.debug(e);
+      log.debug("Error", e);
       throw new MtasParserException(e.getMessage());
     }
     // update tokens with offset
