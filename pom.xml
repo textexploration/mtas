@@ -3,10 +3,8 @@
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<lucene-version>9.9.2</lucene-version>
-    <solr-version>9.5.0</solr-version>
-<!--    <lucene-version>8.11.3</lucene-version>-->
-<!--    <solr-version>8.11.3</solr-version>-->
+		<lucene-version>9.10.0</lucene-version>
+	    <solr-version>9.6.0</solr-version>
 	</properties>
 	<scm>
     <connection>scm:git:git@github.com:textexploration/mtas.git</connection>

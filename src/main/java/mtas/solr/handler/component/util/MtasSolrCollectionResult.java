@@ -331,7 +331,7 @@ public class MtasSolrCollectionResult implements Serializable {
           }
         }
       } else {
-        throw new IOException("not allowed for action '" + action + "'");
+//        throw new IOException("not allowed for action '" + action + "'");
       }
     }
   }

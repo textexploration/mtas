@@ -13,6 +13,7 @@ import mtas.search.spans.util.MtasSpans;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.lucene.codecs.FieldsProducer;
+import org.apache.lucene.index.IndexReaderContext;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
@@ -106,8 +107,8 @@ public class MtasSpanMatchAllQuery extends MtasSpanQuery {
     public void extractTermStates(Map<Term, TermStates> contexts) {
       Term term = new Term(field);
       if (!contexts.containsKey(term)) {
-        try {
-          contexts.put(term, TermStates.build(searcher, term, true));
+    	  try {
+        	contexts.put(term, TermStates.build(searcher, term, true));
         } catch (IOException e) {
           log.debug("Error", e);
           // fail

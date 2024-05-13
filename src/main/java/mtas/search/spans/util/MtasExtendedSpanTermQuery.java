@@ -8,6 +8,7 @@ import java.util.Objects;
 import mtas.analysis.token.MtasToken;
 import mtas.codec.util.CodecUtil;
 import org.apache.lucene.index.FieldInfo;
+import org.apache.lucene.index.IndexReaderContext;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.PostingsEnum;

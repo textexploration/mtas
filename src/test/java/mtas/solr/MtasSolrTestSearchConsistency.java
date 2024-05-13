@@ -922,7 +922,7 @@ public class MtasSolrTestSearchConsistency {
       if (subListRaw != null && subListRaw instanceof Map) {
         Object subSubListRaw = ((Map<String, Object>) subListRaw).get("hit");
         if (subSubListRaw != null && subSubListRaw instanceof Map) {
-          Object subSubSubListRaw = ((List<Object>) subSubListRaw).get(0);
+          Object subSubSubListRaw = ((Map<String, Object>) subSubListRaw).values().toArray()[0];
           if (subSubSubListRaw != null && subSubSubListRaw instanceof List) {
             Object subSubSubSubListRaw = ((List<Object>) subSubSubListRaw)
                 .get(0);
